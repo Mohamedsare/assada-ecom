@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  --font-sans: var(--font-geist-sans);
+
+  --color-night: #020B27;
+  --color-night-2: #0F172A;
+  --color-green: #16A34A;
+  --color-green-light: #22C55E;
+  --color-gray-light: #F8FAFC;
+  --color-gray-border: #E5E7EB;
+  --color-text-dark: #0F172A;
+  --color-text-secondary: #64748B;
+  --color-red: #EF4444;
+  --color-orange: #F97316;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar custom */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #16A34A;
+  border-radius: 3px;
+}
+
+/* Masquer la scrollbar (carrousels mobiles) */
+.scrollbar-hide {
+  -ms-overflow-style: none;      /* IE / Edge */
+  scrollbar-width: none;          /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;                  /* Chrome / Safari */
+}
+
+/* Défilement automatique infini (marquee) */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee-x 28s linear infinite;
+  will-change: transform;
+}
+.animate-marquee:hover,
+.animate-marquee:active {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none; }
+}
+
+/* Toast progress bar */
+@keyframes shrink-x {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+.animate-shrink-x {
+  animation: shrink-x linear forwards;
+}
+
+/* Hero section animations */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeBg {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-slide-in {
+  animation: fadeSlideIn 0.5s ease forwards;
+}
+.animate-fade-bg {
+  animation: fadeBg 0.6s ease forwards;
+}
