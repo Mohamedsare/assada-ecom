@@ -1,15 +1,11 @@
-import { Star } from "lucide-react";
-import ComingSoon from "@/components/admin/ComingSoon";
+import type { Metadata } from "next";
+import { getAdminReviews } from "@/lib/supabase/queries";
+import AvisContent from "./AvisContent";
 
-export const metadata = { title: "Avis clients" };
+export const metadata: Metadata = { title: "Avis clients" };
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Avis clients"
-      description="Modérez et gérez les avis laissés par vos clients"
-      icon={Star}
-      features={["Approbation des avis", "Notes de 1 à 5 étoiles", "Réponses aux avis", "Avis par produit", "Signalement d'abus"]}
-    />
-  );
+export default async function AdminAvisPage() {
+  const reviews = await getAdminReviews();
+  return <AvisContent reviews={reviews} />;
 }

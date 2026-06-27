@@ -480,6 +480,39 @@ create policy "Admin lit les paramètres" on public.settings
 create policy "Admin gère paramètres" on public.settings
   for all using (public.is_admin());
 
+-- ---- COUPONS ----
+-- (RLS était activé sans policy : la table était inaccessible. Ajout des policies.)
+create policy "Lecture publique coupons actifs" on public.coupons
+  for select using (is_active = true or public.is_admin());
+
+create policy "Admin gère coupons" on public.coupons
+  for all using (public.is_admin());
+
+-- =============================================
+-- TABLE : contact_messages (formulaire de contact)
+-- =============================================
+create table if not exists public.contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text,
+  subject text,
+  message text not null,
+  is_read boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table public.contact_messages enable row level security;
+
+-- N'importe qui peut envoyer un message via le formulaire de contact
+create policy "Envoyer un message" on public.contact_messages
+  for insert with check (true);
+
+-- Seuls les admins peuvent lire / gérer les messages reçus
+create policy "Admin gère messages" on public.contact_messages
+  for all using (public.is_admin());
+
+create index if not exists idx_contact_messages_created on public.contact_messages(created_at desc);
+
 -- =============================================
 -- DONNÉES INITIALES
 -- =============================================

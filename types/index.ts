@@ -149,3 +149,54 @@ export interface Address {
   longitude?: number;
   is_default: boolean;
 }
+
+export interface Review {
+  id: string;
+  user_id?: string;
+  product_id: string;
+  order_id?: string;
+  rating: number;
+  comment?: string;
+  is_approved: boolean;
+  created_at: string;
+  product?: Pick<Product, "id" | "name" | "slug" | "main_image_url">;
+  profile?: Pick<Profile, "first_name" | "last_name" | "email">;
+}
+
+export interface Payment {
+  id: string;
+  order_id: string;
+  method: PaymentMethod;
+  status: PaymentStatus;
+  amount: number;
+  reference?: string;
+  paid_at?: string;
+  created_at: string;
+  order?: Pick<Order, "id" | "order_number" | "customer_name" | "order_status">;
+}
+
+export type DiscountType = "percentage" | "fixed";
+
+export interface Coupon {
+  id: string;
+  code: string;
+  description?: string;
+  discount_type: DiscountType;
+  discount_value: number;
+  min_order_amount?: number;
+  max_uses?: number;
+  used_count: number;
+  is_active: boolean;
+  expires_at?: string;
+  created_at: string;
+}
+
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email?: string;
+  subject?: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+}

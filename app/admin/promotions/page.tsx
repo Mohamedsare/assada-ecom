@@ -1,15 +1,11 @@
-import { Ticket } from "lucide-react";
-import ComingSoon from "@/components/admin/ComingSoon";
+import type { Metadata } from "next";
+import { getAdminCoupons } from "@/lib/supabase/queries";
+import PromotionsContent from "./PromotionsContent";
 
-export const metadata = { title: "Promotions & Coupons" };
+export const metadata: Metadata = { title: "Promotions & Coupons" };
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Promotions & Coupons"
-      description="Créez et gérez vos codes promo et campagnes promotionnelles"
-      icon={Ticket}
-      features={["Codes promo (% ou montant fixe)", "Date d'expiration", "Limite d'utilisation", "Montant minimum de commande", "Suivi des utilisations"]}
-    />
-  );
+export default async function AdminPromotionsPage() {
+  const coupons = await getAdminCoupons();
+  return <PromotionsContent coupons={coupons} />;
 }

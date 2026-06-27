@@ -1,15 +1,11 @@
-import { CreditCard } from "lucide-react";
-import ComingSoon from "@/components/admin/ComingSoon";
+import type { Metadata } from "next";
+import { getAdminPayments } from "@/lib/supabase/queries";
+import PaiementsContent from "./PaiementsContent";
 
-export const metadata = { title: "Paiements" };
+export const metadata: Metadata = { title: "Paiements" };
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Paiements"
-      description="Suivez les paiements et transactions de vos commandes"
-      icon={CreditCard}
-      features={["Méthode de paiement", "Statut des paiements", "Références de transaction", "Montants encaissés", "Espèces, Airtel Money, Moov Money"]}
-    />
-  );
+export default async function AdminPaiementsPage() {
+  const payments = await getAdminPayments();
+  return <PaiementsContent payments={payments} />;
 }

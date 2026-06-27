@@ -1,15 +1,11 @@
-import { MessageSquare } from "lucide-react";
-import ComingSoon from "@/components/admin/ComingSoon";
+import type { Metadata } from "next";
+import { getAdminMessages } from "@/lib/supabase/queries";
+import MessagesContent from "./MessagesContent";
 
-export const metadata = { title: "Messages" };
+export const metadata: Metadata = { title: "Messages" };
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Messages"
-      description="Consultez et répondez aux messages de vos clients"
-      icon={MessageSquare}
-      features={["Messages du formulaire de contact", "Intégration WhatsApp", "Marquage lu / non lu", "Réponses rapides", "Historique des conversations"]}
-    />
-  );
+export default async function AdminMessagesPage() {
+  const messages = await getAdminMessages();
+  return <MessagesContent messages={messages} />;
 }

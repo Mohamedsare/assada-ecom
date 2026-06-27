@@ -1,15 +1,11 @@
-import { Boxes } from "lucide-react";
-import ComingSoon from "@/components/admin/ComingSoon";
+import type { Metadata } from "next";
+import { getAdminProducts } from "@/lib/supabase/queries";
+import StocksContent from "./StocksContent";
 
-export const metadata = { title: "Stocks" };
+export const metadata: Metadata = { title: "Gestion des stocks" };
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Gestion des stocks"
-      description="Suivez et gérez les niveaux de stock de vos produits"
-      icon={Boxes}
-      features={["Niveaux de stock par produit", "Alertes stock faible", "Gestion des variantes", "Historique des mouvements", "Réapprovisionnement"]}
-    />
-  );
+export default async function AdminStocksPage() {
+  const products = await getAdminProducts();
+  return <StocksContent products={products} />;
 }

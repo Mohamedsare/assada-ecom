@@ -1,15 +1,12 @@
-import { UserCog } from "lucide-react";
-import ComingSoon from "@/components/admin/ComingSoon";
+import type { Metadata } from "next";
+import { getAdminProfiles, getCurrentProfile } from "@/lib/supabase/queries";
+import UsersContent from "./UsersContent";
 
-export const metadata = { title: "Utilisateurs admins" };
+export const metadata: Metadata = { title: "Utilisateurs admins" };
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Utilisateurs admins"
-      description="Gérez les comptes administrateurs et leurs permissions"
-      icon={UserCog}
-      features={["Rôles : admin, super admin", "Gestion des permissions", "Ajout / suppression d'admins", "Historique des connexions", "Sécurité des comptes"]}
-    />
-  );
+export default async function AdminUsersPage() {
+  const [profiles, current] = await Promise.all([getAdminProfiles(), getCurrentProfile()]);
+  const staff = profiles.filter((p) => p.role !== "customer");
+  return <UsersContent staff={staff} currentUserId={current?.id ?? ""} />;
 }

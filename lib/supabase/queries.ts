@@ -1,5 +1,8 @@
 import { createClient } from "./server";
-import type { Product, Category, Brand, Order, Profile, Address } from "@/types";
+import type {
+  Product, Category, Brand, Order, Profile, Address,
+  Review, Payment, Coupon, ContactMessage,
+} from "@/types";
 
 function logError(fn: string, error: unknown) {
   const e = error as { message?: string; code?: string; details?: string; hint?: string };
@@ -318,6 +321,65 @@ export async function getAdminStats() {
     avgOrderValue: avgOrder,
     lowStockCount: lowStock.length,
   };
+}
+
+// ─── REVIEWS (admin) ──────────────────────────────────────────────────────────
+
+export async function getAdminReviews(): Promise<Review[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("reviews")
+    .select(`
+      *,
+      product:products(id, name, slug, main_image_url),
+      profile:profiles(first_name, last_name, email)
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) { logError("getAdminReviews", error); return []; }
+  return (data ?? []) as Review[];
+}
+
+// ─── PAYMENTS (admin) ─────────────────────────────────────────────────────────
+
+export async function getAdminPayments(): Promise<Payment[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("payments")
+    .select(`
+      *,
+      order:orders(id, order_number, customer_name, order_status)
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) { logError("getAdminPayments", error); return []; }
+  return (data ?? []) as Payment[];
+}
+
+// ─── COUPONS (admin) ──────────────────────────────────────────────────────────
+
+export async function getAdminCoupons(): Promise<Coupon[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("coupons")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) { logError("getAdminCoupons", error); return []; }
+  return (data ?? []) as Coupon[];
+}
+
+// ─── CONTACT MESSAGES (admin) ─────────────────────────────────────────────────
+
+export async function getAdminMessages(): Promise<ContactMessage[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("contact_messages")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) { logError("getAdminMessages", error); return []; }
+  return (data ?? []) as ContactMessage[];
 }
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────

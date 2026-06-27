@@ -5,6 +5,7 @@ import { Phone, Mail, MapPin, MessageCircle, Send, ChevronDown, ChevronUp } from
 import Link from "next/link";
 import { SITE_EMAIL, SITE_PHONE, WHATSAPP_NUMBER } from "@/lib/constants";
 import { getWhatsAppUrl } from "@/lib/utils";
+import { createContactMessage } from "@/lib/supabase/actions";
 import AdvantagesSection from "@/components/sections/AdvantagesSection";
 
 const FAQ = [
@@ -30,10 +31,22 @@ export default function ContactContent() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
+    setSending(true);
+    setError(null);
+    const fd = new FormData();
+    fd.set("name", form.name);
+    fd.set("email", form.email);
+    fd.set("subject", form.subject);
+    fd.set("message", form.message);
+    const res = await createContactMessage(fd);
+    setSending(false);
+    if (res?.error) setError(res.error);
+    else setSent(true);
   };
 
   return (
@@ -227,12 +240,15 @@ export default function ContactContent() {
                   />
                 </div>
 
+                {error && <p className="text-sm text-red-500">{error}</p>}
+
                 <button
                   type="submit"
-                  className="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-white py-3 rounded-xl font-semibold hover:bg-[#15803d] transition-colors"
+                  disabled={sending}
+                  className="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-white py-3 rounded-xl font-semibold hover:bg-[#15803d] disabled:opacity-60 transition-colors"
                 >
                   <Send size={16} />
-                  Envoyer le message
+                  {sending ? "Envoi en cours…" : "Envoyer le message"}
                 </button>
               </form>
             )}

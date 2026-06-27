@@ -1,15 +1,11 @@
-import { Truck } from "lucide-react";
-import ComingSoon from "@/components/admin/ComingSoon";
+import type { Metadata } from "next";
+import { getAdminOrders } from "@/lib/supabase/queries";
+import LivraisonsContent from "./LivraisonsContent";
 
-export const metadata = { title: "Livreurs & Tracking" };
+export const metadata: Metadata = { title: "Livraisons" };
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Livreurs & Tracking"
-      description="Gérez vos livreurs et suivez les livraisons en temps réel"
-      icon={Truck}
-      features={["Assignation des livreurs", "Géolocalisation en temps réel", "Carte de suivi", "Statut de livraison", "Distance boutique-client"]}
-    />
-  );
+export default async function AdminLivraisonsPage() {
+  const orders = await getAdminOrders();
+  return <LivraisonsContent orders={orders} />;
 }

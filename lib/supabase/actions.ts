@@ -530,6 +530,168 @@ export async function adminUpdateSettings(formData: FormData) {
   return { success: true };
 }
 
+// ─── ADMIN — REVIEWS ──────────────────────────────────────────────────────────
+
+export async function adminUpdateReviewApproval(id: string, is_approved: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("reviews").update({ is_approved }).eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/avis");
+  return { success: true };
+}
+
+export async function adminDeleteReview(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("reviews").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/avis");
+  return { success: true };
+}
+
+// ─── ADMIN — PAYMENTS (table) ─────────────────────────────────────────────────
+
+export async function adminUpdatePayment(id: string, status: string) {
+  const supabase = await createClient();
+  const { data: payment, error } = await supabase
+    .from("payments")
+    .update({ status, paid_at: status === "paid" ? new Date().toISOString() : null })
+    .eq("id", id)
+    .select("order_id")
+    .single();
+
+  if (error) return { error: error.message };
+
+  // Synchronise le statut de paiement de la commande liée
+  if (payment?.order_id) {
+    await supabase.from("orders")
+      .update({ payment_status: status, updated_at: new Date().toISOString() })
+      .eq("id", payment.order_id);
+  }
+
+  revalidatePath("/admin/paiements");
+  revalidatePath("/admin/commandes");
+  return { success: true };
+}
+
+// ─── ADMIN — STOCK ────────────────────────────────────────────────────────────
+
+export async function adminUpdateStock(id: string, stock_quantity: number) {
+  const supabase = await createClient();
+  const qty = Math.max(0, Math.floor(stock_quantity));
+  const { error } = await supabase.from("products")
+    .update({
+      stock_quantity: qty,
+      status: qty === 0 ? "out_of_stock" : "active",
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+
+  if (error) return { error: error.message };
+  revalidatePath("/admin/stocks");
+  revalidatePath("/admin/produits");
+  return { success: true };
+}
+
+// ─── ADMIN — USERS (rôles) ────────────────────────────────────────────────────
+
+export async function adminUpdateUserRole(id: string, role: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("profiles")
+    .update({ role, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/utilisateurs");
+  revalidatePath("/admin/clients");
+  return { success: true };
+}
+
+export async function adminToggleUserActive(id: string, is_active: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("profiles")
+    .update({ is_active, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/utilisateurs");
+  revalidatePath("/admin/clients");
+  return { success: true };
+}
+
+// ─── ADMIN — COUPONS ──────────────────────────────────────────────────────────
+
+export async function adminCreateCoupon(formData: FormData) {
+  const supabase = await createClient();
+  const code = (formData.get("code") as string)?.trim().toUpperCase();
+  if (!code) return { error: "Code requis" };
+
+  const { error } = await supabase.from("coupons").insert({
+    code,
+    description: formData.get("description") || null,
+    discount_type: formData.get("discount_type") || "percentage",
+    discount_value: Number(formData.get("discount_value")),
+    min_order_amount: formData.get("min_order_amount") ? Number(formData.get("min_order_amount")) : 0,
+    max_uses: formData.get("max_uses") ? Number(formData.get("max_uses")) : null,
+    is_active: formData.get("is_active") !== "false",
+    expires_at: formData.get("expires_at") || null,
+  });
+
+  if (error) return { error: error.message };
+  revalidatePath("/admin/promotions");
+  return { success: true };
+}
+
+export async function adminToggleCoupon(id: string, is_active: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("coupons").update({ is_active }).eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/promotions");
+  return { success: true };
+}
+
+export async function adminDeleteCoupon(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("coupons").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/promotions");
+  return { success: true };
+}
+
+// ─── ADMIN — MESSAGES ─────────────────────────────────────────────────────────
+
+export async function adminMarkMessageRead(id: string, is_read: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("contact_messages").update({ is_read }).eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/messages");
+  return { success: true };
+}
+
+export async function adminDeleteMessage(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("contact_messages").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/messages");
+  return { success: true };
+}
+
+// ─── CONTACT (public) ─────────────────────────────────────────────────────────
+
+export async function createContactMessage(formData: FormData) {
+  const supabase = await createClient();
+  const name = (formData.get("name") as string)?.trim();
+  const message = (formData.get("message") as string)?.trim();
+  if (!name || !message) return { error: "Nom et message requis" };
+
+  const { error } = await supabase.from("contact_messages").insert({
+    name,
+    email: formData.get("email") || null,
+    subject: formData.get("subject") || null,
+    message,
+  });
+
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
 // ─── ADMIN — IMAGE UPLOAD ─────────────────────────────────────────────────────
 
 export async function uploadImage(bucket: string, file: File): Promise<string | null> {
