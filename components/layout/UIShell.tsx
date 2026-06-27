@@ -31,44 +31,45 @@ const TOAST_BAR_CLASS = {
 };
 
 // ─── UIShell ──────────────────────────────────────────────────────────────────
-// Lit l'état drawer + toasts depuis le store Zustand (useUIStore).
-// openCartDrawer() / addToast() appelés depuis Header/ProductCard utilisent
-// useUIStore.getState() — garantie de singleton, pas de dépendance à useEffect.
 
 export default function UIShell() {
-  const drawerOpen  = useUIStore((s) => s.cartDrawerOpen);
-  const closeDrawer = useUIStore((s) => s.closeCartDrawer);
   const toasts      = useUIStore((s) => s.toasts);
   const removeToast = useUIStore((s) => s.removeToast);
-  const addToast    = useUIStore((s) => s.addToast);
 
   return (
     <>
-      <CartDrawerInner open={drawerOpen} onClose={closeDrawer} addToast={addToast} />
+      <CartDrawerPortal />
       <ToastContainerInner toasts={toasts} onRemove={removeToast} />
     </>
   );
 }
 
+// ─── CartDrawerPortal ─────────────────────────────────────────────────────────
+// Gère uniquement le montage côté client du portal.
+// CartDrawerInner s'abonne DIRECTEMENT aux stores — aucune prop intermédiaire.
+
+function CartDrawerPortal() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return createPortal(<CartDrawerInner />, document.body);
+}
+
 // ─── CartDrawer ───────────────────────────────────────────────────────────────
 
-function CartDrawerInner({
-  open,
-  onClose,
-  addToast,
-}: {
-  open: boolean;
-  onClose: () => void;
-  addToast: (t: Omit<Toast, "id">) => void;
-}) {
+function CartDrawerInner() {
+  // Abonnement direct : CartDrawerInner se re-rend lui-même quand l'état change,
+  // sans dépendre du re-rendu d'un parent intermédiaire.
+  const open       = useUIStore((s) => s.cartDrawerOpen);
+  const onClose    = useUIStore((s) => s.closeCartDrawer);
+  const addToast   = useUIStore((s) => s.addToast);
+
   const items      = useCartStore((s) => s.items);
   const totalItems = useCartStore((s) => s.totalItems);
   const totalPrice = useCartStore((s) => s.totalPrice);
   const _remove    = useCartStore((s) => s.removeItem);
   const _update    = useCartStore((s) => s.updateQuantity);
   const _clear     = useCartStore((s) => s.clearCart);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   const removeItem = (id: string, name?: string) => {
     _remove(id);
@@ -125,7 +126,7 @@ function CartDrawerInner({
           <div className="flex items-center gap-2.5">
             <ShoppingCart size={18} />
             <h2 className="font-bold text-base">Mon panier</h2>
-            {mounted && totalItems() > 0 && (
+            {totalItems() > 0 && (
               <span className="bg-[#16A34A] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                 {totalItems() > 9 ? "9+" : totalItems()}
               </span>

@@ -14,7 +14,7 @@ import {
 import { cn, getWhatsAppUrl, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/utils";
 import { NAV_LINKS, WHATSAPP_NUMBER } from "@/lib/constants";
 import { useCartStore } from "@/stores/cart";
-import { openCartDrawer } from "@/lib/ui-actions";
+import { useUIStore } from "@/stores/ui";
 
 export default function Header() {
   const pathname = usePathname();
@@ -22,7 +22,12 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [mounted, setMounted] = useState(false);
-  const totalItems   = useCartStore((s) => s.totalItems);
+  // On s'abonne à la valeur dérivée (et non à la fonction) pour que le badge
+  // se re-rende dès que le panier change, sans attendre un changement de page.
+  const totalItems     = useCartStore((s) =>
+    s.items.reduce((sum, item) => sum + item.quantity, 0)
+  );
+  const openCartDrawer = useUIStore((s) => s.openCartDrawer);
 
   // Évite l'erreur d'hydratation : le panier (localStorage) n'existe qu'au client
   useEffect(() => setMounted(true), []);
@@ -112,9 +117,9 @@ export default function Header() {
               aria-label="Ouvrir le panier"
             >
               <ShoppingCart size={20} />
-              {mounted && totalItems() > 0 && (
+              {mounted && totalItems > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 bg-[#16A34A] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center font-bold">
-                  {totalItems() > 9 ? "9+" : totalItems()}
+                  {totalItems > 9 ? "9+" : totalItems}
                 </span>
               )}
             </button>

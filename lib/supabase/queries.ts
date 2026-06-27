@@ -73,6 +73,16 @@ export async function getProductSlugs(): Promise<string[]> {
   return (data ?? []).map((p: { slug: string }) => p.slug);
 }
 
+/** Données minimales des produits actifs pour le sitemap (slug + date de mise à jour). */
+export async function getProductSitemapData(): Promise<{ slug: string; updated_at: string | null }[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("products")
+    .select("slug, updated_at")
+    .eq("status", "active");
+  return (data ?? []) as { slug: string; updated_at: string | null }[];
+}
+
 export async function getRelatedProducts(productId: string, categoryId: string, limit = 4): Promise<Product[]> {
   const supabase = await createClient();
   const { data, error } = await supabase

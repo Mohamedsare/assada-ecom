@@ -3,14 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Home, Store, Search, ShoppingCart, User } from "lucide-react";
+import { Home, Store, ShoppingCart, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCartStore } from "@/stores/cart";
 
 const ITEMS = [
   { href: "/", label: "Accueil", icon: Home },
   { href: "/boutique", label: "Boutique", icon: Store },
-  { href: "/recherche", label: "Recherche", icon: Search },
   { href: "/panier", label: "Panier", icon: ShoppingCart, badge: true },
   { href: "/compte", label: "Compte", icon: User },
 ];
@@ -18,7 +17,11 @@ const ITEMS = [
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const totalItems = useCartStore((s) => s.totalItems);
+  // Valeur dérivée (et non la fonction) pour que le badge se mette à jour
+  // dès que le panier change. Voir aussi Header.tsx.
+  const totalItems = useCartStore((s) =>
+    s.items.reduce((sum, item) => sum + item.quantity, 0)
+  );
 
   useEffect(() => setMounted(true), []);
 
@@ -28,7 +31,7 @@ export default function MobileBottomNav() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       aria-label="Navigation mobile"
     >
-      <div className="grid grid-cols-5 h-16">
+      <div className="grid grid-cols-4 h-16">
         {ITEMS.map(({ href, label, icon: Icon, badge }) => {
           const isActive =
             href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -43,9 +46,9 @@ export default function MobileBottomNav() {
             >
               <div className="relative">
                 <Icon size={21} strokeWidth={isActive ? 2.4 : 2} />
-                {badge && mounted && totalItems() > 0 && (
+                {badge && mounted && totalItems > 0 && (
                   <span className="absolute -top-1.5 -right-2.5 bg-green text-white text-[10px] font-bold rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
-                    {totalItems() > 9 ? "9+" : totalItems()}
+                    {totalItems > 9 ? "9+" : totalItems}
                   </span>
                 )}
               </div>
