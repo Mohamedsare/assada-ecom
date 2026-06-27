@@ -99,6 +99,41 @@ function buildStatusCounts(orders: Order[]): Record<string, number> {
   return counts;
 }
 
+/** Chiffre d'affaires et nombre de commandes par mois (12 derniers mois). */
+function monthlySeries(orders: Order[]): { revenue: number[]; counts: number[] } {
+  const now = new Date();
+  const revenue = new Array(12).fill(0) as number[];
+  const counts = new Array(12).fill(0) as number[];
+  for (const order of orders) {
+    const d = new Date(order.created_at);
+    for (let i = 11; i >= 0; i--) {
+      const m = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      if (d.getFullYear() === m.getFullYear() && d.getMonth() === m.getMonth()) {
+        revenue[11 - i] += order.total_amount ?? 0;
+        counts[11 - i] += 1;
+        break;
+      }
+    }
+  }
+  return { revenue, counts };
+}
+
+/** Convertit une série de valeurs en points pour une sparkline (viewBox 200x40). */
+function sparklinePoints(values: number[], width = 200, height = 40, pad = 5): string {
+  if (values.length === 0) return "";
+  const max = Math.max(...values);
+  const min = Math.min(...values);
+  const range = max - min || 1;
+  const step = width / Math.max(values.length - 1, 1);
+  return values
+    .map((v, i) => {
+      const x = Math.round(i * step);
+      const y = Math.round(height - pad - ((v - min) / range) * (height - pad * 2));
+      return `${x},${y}`;
+    })
+    .join(" ");
+}
+
 export default async function AdminDashboardPage() {
   const [stats, allOrders, allProducts] = await Promise.all([
     getAdminStats(),
@@ -114,11 +149,27 @@ export default async function AdminDashboardPage() {
 
   const salesChartData = buildSalesChartData(allOrders);
   const statusCounts   = buildStatusCounts(allOrders);
+  const series         = monthlySeries(allOrders);
+  const revenueSpark   = sparklinePoints(series.revenue);
+  const ordersSpark    = sparklinePoints(series.counts);
+
+  const deliveryRate = stats.totalOrders ? Math.round((stats.deliveredOrders / stats.totalOrders) * 100) : 0;
+  const report = [
+    { label: "Ventes totales", value: formatPrice(stats.totalRevenue) },
+    { label: "Commandes totales", value: String(stats.totalOrders) },
+    { label: "Commandes en attente", value: String(stats.pendingOrders) },
+    { label: "Commandes livrées", value: String(stats.deliveredOrders) },
+    { label: "Commandes annulées", value: String(stats.cancelledOrders) },
+    { label: "Clients", value: String(stats.totalCustomers) },
+    { label: "Panier moyen", value: formatPrice(stats.avgOrderValue) },
+    { label: "Taux de livraison", value: `${deliveryRate}%` },
+    { label: "Produits en stock faible", value: String(stats.lowStockCount) },
+  ];
 
   return (
     <div className="space-y-4 text-[13px]" style={{ zoom: 0.65 }}>
       {/* Barre période / export */}
-      <DashboardToolbar />
+      <DashboardToolbar report={report} />
 
       {/* KPI — 2 cards graphiques + 4 cards stats */}
       <div className="grid grid-cols-2 lg:grid-cols-8 gap-4 items-stretch">
@@ -140,7 +191,7 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
           <svg viewBox="0 0 200 40" className="w-full h-7 mt-1" preserveAspectRatio="none">
-            <polyline points="0,35 25,28 50,30 75,18 100,22 125,12 150,16 175,6 200,10" fill="none" stroke="#93c5fd" strokeWidth="2" />
+            <polyline points={revenueSpark} fill="none" stroke="#93c5fd" strokeWidth="2" />
           </svg>
         </div>
 
@@ -159,7 +210,7 @@ export default async function AdminDashboardPage() {
             </div>
           </div>
           <svg viewBox="0 0 200 40" className="w-full h-7 mt-1" preserveAspectRatio="none">
-            <polyline points="0,30 25,32 50,22 75,26 100,16 125,20 150,10 175,14 200,6" fill="none" stroke="#bbf7d0" strokeWidth="2" />
+            <polyline points={ordersSpark} fill="none" stroke="#bbf7d0" strokeWidth="2" />
           </svg>
         </div>
 

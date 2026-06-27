@@ -51,14 +51,21 @@ const NAV: { href: string; label: string; icon: typeof LayoutDashboard; badge?: 
   { href: "/admin/reglages", label: "Réglages boutique", icon: Store },
 ];
 
-const NOTIFICATIONS = [
-  { title: "Nouvelle commande", desc: "ODMS-2025-3421 · Marie K.", time: "Il y a 15 min", color: "bg-blue-500" },
-  { title: "Stock faible", desc: "AirPods Pro 2 · 4 unités restantes", time: "Il y a 1 h", color: "bg-orange-500" },
-  { title: "Commande livrée", desc: "ODMS-2025-3418 · Franck L.", time: "Il y a 2 h", color: "bg-green" },
-  { title: "Nouveau client", desc: "Sandra Obame s'est inscrite", time: "Il y a 3 h", color: "bg-purple-500" },
-];
+export interface AdminNotification {
+  title: string;
+  desc: string;
+  time: string;
+  color: string;
+}
 
-export default function AdminLayoutClient({ children, adminName, adminRole }: { children: React.ReactNode; adminName: string; adminRole: string }) {
+export default function AdminLayoutClient({
+  children, adminName, adminRole, notifications,
+}: {
+  children: React.ReactNode;
+  adminName: string;
+  adminRole: string;
+  notifications: AdminNotification[];
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -217,25 +224,31 @@ export default function AdminLayoutClient({ children, adminName, adminRole }: { 
               aria-label="Notifications"
             >
               <Bell size={20} className="text-gray-300" />
-              <span className="absolute top-0.5 right-0.5 bg-green text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">{NOTIFICATIONS.length}</span>
+              {notifications.length > 0 && (
+                <span className="absolute top-0.5 right-0.5 bg-green text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">{notifications.length}</span>
+              )}
             </button>
             {notifOpen && (
               <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 text-[#0F172A]">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
                   <p className="font-bold text-sm">Notifications</p>
-                  <span className="text-xs text-green font-medium">{NOTIFICATIONS.length} nouvelles</span>
+                  <span className="text-xs text-green font-medium">{notifications.length} récentes</span>
                 </div>
                 <div className="max-h-80 overflow-y-auto">
-                  {NOTIFICATIONS.map((n, i) => (
-                    <div key={i} className="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
-                      <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${n.color}`} />
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium">{n.title}</p>
-                        <p className="text-xs text-text-secondary truncate">{n.desc}</p>
-                        <p className="text-[10px] text-gray-400 mt-0.5">{n.time}</p>
+                  {notifications.length === 0 ? (
+                    <p className="text-sm text-text-secondary text-center py-8">Aucune notification</p>
+                  ) : (
+                    notifications.map((n, i) => (
+                      <div key={i} className="flex gap-3 px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
+                        <span className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${n.color}`} />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium">{n.title}</p>
+                          <p className="text-xs text-text-secondary truncate">{n.desc}</p>
+                          {n.time && <p className="text-[10px] text-gray-400 mt-0.5">{n.time}</p>}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
                 <Link href="/admin/commandes" onClick={() => setNotifOpen(false)} className="block text-center py-2.5 text-sm text-green font-medium hover:bg-gray-50 transition-colors">
                   Voir toutes les commandes

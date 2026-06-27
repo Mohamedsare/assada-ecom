@@ -3,23 +3,20 @@
 import { useState } from "react";
 import { Download } from "lucide-react";
 
-export default function DashboardToolbar() {
+export interface ReportRow {
+  label: string;
+  value: string;
+}
+
+export default function DashboardToolbar({ report }: { report: ReportRow[] }) {
   const [period, setPeriod] = useState("30 derniers jours");
   const [exported, setExported] = useState(false);
 
   const handleExport = () => {
-    // Génère un rapport CSV téléchargeable (démo)
+    // Rapport CSV à partir des indicateurs réels du tableau de bord.
     const rows = [
-      ["Indicateur", "Valeur", "Période"],
-      ["Ventes totales", "18 450 000 FCFA", period],
-      ["Commandes totales", "342", period],
-      ["Commandes en attente", "26", period],
-      ["Commandes livrées", "268", period],
-      ["Commandes annulées", "8", period],
-      ["Clients actifs", "1 256", period],
-      ["Panier moyen", "54 000 FCFA", period],
-      ["Taux de conversion", "4.8%", period],
-      ["Taux de livraison", "96.4%", period],
+      ["Indicateur", "Valeur"],
+      ...report.map((r) => [r.label, r.value]),
     ];
     const csv = rows.map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
     const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
