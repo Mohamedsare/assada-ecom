@@ -4,7 +4,8 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Sparkles, Loader2 } from "lucide-react";
 import { adminCreateProduct, adminUpdateProduct, generateProductInfo } from "@/lib/supabase/actions";
-import ImageUploadField from "@/components/admin/ImageUploadField";
+import MultiImageUpload from "@/components/admin/MultiImageUpload";
+import VideoUploadField from "@/components/admin/VideoUploadField";
 import type { Product, Category, Brand } from "@/types";
 
 const STATUS_OPTIONS: { value: string; label: string }[] = [
@@ -35,11 +36,24 @@ export default function ProductForm({
   const [seoTitle, setSeoTitle] = useState(product?.seo_title ?? "");
   const [seoDesc, setSeoDesc] = useState(product?.seo_description ?? "");
 
-  // État de l'analyse IA
-  const [imageUrl, setImageUrl] = useState(product?.main_image_url ?? "");
+  // Photos existantes (édition) triées par ordre
+  const initialImages = (product?.images ?? [])
+    .slice()
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((img) => img.image_url);
+  if (!initialImages.length && product?.main_image_url) initialImages.push(product.main_image_url);
+
+  // État de l'analyse IA (basée sur la 1re photo)
+  const [imageUrl, setImageUrl] = useState(initialImages[0] ?? "");
   const [aiPending, startAi] = useTransition();
   const [aiError, setAiError] = useState<string | null>(null);
   const [aiDone, setAiDone] = useState(false);
+
+  const handleImagesChange = (urls: string[]) => {
+    const first = urls[0] ?? "";
+    if (first && first !== imageUrl) runAi(first);
+    setImageUrl(first);
+  };
 
   const runAi = (url: string) => {
     if (!url) return;
@@ -152,15 +166,24 @@ export default function ProductForm({
 
         {/* Colonne latérale */}
         <div className="space-y-6">
-          <Card title="Image principale">
-            <ImageUploadField
-              name="main_image_url"
+          <Card title="Photos & vidéo">
+            <MultiImageUpload
+              name="images"
               bucket="products"
-              label="Image"
-              defaultValue={product?.main_image_url}
-              onChange={(url) => { setImageUrl(url); runAi(url); }}
+              label="Photos (5 max)"
+              defaultValues={initialImages}
+              max={5}
+              onChange={handleImagesChange}
             />
-            <p className="text-[11px] text-text-secondary">{"Dès l'ajout d'une photo, l'IA génère automatiquement la fiche."}</p>
+            <p className="text-[11px] text-text-secondary">{"La 1re photo est l'image principale. L'IA génère la fiche dès son ajout."}</p>
+            <div className="pt-1">
+              <VideoUploadField
+                name="video_url"
+                bucket="products"
+                label="Vidéo (1 max)"
+                defaultValue={product?.video_url}
+              />
+            </div>
           </Card>
 
           <Card title="Organisation">

@@ -54,6 +54,7 @@ export interface Product {
   stock_quantity: number;
   sku?: string;
   main_image_url?: string;
+  video_url?: string;
   is_featured: boolean;
   is_new: boolean;
   is_promo: boolean;

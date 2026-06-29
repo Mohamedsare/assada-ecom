@@ -305,12 +305,20 @@ export async function createOrder(data: {
 
 // ─── ADMIN — PRODUCTS ────────────────────────────────────────────────────────
 
+/** Récupère jusqu'à 5 URLs d'images depuis le FormData (champs "images"). */
+function readProductImages(formData: FormData): string[] {
+  return formData.getAll("images").map((v) => String(v)).filter(Boolean).slice(0, 5);
+}
+
 export async function adminCreateProduct(formData: FormData) {
   const supabase = await createClient();
 
   const name = formData.get("name") as string;
   const slug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  const images = readProductImages(formData);
+  const mainImage = images[0] || (formData.get("main_image_url") as string) || null;
 
   const { data, error } = await supabase.from("products").insert({
     name,
@@ -323,7 +331,8 @@ export async function adminCreateProduct(formData: FormData) {
     old_price: formData.get("old_price") ? Number(formData.get("old_price")) : null,
     stock_quantity: Number(formData.get("stock_quantity") ?? 0),
     sku: formData.get("sku") || null,
-    main_image_url: formData.get("main_image_url") || null,
+    main_image_url: mainImage,
+    video_url: formData.get("video_url") || null,
     is_featured: formData.get("is_featured") === "true",
     is_new: formData.get("is_new") === "true",
     is_promo: formData.get("is_promo") === "true",
@@ -333,6 +342,13 @@ export async function adminCreateProduct(formData: FormData) {
   }).select().single();
 
   if (error) return { error: error.message };
+
+  if (images.length) {
+    await supabase.from("product_images").insert(
+      images.map((url, i) => ({ product_id: data.id, image_url: url, sort_order: i, alt_text: name })),
+    );
+  }
+
   revalidatePath("/admin/produits");
   revalidatePath("/boutique");
   return { success: true, product: data };
@@ -340,6 +356,9 @@ export async function adminCreateProduct(formData: FormData) {
 
 export async function adminUpdateProduct(id: string, formData: FormData) {
   const supabase = await createClient();
+
+  const images = readProductImages(formData);
+  const mainImage = images[0] || (formData.get("main_image_url") as string) || null;
 
   const { error } = await supabase.from("products").update({
     name: formData.get("name"),
@@ -351,7 +370,8 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
     old_price: formData.get("old_price") ? Number(formData.get("old_price")) : null,
     stock_quantity: Number(formData.get("stock_quantity") ?? 0),
     sku: formData.get("sku") || null,
-    main_image_url: formData.get("main_image_url") || null,
+    main_image_url: mainImage,
+    video_url: formData.get("video_url") || null,
     is_featured: formData.get("is_featured") === "true",
     is_new: formData.get("is_new") === "true",
     is_promo: formData.get("is_promo") === "true",
@@ -362,6 +382,15 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
   }).eq("id", id);
 
   if (error) return { error: error.message };
+
+  // Resynchronise la galerie : on remplace l'ensemble des photos
+  await supabase.from("product_images").delete().eq("product_id", id);
+  if (images.length) {
+    await supabase.from("product_images").insert(
+      images.map((url, i) => ({ product_id: id, image_url: url, sort_order: i, alt_text: formData.get("name") })),
+    );
+  }
+
   revalidatePath("/admin/produits");
   revalidatePath("/boutique");
   return { success: true };

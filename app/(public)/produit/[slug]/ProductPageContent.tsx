@@ -16,7 +16,7 @@ import {
   Phone,
   Minus,
   Plus,
-
+  Play,
   Package,
 } from "lucide-react";
 import { formatPrice, calculateDiscount, getWhatsAppUrl, cn } from "@/lib/utils";
@@ -56,7 +56,14 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
     ? [{ id: "main", product_id: product.id, image_url: product.main_image_url, alt_text: product.name, sort_order: 0 }]
     : [];
 
+  // Médias = photos + éventuelle vidéo (affichés dans la même galerie)
+  const media = [
+    ...images.map((img) => ({ kind: "image" as const, key: img.id, url: img.image_url, alt: img.alt_text ?? product.name })),
+    ...(product.video_url ? [{ kind: "video" as const, key: "video", url: product.video_url, alt: product.name }] : []),
+  ];
+
   const [activeImage, setActiveImage] = useState(0);
+  const activeMedia = media[activeImage];
   const [activeTab, setActiveTab] = useState<"description" | "specs" | "avis">("description");
   const [quantity, setQuantity] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
@@ -138,10 +145,12 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
           <div className="space-y-3">
             {/* Main image */}
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#F8FAFC] border border-gray-100">
-              {images[activeImage] ? (
+              {activeMedia?.kind === "video" ? (
+                <video src={activeMedia.url} controls className="w-full h-full object-contain bg-black" />
+              ) : activeMedia ? (
                 <Image
-                  src={images[activeImage].image_url}
-                  alt={images[activeImage].alt_text ?? product.name}
+                  src={activeMedia.url}
+                  alt={activeMedia.alt}
                   fill
                   className="object-contain p-4"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -174,24 +183,31 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             </div>
 
             {/* Thumbnails */}
-            {images.length > 1 && (
+            {media.length > 1 && (
               <div className="flex gap-2 overflow-x-auto pb-1">
-                {images.map((img, i) => (
+                {media.map((m, i) => (
                   <button
-                    key={img.id}
+                    key={m.key}
                     onClick={() => setActiveImage(i)}
+                    aria-label={m.kind === "video" ? "Voir la vidéo" : `Photo ${i + 1}`}
                     className={cn(
                       "relative shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all",
                       i === activeImage ? "border-[#16A34A]" : "border-gray-200 hover:border-gray-300"
                     )}
                   >
-                    <Image
-                      src={img.image_url}
-                      alt={img.alt_text ?? product.name}
-                      fill
-                      className="object-contain p-1"
-                      sizes="64px"
-                    />
+                    {m.kind === "video" ? (
+                      <div className="w-full h-full bg-[#020617] flex items-center justify-center">
+                        <Play size={18} className="text-white fill-white" />
+                      </div>
+                    ) : (
+                      <Image
+                        src={m.url}
+                        alt={m.alt}
+                        fill
+                        className="object-contain p-1"
+                        sizes="64px"
+                      />
+                    )}
                   </button>
                 ))}
               </div>
