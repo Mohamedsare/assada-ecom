@@ -129,11 +129,17 @@ export default function Footer() {
 
         {/* Paiement */}
         <div className="border-t border-white/10 pt-6 mb-6">
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+          <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
             <span className="text-gray-500">Moyens de paiement :</span>
-            <span className="bg-white/10 px-3 py-1 rounded text-xs font-medium">💵 Espèces</span>
-            <span className="bg-white/10 px-3 py-1 rounded text-xs font-medium">📲 Airtel Money</span>
-            <span className="bg-white/10 px-3 py-1 rounded text-xs font-medium">📱 Moov Money</span>
+            {[
+              { src: "/paiments/paiement-livraison.jpeg", alt: "Espèces à la livraison" },
+              { src: "/paiments/airtel-money.jpeg", alt: "Airtel Money" },
+              { src: "/paiments/moov-money.jpeg", alt: "Moov Money" },
+            ].map((p) => (
+              <span key={p.src} className="relative h-8 w-12 overflow-hidden rounded bg-white">
+                <Image src={p.src} alt={p.alt} fill className="object-contain p-0.5" sizes="48px" />
+              </span>
+            ))}
           </div>
         </div>
 

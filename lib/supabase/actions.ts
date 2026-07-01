@@ -231,6 +231,8 @@ export async function createOrder(data: {
   subtotal: number;
   delivery_fee: number;
   total: number;
+  discount?: number;
+  coupon_code?: string | null;
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -259,7 +261,7 @@ export async function createOrder(data: {
       order_status: "pending",
       subtotal: data.subtotal,
       delivery_fee: data.delivery_fee,
-      discount_amount: 0,
+      discount_amount: data.discount ?? 0,
       total_amount: data.total,
       estimated_delivery_date: estimatedDate.toISOString().split("T")[0],
     })
@@ -300,7 +302,54 @@ export async function createOrder(data: {
     message: "Commande reçue et en attente de confirmation.",
   });
 
+  // Incrémente l'usage du coupon si présent (via fonction SQL security definer,
+  // car l'écriture sur coupons est protégée par RLS côté client). Échec silencieux.
+  if (data.coupon_code) {
+    try { await supabase.rpc("increment_coupon_usage", { p_code: data.coupon_code }); }
+    catch { /* fonction non déployée ou usage non suivi : sans impact sur la commande */ }
+  }
+
   return { success: true, order_number };
+}
+
+/**
+ * Valide un code promo pour un sous-total donné (utilisé au checkout).
+ * S'appuie sur la lecture publique des coupons actifs (RLS).
+ */
+export async function validateCoupon(
+  code: string,
+  subtotal: number,
+): Promise<
+  | { ok: true; code: string; discount: number; discount_type: string; discount_value: number }
+  | { ok: false; error: string }
+> {
+  const c = (code || "").trim().toUpperCase();
+  if (!c) return { ok: false, error: "Entrez un code promo." };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("coupons").select("*").eq("code", c).maybeSingle();
+
+  if (error || !data) return { ok: false, error: "Code promo invalide." };
+  if (!data.is_active) return { ok: false, error: "Ce code n'est plus actif." };
+  if (data.expires_at && new Date(data.expires_at) < new Date())
+    return { ok: false, error: "Ce code a expiré." };
+  if (data.max_uses != null && (data.used_count ?? 0) >= data.max_uses)
+    return { ok: false, error: "Ce code a atteint sa limite d'utilisation." };
+  if (subtotal < (data.min_order_amount ?? 0))
+    return { ok: false, error: `Minimum requis : ${Number(data.min_order_amount).toLocaleString("fr-FR")} FCFA.` };
+
+  const discount = data.discount_type === "percentage"
+    ? Math.round(subtotal * (Number(data.discount_value) / 100))
+    : Math.min(Number(data.discount_value), subtotal);
+
+  return {
+    ok: true,
+    code: c,
+    discount,
+    discount_type: data.discount_type,
+    discount_value: Number(data.discount_value),
+  };
 }
 
 // ─── ADMIN — PRODUCTS ────────────────────────────────────────────────────────
@@ -308,6 +357,38 @@ export async function createOrder(data: {
 /** Récupère jusqu'à 5 URLs d'images depuis le FormData (champs "images"). */
 function readProductImages(formData: FormData): string[] {
   return formData.getAll("images").map((v) => String(v)).filter(Boolean).slice(0, 5);
+}
+
+interface VariantInput {
+  color: string | null;
+  size: string | null;
+  stock_quantity: number;
+  price_adjustment: number;
+}
+
+/**
+ * Lit les variantes depuis le champ JSON "variants" du formulaire.
+ * Ignore les lignes totalement vides (ni couleur ni taille).
+ */
+function readProductVariants(formData: FormData): VariantInput[] {
+  const raw = formData.get("variants");
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(String(raw)) as Array<{
+      color?: string; size?: string; stock_quantity?: number | string; price_adjustment?: number | string;
+    }>;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((v) => ({
+        color: v.color?.trim() || null,
+        size: v.size?.trim() || null,
+        stock_quantity: Math.max(0, Math.floor(Number(v.stock_quantity) || 0)),
+        price_adjustment: Math.floor(Number(v.price_adjustment) || 0),
+      }))
+      .filter((v) => v.color || v.size);
+  } catch {
+    return [];
+  }
 }
 
 export async function adminCreateProduct(formData: FormData) {
@@ -346,6 +427,13 @@ export async function adminCreateProduct(formData: FormData) {
   if (images.length) {
     await supabase.from("product_images").insert(
       images.map((url, i) => ({ product_id: data.id, image_url: url, sort_order: i, alt_text: name })),
+    );
+  }
+
+  const variants = readProductVariants(formData);
+  if (variants.length) {
+    await supabase.from("product_variants").insert(
+      variants.map((v) => ({ ...v, product_id: data.id })),
     );
   }
 
@@ -391,8 +479,18 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
     );
   }
 
+  // Resynchronise les variantes (les commandes/paniers conservent leur snapshot via ON DELETE SET NULL)
+  await supabase.from("product_variants").delete().eq("product_id", id);
+  const variants = readProductVariants(formData);
+  if (variants.length) {
+    await supabase.from("product_variants").insert(
+      variants.map((v) => ({ ...v, product_id: id })),
+    );
+  }
+
   revalidatePath("/admin/produits");
   revalidatePath("/boutique");
+  revalidatePath(`/admin/produits/${id}/modifier`);
   return { success: true };
 }
 
@@ -454,11 +552,35 @@ export async function adminUpdateCategory(id: string, formData: FormData) {
   return { success: true };
 }
 
+export async function adminToggleCategoryActive(id: string, is_active: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("categories")
+    .update({ is_active, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/categories");
+  revalidatePath("/boutique");
+  return { success: true };
+}
+
 export async function adminDeleteCategory(id: string) {
   const supabase = await createClient();
+
+  // Empêche la suppression d'une catégorie contenant des produits ou des sous-catégories.
+  const [{ count: productCount }, { count: childCount }] = await Promise.all([
+    supabase.from("products").select("id", { count: "exact", head: true }).eq("category_id", id),
+    supabase.from("categories").select("id", { count: "exact", head: true }).eq("parent_id", id),
+  ]);
+
+  if ((productCount ?? 0) > 0)
+    throw new Error(`Impossible de supprimer : ${productCount} produit(s) rattaché(s) à cette catégorie.`);
+  if ((childCount ?? 0) > 0)
+    throw new Error(`Impossible de supprimer : ${childCount} sous-catégorie(s) rattachée(s).`);
+
   const { error } = await supabase.from("categories").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/categories");
+  revalidatePath("/boutique");
 }
 
 // ─── ADMIN — BRANDS ──────────────────────────────────────────────────────────
@@ -497,11 +619,30 @@ export async function adminUpdateBrand(id: string, formData: FormData) {
   return { success: true };
 }
 
+export async function adminToggleBrandActive(id: string, is_active: boolean) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("brands")
+    .update({ is_active, updated_at: new Date().toISOString() })
+    .eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/marques");
+  revalidatePath("/boutique");
+  return { success: true };
+}
+
 export async function adminDeleteBrand(id: string) {
   const supabase = await createClient();
+
+  // Empêche la suppression d'une marque rattachée à des produits (évite l'orphelinage silencieux).
+  const { count } = await supabase
+    .from("products").select("id", { count: "exact", head: true }).eq("brand_id", id);
+  if ((count ?? 0) > 0)
+    throw new Error(`Impossible de supprimer : ${count} produit(s) rattaché(s) à cette marque.`);
+
   const { error } = await supabase.from("brands").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidatePath("/admin/marques");
+  revalidatePath("/boutique");
 }
 
 // ─── ADMIN — ORDERS ───────────────────────────────────────────────────────────
@@ -524,6 +665,8 @@ export async function adminUpdateOrderStatus(id: string, status: string) {
   });
 
   revalidatePath("/admin/commandes");
+  revalidatePath(`/admin/commandes/${id}`);
+  revalidatePath("/admin/livraisons");
   return { success: true };
 }
 
@@ -535,7 +678,27 @@ export async function adminUpdatePaymentStatus(id: string, status: string) {
   }).eq("id", id);
 
   if (error) return { error: error.message };
+
+  // Synchronise la ligne de paiement liée si elle existe
+  await supabase.from("payments")
+    .update({ status, paid_at: status === "paid" ? new Date().toISOString() : null })
+    .eq("order_id", id);
+
   revalidatePath("/admin/commandes");
+  revalidatePath(`/admin/commandes/${id}`);
+  revalidatePath("/admin/paiements");
+  return { success: true };
+}
+
+export async function adminUpdateOrderNote(id: string, note: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("orders").update({
+    admin_note: note || null,
+    updated_at: new Date().toISOString(),
+  }).eq("id", id);
+
+  if (error) return { error: error.message };
+  revalidatePath(`/admin/commandes/${id}`);
   return { success: true };
 }
 
@@ -624,10 +787,20 @@ export async function adminUpdatePayment(id: string, status: string) {
 export async function adminUpdateStock(id: string, stock_quantity: number) {
   const supabase = await createClient();
   const qty = Math.max(0, Math.floor(stock_quantity));
+
+  // On ne touche au statut que pour la transition stock ↔ rupture :
+  // un produit en brouillon ou masqué ne doit pas être publié par un simple réassort.
+  const { data: current } = await supabase
+    .from("products").select("status").eq("id", id).single();
+
+  let status = current?.status as string | undefined;
+  if (qty === 0) status = "out_of_stock";
+  else if (status === "out_of_stock") status = "active";
+
   const { error } = await supabase.from("products")
     .update({
       stock_quantity: qty,
-      status: qty === 0 ? "out_of_stock" : "active",
+      ...(status ? { status } : {}),
       updated_at: new Date().toISOString(),
     })
     .eq("id", id);
@@ -635,6 +808,7 @@ export async function adminUpdateStock(id: string, stock_quantity: number) {
   if (error) return { error: error.message };
   revalidatePath("/admin/stocks");
   revalidatePath("/admin/produits");
+  revalidatePath("/boutique");
   return { success: true };
 }
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   DollarSign,
   ShoppingBag,
@@ -33,6 +34,7 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export const metadata = { title: "Tableau de bord admin" };
+export const dynamic = "force-dynamic";
 
 const FR_MONTHS = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
 const FR_DAYS   = ["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"];
@@ -247,7 +249,7 @@ export default async function AdminDashboardPage() {
               recentOrders.map((o) => (
                 <Link
                   key={o.id}
-                  href="/admin/commandes"
+                  href={`/admin/commandes/${o.id}`}
                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
@@ -280,16 +282,24 @@ export default async function AdminDashboardPage() {
           </div>
           <div className="p-3 space-y-1">
             {allProducts.slice(0, 5).map((p) => (
-              <div key={p.id} className="flex items-center gap-3 p-2">
-                <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center text-base shrink-0">
-                  <Package size={15} className="text-gray-400" />
+              <Link
+                key={p.id}
+                href={`/admin/produits/${p.id}/modifier`}
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                  {p.main_image_url ? (
+                    <Image src={p.main_image_url} alt={p.name} width={36} height={36} className="object-cover w-full h-full" />
+                  ) : (
+                    <Package size={15} className="text-gray-400" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-[#0F172A] truncate">{p.name}</p>
                   <p className="text-[11px] text-text-secondary">{p.category?.name ?? "—"}</p>
                 </div>
                 <span className="text-sm font-bold text-green shrink-0">{formatPrice(p.current_price)}</span>
-              </div>
+              </Link>
             ))}
             {allProducts.length === 0 && (
               <p className="text-xs text-text-secondary text-center py-6">Aucun produit</p>
@@ -308,16 +318,24 @@ export default async function AdminDashboardPage() {
               <p className="text-xs text-text-secondary text-center py-6">Aucune alerte</p>
             ) : (
               lowStock.map((s) => (
-                <div key={s.id} className="flex items-center gap-3 p-2">
-                  <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
-                    <Package size={15} className="text-gray-400" />
+                <Link
+                  key={s.id}
+                  href={`/admin/produits/${s.id}/modifier`}
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <div className="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                    {s.main_image_url ? (
+                      <Image src={s.main_image_url} alt={s.name} width={36} height={36} className="object-cover w-full h-full" />
+                    ) : (
+                      <Package size={15} className="text-gray-400" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#0F172A] truncate">{s.name}</p>
                     <p className="text-[11px] text-text-secondary">Stock : {s.stock_quantity} unités</p>
                   </div>
                   <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full shrink-0">Faible</span>
-                </div>
+                </Link>
               ))
             )}
           </div>

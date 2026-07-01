@@ -10,12 +10,11 @@ import {
 import { createPortal } from "react-dom";
 import { useCartStore } from "@/stores/cart";
 import { useUIStore, type Toast } from "@/stores/ui";
+import { useConfigStore } from "@/stores/config";
 import { formatPrice, cn } from "@/lib/utils";
+import QuickView from "@/components/product/QuickView";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-
-const DELIVERY_FEE = 2000;
-const FREE_DELIVERY_THRESHOLD = 100_000;
 
 const TOAST_ICONS = {
   success: <CheckCircle size={17} className="text-[#16A34A] shrink-0" />,
@@ -39,6 +38,7 @@ export default function UIShell() {
   return (
     <>
       <CartDrawerPortal />
+      <QuickView />
       <ToastContainerInner toasts={toasts} onRemove={removeToast} />
     </>
   );
@@ -70,6 +70,9 @@ function CartDrawerInner() {
   const _remove    = useCartStore((s) => s.removeItem);
   const _update    = useCartStore((s) => s.updateQuantity);
   const _clear     = useCartStore((s) => s.clearCart);
+
+  const DELIVERY_FEE = useConfigStore((s) => s.deliveryFee);
+  const FREE_DELIVERY_THRESHOLD = useConfigStore((s) => s.freeDeliveryThreshold);
 
   const removeItem = (id: string, name?: string) => {
     _remove(id);

@@ -4,14 +4,18 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import UIShell from "@/components/layout/UIShell";
+import ConfigHydrator from "@/components/layout/ConfigHydrator";
+import { getStoreConfig } from "@/lib/supabase/queries";
 
-export default function PublicLayout({
+export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const config = await getStoreConfig();
   return (
     <>
+      <ConfigHydrator deliveryFee={config.deliveryFee} freeDeliveryThreshold={config.freeDeliveryThreshold} />
       <TopBar />
       <Header />
       <main className="flex-1 pb-16 lg:pb-0">{children}</main>

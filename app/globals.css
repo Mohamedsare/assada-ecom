@@ -15,6 +15,16 @@
   --color-text-secondary: #64748B;
   --color-red: #EF4444;
   --color-orange: #F97316;
+
+  /* Rayons réduits globalement (tout rounded-* devient plus discret) */
+  --radius-xs:  0.0625rem;  /* 1px  */
+  --radius-sm:  0.125rem;   /* 2px  */
+  --radius-md:  0.25rem;    /* 4px  */
+  --radius-lg:  0.375rem;   /* 6px  */
+  --radius-xl:  0.5rem;     /* 8px  */
+  --radius-2xl: 0.625rem;   /* 10px */
+  --radius-3xl: 0.875rem;   /* 14px */
+  --radius-4xl: 1.25rem;    /* 20px */
 }
 
 body {
@@ -92,4 +102,16 @@ html {
 }
 .animate-fade-bg {
   animation: fadeBg 0.6s ease forwards;
+}
+
+/* Quick view modal entrance */
+@keyframes quickViewIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-quickview {
+  animation: quickViewIn 0.25s ease forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-quickview { animation: none; }
 }

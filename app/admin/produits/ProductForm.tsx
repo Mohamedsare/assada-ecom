@@ -6,6 +6,7 @@ import { ArrowLeft, Sparkles, Loader2 } from "lucide-react";
 import { adminCreateProduct, adminUpdateProduct, generateProductInfo } from "@/lib/supabase/actions";
 import MultiImageUpload from "@/components/admin/MultiImageUpload";
 import VideoUploadField from "@/components/admin/VideoUploadField";
+import VariantsField from "@/components/admin/VariantsField";
 import type { Product, Category, Brand } from "@/types";
 
 const STATUS_OPTIONS: { value: string; label: string }[] = [
@@ -150,6 +151,13 @@ export default function ProductForm({
               <Field label="Stock" name="stock_quantity" type="number" defaultValue={product ? String(product.stock_quantity) : "0"} placeholder="10" />
             </div>
             <Field label="SKU (référence)" name="sku" defaultValue={product?.sku ?? ""} placeholder="NK-AM270-42" />
+          </Card>
+
+          <Card title="Variantes (couleurs & tailles)">
+            <p className="text-xs text-text-secondary -mt-1">
+              Optionnel. Chaque variante a son propre stock et un ajustement de prix (en FCFA, positif ou négatif).
+            </p>
+            <VariantsField name="variants" defaultValue={product?.variants} />
           </Card>
 
           <Card title="Référencement (SEO)">

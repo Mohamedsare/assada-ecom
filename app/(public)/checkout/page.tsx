@@ -1,20 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
   Check, ChevronRight, ChevronLeft, Lock,
   User, MapPin, CreditCard, ClipboardCheck,
-  Banknote, Smartphone, Phone,
+  Phone, Ticket, X,
 } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
+import { useConfigStore } from "@/stores/config";
 import { formatPrice } from "@/lib/utils";
-import { createOrder } from "@/lib/supabase/actions";
-
-const DELIVERY_FEE = 2000;
-const FREE_DELIVERY_THRESHOLD = 100000;
+import { createOrder, validateCoupon } from "@/lib/supabase/actions";
 
 const STEPS = [
   { id: 1, label: "Client",   icon: User },
@@ -33,25 +31,19 @@ const PAYMENT_OPTIONS = [
     id: "cash_on_delivery" as const,
     label: "Espèces à la livraison",
     description: "Payez en cash à la réception de votre commande",
-    icon: Banknote,
-    accent: "text-green-600",
-    bg: "bg-green-50",
+    image: "/paiments/paiement-livraison.jpeg",
   },
   {
     id: "airtel_money" as const,
     label: "Airtel Money",
     description: "Paiement mobile sécurisé via Airtel Money",
-    icon: Smartphone,
-    accent: "text-red-500",
-    bg: "bg-red-50",
+    image: "/paiments/airtel-money.jpeg",
   },
   {
     id: "moov_money" as const,
     label: "Moov Money",
     description: "Paiement mobile sécurisé via Moov Money",
-    icon: Smartphone,
-    accent: "text-blue-500",
-    bg: "bg-blue-50",
+    image: "/paiments/moov-money.jpeg",
   },
 ];
 
@@ -102,6 +94,8 @@ export default function CheckoutPage() {
   const totalPrice = useCartStore(s => s.totalPrice);
   const totalItems = useCartStore(s => s.totalItems);
   const clearCart  = useCartStore(s => s.clearCart);
+  const DELIVERY_FEE = useConfigStore(s => s.deliveryFee);
+  const FREE_DELIVERY_THRESHOLD = useConfigStore(s => s.freeDeliveryThreshold);
 
   const [step,       setStep]       = useState(1);
   const [submitting, setSubmitting] = useState(false);
@@ -112,9 +106,25 @@ export default function CheckoutPage() {
   const [address,  setAddress]  = useState<AddressData>({ city: "Libreville", district: "", address_details: "", landmark: "" });
   const [payment,  setPayment]  = useState<PaymentData>({ method: "cash_on_delivery", payment_phone: "" });
 
+  const [couponInput, setCouponInput]   = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
+  const [couponError, setCouponError]   = useState<string | null>(null);
+  const [couponPending, startCoupon]    = useTransition();
+
   const subtotal    = totalPrice();
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
-  const total       = subtotal + deliveryFee;
+  const discount    = appliedCoupon ? Math.min(appliedCoupon.discount, subtotal) : 0;
+  const total       = Math.max(0, subtotal + deliveryFee - discount);
+
+  const applyCoupon = () => {
+    setCouponError(null);
+    startCoupon(async () => {
+      const res = await validateCoupon(couponInput, subtotal);
+      if (!res.ok) { setCouponError(res.error); setAppliedCoupon(null); }
+      else { setAppliedCoupon({ code: res.code, discount: res.discount }); setCouponInput(res.code); }
+    });
+  };
+  const removeCoupon = () => { setAppliedCoupon(null); setCouponInput(""); setCouponError(null); };
 
   useEffect(() => {
     if (items.length === 0) router.replace("/panier");
@@ -158,6 +168,8 @@ export default function CheckoutPage() {
       subtotal,
       delivery_fee: deliveryFee,
       total,
+      discount,
+      coupon_code: appliedCoupon?.code ?? null,
     });
 
     if (result.error) {
@@ -174,7 +186,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) return null;
 
-  const OrderSummary = () => (
+  const orderSummary = (
     <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
       <h3 className="font-bold text-[#0F172A] mb-4 text-base">Ma commande</h3>
       <div className="space-y-3 mb-5">
@@ -205,6 +217,12 @@ export default function CheckoutPage() {
             {deliveryFee === 0 ? "Gratuite 🎉" : formatPrice(deliveryFee)}
           </span>
         </div>
+        {discount > 0 && (
+          <div className="flex justify-between">
+            <span className="text-gray-500">Réduction{appliedCoupon ? ` (${appliedCoupon.code})` : ""}</span>
+            <span className="font-medium text-[#16A34A]">− {formatPrice(discount)}</span>
+          </div>
+        )}
         <div className="flex justify-between font-extrabold text-base pt-2 border-t border-gray-100">
           <span className="text-[#0F172A]">Total</span>
           <span className="text-[#16A34A]">{formatPrice(total)}</span>
@@ -347,8 +365,8 @@ export default function CheckoutPage() {
                         className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all text-left ${
                           selected ? "border-[#16A34A] bg-green-50/60" : "border-gray-200 hover:border-gray-300 bg-white"
                         }`}>
-                        <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors ${selected ? "bg-[#16A34A]" : opt.bg}`}>
-                          <opt.icon size={20} className={selected ? "text-white" : opt.accent} />
+                        <div className={`relative w-11 h-11 rounded-xl overflow-hidden shrink-0 border bg-white transition-colors ${selected ? "border-[#16A34A]" : "border-gray-200"}`}>
+                          <Image src={opt.image} alt={opt.label} fill className="object-contain p-1" sizes="44px" />
                         </div>
                         <div className="flex-1 min-w-0 text-left">
                           <p className="font-semibold text-[#0F172A] text-sm">{opt.label}</p>
@@ -435,7 +453,42 @@ export default function CheckoutPage() {
                       );
                     })}
                   </div>
-                  <div className="border-t border-gray-100 mt-5 pt-4 space-y-2 text-sm">
+                  {/* Code promo */}
+                  <div className="border-t border-gray-100 mt-5 pt-4">
+                    {appliedCoupon ? (
+                      <div className="flex items-center justify-between bg-green-50 border border-green/30 rounded-xl px-3 py-2.5">
+                        <span className="flex items-center gap-2 text-sm font-semibold text-[#16A34A]">
+                          <Ticket size={15} /> {appliedCoupon.code} appliqué
+                        </span>
+                        <button type="button" onClick={removeCoupon} className="text-gray-400 hover:text-red-500 transition-colors" title="Retirer le code">
+                          <X size={16} />
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <label className="block text-xs font-medium text-gray-500 mb-1.5">Code promo</label>
+                        <div className="flex gap-2">
+                          <input
+                            value={couponInput}
+                            onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                            placeholder="BIENVENUE10"
+                            className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors uppercase"
+                          />
+                          <button
+                            type="button"
+                            onClick={applyCoupon}
+                            disabled={couponPending || !couponInput.trim()}
+                            className="bg-[#0F172A] text-white text-sm font-semibold px-4 rounded-xl hover:bg-[#1e293b] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            {couponPending ? "…" : "Appliquer"}
+                          </button>
+                        </div>
+                        {couponError && <p className="text-xs text-red-600 mt-1.5">{couponError}</p>}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="border-t border-gray-100 mt-4 pt-4 space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-500">Sous-total</span>
                       <span className="font-medium">{formatPrice(subtotal)}</span>
@@ -446,6 +499,12 @@ export default function CheckoutPage() {
                         {deliveryFee === 0 ? "Gratuite 🎉" : formatPrice(deliveryFee)}
                       </span>
                     </div>
+                    {discount > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Réduction{appliedCoupon ? ` (${appliedCoupon.code})` : ""}</span>
+                        <span className="font-medium text-[#16A34A]">− {formatPrice(discount)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between font-extrabold text-base pt-2 border-t border-gray-100">
                       <span className="text-[#0F172A]">Total</span>
                       <span className="text-[#16A34A]">{formatPrice(total)}</span>
@@ -490,7 +549,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="hidden lg:block lg:sticky lg:top-20 lg:self-start">
-            <OrderSummary />
+            {orderSummary}
           </div>
         </div>
       </div>

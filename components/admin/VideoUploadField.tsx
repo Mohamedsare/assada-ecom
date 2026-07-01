@@ -24,8 +24,14 @@ export default function VideoUploadField({
   const [pending, startTransition] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const MAX_SIZE = 50 * 1024 * 1024; // 50 Mo (aligné sur file_size_limit du bucket)
+
   const handleFile = (file: File) => {
     setError(null);
+    if (file.size > MAX_SIZE) {
+      setError(`Vidéo trop lourde (${(file.size / 1024 / 1024).toFixed(0)} Mo). Maximum 50 Mo.`);
+      return;
+    }
     const fd = new FormData();
     fd.append("file", file);
     startTransition(async () => {

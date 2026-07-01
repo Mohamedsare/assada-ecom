@@ -8,5 +8,6 @@ export const dynamic = "force-dynamic";
 export default async function AdminUsersPage() {
   const [profiles, current] = await Promise.all([getAdminProfiles(), getCurrentProfile()]);
   const staff = profiles.filter((p) => p.role !== "customer");
-  return <UsersContent staff={staff} currentUserId={current?.id ?? ""} />;
+  const customers = profiles.filter((p) => p.role === "customer");
+  return <UsersContent staff={staff} customers={customers} currentUserId={current?.id ?? ""} />;
 }

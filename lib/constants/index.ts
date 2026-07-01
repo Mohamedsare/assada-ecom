@@ -1,4 +1,9 @@
 export const SITE_NAME = "Odm's Shopping";
+
+/** Valeurs de livraison par défaut (surchargées par les Paramètres boutique en base). */
+export const DEFAULT_DELIVERY_FEE = 2000;
+export const DEFAULT_FREE_DELIVERY_THRESHOLD = 100_000;
+
 export const SITE_EMAIL = "odms-shopping@gmail.com";
 export const SITE_PHONE = "+241 62 57 37 48";
 export const WHATSAPP_NUMBER = "24162573748";
@@ -70,5 +75,4 @@ export const NAV_LINKS = [
   { label: "Boutique", href: "/boutique" },
   { label: "Nouveautés", href: "/nouveautes" },
   { label: "Promotions", href: "/promotions" },
-  { label: "Contact", href: "/contact" },
 ] as const;

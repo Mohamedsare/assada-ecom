@@ -7,11 +7,9 @@ import {
   Truck, ShieldCheck, RotateCcw, Headphones, ChevronRight,
 } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
+import { useConfigStore } from "@/stores/config";
 import { addToast } from "@/lib/ui-actions";
 import { formatPrice } from "@/lib/utils";
-
-const DELIVERY_FEE = 2000;
-const FREE_DELIVERY_THRESHOLD = 100000;
 
 export default function PanierPage() {
   const items       = useCartStore((s) => s.items);
@@ -20,6 +18,8 @@ export default function PanierPage() {
   const _removeItem = useCartStore((s) => s.removeItem);
   const _updateQty  = useCartStore((s) => s.updateQuantity);
   const _clearCart  = useCartStore((s) => s.clearCart);
+  const DELIVERY_FEE = useConfigStore((s) => s.deliveryFee);
+  const FREE_DELIVERY_THRESHOLD = useConfigStore((s) => s.freeDeliveryThreshold);
 
   const removeItem = (id: string, name?: string) => {
     _removeItem(id);
@@ -226,8 +226,8 @@ export default function PanierPage() {
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-text-secondary">Réduction</span>
-                  <span className="font-semibold text-green">— 0 FCFA</span>
+                  <span className="text-text-secondary">Code promo</span>
+                  <span className="text-xs text-text-secondary">À appliquer au paiement</span>
                 </div>
               </div>
 

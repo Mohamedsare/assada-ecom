@@ -269,9 +269,15 @@ export default function HomeFooter() {
           </p>
           <div className="flex items-center gap-2 text-xs">
             <span className="text-gray-500 mr-1">Paiement :</span>
-            <span className="bg-white/10 px-2.5 py-1 rounded font-medium">Airtel Money</span>
-            <span className="bg-white/10 px-2.5 py-1 rounded font-medium">Moov Money</span>
-            <span className="bg-white/10 px-2.5 py-1 rounded font-medium">Espèces</span>
+            {[
+              { src: "/paiments/airtel-money.jpeg", alt: "Airtel Money" },
+              { src: "/paiments/moov-money.jpeg", alt: "Moov Money" },
+              { src: "/paiments/paiement-livraison.jpeg", alt: "Espèces à la livraison" },
+            ].map((p) => (
+              <span key={p.src} className="relative h-7 w-11 overflow-hidden rounded bg-white">
+                <Image src={p.src} alt={p.alt} fill className="object-contain p-0.5" sizes="44px" />
+              </span>
+            ))}
           </div>
         </div>
       </div>

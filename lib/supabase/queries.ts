@@ -1,4 +1,5 @@
 import { createClient } from "./server";
+import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD } from "@/lib/constants";
 import type {
   Product, Category, Brand, Order, Profile, Address,
   Review, Payment, Coupon, ContactMessage,
@@ -168,6 +169,18 @@ export async function getAllCategories(): Promise<Category[]> {
   return (data ?? []) as Category[];
 }
 
+/** Nombre de produits par catégorie (toutes statuts confondus) pour l'admin. */
+export async function getProductCountByCategory(): Promise<Record<string, number>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("category_id");
+  if (error) { logError("getProductCountByCategory", error); return {}; }
+  const counts: Record<string, number> = {};
+  for (const row of (data ?? []) as { category_id: string | null }[]) {
+    if (row.category_id) counts[row.category_id] = (counts[row.category_id] ?? 0) + 1;
+  }
+  return counts;
+}
+
 // ─── BRANDS ─────────────────────────────────────────────────────────────────
 
 export async function getBrands(): Promise<Brand[]> {
@@ -191,6 +204,18 @@ export async function getAllBrands(): Promise<Brand[]> {
 
   if (error) return [];
   return (data ?? []) as Brand[];
+}
+
+/** Nombre de produits par marque (tous statuts) pour l'admin. */
+export async function getProductCountByBrand(): Promise<Record<string, number>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("products").select("brand_id");
+  if (error) { logError("getProductCountByBrand", error); return {}; }
+  const counts: Record<string, number> = {};
+  for (const row of (data ?? []) as { brand_id: string | null }[]) {
+    if (row.brand_id) counts[row.brand_id] = (counts[row.brand_id] ?? 0) + 1;
+  }
+  return counts;
 }
 
 // ─── ORDERS ─────────────────────────────────────────────────────────────────
@@ -230,6 +255,19 @@ export async function getAdminOrders(): Promise<Order[]> {
   return (data ?? []) as Order[];
 }
 
+/** Une commande complète (articles + timeline de suivi) pour le détail admin. */
+export async function getAdminOrderById(id: string): Promise<Order | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select(`*, items:order_items(*), tracking:order_tracking(*)`)
+    .eq("id", id)
+    .single();
+
+  if (error) { logError("getAdminOrderById", error); return null; }
+  return data as Order;
+}
+
 // ─── PROFILE ─────────────────────────────────────────────────────────────────
 
 export async function getCurrentProfile(): Promise<Profile | null> {
@@ -256,6 +294,30 @@ export async function getAdminProfiles(): Promise<Profile[]> {
 
   if (error) return [];
   return (data ?? []) as Profile[];
+}
+
+/** Un profil par id — pour le détail client admin. */
+export async function getProfileById(id: string): Promise<Profile | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("profiles").select("*").eq("id", id).single();
+  if (error) { logError("getProfileById", error); return null; }
+  return data as Profile;
+}
+
+/** Statistiques de commandes agrégées par client (nb de commandes + total dépensé). */
+export async function getCustomerOrderStats(): Promise<Record<string, { count: number; total: number }>> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("orders").select("user_id, total_amount, order_status");
+  if (error) { logError("getCustomerOrderStats", error); return {}; }
+  const stats: Record<string, { count: number; total: number }> = {};
+  for (const o of (data ?? []) as { user_id: string | null; total_amount: number; order_status: string }[]) {
+    if (!o.user_id) continue;
+    if (!stats[o.user_id]) stats[o.user_id] = { count: 0, total: 0 };
+    stats[o.user_id].count += 1;
+    // On ne comptabilise que le CA réellement encaissé (commandes livrées)
+    if (o.order_status === "delivered") stats[o.user_id].total += o.total_amount ?? 0;
+  }
+  return stats;
 }
 
 // ─── ADDRESSES ───────────────────────────────────────────────────────────────
@@ -408,4 +470,27 @@ export async function getSettings(): Promise<Record<string, unknown>> {
   const { data } = await supabase.from("settings").select("key, value");
   if (!data) return {};
   return Object.fromEntries(data.map((s: { key: string; value: unknown }) => [s.key, s.value]));
+}
+
+/** Décode une valeur de réglage potentiellement encodée en JSON, puis en nombre. */
+function readSettingNumber(raw: unknown, fallback: number): number {
+  if (raw == null) return fallback;
+  let v = raw;
+  if (typeof v === "string") {
+    try { const parsed = JSON.parse(v); v = parsed; } catch { /* valeur brute */ }
+  }
+  const n = Number(v);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+/**
+ * Configuration boutique consommée par le panier / checkout (frais de livraison,
+ * seuil de gratuité). Lit les Paramètres en base avec repli sur les constantes.
+ */
+export async function getStoreConfig(): Promise<{ deliveryFee: number; freeDeliveryThreshold: number }> {
+  const s = await getSettings();
+  return {
+    deliveryFee: readSettingNumber(s.delivery_fee, DEFAULT_DELIVERY_FEE),
+    freeDeliveryThreshold: readSettingNumber(s.free_delivery_threshold, DEFAULT_FREE_DELIVERY_THRESHOLD),
+  };
 }

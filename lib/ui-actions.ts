@@ -1,4 +1,5 @@
 import { useUIStore } from "@/stores/ui";
+import type { Product } from "@/types";
 export type { Toast, ToastType } from "@/stores/ui";
 
 // Appels directs au store Zustand via getState() — fonctionne hors composant React,
@@ -9,6 +10,14 @@ export function openCartDrawer() {
 
 export function closeCartDrawer() {
   useUIStore.getState().closeCartDrawer();
+}
+
+export function openQuickView(product: Product) {
+  useUIStore.getState().openQuickView(product);
+}
+
+export function closeQuickView() {
+  useUIStore.getState().closeQuickView();
 }
 
 export function addToast(toast: Omit<import("@/stores/ui").Toast, "id">) {

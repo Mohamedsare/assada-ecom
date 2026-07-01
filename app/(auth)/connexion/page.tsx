@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { signInWithGoogle } from "@/lib/supabase/actions";
+import BackButton from "@/components/ui/BackButton";
 
 function ConnexionForm() {
   const router = useRouter();
@@ -63,7 +64,12 @@ function ConnexionForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4 py-12">
+    <div className="relative min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4 py-12">
+      {/* Bouton retour flottant */}
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
+        <BackButton />
+      </div>
+
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">

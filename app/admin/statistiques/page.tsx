@@ -3,7 +3,6 @@ import { DollarSign, ShoppingBag, Users, TrendingUp, MapPin, Package, Tag, Credi
 import { getAdminOrders, getAdminProducts, getAdminStats } from "@/lib/supabase/queries";
 import { formatPrice } from "@/lib/utils";
 import { PAYMENT_METHODS, ORDER_STATUS_LABELS } from "@/lib/constants";
-import type { Order } from "@/types";
 
 export const metadata: Metadata = { title: "Rapports & Statistiques" };
 export const dynamic = "force-dynamic";
@@ -44,6 +43,8 @@ export default async function AdminStatsPage() {
   const productCat = new Map(products.map((p) => [p.id, p.category?.name ?? "Sans catégorie"]));
 
   for (const o of orders) {
+    // Une commande annulée ou retournée n'est pas une vente : on l'exclut des agrégats produits/catégories.
+    if (o.order_status === "cancelled" || o.order_status === "returned") continue;
     for (const it of o.items ?? []) {
       const cur = productQty.get(it.product_name) ?? { name: it.product_name, qty: 0, revenue: 0 };
       cur.qty += it.quantity;

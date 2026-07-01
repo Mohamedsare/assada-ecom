@@ -1,20 +1,41 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
-import { Plus, Pencil, Tag, X } from "lucide-react";
-import { adminCreateCategory, adminUpdateCategory, adminDeleteCategory } from "@/lib/supabase/actions";
+import { useRouter } from "next/navigation";
+import { Plus, Pencil, Tag, X, Search, Loader2, Trash2, CornerDownRight } from "lucide-react";
+import {
+  adminCreateCategory, adminUpdateCategory, adminDeleteCategory, adminToggleCategoryActive,
+} from "@/lib/supabase/actions";
 import DeleteForm from "@/components/admin/DeleteForm";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import type { Category } from "@/types";
 
-export default function CategoriesContent({ categories }: { categories: Category[] }) {
+export default function CategoriesContent({
+  categories,
+  counts,
+}: {
+  categories: Category[];
+  counts: Record<string, number>;
+}) {
   const [editing, setEditing] = useState<Category | null>(null);
   const [creating, setCreating] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const nameById = useMemo(
+    () => Object.fromEntries(categories.map((c) => [c.id, c.name])),
+    [categories],
+  );
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return categories;
+    return categories.filter((c) => c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q));
+  }, [categories, search]);
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-5">
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-[#0F172A]">Catégories</h1>
           <p className="text-text-secondary text-sm mt-0.5">{categories.length} catégories</p>
@@ -27,54 +48,84 @@ export default function CategoriesContent({ categories }: { categories: Category
         </button>
       </div>
 
+      <div className="relative max-w-md">
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Rechercher une catégorie…"
+          className="w-full border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm outline-none focus:border-green transition-colors"
+        />
+      </div>
+
       <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                {["Catégorie", "Slug", "Ordre", "Statut", "Actions"].map((h) => (
-                  <th key={h} className="text-left text-xs text-text-secondary font-medium py-3 px-4">{h}</th>
+                {["Catégorie", "Slug", "Produits", "Ordre", "Statut", "Actions"].map((h) => (
+                  <th key={h} className="text-left text-xs text-text-secondary font-medium py-3 px-4 whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {categories.length === 0 ? (
-                <tr><td colSpan={5} className="py-12 text-center text-text-secondary text-sm">Aucune catégorie pour le moment.</td></tr>
-              ) : categories.map((cat) => (
-                <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 bg-green/10 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
-                        {cat.image_url ? (
-                          <Image src={cat.image_url} alt={cat.name} width={36} height={36} className="object-cover w-full h-full" />
+              {filtered.length === 0 ? (
+                <tr><td colSpan={6} className="py-12 text-center text-text-secondary text-sm">Aucune catégorie trouvée.</td></tr>
+              ) : filtered.map((cat) => {
+                const count = counts[cat.id] ?? 0;
+                const parentName = cat.parent_id ? nameById[cat.parent_id] : null;
+                return (
+                  <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-green/10 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                          {cat.image_url ? (
+                            <Image src={cat.image_url} alt={cat.name} width={36} height={36} className="object-cover w-full h-full" />
+                          ) : (
+                            <Tag size={15} className="text-green" />
+                          )}
+                        </div>
+                        <div>
+                          <span className="text-sm font-medium text-[#0F172A]">{cat.name}</span>
+                          {parentName && (
+                            <p className="text-xs text-text-secondary flex items-center gap-1">
+                              <CornerDownRight size={11} /> {parentName}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4"><span className="text-sm text-text-secondary">{cat.slug}</span></td>
+                    <td className="py-3 px-4">
+                      <span className={`text-sm font-medium ${count > 0 ? "text-[#0F172A]" : "text-gray-400"}`}>{count}</span>
+                    </td>
+                    <td className="py-3 px-4"><span className="text-sm text-text-secondary">{cat.sort_order}</span></td>
+                    <td className="py-3 px-4"><ActiveToggle category={cat} /></td>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => setEditing(cat)}
+                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0F172A] transition-colors"
+                          title="Modifier"
+                        >
+                          <Pencil size={15} />
+                        </button>
+                        {count > 0 ? (
+                          <button
+                            disabled
+                            className="p-1.5 rounded-lg text-gray-300 cursor-not-allowed"
+                            title={`Impossible de supprimer : ${count} produit(s) rattaché(s)`}
+                          >
+                            <Trash2 size={15} />
+                          </button>
                         ) : (
-                          <Tag size={15} className="text-green" />
+                          <DeleteForm action={adminDeleteCategory.bind(null, cat.id)} name={cat.name} iconSize={15} />
                         )}
                       </div>
-                      <span className="text-sm font-medium text-[#0F172A]">{cat.name}</span>
-                    </div>
-                  </td>
-                  <td className="py-3 px-4"><span className="text-sm text-text-secondary">{cat.slug}</span></td>
-                  <td className="py-3 px-4"><span className="text-sm text-text-secondary">{cat.sort_order}</span></td>
-                  <td className="py-3 px-4">
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${cat.is_active ? "bg-green-50 text-green" : "bg-gray-100 text-gray-500"}`}>
-                      {cat.is_active ? "Actif" : "Inactif"}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => setEditing(cat)}
-                        className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0F172A] transition-colors"
-                        title="Modifier"
-                      >
-                        <Pencil size={15} />
-                      </button>
-                      <DeleteForm action={adminDeleteCategory.bind(null, cat.id)} name={cat.name} iconSize={15} />
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -88,6 +139,35 @@ export default function CategoriesContent({ categories }: { categories: Category
         />
       )}
     </div>
+  );
+}
+
+function ActiveToggle({ category }: { category: Category }) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [active, setActive] = useState(category.is_active);
+
+  const toggle = () => {
+    const next = !active;
+    setActive(next);
+    startTransition(async () => {
+      await adminToggleCategoryActive(category.id, next);
+      router.refresh();
+    });
+  };
+
+  return (
+    <button
+      onClick={toggle}
+      disabled={pending}
+      className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 transition-colors disabled:opacity-60 ${
+        active ? "bg-green-50 text-green hover:bg-green-100" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+      }`}
+      title="Cliquer pour changer le statut"
+    >
+      {pending && <Loader2 size={11} className="animate-spin" />}
+      {active ? "Actif" : "Inactif"}
+    </button>
   );
 }
 

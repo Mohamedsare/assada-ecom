@@ -5,10 +5,14 @@ import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import AccountSidebar from "@/components/account/AccountSidebar";
 import UIShell from "@/components/layout/UIShell";
+import ConfigHydrator from "@/components/layout/ConfigHydrator";
+import { getStoreConfig } from "@/lib/supabase/queries";
 
-export default function CompteLayout({ children }: { children: React.ReactNode }) {
+export default async function CompteLayout({ children }: { children: React.ReactNode }) {
+  const config = await getStoreConfig();
   return (
     <>
+      <ConfigHydrator deliveryFee={config.deliveryFee} freeDeliveryThreshold={config.freeDeliveryThreshold} />
       <TopBar />
       <Header />
       <main className="flex-1 bg-[#F8FAFC] pb-16 lg:pb-0">

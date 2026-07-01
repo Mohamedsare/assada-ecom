@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useTransition } from "react";
+import Link from "next/link";
 import { Boxes, Search, AlertTriangle, PackageX, Check, Minus, Plus } from "lucide-react";
 import { adminUpdateStock } from "@/lib/supabase/actions";
 import { formatPrice } from "@/lib/utils";
@@ -118,7 +119,7 @@ function StockRow({ product }: { product: Product }) {
   return (
     <tr className="hover:bg-gray-50 transition-colors">
       <td className="py-3 px-4">
-        <p className="text-sm font-medium text-[#0F172A] line-clamp-1">{product.name}</p>
+        <Link href={`/admin/produits/${product.id}/modifier`} className="text-sm font-medium text-[#0F172A] hover:text-green transition-colors line-clamp-1">{product.name}</Link>
         <p className="text-xs text-text-secondary">{product.category?.name ?? "—"}</p>
       </td>
       <td className="py-3 px-4"><span className="text-xs text-text-secondary">{product.sku ?? "—"}</span></td>

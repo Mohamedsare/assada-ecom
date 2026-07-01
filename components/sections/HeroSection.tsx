@@ -68,9 +68,9 @@ export default function HeroSection() {
           className="object-cover object-right animate-fade-bg"
           sizes="100vw"
         />
-        {/* Dégradé pour lisibilité — plus fort sur mobile */}
-        <div className="absolute inset-0 bg-night/55 lg:hidden" />
-        <div className="absolute inset-0 bg-linear-to-r from-night via-night/70 to-transparent lg:from-night/80 lg:via-night/50" />
+        {/* Dégradé pour lisibilité — plus léger sur mobile pour mieux voir l'image */}
+        <div className="absolute inset-0 bg-night/25 lg:hidden" />
+        <div className="absolute inset-0 bg-linear-to-r from-night/60 via-night/25 to-transparent lg:from-night/80 lg:via-night/50" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">

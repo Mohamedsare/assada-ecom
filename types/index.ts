@@ -102,6 +102,9 @@ export interface Order {
   delivery_city: string;
   delivery_district: string;
   delivery_address_details?: string;
+  delivery_landmark?: string;
+  delivery_latitude?: number;
+  delivery_longitude?: number;
   payment_method: PaymentMethod;
   payment_status: PaymentStatus;
   order_status: OrderStatus;
@@ -109,9 +112,23 @@ export interface Order {
   delivery_fee: number;
   discount_amount: number;
   total_amount: number;
+  customer_note?: string;
+  admin_note?: string;
   estimated_delivery_date?: string;
   created_at: string;
+  updated_at?: string;
   items?: OrderItem[];
+  tracking?: OrderTracking[];
+}
+
+export interface OrderTracking {
+  id: string;
+  order_id: string;
+  status: OrderStatus;
+  message?: string;
+  latitude?: number;
+  longitude?: number;
+  created_at: string;
 }
 
 export interface OrderItem {

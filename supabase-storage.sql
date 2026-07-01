@@ -5,13 +5,19 @@
 -- =============================================================
 
 -- 1) Création des buckets publics (idempotent)
-insert into storage.buckets (id, name, public)
+--    Le bucket `products` accepte images ET vidéos.
+--    file_size_limit = 52428800 octets (50 Mo) pour permettre les vidéos produit.
+--    NB : cette limite ne peut PAS dépasser la limite globale du projet
+--    (Dashboard → Storage → Settings). Pour des vidéos > 50 Mo, augmente-la là-bas.
+insert into storage.buckets (id, name, public, file_size_limit)
 values
-  ('products',   'products',   true),
-  ('categories', 'categories', true),
-  ('brands',     'brands',     true),
-  ('avatars',    'avatars',    true)
-on conflict (id) do update set public = true;
+  ('products',   'products',   true, 52428800),
+  ('categories', 'categories', true,  5242880),
+  ('brands',     'brands',     true,  5242880),
+  ('avatars',    'avatars',    true,  5242880)
+on conflict (id) do update
+  set public = true,
+      file_size_limit = excluded.file_size_limit;
 
 -- 2) Policies sur storage.objects
 --    (on supprime d'abord pour rendre le script ré-exécutable)

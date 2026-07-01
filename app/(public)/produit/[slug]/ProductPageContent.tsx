@@ -11,6 +11,7 @@ import {
   Truck,
   ShieldCheck,
   RefreshCw,
+  ChevronLeft,
   ChevronRight,
   MessageCircle,
   Phone,
@@ -19,7 +20,7 @@ import {
   Play,
   Package,
 } from "lucide-react";
-import { formatPrice, calculateDiscount, getWhatsAppUrl, cn } from "@/lib/utils";
+import { formatPrice, calculateDiscount, getWhatsAppUrl, getProductOrderWhatsAppUrl, cn } from "@/lib/utils";
 import type { Product, ProductVariant } from "@/types";
 import { useCartStore } from "@/stores/cart";
 import { openCartDrawer, addToast } from "@/lib/ui-actions";
@@ -64,6 +65,18 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
 
   const [activeImage, setActiveImage] = useState(0);
   const activeMedia = media[activeImage];
+  const goPrevMedia = () => setActiveImage((i) => (i - 1 + media.length) % media.length);
+  const goNextMedia = () => setActiveImage((i) => (i + 1) % media.length);
+
+  // Zoom-loupe sur l'image principale (suit le curseur)
+  const [zooming, setZooming] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
+  const handleZoomMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setZoomOrigin({ x, y });
+  };
   const [activeTab, setActiveTab] = useState<"description" | "specs" | "avis">("description");
   const [quantity, setQuantity] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
@@ -105,9 +118,23 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
     );
   };
 
+  const pageUrl = typeof window !== "undefined" ? window.location.href : "";
+
+  // Question générale (sans détails de commande)
   const whatsappMsg = getWhatsAppUrl(
-    `Bonjour Odm's Shopping, je suis intéressé par ce produit : ${product.name}\nLien : ${typeof window !== "undefined" ? window.location.href : ""}`
+    `Bonjour Odm's Shopping, je suis intéressé par ce produit : ${product.name}\nLien : ${pageUrl}`
   );
+
+  // Commande complète : reprend toutes les options choisies par le client
+  const whatsappOrderMsg = getProductOrderWhatsAppUrl({
+    name: product.name,
+    brand: product.brand?.name,
+    color: selectedColor,
+    size: selectedSize,
+    quantity,
+    unitPrice: effectivePrice,
+    url: pageUrl,
+  });
 
   const tabs = [
     { key: "description", label: "Description" },
@@ -144,7 +171,15 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
           {/* ── Images ── */}
           <div className="space-y-3">
             {/* Main image */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-[#F8FAFC] border border-gray-100">
+            <div
+              className={cn(
+                "relative aspect-square rounded-2xl overflow-hidden bg-[#F8FAFC] border border-gray-100",
+                activeMedia?.kind === "image" && "cursor-zoom-in"
+              )}
+              onMouseEnter={() => activeMedia?.kind === "image" && setZooming(true)}
+              onMouseLeave={() => setZooming(false)}
+              onMouseMove={activeMedia?.kind === "image" ? handleZoomMove : undefined}
+            >
               {activeMedia?.kind === "video" ? (
                 <video src={activeMedia.url} controls className="w-full h-full object-contain bg-black" />
               ) : activeMedia ? (
@@ -152,7 +187,11 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                   src={activeMedia.url}
                   alt={activeMedia.alt}
                   fill
-                  className="object-contain p-4"
+                  className="object-contain p-4 transition-transform duration-200 ease-out will-change-transform"
+                  style={{
+                    transform: zooming ? "scale(1.9)" : "scale(1)",
+                    transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+                  }}
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
                 />
@@ -180,6 +219,30 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
               >
                 <Heart size={16} className={wishlisted ? "fill-red-500 text-red-500" : "text-gray-400"} />
               </button>
+
+              {/* Carousel arrows */}
+              {media.length > 1 && (
+                <>
+                  <button
+                    onClick={goPrevMedia}
+                    aria-label="Média précédent"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md text-[#0F172A] hover:bg-white transition-colors"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    onClick={goNextMedia}
+                    aria-label="Média suivant"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md text-[#0F172A] hover:bg-white transition-colors"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                  {/* Compteur */}
+                  <span className="absolute bottom-3 right-3 bg-black/50 text-white text-[11px] font-medium px-2 py-0.5 rounded-full backdrop-blur-sm">
+                    {activeImage + 1} / {media.length}
+                  </span>
+                </>
+              )}
             </div>
 
             {/* Thumbnails */}
@@ -372,7 +435,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
 
             {/* WhatsApp CTA */}
             <a
-              href={whatsappMsg}
+              href={whatsappOrderMsg}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full h-11 rounded-xl bg-[#25D366] hover:bg-[#1ebe5c] text-white flex items-center justify-center gap-2 font-semibold text-sm transition-colors"

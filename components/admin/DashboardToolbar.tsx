@@ -9,7 +9,6 @@ export interface ReportRow {
 }
 
 export default function DashboardToolbar({ report }: { report: ReportRow[] }) {
-  const [period, setPeriod] = useState("30 derniers jours");
   const [exported, setExported] = useState(false);
 
   const handleExport = () => {
@@ -35,15 +34,6 @@ export default function DashboardToolbar({ report }: { report: ReportRow[] }) {
   return (
     <div className="flex items-center justify-end gap-2">
       {exported && <span className="text-green text-xs font-medium">✓ Rapport téléchargé</span>}
-      <select
-        value={period}
-        onChange={(e) => setPeriod(e.target.value)}
-        className="text-xs bg-white border border-gray-200 rounded-lg px-2.5 py-1.5 outline-none focus:border-green cursor-pointer"
-      >
-        <option>30 derniers jours</option>
-        <option>7 derniers jours</option>
-        <option>Cette année</option>
-      </select>
       <button
         onClick={handleExport}
         className="flex items-center gap-1.5 bg-green hover:bg-[#15803d] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"

@@ -2,13 +2,21 @@
 
 import { useState, useMemo, useTransition } from "react";
 import Link from "next/link";
-import { MessageCircle, Search, Users, Ban, CheckCircle2 } from "lucide-react";
-import { getWhatsAppUrl } from "@/lib/utils";
+import { MessageCircle, Search, Users, Ban, CheckCircle2, Eye } from "lucide-react";
+import { formatPrice, getClientWhatsAppUrl } from "@/lib/utils";
 import { adminToggleUserActive } from "@/lib/supabase/actions";
 import type { Profile } from "@/types";
 
-export default function ClientsContent({ customers }: { customers: Profile[] }) {
+type Stats = Record<string, { count: number; total: number }>;
+
+export default function ClientsContent({ customers, stats }: { customers: Profile[]; stats: Stats }) {
   const [query, setQuery] = useState("");
+
+  const kpis = useMemo(() => {
+    const active = customers.filter((c) => c.is_active).length;
+    const withOrders = customers.filter((c) => (stats[c.id]?.count ?? 0) > 0).length;
+    return { total: customers.length, active, blocked: customers.length - active, withOrders };
+  }, [customers, stats]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -21,8 +29,8 @@ export default function ClientsContent({ customers }: { customers: Profile[] }) 
   }, [customers, query]);
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-5">
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-[#0F172A]">Clients</h1>
           <p className="text-text-secondary text-sm mt-0.5">{customers.length} clients enregistrés</p>
@@ -39,6 +47,14 @@ export default function ClientsContent({ customers }: { customers: Profile[] }) 
         </div>
       </div>
 
+      {/* KPI */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard label="Clients" value={kpis.total} tone="default" />
+        <StatCard label="Actifs" value={kpis.active} tone="green" />
+        <StatCard label="Bloqués" value={kpis.blocked} tone="red" />
+        <StatCard label="Ont commandé" value={kpis.withOrders} tone="default" />
+      </div>
+
       {customers.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Users size={48} className="mx-auto text-gray-200 mb-4" />
@@ -51,15 +67,15 @@ export default function ClientsContent({ customers }: { customers: Profile[] }) 
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  {["Client", "Téléphone", "Statut", "Membre depuis", "Actions"].map((h) => (
-                    <th key={h} className="text-left text-xs text-text-secondary font-medium py-3 px-4">{h}</th>
+                  {["Client", "Téléphone", "Commandes", "Total dépensé", "Statut", "Membre depuis", "Actions"].map((h) => (
+                    <th key={h} className="text-left text-xs text-text-secondary font-medium py-3 px-4 whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {filtered.length === 0 ? (
-                  <tr><td colSpan={5} className="py-12 text-center text-text-secondary text-sm">Aucun client ne correspond à « {query} ».</td></tr>
-                ) : filtered.map((c) => <ClientRow key={c.id} client={c} />)}
+                  <tr><td colSpan={7} className="py-12 text-center text-text-secondary text-sm">Aucun client ne correspond à « {query} ».</td></tr>
+                ) : filtered.map((c) => <ClientRow key={c.id} client={c} stat={stats[c.id]} />)}
               </tbody>
             </table>
           </div>
@@ -69,7 +85,7 @@ export default function ClientsContent({ customers }: { customers: Profile[] }) 
   );
 }
 
-function ClientRow({ client }: { client: Profile }) {
+function ClientRow({ client, stat }: { client: Profile; stat?: { count: number; total: number } }) {
   const [active, setActive] = useState(client.is_active);
   const [pending, startTransition] = useTransition();
 
@@ -88,34 +104,47 @@ function ClientRow({ client }: { client: Profile }) {
     startTransition(() => { adminToggleUserActive(client.id, next); });
   };
 
+  const count = stat?.count ?? 0;
+  const total = stat?.total ?? 0;
+
   return (
     <tr className="hover:bg-gray-50 transition-colors">
       <td className="py-3 px-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-green rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">{initials}</div>
           <div>
-            <p className="text-sm font-medium text-[#0F172A]">{displayName}</p>
+            <Link href={`/admin/clients/${client.id}`} className="text-sm font-medium text-[#0F172A] hover:text-green transition-colors">{displayName}</Link>
             <p className="text-xs text-text-secondary">{client.email ?? "—"}</p>
           </div>
         </div>
       </td>
       <td className="py-3 px-4"><span className="text-sm text-text-secondary">{client.phone ?? "—"}</span></td>
+      <td className="py-3 px-4"><span className="text-sm font-medium text-[#0F172A]">{count}</span></td>
+      <td className="py-3 px-4"><span className="text-sm font-medium text-[#16A34A]">{total > 0 ? formatPrice(total) : "—"}</span></td>
       <td className="py-3 px-4">
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${active ? "bg-green-50 text-green" : "bg-red-50 text-red-600"}`}>
           {active ? "Actif" : "Bloqué"}
         </span>
       </td>
       <td className="py-3 px-4">
-        <span className="text-sm text-text-secondary">
+        <span className="text-sm text-text-secondary whitespace-nowrap">
           {new Date(client.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
         </span>
       </td>
       <td className="py-3 px-4">
         <div className="flex items-center gap-1">
+          <Link
+            href={`/admin/clients/${client.id}`}
+            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-green transition-colors"
+            title="Voir la fiche client"
+          >
+            <Eye size={15} />
+          </Link>
           {client.phone && (
             <Link
-              href={getWhatsAppUrl(`Bonjour ${client.first_name ?? ""}`)}
+              href={getClientWhatsAppUrl(client.phone, `Bonjour ${client.first_name ?? ""}`)}
               target="_blank"
+              rel="noopener noreferrer"
               className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#25D366] transition-colors"
               title="WhatsApp"
             >
@@ -133,5 +162,19 @@ function ClientRow({ client }: { client: Profile }) {
         </div>
       </td>
     </tr>
+  );
+}
+
+function StatCard({ label, value, tone }: { label: string; value: number; tone: "default" | "green" | "red" }) {
+  const tones: Record<string, string> = {
+    default: "text-[#0F172A]",
+    green: "text-[#16A34A]",
+    red: "text-red-600",
+  };
+  return (
+    <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
+      <p className="text-xs text-text-secondary mb-1">{label}</p>
+      <p className={`text-2xl font-bold ${tones[tone]}`}>{value}</p>
+    </div>
   );
 }

@@ -1,20 +1,36 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
-import { Plus, Pencil, Award, X } from "lucide-react";
-import { adminCreateBrand, adminUpdateBrand, adminDeleteBrand } from "@/lib/supabase/actions";
+import { useRouter } from "next/navigation";
+import { Plus, Pencil, Award, X, Search, Loader2, Trash2 } from "lucide-react";
+import {
+  adminCreateBrand, adminUpdateBrand, adminDeleteBrand, adminToggleBrandActive,
+} from "@/lib/supabase/actions";
 import DeleteForm from "@/components/admin/DeleteForm";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import type { Brand } from "@/types";
 
-export default function MarquesContent({ brands }: { brands: Brand[] }) {
+export default function MarquesContent({
+  brands,
+  counts,
+}: {
+  brands: Brand[];
+  counts: Record<string, number>;
+}) {
   const [editing, setEditing] = useState<Brand | null>(null);
   const [creating, setCreating] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return brands;
+    return brands.filter((b) => b.name.toLowerCase().includes(q) || b.slug.toLowerCase().includes(q));
+  }, [brands, search]);
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-5">
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-[#0F172A]">Marques</h1>
           <p className="text-text-secondary text-sm mt-0.5">{brands.length} marques</p>
@@ -27,39 +43,67 @@ export default function MarquesContent({ brands }: { brands: Brand[] }) {
         </button>
       </div>
 
+      <div className="relative max-w-md">
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Rechercher une marque…"
+          className="w-full border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 text-sm outline-none focus:border-green transition-colors"
+        />
+      </div>
+
       {brands.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Award size={48} className="mx-auto text-gray-200 mb-4" />
           <p className="font-semibold text-[#0F172A] mb-1">Aucune marque</p>
           <p className="text-text-secondary text-sm">Ajoutez votre première marque.</p>
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="bg-white rounded-lg border border-gray-100 p-12 text-center text-text-secondary text-sm">
+          Aucune marque ne correspond à « {search} ».
+        </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          {brands.map((brand) => (
-            <div key={brand.id} className="bg-white rounded-lg border border-gray-100 shadow-sm p-5 text-center group">
-              <div className="w-14 h-14 bg-gray-50 rounded-lg flex items-center justify-center mx-auto mb-3 overflow-hidden">
-                {brand.logo_url ? (
-                  <Image src={brand.logo_url} alt={brand.name} width={56} height={56} className="object-contain" />
-                ) : (
-                  <Award size={24} className="text-green" />
-                )}
+          {filtered.map((brand) => {
+            const count = counts[brand.id] ?? 0;
+            return (
+              <div key={brand.id} className="bg-white rounded-lg border border-gray-100 shadow-sm p-5 text-center group">
+                <div className="w-14 h-14 bg-gray-50 rounded-lg flex items-center justify-center mx-auto mb-3 overflow-hidden">
+                  {brand.logo_url ? (
+                    <Image src={brand.logo_url} alt={brand.name} width={56} height={56} className="object-contain" />
+                  ) : (
+                    <Award size={24} className="text-green" />
+                  )}
+                </div>
+                <p className="font-semibold text-[#0F172A] text-sm">{brand.name}</p>
+                <p className="text-xs text-text-secondary mt-0.5">{count} produit{count !== 1 ? "s" : ""}</p>
+                <div className="mt-2">
+                  <ActiveToggle brand={brand} />
+                </div>
+                <div className="flex items-center justify-center gap-1 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    onClick={() => setEditing(brand)}
+                    className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0F172A] transition-colors"
+                    title="Modifier"
+                  >
+                    <Pencil size={14} />
+                  </button>
+                  {count > 0 ? (
+                    <button
+                      disabled
+                      className="p-1.5 rounded-lg text-gray-300 cursor-not-allowed"
+                      title={`Impossible de supprimer : ${count} produit(s) rattaché(s)`}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  ) : (
+                    <DeleteForm action={adminDeleteBrand.bind(null, brand.id)} name={brand.name} iconSize={14} />
+                  )}
+                </div>
               </div>
-              <p className="font-semibold text-[#0F172A] text-sm">{brand.name}</p>
-              <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mt-2 ${brand.is_active ? "bg-green-50 text-green" : "bg-gray-100 text-gray-500"}`}>
-                {brand.is_active ? "Actif" : "Inactif"}
-              </span>
-              <div className="flex items-center justify-center gap-1 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={() => setEditing(brand)}
-                  className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0F172A] transition-colors"
-                  title="Modifier"
-                >
-                  <Pencil size={14} />
-                </button>
-                <DeleteForm action={adminDeleteBrand.bind(null, brand.id)} name={brand.name} iconSize={14} />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -67,6 +111,35 @@ export default function MarquesContent({ brands }: { brands: Brand[] }) {
         <BrandModal brand={editing} onClose={() => { setCreating(false); setEditing(null); }} />
       )}
     </div>
+  );
+}
+
+function ActiveToggle({ brand }: { brand: Brand }) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [active, setActive] = useState(brand.is_active);
+
+  const toggle = () => {
+    const next = !active;
+    setActive(next);
+    startTransition(async () => {
+      await adminToggleBrandActive(brand.id, next);
+      router.refresh();
+    });
+  };
+
+  return (
+    <button
+      onClick={toggle}
+      disabled={pending}
+      className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full transition-colors disabled:opacity-60 ${
+        active ? "bg-green-50 text-green hover:bg-green-100" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+      }`}
+      title="Cliquer pour changer le statut"
+    >
+      {pending && <Loader2 size={11} className="animate-spin" />}
+      {active ? "Actif" : "Inactif"}
+    </button>
   );
 }
 

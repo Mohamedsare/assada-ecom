@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { signInWithGoogle } from "@/lib/supabase/actions";
+import BackButton from "@/components/ui/BackButton";
 
 export default function InscriptionPage() {
   const router = useRouter();
@@ -90,7 +91,12 @@ export default function InscriptionPage() {
   const inputCls = "w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#16A34A]/10 transition-all";
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4 py-12">
+    <div className="relative min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4 py-12">
+      {/* Bouton retour flottant */}
+      <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10">
+        <BackButton />
+      </div>
+
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/">
