@@ -19,8 +19,10 @@ import {
   Plus,
   Play,
   Package,
+  Check,
 } from "lucide-react";
 import { formatPrice, calculateDiscount, getWhatsAppUrl, getProductOrderWhatsAppUrl, cn } from "@/lib/utils";
+import { colorToHex, isLightColor } from "@/lib/colors";
 import type { Product, ProductVariant } from "@/types";
 import { useCartStore } from "@/stores/cart";
 import { openCartDrawer, addToast } from "@/lib/ui-actions";
@@ -333,24 +335,31 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                 <p className="text-sm font-semibold text-[#0F172A] mb-2">
                   Couleur : <span className="font-normal text-[#64748B]">{selectedColor ?? "—"}</span>
                 </p>
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex gap-2.5 flex-wrap">
                   {colors.map((color) => {
                     const available = colorsForSize.includes(color);
+                    const hex = colorToHex(color);
+                    const isSelected = selectedColor === color;
                     return (
                       <button
                         key={color}
                         onClick={() => available && setSelectedColor(color)}
                         disabled={!available}
+                        title={color}
+                        aria-label={color}
+                        aria-pressed={isSelected}
                         className={cn(
-                          "px-3 py-1.5 rounded-lg border text-xs font-medium transition-all",
-                          selectedColor === color
-                            ? "border-[#16A34A] bg-[#16A34A]/10 text-[#16A34A]"
-                            : available
-                            ? "border-gray-200 text-[#0F172A] hover:border-[#16A34A]"
-                            : "border-gray-100 text-gray-300 cursor-not-allowed line-through"
+                          "relative w-9 h-9 rounded-full transition-transform hover:scale-110",
+                          isSelected ? "ring-2 ring-offset-2 ring-[#16A34A]" : "ring-1 ring-gray-300",
+                          !available && "opacity-40 cursor-not-allowed hover:scale-100"
                         )}
+                        style={{ background: hex ?? "conic-gradient(#f87171,#facc15,#4ade80,#60a5fa,#c084fc,#f87171)" }}
                       >
-                        {color}
+                        {isSelected && (
+                          <span className="absolute inset-0 flex items-center justify-center">
+                            <Check size={15} className={hex && isLightColor(hex) ? "text-black" : "text-white"} />
+                          </span>
+                        )}
                       </button>
                     );
                   })}

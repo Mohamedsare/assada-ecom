@@ -195,22 +195,6 @@ export interface Payment {
   order?: Pick<Order, "id" | "order_number" | "customer_name" | "order_status">;
 }
 
-export type DiscountType = "percentage" | "fixed";
-
-export interface Coupon {
-  id: string;
-  code: string;
-  description?: string;
-  discount_type: DiscountType;
-  discount_value: number;
-  min_order_amount?: number;
-  max_uses?: number;
-  used_count: number;
-  is_active: boolean;
-  expires_at?: string;
-  created_at: string;
-}
-
 export interface ContactMessage {
   id: string;
   name: string;

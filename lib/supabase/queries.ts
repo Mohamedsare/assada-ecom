@@ -2,7 +2,7 @@ import { createClient } from "./server";
 import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD } from "@/lib/constants";
 import type {
   Product, Category, Brand, Order, Profile, Address,
-  Review, Payment, Coupon, ContactMessage,
+  Review, Payment, ContactMessage,
 } from "@/types";
 
 function logError(fn: string, error: unknown) {
@@ -435,19 +435,6 @@ export async function getAdminPayments(): Promise<Payment[]> {
 
   if (error) { logError("getAdminPayments", error); return []; }
   return (data ?? []) as Payment[];
-}
-
-// ─── COUPONS (admin) ──────────────────────────────────────────────────────────
-
-export async function getAdminCoupons(): Promise<Coupon[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("coupons")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) { logError("getAdminCoupons", error); return []; }
-  return (data ?? []) as Coupon[];
 }
 
 // ─── CONTACT MESSAGES (admin) ─────────────────────────────────────────────────

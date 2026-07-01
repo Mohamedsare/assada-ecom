@@ -1,8 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Plus, Trash2, Wand2, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Plus, Trash2, Wand2, X, Check } from "lucide-react";
 import type { ProductVariant } from "@/types";
+import { COLOR_PALETTE, colorToHex, normalizeColor, isLightColor } from "@/lib/colors";
+import { cn } from "@/lib/utils";
 
 interface VariantRow {
   key: string;
@@ -14,24 +16,6 @@ interface VariantRow {
 
 let keySeq = 0;
 const newKey = () => `v${++keySeq}-${Date.now()}`;
-
-// ─── Couleurs : nom (FR) → hex pour la pastille ───────────────────────────────
-const COLOR_MAP: Record<string, string> = {
-  noir: "#111827", blanc: "#FFFFFF", gris: "#9CA3AF", "gris clair": "#D1D5DB",
-  rouge: "#EF4444", bordeaux: "#7F1D1D", rose: "#EC4899", orange: "#F97316",
-  jaune: "#FACC15", or: "#D4AF37", ore: "#D4AF37", dore: "#D4AF37",
-  vert: "#16A34A", "vert clair": "#22C55E", kaki: "#556B2F", turquoise: "#14B8A6",
-  bleu: "#3B82F6", "bleu clair": "#60A5FA", "bleu nuit": "#020617", marine: "#1E3A5F",
-  violet: "#8B5CF6", mauve: "#C084FC", marron: "#92400E", beige: "#E7D3B3",
-  argent: "#C0C0C0", "gris fonce": "#4B5563", creme: "#F5F0E1", camel: "#C19A6B",
-};
-
-function normalize(s: string): string {
-  return s.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-}
-function colorSwatch(name: string): string | null {
-  return COLOR_MAP[normalize(name)] ?? null;
-}
 
 // ─── Presets de tailles ───────────────────────────────────────────────────────
 const SIZE_PRESETS: { label: string; sizes: string[] }[] = [
@@ -53,7 +37,8 @@ function toRow(v: ProductVariant): VariantRow {
 
 /**
  * Gestionnaire de variantes « pro » :
- *  - Couleurs (pastilles) + Tailles (chips + presets) → génération de la matrice.
+ *  - Couleurs choisies dans une palette (vraies pastilles, plus de texte libre).
+ *  - Tailles (chips + presets) → génération de la matrice.
  *  - Tableau stock / ajustement de prix par variante.
  *  - Sérialisé en JSON dans un input caché `name` (contrat inchangé côté serveur).
  */
@@ -67,50 +52,43 @@ export default function VariantsField({
   const initial = (defaultValue ?? []).map(toRow);
   const [rows, setRows] = useState<VariantRow[]>(initial);
 
-  // Chips dérivées : au chargement, on récupère couleurs/tailles existantes.
   const [colors, setColors] = useState<string[]>(
     [...new Set(initial.map((r) => r.color).filter(Boolean))]
   );
   const [sizes, setSizes] = useState<string[]>(
     [...new Set(initial.map((r) => r.size).filter(Boolean))]
   );
-  const [colorInput, setColorInput] = useState("");
   const [sizeInput, setSizeInput] = useState("");
 
-  // ── Chips ───────────────────────────────────────────────────────────────────
-  const addChip = (kind: "color" | "size", raw: string) => {
-    const values = raw.split(",").map((v) => v.trim()).filter(Boolean);
-    if (!values.length) return;
-    const setter = kind === "color" ? setColors : setSizes;
-    setter((prev) => {
-      const next = [...prev];
-      for (const v of values) {
-        if (!next.some((x) => normalize(x) === normalize(v))) next.push(v);
-      }
-      return next;
-    });
-  };
-  const removeChip = (kind: "color" | "size", val: string) => {
-    (kind === "color" ? setColors : setSizes)((prev) => prev.filter((x) => x !== val));
-  };
-  const addPreset = (preset: string[]) => {
-    setSizes((prev) => {
-      const next = [...prev];
-      for (const v of preset) if (!next.some((x) => normalize(x) === normalize(v))) next.push(v);
-      return next;
-    });
+  // ── Couleurs (palette) ────────────────────────────────────────────────────────
+  const toggleColor = (colorName: string) => {
+    setColors((prev) =>
+      prev.some((x) => normalizeColor(x) === normalizeColor(colorName))
+        ? prev.filter((x) => normalizeColor(x) !== normalizeColor(colorName))
+        : [...prev, colorName]
+    );
   };
 
-  const chipKeyDown = (kind: "color" | "size") => (e: React.KeyboardEvent<HTMLInputElement>) => {
+  // ── Tailles (chips + presets) ─────────────────────────────────────────────────
+  const addSizes = (raw: string) => {
+    const values = raw.split(",").map((v) => v.trim()).filter(Boolean);
+    if (!values.length) return;
+    setSizes((prev) => {
+      const next = [...prev];
+      for (const v of values) if (!next.some((x) => normalizeColor(x) === normalizeColor(v))) next.push(v);
+      return next;
+    });
+  };
+  const removeSize = (val: string) => setSizes((prev) => prev.filter((x) => x !== val));
+  const sizeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
-      const val = kind === "color" ? colorInput : sizeInput;
-      addChip(kind, val);
-      (kind === "color" ? setColorInput : setSizeInput)("");
+      addSizes(sizeInput);
+      setSizeInput("");
     }
   };
 
-  // ── Génération de la matrice (préserve stock/prix des variantes existantes) ──
+  // ── Génération de la matrice (préserve stock/prix existants) ──────────────────
   const combos = useMemo(() => {
     const c = colors.length ? colors : [""];
     const s = sizes.length ? sizes : [""];
@@ -119,20 +97,30 @@ export default function VariantsField({
     return list.filter((x) => x.color || x.size);
   }, [colors, sizes]);
 
+  const buildRows = (prev: VariantRow[]): VariantRow[] => {
+    const prevByKey = new Map(prev.map((r) => [`${normalizeColor(r.color)}|${normalizeColor(r.size)}`, r]));
+    return combos.map(({ color, size }) => {
+      const existing = prevByKey.get(`${normalizeColor(color)}|${normalizeColor(size)}`);
+      return existing
+        ? { ...existing, color, size }
+        : { key: newKey(), color, size, stock_quantity: "0", price_adjustment: "0" };
+    });
+  };
+
   const generate = () => {
     if (!combos.length) return;
-    const prevByKey = new Map(
-      rows.map((r) => [`${normalize(r.color)}|${normalize(r.size)}`, r])
-    );
-    setRows(
-      combos.map(({ color, size }) => {
-        const existing = prevByKey.get(`${normalize(color)}|${normalize(size)}`);
-        return existing
-          ? { ...existing, color, size }
-          : { key: newKey(), color, size, stock_quantity: "0", price_adjustment: "0" };
-      })
-    );
+    setRows((prev) => buildRows(prev));
   };
+
+  // Synchronise automatiquement la matrice quand couleurs/tailles changent
+  // (on ignore le montage initial pour ne pas altérer les variantes chargées).
+  const didMount = useRef(false);
+  useEffect(() => {
+    if (!didMount.current) { didMount.current = true; return; }
+    if (!combos.length) return;
+    setRows((prev) => buildRows(prev));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [colors, sizes]);
 
   // ── Lignes ────────────────────────────────────────────────────────────────
   const update = (key: string, field: keyof VariantRow, value: string) =>
@@ -143,6 +131,12 @@ export default function VariantsField({
   const clearAll = () => setRows([]);
 
   const totalStock = rows.reduce((s, r) => s + (Number(r.stock_quantity) || 0), 0);
+
+  // Options du menu couleur des lignes = couleurs sélectionnées + éventuelles couleurs héritées.
+  const colorOptions = useMemo(
+    () => [...new Set([...colors, ...rows.map((r) => r.color).filter(Boolean)])],
+    [colors, rows]
+  );
 
   // ── Sérialisation ────────────────────────────────────────────────────────────
   const serialized = JSON.stringify(
@@ -160,35 +154,39 @@ export default function VariantsField({
     <div className="space-y-4">
       <input type="hidden" name={name} value={serialized} />
 
-      {/* Couleurs */}
+      {/* Couleurs — palette */}
       <div>
-        <label className="block text-xs font-semibold text-text-secondary mb-1.5">Couleurs</label>
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          {colors.map((c) => {
-            const hex = colorSwatch(c);
+        <label className="block text-xs font-semibold text-text-secondary mb-2">Couleurs (cliquez pour sélectionner)</label>
+        <div className="flex flex-wrap gap-2">
+          {COLOR_PALETTE.map((c) => {
+            const selected = colors.some((x) => normalizeColor(x) === normalizeColor(c.name));
             return (
-              <span key={c} className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 pl-1.5 pr-2 py-1 text-xs">
-                <span
-                  className="w-3.5 h-3.5 rounded-full border border-gray-300 shrink-0"
-                  style={hex ? { background: hex } : { background: "conic-gradient(#f87171,#facc15,#4ade80,#60a5fa,#c084fc,#f87171)" }}
-                  title={hex ? undefined : "Couleur non reconnue (pastille générique)"}
-                />
-                {c}
-                <button type="button" onClick={() => removeChip("color", c)} className="text-gray-400 hover:text-red-500">
-                  <X size={12} />
-                </button>
-              </span>
+              <button
+                key={c.name}
+                type="button"
+                onClick={() => toggleColor(c.name)}
+                title={c.name}
+                aria-pressed={selected}
+                className={cn(
+                  "relative w-8 h-8 rounded-full transition-transform hover:scale-110",
+                  selected ? "ring-2 ring-offset-2 ring-green" : "ring-1 ring-gray-300"
+                )}
+                style={{ background: c.hex }}
+              >
+                {selected && (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <Check size={14} className={isLightColor(c.hex) ? "text-black" : "text-white"} />
+                  </span>
+                )}
+              </button>
             );
           })}
         </div>
-        <input
-          value={colorInput}
-          onChange={(e) => setColorInput(e.target.value)}
-          onKeyDown={chipKeyDown("color")}
-          onBlur={() => { if (colorInput.trim()) { addChip("color", colorInput); setColorInput(""); } }}
-          placeholder="Noir, Blanc, Rouge…  (Entrée pour ajouter)"
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors"
-        />
+        {colors.length > 0 && (
+          <p className="mt-2 text-[11px] text-text-secondary">
+            Sélectionnées : <b className="text-[#0F172A]">{colors.join(", ")}</b>
+          </p>
+        )}
       </div>
 
       {/* Tailles */}
@@ -199,7 +197,7 @@ export default function VariantsField({
             <button
               key={p.label}
               type="button"
-              onClick={() => addPreset(p.sizes)}
+              onClick={() => addSizes(p.sizes.join(","))}
               className="rounded-full bg-[#F8FAFC] border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-[#0F172A] hover:border-green hover:text-green transition-colors"
             >
               + {p.label}
@@ -210,7 +208,7 @@ export default function VariantsField({
           {sizes.map((s) => (
             <span key={s} className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-2 py-1 text-xs font-medium">
               {s}
-              <button type="button" onClick={() => removeChip("size", s)} className="text-gray-400 hover:text-red-500">
+              <button type="button" onClick={() => removeSize(s)} className="text-gray-400 hover:text-red-500">
                 <X size={12} />
               </button>
             </span>
@@ -219,8 +217,8 @@ export default function VariantsField({
         <input
           value={sizeInput}
           onChange={(e) => setSizeInput(e.target.value)}
-          onKeyDown={chipKeyDown("size")}
-          onBlur={() => { if (sizeInput.trim()) { addChip("size", sizeInput); setSizeInput(""); } }}
+          onKeyDown={sizeKeyDown}
+          onBlur={() => { if (sizeInput.trim()) { addSizes(sizeInput); setSizeInput(""); } }}
           placeholder="42, 43, M, L…  (Entrée pour ajouter)"
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors"
         />
@@ -246,7 +244,7 @@ export default function VariantsField({
       {/* Tableau des variantes */}
       {rows.length === 0 ? (
         <p className="text-xs text-text-secondary">
-          Aucune variante. Ajoutez couleurs/tailles ci-dessus puis « Générer », ou ajoutez une ligne manuellement.
+          Aucune variante. Choisissez couleurs/tailles ci-dessus puis « Générer », ou ajoutez une ligne manuellement.
         </p>
       ) : (
         <div className="space-y-2">
@@ -257,17 +255,35 @@ export default function VariantsField({
           <div className="hidden sm:grid grid-cols-[1fr_1fr_72px_92px_32px] gap-2 px-1 text-[11px] font-medium text-text-secondary">
             <span>Couleur</span><span>Taille</span><span>Stock</span><span>Prix +/−</span><span />
           </div>
-          {rows.map((row) => (
-            <div key={row.key} className="grid grid-cols-2 sm:grid-cols-[1fr_1fr_72px_92px_32px] gap-2 items-center">
-              <input value={row.color} onChange={(e) => update(row.key, "color", e.target.value)} placeholder="Noir" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors" />
-              <input value={row.size} onChange={(e) => update(row.key, "size", e.target.value)} placeholder="42" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors" />
-              <input type="number" min={0} value={row.stock_quantity} onChange={(e) => update(row.key, "stock_quantity", e.target.value)} placeholder="0" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors" />
-              <input type="number" value={row.price_adjustment} onChange={(e) => update(row.key, "price_adjustment", e.target.value)} placeholder="0" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors" />
-              <button type="button" onClick={() => remove(row.key)} className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors justify-self-center" title="Supprimer la variante">
-                <Trash2 size={15} />
-              </button>
-            </div>
-          ))}
+          {rows.map((row) => {
+            const hex = colorToHex(row.color);
+            return (
+              <div key={row.key} className="grid grid-cols-2 sm:grid-cols-[1fr_1fr_72px_92px_32px] gap-2 items-center">
+                <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1.5 focus-within:border-green transition-colors">
+                  <span
+                    className="w-4 h-4 rounded-full shrink-0 ring-1 ring-gray-300"
+                    style={{ background: hex ?? "conic-gradient(#f87171,#facc15,#4ade80,#60a5fa,#c084fc,#f87171)" }}
+                  />
+                  <select
+                    value={row.color}
+                    onChange={(e) => update(row.key, "color", e.target.value)}
+                    className="flex-1 bg-transparent text-sm outline-none"
+                  >
+                    <option value="">—</option>
+                    {colorOptions.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+                <input value={row.size} onChange={(e) => update(row.key, "size", e.target.value)} placeholder="42" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors" />
+                <input type="number" min={0} value={row.stock_quantity} onChange={(e) => update(row.key, "stock_quantity", e.target.value)} placeholder="0" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors" />
+                <input type="number" value={row.price_adjustment} onChange={(e) => update(row.key, "price_adjustment", e.target.value)} placeholder="0" className="border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-green transition-colors" />
+                <button type="button" onClick={() => remove(row.key)} className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors justify-self-center" title="Supprimer la variante">
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            );
+          })}
         </div>
       )}
 

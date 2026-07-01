@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   X, ShoppingCart, Heart, Star, Minus, Plus, Play, Truck, ShieldCheck,
-  Package, MessageCircle, ChevronLeft, ChevronRight, ArrowRight,
+  Package, MessageCircle, ChevronLeft, ChevronRight, ArrowRight, Check,
 } from "lucide-react";
 import { createPortal } from "react-dom";
 import { formatPrice, calculateDiscount, getProductOrderWhatsAppUrl, cn } from "@/lib/utils";
+import { colorToHex, isLightColor } from "@/lib/colors";
 import type { Product, ProductVariant } from "@/types";
 import { useUIStore } from "@/stores/ui";
 import { useCartStore } from "@/stores/cart";
@@ -266,20 +267,25 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
               <p className="text-sm font-semibold text-[#0F172A] mb-2">
                 Couleur : <span className="font-normal text-[#64748B]">{selectedColor ?? "—"}</span>
               </p>
-              <div className="flex gap-2 flex-wrap">
+              <div className="flex gap-2.5 flex-wrap">
                 {colors.map((color) => {
                   const available = colorsForSize.includes(color);
+                  const hex = colorToHex(color);
+                  const isSelected = selectedColor === color;
                   return (
                     <button key={color} onClick={() => available && setSelectedColor(color)} disabled={!available}
+                      title={color} aria-label={color} aria-pressed={isSelected}
                       className={cn(
-                        "px-3 py-1.5 rounded-lg border text-xs font-medium transition-all",
-                        selectedColor === color
-                          ? "border-green bg-green/10 text-green"
-                          : available
-                          ? "border-gray-200 text-[#0F172A] hover:border-green"
-                          : "border-gray-100 text-gray-300 cursor-not-allowed line-through"
-                      )}>
-                      {color}
+                        "relative w-9 h-9 rounded-full transition-transform hover:scale-110",
+                        isSelected ? "ring-2 ring-offset-2 ring-green" : "ring-1 ring-gray-300",
+                        !available && "opacity-40 cursor-not-allowed hover:scale-100"
+                      )}
+                      style={{ background: hex ?? "conic-gradient(#f87171,#facc15,#4ade80,#60a5fa,#c084fc,#f87171)" }}>
+                      {isSelected && (
+                        <span className="absolute inset-0 flex items-center justify-center">
+                          <Check size={15} className={hex && isLightColor(hex) ? "text-black" : "text-white"} />
+                        </span>
+                      )}
                     </button>
                   );
                 })}

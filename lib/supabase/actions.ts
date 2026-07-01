@@ -214,8 +214,8 @@ export async function removeFromWishlist(productId: string) {
 // ─── ORDERS ──────────────────────────────────────────────────────────────────
 
 export async function createOrder(data: {
-  customer: { first_name: string; last_name: string; phone: string; email: string };
-  address: { city: string; district: string; address_details: string; landmark: string };
+  customer: { first_name: string; last_name: string; phone: string; email?: string };
+  address: { city: string; district: string; address_details?: string; landmark?: string };
   payment: { method: string; payment_phone: string };
   items: {
     product_id: string;
@@ -254,7 +254,7 @@ export async function createOrder(data: {
       customer_phone: data.customer.phone,
       delivery_city: data.address.city,
       delivery_district: data.address.district,
-      delivery_address_details: data.address.address_details,
+      delivery_address_details: data.address.address_details || null,
       delivery_landmark: data.address.landmark || null,
       payment_method: data.payment.method,
       payment_status: "pending",
@@ -310,46 +310,6 @@ export async function createOrder(data: {
   }
 
   return { success: true, order_number };
-}
-
-/**
- * Valide un code promo pour un sous-total donné (utilisé au checkout).
- * S'appuie sur la lecture publique des coupons actifs (RLS).
- */
-export async function validateCoupon(
-  code: string,
-  subtotal: number,
-): Promise<
-  | { ok: true; code: string; discount: number; discount_type: string; discount_value: number }
-  | { ok: false; error: string }
-> {
-  const c = (code || "").trim().toUpperCase();
-  if (!c) return { ok: false, error: "Entrez un code promo." };
-
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("coupons").select("*").eq("code", c).maybeSingle();
-
-  if (error || !data) return { ok: false, error: "Code promo invalide." };
-  if (!data.is_active) return { ok: false, error: "Ce code n'est plus actif." };
-  if (data.expires_at && new Date(data.expires_at) < new Date())
-    return { ok: false, error: "Ce code a expiré." };
-  if (data.max_uses != null && (data.used_count ?? 0) >= data.max_uses)
-    return { ok: false, error: "Ce code a atteint sa limite d'utilisation." };
-  if (subtotal < (data.min_order_amount ?? 0))
-    return { ok: false, error: `Minimum requis : ${Number(data.min_order_amount).toLocaleString("fr-FR")} FCFA.` };
-
-  const discount = data.discount_type === "percentage"
-    ? Math.round(subtotal * (Number(data.discount_value) / 100))
-    : Math.min(Number(data.discount_value), subtotal);
-
-  return {
-    ok: true,
-    code: c,
-    discount,
-    discount_type: data.discount_type,
-    discount_value: Number(data.discount_value),
-  };
 }
 
 // ─── ADMIN — PRODUCTS ────────────────────────────────────────────────────────
@@ -833,45 +793,6 @@ export async function adminToggleUserActive(id: string, is_active: boolean) {
   if (error) return { error: error.message };
   revalidatePath("/admin/utilisateurs");
   revalidatePath("/admin/clients");
-  return { success: true };
-}
-
-// ─── ADMIN — COUPONS ──────────────────────────────────────────────────────────
-
-export async function adminCreateCoupon(formData: FormData) {
-  const supabase = await createClient();
-  const code = (formData.get("code") as string)?.trim().toUpperCase();
-  if (!code) return { error: "Code requis" };
-
-  const { error } = await supabase.from("coupons").insert({
-    code,
-    description: formData.get("description") || null,
-    discount_type: formData.get("discount_type") || "percentage",
-    discount_value: Number(formData.get("discount_value")),
-    min_order_amount: formData.get("min_order_amount") ? Number(formData.get("min_order_amount")) : 0,
-    max_uses: formData.get("max_uses") ? Number(formData.get("max_uses")) : null,
-    is_active: formData.get("is_active") !== "false",
-    expires_at: formData.get("expires_at") || null,
-  });
-
-  if (error) return { error: error.message };
-  revalidatePath("/admin/promotions");
-  return { success: true };
-}
-
-export async function adminToggleCoupon(id: string, is_active: boolean) {
-  const supabase = await createClient();
-  const { error } = await supabase.from("coupons").update({ is_active }).eq("id", id);
-  if (error) return { error: error.message };
-  revalidatePath("/admin/promotions");
-  return { success: true };
-}
-
-export async function adminDeleteCoupon(id: string) {
-  const supabase = await createClient();
-  const { error } = await supabase.from("coupons").delete().eq("id", id);
-  if (error) return { error: error.message };
-  revalidatePath("/admin/promotions");
   return { success: true };
 }
 

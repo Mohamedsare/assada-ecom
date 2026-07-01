@@ -1,24 +1,22 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
   Check, ChevronRight, ChevronLeft, Lock,
   User, MapPin, CreditCard, ClipboardCheck,
-  Phone, Ticket, X,
 } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
 import { useConfigStore } from "@/stores/config";
 import { formatPrice } from "@/lib/utils";
-import { createOrder, validateCoupon } from "@/lib/supabase/actions";
+import { createOrder } from "@/lib/supabase/actions";
 
 const STEPS = [
-  { id: 1, label: "Client",   icon: User },
-  { id: 2, label: "Adresse",  icon: MapPin },
-  { id: 3, label: "Paiement", icon: CreditCard },
-  { id: 4, label: "Récap",    icon: ClipboardCheck },
+  { id: 1, label: "Client",  icon: User },
+  { id: 2, label: "Adresse", icon: MapPin },
+  { id: 3, label: "Récap",   icon: ClipboardCheck },
 ];
 
 const GABON_CITIES = [
@@ -26,48 +24,21 @@ const GABON_CITIES = [
   "Mouila", "Lambaréné", "Tchibanga", "Koulamoutou", "Makokou",
 ];
 
-const PAYMENT_OPTIONS = [
-  {
-    id: "cash_on_delivery" as const,
-    label: "Espèces à la livraison",
-    description: "Payez en cash à la réception de votre commande",
-    image: "/paiments/paiement-livraison.jpeg",
-  },
-  {
-    id: "airtel_money" as const,
-    label: "Airtel Money",
-    description: "Paiement mobile sécurisé via Airtel Money",
-    image: "/paiments/airtel-money.jpeg",
-  },
-  {
-    id: "moov_money" as const,
-    label: "Moov Money",
-    description: "Paiement mobile sécurisé via Moov Money",
-    image: "/paiments/moov-money.jpeg",
-  },
-];
-
-interface CustomerData { first_name: string; last_name: string; phone: string; email: string }
-interface AddressData  { city: string; district: string; address_details: string; landmark: string }
+interface CustomerData { first_name: string; last_name: string; phone: string }
+interface AddressData  { city: string; district: string }
 type PaymentMethod     = "cash_on_delivery" | "airtel_money" | "moov_money";
 interface PaymentData  { method: PaymentMethod; payment_phone: string }
 
-function validate(step: number, c: CustomerData, a: AddressData, p: PaymentData) {
+function validate(step: number, c: CustomerData, a: AddressData) {
   const e: Record<string, string> = {};
   if (step === 1) {
     if (!c.first_name.trim()) e.first_name = "Prénom requis";
     if (!c.last_name.trim())  e.last_name  = "Nom requis";
     if (c.phone.replace(/\s/g, "").length < 8) e.phone = "Numéro invalide (min. 8 chiffres)";
-    if (c.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)) e.email = "Email invalide";
   }
   if (step === 2) {
-    if (!a.city)                              e.city            = "Ville requise";
-    if (!a.district.trim())                   e.district        = "Quartier requis";
-    if (a.address_details.trim().length < 5) e.address_details = "Adresse trop courte";
-  }
-  if (step === 3) {
-    if ((p.method === "airtel_money" || p.method === "moov_money") && !p.payment_phone.trim())
-      e.payment_phone = "Numéro de paiement requis";
+    if (!a.city)            e.city     = "Ville requise";
+    if (!a.district.trim()) e.district = "Quartier requis";
   }
   return e;
 }
@@ -102,36 +73,21 @@ export default function CheckoutPage() {
   const [errors,     setErrors]     = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const [customer, setCustomer] = useState<CustomerData>({ first_name: "", last_name: "", phone: "", email: "" });
-  const [address,  setAddress]  = useState<AddressData>({ city: "Libreville", district: "", address_details: "", landmark: "" });
-  const [payment,  setPayment]  = useState<PaymentData>({ method: "cash_on_delivery", payment_phone: "" });
-
-  const [couponInput, setCouponInput]   = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
-  const [couponError, setCouponError]   = useState<string | null>(null);
-  const [couponPending, startCoupon]    = useTransition();
+  const [customer, setCustomer] = useState<CustomerData>({ first_name: "", last_name: "", phone: "" });
+  const [address,  setAddress]  = useState<AddressData>({ city: "Libreville", district: "" });
+  // Paiement toujours « à la livraison » (espèces ou mobile money) — plus d'étape dédiée.
+  const payment: PaymentData = { method: "cash_on_delivery", payment_phone: "" };
 
   const subtotal    = totalPrice();
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
-  const discount    = appliedCoupon ? Math.min(appliedCoupon.discount, subtotal) : 0;
-  const total       = Math.max(0, subtotal + deliveryFee - discount);
-
-  const applyCoupon = () => {
-    setCouponError(null);
-    startCoupon(async () => {
-      const res = await validateCoupon(couponInput, subtotal);
-      if (!res.ok) { setCouponError(res.error); setAppliedCoupon(null); }
-      else { setAppliedCoupon({ code: res.code, discount: res.discount }); setCouponInput(res.code); }
-    });
-  };
-  const removeCoupon = () => { setAppliedCoupon(null); setCouponInput(""); setCouponError(null); };
+  const total       = subtotal + deliveryFee;
 
   useEffect(() => {
     if (items.length === 0) router.replace("/panier");
   }, [items.length, router]);
 
   const goNext = () => {
-    const errs = validate(step, customer, address, payment);
+    const errs = validate(step, customer, address);
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
     setStep(s => s + 1);
@@ -168,8 +124,6 @@ export default function CheckoutPage() {
       subtotal,
       delivery_fee: deliveryFee,
       total,
-      discount,
-      coupon_code: appliedCoupon?.code ?? null,
     });
 
     if (result.error) {
@@ -181,8 +135,6 @@ export default function CheckoutPage() {
     clearCart();
     router.push(`/validation-commande?order=${result.order_number}`);
   };
-
-  const paymentLabel = PAYMENT_OPTIONS.find(p => p.id === payment.method)?.label ?? "";
 
   if (items.length === 0) return null;
 
@@ -217,12 +169,6 @@ export default function CheckoutPage() {
             {deliveryFee === 0 ? "Gratuite 🎉" : formatPrice(deliveryFee)}
           </span>
         </div>
-        {discount > 0 && (
-          <div className="flex justify-between">
-            <span className="text-gray-500">Réduction{appliedCoupon ? ` (${appliedCoupon.code})` : ""}</span>
-            <span className="font-medium text-[#16A34A]">− {formatPrice(discount)}</span>
-          </div>
-        )}
         <div className="flex justify-between font-extrabold text-base pt-2 border-t border-gray-100">
           <span className="text-[#0F172A]">Total</span>
           <span className="text-[#16A34A]">{formatPrice(total)}</span>
@@ -306,10 +252,6 @@ export default function CheckoutPage() {
                       value={customer.phone} onChange={e => setCustomer(c => ({ ...c, phone: e.target.value }))} />
                   </div>
                 </Field>
-                <Field label="Email" error={errors.email}>
-                  <input className={inputCls} type="email" placeholder="votre@email.com (optionnel)"
-                    value={customer.email} onChange={e => setCustomer(c => ({ ...c, email: e.target.value }))} />
-                </Field>
               </div>
             )}
 
@@ -334,81 +276,20 @@ export default function CheckoutPage() {
                   <input className={inputCls} placeholder="Ex : Akanda, Lalala, PK8…"
                     value={address.district} onChange={e => setAddress(a => ({ ...a, district: e.target.value }))} />
                 </Field>
-                <Field label="Adresse détaillée" required error={errors.address_details}>
-                  <textarea className={`${inputCls} resize-none`} rows={3}
-                    placeholder="Ex : Rue des Cocotiers, immeuble Soleil, 2ème étage…"
-                    value={address.address_details} onChange={e => setAddress(a => ({ ...a, address_details: e.target.value }))} />
-                </Field>
-                <Field label="Repère / Indications" error={errors.landmark}>
-                  <input className={inputCls} placeholder="Ex : En face de la pharmacie Total…"
-                    value={address.landmark} onChange={e => setAddress(a => ({ ...a, landmark: e.target.value }))} />
-                </Field>
               </div>
             )}
 
             {step === 3 && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-[#020B27] rounded-full flex items-center justify-center shrink-0">
-                    <CreditCard size={16} className="text-white" />
-                  </div>
-                  <div>
-                    <h2 className="font-bold text-[#0F172A]">Mode de paiement</h2>
-                    <p className="text-xs text-gray-500">Choisissez comment vous souhaitez payer</p>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  {PAYMENT_OPTIONS.map(opt => {
-                    const selected = payment.method === opt.id;
-                    return (
-                      <button key={opt.id} onClick={() => setPayment(p => ({ ...p, method: opt.id, payment_phone: "" }))}
-                        className={`w-full flex items-center gap-4 p-4 rounded-2xl border-2 transition-all text-left ${
-                          selected ? "border-[#16A34A] bg-green-50/60" : "border-gray-200 hover:border-gray-300 bg-white"
-                        }`}>
-                        <div className={`relative w-11 h-11 rounded-xl overflow-hidden shrink-0 border bg-white transition-colors ${selected ? "border-[#16A34A]" : "border-gray-200"}`}>
-                          <Image src={opt.image} alt={opt.label} fill className="object-contain p-1" sizes="44px" />
-                        </div>
-                        <div className="flex-1 min-w-0 text-left">
-                          <p className="font-semibold text-[#0F172A] text-sm">{opt.label}</p>
-                          <p className="text-xs text-gray-500 mt-0.5 leading-snug">{opt.description}</p>
-                        </div>
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-                          selected ? "border-[#16A34A] bg-[#16A34A]" : "border-gray-300"
-                        }`}>
-                          {selected && <Check size={11} className="text-white" />}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-                {(payment.method === "airtel_money" || payment.method === "moov_money") && (
-                  <Field
-                    label={`Numéro ${payment.method === "airtel_money" ? "Airtel Money" : "Moov Money"}`}
-                    required error={errors.payment_phone}
-                  >
-                    <div className="relative">
-                      <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                      <input className={`${inputCls} pl-10`} type="tel"
-                        placeholder="Numéro de paiement mobile"
-                        value={payment.payment_phone}
-                        onChange={e => setPayment(p => ({ ...p, payment_phone: e.target.value }))} />
-                    </div>
-                  </Field>
-                )}
-              </div>
-            )}
-
-            {step === 4 && (
               <div className="space-y-4">
                 <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm divide-y divide-gray-50">
                   <h2 className="font-bold text-[#0F172A] pb-4">Vérifiez votre commande</h2>
                   {[
-                    { icon: User, title: "Client", stepBack: 1,
-                      lines: [`${customer.first_name} ${customer.last_name}`, `+241 ${customer.phone}`, customer.email].filter(Boolean) },
-                    { icon: MapPin, title: "Livraison", stepBack: 2,
-                      lines: [`${address.city}, ${address.district}`, address.address_details, address.landmark ? `📍 ${address.landmark}` : ""].filter(Boolean) },
-                    { icon: CreditCard, title: "Paiement", stepBack: 3,
-                      lines: [paymentLabel, payment.payment_phone].filter(Boolean) },
+                    { icon: User, title: "Client", stepBack: 1 as number | undefined,
+                      lines: [`${customer.first_name} ${customer.last_name}`, `+241 ${customer.phone}`].filter(Boolean) },
+                    { icon: MapPin, title: "Livraison", stepBack: 2 as number | undefined,
+                      lines: [`${address.city}, ${address.district}`].filter(Boolean) },
+                    { icon: CreditCard, title: "Paiement", stepBack: undefined as number | undefined,
+                      lines: ["Paiement à la livraison", "Espèces ou Mobile Money (sur place)"] },
                   ].map(({ icon: Icon, title, stepBack, lines }) => (
                     <div key={title} className="flex items-start gap-3 py-4 first:pt-4">
                       <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center shrink-0">
@@ -420,10 +301,12 @@ export default function CheckoutPage() {
                           <p key={i} className={`text-sm ${i === 0 ? "font-semibold text-[#0F172A]" : "text-gray-500"}`}>{l as string}</p>
                         ))}
                       </div>
-                      <button onClick={() => { setErrors({}); setStep(stepBack); }}
-                        className="text-xs text-[#16A34A] font-semibold hover:underline shrink-0 mt-0.5">
-                        Modifier
-                      </button>
+                      {stepBack && (
+                        <button onClick={() => { setErrors({}); setStep(stepBack); }}
+                          className="text-xs text-[#16A34A] font-semibold hover:underline shrink-0 mt-0.5">
+                          Modifier
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -454,41 +337,7 @@ export default function CheckoutPage() {
                     })}
                   </div>
                   {/* Code promo */}
-                  <div className="border-t border-gray-100 mt-5 pt-4">
-                    {appliedCoupon ? (
-                      <div className="flex items-center justify-between bg-green-50 border border-green/30 rounded-xl px-3 py-2.5">
-                        <span className="flex items-center gap-2 text-sm font-semibold text-[#16A34A]">
-                          <Ticket size={15} /> {appliedCoupon.code} appliqué
-                        </span>
-                        <button type="button" onClick={removeCoupon} className="text-gray-400 hover:text-red-500 transition-colors" title="Retirer le code">
-                          <X size={16} />
-                        </button>
-                      </div>
-                    ) : (
-                      <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5">Code promo</label>
-                        <div className="flex gap-2">
-                          <input
-                            value={couponInput}
-                            onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
-                            placeholder="BIENVENUE10"
-                            className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors uppercase"
-                          />
-                          <button
-                            type="button"
-                            onClick={applyCoupon}
-                            disabled={couponPending || !couponInput.trim()}
-                            className="bg-[#0F172A] text-white text-sm font-semibold px-4 rounded-xl hover:bg-[#1e293b] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                          >
-                            {couponPending ? "…" : "Appliquer"}
-                          </button>
-                        </div>
-                        {couponError && <p className="text-xs text-red-600 mt-1.5">{couponError}</p>}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="border-t border-gray-100 mt-4 pt-4 space-y-2 text-sm">
+                  <div className="border-t border-gray-100 mt-5 pt-4 space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-500">Sous-total</span>
                       <span className="font-medium">{formatPrice(subtotal)}</span>
@@ -499,12 +348,6 @@ export default function CheckoutPage() {
                         {deliveryFee === 0 ? "Gratuite 🎉" : formatPrice(deliveryFee)}
                       </span>
                     </div>
-                    {discount > 0 && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Réduction{appliedCoupon ? ` (${appliedCoupon.code})` : ""}</span>
-                        <span className="font-medium text-[#16A34A]">− {formatPrice(discount)}</span>
-                      </div>
-                    )}
                     <div className="flex justify-between font-extrabold text-base pt-2 border-t border-gray-100">
                       <span className="text-[#0F172A]">Total</span>
                       <span className="text-[#16A34A]">{formatPrice(total)}</span>
@@ -532,7 +375,7 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            {step < 4 && (
+            {step < 3 && (
               <div className="hidden lg:flex gap-3">
                 {step > 1 && (
                   <button onClick={goPrev}
@@ -562,7 +405,7 @@ export default function CheckoutPage() {
               <ChevronLeft size={20} />
             </button>
           )}
-          {step < 4 ? (
+          {step < 3 ? (
             <button onClick={goNext}
               className="flex-1 flex items-center justify-center gap-2 bg-[#16A34A] text-white py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all">
               Continuer <ChevronRight size={18} />
@@ -577,7 +420,7 @@ export default function CheckoutPage() {
           )}
         </div>
         <div className="flex justify-between mt-2 px-0.5">
-          <span className="text-xs text-gray-400">Étape {step} sur 4</span>
+          <span className="text-xs text-gray-400">Étape {step} sur 3</span>
           <span className="text-xs font-bold text-[#16A34A]">{formatPrice(total)}</span>
         </div>
       </div>
