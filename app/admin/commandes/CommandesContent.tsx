@@ -36,6 +36,14 @@ const PAGE_SIZE = 15;
 
 export default function CommandesContent({ initialOrders }: { initialOrders: Order[] }) {
   const [orders, setOrders] = useState<Order[]>(initialOrders);
+  // Resynchronise la liste quand le temps réel déclenche un router.refresh() :
+  // les nouvelles données server-rendered arrivent via initialOrders. Pattern
+  // « ajuster l'état pendant le rendu » (recommandé plutôt qu'un useEffect).
+  const [prevInitial, setPrevInitial] = useState(initialOrders);
+  if (initialOrders !== prevInitial) {
+    setPrevInitial(initialOrders);
+    setOrders(initialOrders);
+  }
   const [filterStatus, setFilterStatus] = useState("");
   const [filterPayment, setFilterPayment] = useState("");
   const [filterDate, setFilterDate] = useState("all");

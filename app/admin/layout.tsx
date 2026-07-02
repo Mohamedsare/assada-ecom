@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentProfile, getAdminOrders, getAdminProducts } from "@/lib/supabase/queries";
 import AdminLayoutClient, { type AdminNotification } from "./AdminLayoutClient";
+import RealtimeRefresh from "@/components/admin/RealtimeRefresh";
 
 const ROLE_LABELS: Record<string, string> = {
   admin: "Administrateur",
@@ -71,6 +72,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       notifications={notifications}
       pendingOrders={pendingOrders}
     >
+      <RealtimeRefresh />
       {children}
     </AdminLayoutClient>
   );
