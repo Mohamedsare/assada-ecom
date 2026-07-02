@@ -25,6 +25,7 @@ export default function AProposPage() {
     <LegalPage
       title="À propos d’Assada"
       subtitle="Votre boutique de cosmétiques, parfums et soins beauté à Casablanca — qualité, confiance et satisfaction garanties."
+      heroImage="/banners/banner-a-propos.png"
     >
       <h2>Qui sommes-nous ?</h2>
       <p>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronRight } from "lucide-react";
 
 /**
@@ -10,18 +11,34 @@ export default function LegalPage({
   title,
   subtitle,
   updatedAt,
+  heroImage,
   children,
 }: {
   title: string;
   subtitle?: string;
   updatedAt?: string;
+  /** Image de fond optionnelle pour le hero (ex : page À propos). */
+  heroImage?: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Hero */}
-      <div className="bg-night text-white">
-        <div className="max-w-4xl mx-auto px-4 py-12 md:py-16">
+      <div className="relative bg-night text-white overflow-hidden">
+        {heroImage && (
+          <>
+            <Image
+              src={heroImage}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center opacity-40"
+            />
+            <div className="absolute inset-0 bg-linear-to-r from-night via-night/85 to-night/40" />
+          </>
+        )}
+        <div className={`relative max-w-4xl mx-auto px-4 ${heroImage ? "py-16 md:py-24" : "py-12 md:py-16"}`}>
           <nav className="flex items-center gap-1.5 text-xs text-gray-400 mb-4">
             <Link href="/" className="hover:text-[#C9A063] transition-colors">Accueil</Link>
             <ChevronRight size={13} />
