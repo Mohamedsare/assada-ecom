@@ -26,41 +26,57 @@ import {
   ExternalLink,
   PanelLeftClose,
   PanelLeftOpen,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 import { signOut } from "@/lib/supabase/actions";
+import { hasPermission, isFullAccessRole, type PermissionModuleKey } from "@/lib/permissions";
+import type { PermissionMatrix, UserRole } from "@/types";
 
 type NavIcon = typeof LayoutDashboard;
-type NavLeaf = { href: string; label: string; icon: NavIcon };
-type NavGroup = { label: string; icon: NavIcon; children: { href: string; label: string }[] };
+/** `perm` = module requis pour un employé ; `adminOnly` = réservé admin/super_admin. */
+type NavLeaf = { href: string; label: string; icon: NavIcon; perm?: PermissionModuleKey; adminOnly?: boolean };
+type NavGroup = { label: string; icon: NavIcon; perm?: PermissionModuleKey; adminOnly?: boolean; children: { href: string; label: string }[] };
 type NavItem = NavLeaf | NavGroup;
 
 const NAV: NavItem[] = [
-  { href: "/admin/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
-  { href: "/admin/commandes", label: "Commandes", icon: ShoppingBag },
+  { href: "/admin/dashboard", label: "Tableau de bord", icon: LayoutDashboard, perm: "dashboard" },
+  { href: "/admin/commandes", label: "Commandes", icon: ShoppingBag, perm: "orders" },
   {
-    label: "Produits", icon: Package, children: [
+    label: "Produits", icon: Package, perm: "products", children: [
       { href: "/admin/produits", label: "Tous les produits" },
       { href: "/admin/stocks", label: "Stocks" },
     ],
   },
   {
-    label: "Catégories", icon: Tag, children: [
+    label: "Catégories", icon: Tag, perm: "categories", children: [
       { href: "/admin/categories", label: "Toutes les catégories" },
       { href: "/admin/marques", label: "Marques" },
     ],
   },
-  { href: "/admin/clients", label: "Clients", icon: Users },
-  { href: "/admin/livraisons", label: "Livreurs & Tracking", icon: Truck },
-  { href: "/admin/paiements", label: "Paiements", icon: CreditCard },
-  { href: "/admin/statistiques", label: "Rapports & Statistiques", icon: BarChart3 },
-  { href: "/admin/avis", label: "Avis clients", icon: Star },
-  { href: "/admin/messages", label: "Messages", icon: MessageSquare },
-  { href: "/admin/parametres", label: "Paramètres", icon: Settings },
-  { href: "/admin/utilisateurs", label: "Utilisateurs admins", icon: UserCog },
-  { href: "/admin/reglages", label: "Réglages boutique", icon: Store },
+  { href: "/admin/clients", label: "Clients", icon: Users, perm: "clients" },
+  { href: "/admin/livreurs", label: "Livreurs", icon: Truck, perm: "delivery" },
+  { href: "/admin/livraisons", label: "Livraisons & Tracking", icon: Truck, perm: "delivery" },
+  { href: "/admin/paiements", label: "Paiements", icon: CreditCard, adminOnly: true },
+  { href: "/admin/statistiques", label: "Rapports & Statistiques", icon: BarChart3, perm: "dashboard" },
+  { href: "/admin/avis", label: "Avis clients", icon: Star, perm: "products" },
+  { href: "/admin/messages", label: "Messages", icon: MessageSquare, perm: "clients" },
+  { href: "/admin/permissions", label: "Permissions", icon: Lock, adminOnly: true },
+  { href: "/admin/parametres", label: "Paramètres", icon: Settings, adminOnly: true },
+  { href: "/admin/utilisateurs", label: "Utilisateurs admins", icon: UserCog, adminOnly: true },
+  { href: "/admin/reglages", label: "Réglages boutique", icon: Store, adminOnly: true },
 ];
+
+/** Filtre le menu selon le rôle et les permissions de l'employé. */
+function visibleNav(role: UserRole, permissions: PermissionMatrix): NavItem[] {
+  if (isFullAccessRole(role)) return NAV;
+  const profile = { role, permissions };
+  return NAV.filter((item) => {
+    if (item.adminOnly) return false;
+    return item.perm ? hasPermission(profile, item.perm, "view") : false;
+  });
+}
 
 export interface AdminNotification {
   title: string;
@@ -70,14 +86,17 @@ export interface AdminNotification {
 }
 
 export default function AdminLayoutClient({
-  children, adminName, adminRole, notifications, pendingOrders = 0,
+  children, adminName, adminRole, role = "admin", permissions = {}, notifications, pendingOrders = 0,
 }: {
   children: React.ReactNode;
   adminName: string;
   adminRole: string;
+  role?: UserRole;
+  permissions?: PermissionMatrix;
   notifications: AdminNotification[];
   pendingOrders?: number;
 }) {
+  const nav = visibleNav(role, permissions);
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -110,13 +129,14 @@ export default function AdminLayoutClient({
     }
   };
 
-  const Sidebar = ({ collapsed = false }: { collapsed?: boolean }) => (
+  // Fonction de rendu (pas un composant) : évite de recréer un composant à chaque render.
+  const renderSidebar = (collapsed = false) => (
     <div className="flex flex-col h-full bg-night">
       {/* Logo */}
       <div className={cn("py-3 flex items-center border-b border-white/10", collapsed ? "px-2 justify-center" : "px-4 justify-between")}>
         {!collapsed && (
           <Link href="/admin/dashboard" className="flex items-center">
-            <Image src="/logo1.png" alt="Odm's Shopping" width={180} height={120} className="h-14 w-auto object-contain" />
+            <Image src="/logo1.png" alt="Assada" width={180} height={120} className="h-14 w-auto object-contain" />
           </Link>
         )}
         <div className="flex items-center gap-1">
@@ -135,7 +155,7 @@ export default function AdminLayoutClient({
 
       {/* Nav */}
       <nav className="flex-1 px-2.5 py-2 overflow-y-auto scrollbar-hide">
-        {NAV.map((item) => {
+        {nav.map((item) => {
           const Icon = item.icon;
 
           // Groupe avec sous-menu
@@ -235,7 +255,7 @@ export default function AdminLayoutClient({
             <div className="w-7 h-7 bg-white/10 rounded-md flex items-center justify-center shrink-0">
               <Image src="/logo1.png" alt="" width={48} height={32} className="h-5 w-auto object-contain" />
             </div>
-            <span className="text-white font-bold text-xs">Odm&apos;s Shopping</span>
+            <span className="text-white font-bold text-xs">Assada</span>
           </div>
           <div className="space-y-0.5 text-[10px] text-gray-400">
             <a href={`tel:${SITE_PHONE}`} className="block hover:text-gray-200 transition-colors">
@@ -255,7 +275,7 @@ export default function AdminLayoutClient({
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
       {/* Desktop sidebar */}
       <aside className={cn("hidden lg:flex flex-col shrink-0 transition-all duration-200", collapsed ? "lg:w-16" : "lg:w-52")}>
-        <Sidebar collapsed={collapsed} />
+        {renderSidebar(collapsed)}
       </aside>
 
       {/* Mobile sidebar */}
@@ -263,7 +283,7 @@ export default function AdminLayoutClient({
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
           <aside className="absolute left-0 top-0 bottom-0 w-64 flex flex-col">
-            <Sidebar />
+            {renderSidebar(false)}
           </aside>
         </div>
       )}
@@ -299,11 +319,11 @@ export default function AdminLayoutClient({
             >
               <Bell size={20} className="text-gray-300" />
               {notifications.length > 0 && (
-                <span className="absolute top-0.5 right-0.5 bg-green text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">{notifications.length}</span>
+                <span className="absolute top-0.5 right-0.5 bg-green text-[#020B27] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">{notifications.length}</span>
               )}
             </button>
             {notifOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#0F172A]">
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#020B27]">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
                   <p className="font-bold text-sm">Notifications</p>
                   <span className="text-xs text-green font-medium">{notifications.length} récentes</span>
@@ -337,13 +357,17 @@ export default function AdminLayoutClient({
               onClick={() => { setUserOpen((v) => !v); setNotifOpen(false); }}
               className="flex items-center gap-2 hover:bg-white/10 rounded-lg p-1 pr-2 transition-colors"
             >
-              <div className="w-9 h-9 bg-green rounded-full flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-9 h-9 bg-green rounded-full flex items-center justify-center text-[#020B27] font-bold text-sm">
                 {adminName.slice(0, 2).toUpperCase()}
               </div>
               <ChevronDown size={15} className="text-gray-400" />
             </button>
             {userOpen && (
-              <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#0F172A] py-1.5">
+              <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#020B27] py-1.5">
+                <div className="px-4 py-2 border-b border-gray-50 mb-1">
+                  <p className="text-sm font-semibold text-[#020B27] truncate">{adminName}</p>
+                  <p className="text-xs text-text-secondary">{adminRole}</p>
+                </div>
                 <Link href="/admin/parametres" onClick={() => setUserOpen(false)} className="flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors">
                   <Settings size={15} className="text-gray-500" /> Paramètres
                 </Link>

@@ -23,6 +23,7 @@ export default function MobileBottomNav() {
     s.items.reduce((sum, item) => sum + item.quantity, 0)
   );
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), []);
 
   return (
@@ -47,7 +48,7 @@ export default function MobileBottomNav() {
               <div className="relative">
                 <Icon size={21} strokeWidth={isActive ? 2.4 : 2} />
                 {badge && mounted && totalItems > 0 && (
-                  <span className="absolute -top-1.5 -right-2.5 bg-green text-white text-[10px] font-bold rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
+                  <span className="absolute -top-1.5 -right-2.5 bg-green text-[#020B27] text-[10px] font-bold rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
                     {totalItems > 9 ? "9+" : totalItems}
                   </span>
                 )}

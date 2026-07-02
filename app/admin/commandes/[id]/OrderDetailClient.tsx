@@ -6,14 +6,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft, MessageCircle, Printer, MapPin, Phone, Mail, User,
-  Package, CreditCard, Save, Loader2, CheckCircle2,
+  Package, CreditCard, Save, Loader2, CheckCircle2, FileText, Truck, Radio,
 } from "lucide-react";
 import { formatPrice, formatDate, getClientWhatsAppUrl } from "@/lib/utils";
-import { ORDER_STATUS_LABELS } from "@/lib/constants";
+import { ORDER_STATUS_LABELS, ORDER_CHANNEL_LABELS } from "@/lib/constants";
 import {
   adminUpdateOrderStatus, adminUpdatePaymentStatus, adminUpdateOrderNote,
+  adminAssignOrderAgent, adminUpdateOrderChannel,
 } from "@/lib/supabase/actions";
-import type { Order } from "@/types";
+import type { Order, DeliveryAgent, OrderChannel } from "@/types";
 
 const STATUS_COLOR: Record<string, string> = {
   pending:          "bg-yellow-100 text-yellow-700",
@@ -21,7 +22,7 @@ const STATUS_COLOR: Record<string, string> = {
   preparing:        "bg-purple-100 text-purple-700",
   shipped:          "bg-indigo-100 text-indigo-700",
   out_for_delivery: "bg-orange-100 text-orange-700",
-  delivered:        "bg-green-100 text-[#16A34A]",
+  delivered:        "bg-green-100 text-[#020B27]",
   cancelled:        "bg-red-100 text-red-700",
   returned:         "bg-gray-100 text-gray-700",
 };
@@ -42,7 +43,7 @@ const PAYMENT_STATUS_LABELS: Record<string, string> = {
 
 const PAYMENT_STATUS_COLOR: Record<string, string> = {
   pending:          "bg-yellow-100 text-yellow-700",
-  paid:             "bg-green-100 text-[#16A34A]",
+  paid:             "bg-green-100 text-[#020B27]",
   failed:           "bg-red-100 text-red-700",
   refunded:         "bg-gray-100 text-gray-700",
   cash_on_delivery: "bg-blue-100 text-blue-700",
@@ -51,13 +52,24 @@ const PAYMENT_STATUS_COLOR: Record<string, string> = {
 // Étapes normales de progression (hors annulation / retour)
 const TIMELINE_STEPS = ["pending", "confirmed", "preparing", "shipped", "out_for_delivery", "delivered"];
 
-export default function OrderDetailClient({ order }: { order: Order }) {
+export default function OrderDetailClient({ order, agents = [] }: { order: Order; agents?: DeliveryAgent[] }) {
   const router = useRouter();
   const [status, setStatus] = useState(order.order_status);
   const [paymentStatus, setPaymentStatus] = useState(order.payment_status);
   const [note, setNote] = useState(order.admin_note ?? "");
+  const [agentId, setAgentId] = useState(order.delivery_agent_id ?? "");
+  const [channel, setChannel] = useState<OrderChannel>(order.channel ?? "site");
   const [pending, startTransition] = useTransition();
   const [noteSaved, setNoteSaved] = useState(false);
+
+  const changeAgent = (value: string) => {
+    setAgentId(value);
+    startTransition(async () => { await adminAssignOrderAgent(order.id, value); router.refresh(); });
+  };
+  const changeChannel = (value: string) => {
+    setChannel(value as OrderChannel);
+    startTransition(async () => { await adminUpdateOrderChannel(order.id, value); router.refresh(); });
+  };
 
   const changeStatus = (value: string) => {
     setStatus(value as Order["order_status"]);
@@ -96,11 +108,11 @@ export default function OrderDetailClient({ order }: { order: Order }) {
       {/* En-tête */}
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.push("/admin/commandes")} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0F172A] transition-colors">
+          <button onClick={() => router.push("/admin/commandes")} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors">
             <ArrowLeft size={18} />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-[#0F172A]">{order.order_number}</h1>
+            <h1 className="text-2xl font-bold text-[#020B27]">{order.order_number}</h1>
             <p className="text-sm text-[#64748B] mt-0.5">Passée le {formatDate(order.created_at)}</p>
           </div>
           <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_COLOR[status]}`}>
@@ -109,12 +121,18 @@ export default function OrderDetailClient({ order }: { order: Order }) {
         </div>
         <div className="flex items-center gap-2">
           <Link
-            href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant votre commande ${order.order_number} chez Odm's Shopping.`)}
+            href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant votre commande ${order.order_number} chez Assada.`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 border border-gray-200 text-[#0F172A] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#25D366] hover:text-[#25D366] transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#16A34A] hover:text-[#16A34A] transition-colors"
           >
             <MessageCircle size={16} /> WhatsApp client
+          </Link>
+          <Link
+            href={`/admin/commandes/${order.id}/facture`}
+            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#16A34A] hover:text-[#16A34A] transition-colors"
+          >
+            <FileText size={16} /> Générer la facture
           </Link>
           <button
             onClick={() => window.print()}
@@ -141,14 +159,14 @@ export default function OrderDetailClient({ order }: { order: Order }) {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#0F172A] truncate">{item.product_name}</p>
+                    <p className="text-sm font-medium text-[#020B27] truncate">{item.product_name}</p>
                     <p className="text-xs text-[#64748B]">
                       {[item.color, item.size].filter(Boolean).join(" • ")}
                       {(item.color || item.size) && " — "}
                       {item.quantity} × {formatPrice(item.unit_price)}
                     </p>
                   </div>
-                  <p className="text-sm font-bold text-[#0F172A] whitespace-nowrap">{formatPrice(item.total_price)}</p>
+                  <p className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(item.total_price)}</p>
                 </div>
               ))}
             </div>
@@ -158,8 +176,8 @@ export default function OrderDetailClient({ order }: { order: Order }) {
               <Row label="Livraison" value={order.delivery_fee ? formatPrice(order.delivery_fee) : "Gratuite"} />
               {order.discount_amount > 0 && <Row label="Réduction" value={`− ${formatPrice(order.discount_amount)}`} />}
               <div className="flex items-center justify-between pt-1.5 border-t border-gray-50">
-                <span className="font-semibold text-[#0F172A]">Total</span>
-                <span className="font-bold text-lg text-[#16A34A]">{formatPrice(order.total_amount)}</span>
+                <span className="font-semibold text-[#020B27]">Total</span>
+                <span className="font-bold text-lg text-[#020B27]">{formatPrice(order.total_amount)}</span>
               </div>
             </div>
           </Card>
@@ -184,7 +202,7 @@ export default function OrderDetailClient({ order }: { order: Order }) {
                         {!isLast && <div className={`w-0.5 flex-1 min-h-6 ${i < currentStepIndex ? "bg-green" : "bg-gray-100"}`} />}
                       </div>
                       <div className={`pb-4 ${done ? "" : "opacity-50"}`}>
-                        <p className="text-sm font-medium text-[#0F172A]">{ORDER_STATUS_LABELS[step]}</p>
+                        <p className="text-sm font-medium text-[#020B27]">{ORDER_STATUS_LABELS[step]}</p>
                       </div>
                     </div>
                   );
@@ -197,7 +215,7 @@ export default function OrderDetailClient({ order }: { order: Order }) {
                 <p className="text-xs font-medium text-[#64748B]">Historique</p>
                 {tracking.map((t) => (
                   <div key={t.id} className="flex items-start justify-between gap-3 text-xs">
-                    <span className="text-[#0F172A]">{t.message ?? ORDER_STATUS_LABELS[t.status]}</span>
+                    <span className="text-[#020B27]">{t.message ?? ORDER_STATUS_LABELS[t.status]}</span>
                     <span className="text-[#64748B] whitespace-nowrap">{formatDate(t.created_at)}</span>
                   </div>
                 ))}
@@ -218,7 +236,7 @@ export default function OrderDetailClient({ order }: { order: Order }) {
               <button
                 onClick={saveNote}
                 disabled={pending}
-                className="flex items-center gap-2 bg-green hover:bg-[#15803d] disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-green hover:bg-[#15803D] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
               >
                 {pending ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Enregistrer la note
               </button>
@@ -238,6 +256,34 @@ export default function OrderDetailClient({ order }: { order: Order }) {
               className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white disabled:opacity-60"
             >
               {Object.entries(ORDER_STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            </select>
+          </Card>
+
+          {/* Livraison — livreur assigné */}
+          <Card title="Livreur assigné" icon={<Truck size={16} />} className="print:hidden">
+            <select
+              value={agentId}
+              disabled={pending}
+              onChange={(e) => changeAgent(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white disabled:opacity-60"
+            >
+              <option value="">Aucun livreur</option>
+              {agents.map((a) => <option key={a.id} value={a.id}>{a.name}{a.zones ? ` — ${a.zones}` : ""}</option>)}
+            </select>
+            {agents.length === 0 && (
+              <p className="text-xs text-[#64748B]">Ajoutez des livreurs dans le menu « Livreurs » pour pouvoir les assigner.</p>
+            )}
+          </Card>
+
+          {/* Canal de la commande */}
+          <Card title="Canal de la commande" icon={<Radio size={16} />} className="print:hidden">
+            <select
+              value={channel}
+              disabled={pending}
+              onChange={(e) => changeChannel(e.target.value)}
+              className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white disabled:opacity-60"
+            >
+              {Object.entries(ORDER_CHANNEL_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </Card>
 
@@ -269,19 +315,19 @@ export default function OrderDetailClient({ order }: { order: Order }) {
 
           {/* Livraison */}
           <Card title="Adresse de livraison" icon={<MapPin size={16} />}>
-            <p className="text-sm text-[#0F172A] font-medium">{order.delivery_city}</p>
+            <p className="text-sm text-[#020B27] font-medium">{order.delivery_city}</p>
             <p className="text-sm text-[#64748B]">{order.delivery_district}</p>
             {order.delivery_address_details && <p className="text-sm text-[#64748B]">{order.delivery_address_details}</p>}
             {order.delivery_landmark && <p className="text-xs text-[#64748B] italic">Repère : {order.delivery_landmark}</p>}
             {order.estimated_delivery_date && (
               <p className="text-xs text-[#64748B] pt-1 border-t border-gray-50 mt-1">
-                Livraison estimée : <span className="font-medium text-[#0F172A]">{order.estimated_delivery_date}</span>
+                Livraison estimée : <span className="font-medium text-[#020B27]">{order.estimated_delivery_date}</span>
               </p>
             )}
             {order.customer_note && (
               <div className="pt-2 border-t border-gray-50 mt-1">
                 <p className="text-xs text-[#64748B] mb-0.5">Note du client :</p>
-                <p className="text-sm text-[#0F172A]">{order.customer_note}</p>
+                <p className="text-sm text-[#020B27]">{order.customer_note}</p>
               </div>
             )}
           </Card>
@@ -294,7 +340,7 @@ export default function OrderDetailClient({ order }: { order: Order }) {
 function Card({ title, icon, children, className = "" }: { title: string; icon?: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
     <div className={`bg-white rounded-lg border border-gray-100 shadow-sm p-5 ${className}`}>
-      <h2 className="font-semibold text-[#0F172A] mb-4 flex items-center gap-2">
+      <h2 className="font-semibold text-[#020B27] mb-4 flex items-center gap-2">
         {icon && <span className="text-green">{icon}</span>}{title}
       </h2>
       <div className="space-y-3">{children}</div>
@@ -306,14 +352,14 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-[#64748B]">{label}</span>
-      <span className="text-[#0F172A] font-medium">{value}</span>
+      <span className="text-[#020B27] font-medium">{value}</span>
     </div>
   );
 }
 
 function InfoLine({ icon, value }: { icon: React.ReactNode; value: string }) {
   return (
-    <div className="flex items-center gap-2 text-sm text-[#0F172A]">
+    <div className="flex items-center gap-2 text-sm text-[#020B27]">
       <span className="text-gray-400">{icon}</span>{value}
     </div>
   );

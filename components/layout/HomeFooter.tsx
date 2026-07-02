@@ -25,11 +25,11 @@ const ADVANTAGES = [
 
 /* ── Galerie Instagram (déposez les images dans /public/gallery/) ── */
 const GALLERY = [
-  { image: "/categories/chaussure-homme.jpeg", emoji: "👟", bg: "bg-blue-100" },
-  { image: "/categories/vetement-homme.jpeg", emoji: "👕", bg: "bg-gray-200" },
-  { image: "/categories/vetement-femme.jpeg", emoji: "👗", bg: "bg-pink-100" },
-  { image: "/categories/chaussure-femme.jpeg", emoji: "👜", bg: "bg-amber-100" },
-  { image: "/gallery/casque.jpeg", emoji: "🎧", bg: "bg-gray-100" },
+  { image: "/categories/parfums.jpeg", emoji: "🌸", bg: "bg-pink-100" },
+  { image: "/categories/soins-visage.jpeg", emoji: "✨", bg: "bg-rose-100" },
+  { image: "/categories/maquillage.jpeg", emoji: "💄", bg: "bg-fuchsia-100" },
+  { image: "/categories/soins-cheveux.jpeg", emoji: "💆", bg: "bg-amber-100" },
+  { image: "/categories/cadeaux.jpeg", emoji: "🎁", bg: "bg-gray-100" },
 ];
 
 function GalleryImg({ item, alt }: { item: (typeof GALLERY)[number]; alt: string }) {
@@ -62,14 +62,15 @@ const QUICK_LINKS = [
 ];
 
 const CATEGORY_LINKS = [
-  { label: "Chaussures Homme", href: "/boutique?categorie=chaussures-homme" },
-  { label: "Chaussures Femme", href: "/boutique?categorie=chaussures-femme" },
-  { label: "Vêtements Homme", href: "/boutique?categorie=vetements-homme" },
-  { label: "Vêtements Femme", href: "/boutique?categorie=vetements-femme" },
-  { label: "Accessoires Homme", href: "/boutique?categorie=accessoires-homme" },
-  { label: "Accessoires Femme", href: "/boutique?categorie=accessoires-femme" },
-  { label: "Électroniques", href: "/boutique?categorie=electroniques" },
-  { label: "PC & Accessoires", href: "/boutique?categorie=pc-accessoires" },
+  { label: "Parfums", href: "/boutique?categorie=parfums" },
+  { label: "Maquillage", href: "/boutique?categorie=maquillage" },
+  { label: "Soins du visage", href: "/boutique?categorie=soins-visage" },
+  { label: "Soins du corps", href: "/boutique?categorie=soins-corps" },
+  { label: "Soins des cheveux", href: "/boutique?categorie=soins-cheveux" },
+  { label: "Hygiène", href: "/boutique?categorie=hygiene" },
+  { label: "Accessoires", href: "/boutique?categorie=accessoires" },
+  { label: "Cadeaux", href: "/boutique?categorie=cadeaux" },
+  { label: "Bien-être", href: "/boutique?categorie=bien-etre" },
 ];
 
 const INFO_LINKS = [
@@ -114,13 +115,13 @@ export default function HomeFooter() {
             <p className="text-xs font-bold text-green-light uppercase tracking-widest mb-2">
               Suivez-nous
             </p>
-            <p className="text-white text-2xl font-extrabold mb-1">@odms.shopping</p>
+            <p className="text-white text-2xl font-extrabold mb-1">@assada</p>
             <p className="text-gray-400 text-sm mb-5">Découvrez nos produits en images</p>
             <Link
-              href="https://www.instagram.com/odms.shopping"
+              href="https://www.instagram.com/assada"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-green hover:bg-[#15803d] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
+              className="inline-flex items-center gap-2 bg-green hover:bg-[#15803D] text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.52.01-4.76.07-1.15.05-1.77.24-2.19.41-.55.21-.94.47-1.35.88-.41.41-.67.8-.88 1.35-.17.42-.36 1.04-.41 2.19-.06 1.24-.07 1.61-.07 4.76s.01 3.52.07 4.76c.05 1.15.24 1.77.41 2.19.21.55.47.94.88 1.35.41.41.8.67 1.35.88.42.17 1.04.36 2.19.41 1.24.06 1.61.07 4.76.07s3.52-.01 4.76-.07c1.15-.05 1.77-.24 2.19-.41.55-.21.94-.47 1.35-.88.41-.41.67-.8.88-1.35.17-.42.36-1.04.41-2.19.06-1.24.07-1.61.07-4.76s-.01-3.52-.07-4.76c-.05-1.15-.24-1.77-.41-2.19a3.6 3.6 0 00-.88-1.35 3.6 3.6 0 00-1.35-.88c-.42-.17-1.04-.36-2.19-.41-1.24-.06-1.61-.07-4.76-.07zm0 2.76a5.46 5.46 0 110 10.92 5.46 5.46 0 010-10.92zm0 9a3.54 3.54 0 100-7.08 3.54 3.54 0 000 7.08zm6.95-9.22a1.27 1.27 0 11-2.55 0 1.27 1.27 0 012.55 0z" />
@@ -146,14 +147,14 @@ export default function HomeFooter() {
             <Link href="/" className="inline-flex items-center mb-4">
               <Image
                 src="/logo1.png"
-                alt="Odm's Shopping"
+                alt="Assada"
                 width={180}
                 height={120}
                 className="h-14 w-auto object-contain"
               />
             </Link>
             <p className="text-sm leading-relaxed mb-4 text-gray-400">
-              Votre boutique en ligne numéro 1 au Gabon. Qualité, confiance et satisfaction garanties.
+              Votre boutique en ligne numéro 1 à Casablanca. Qualité, confiance et satisfaction garanties.
             </p>
             <div className="flex flex-col gap-2 text-sm">
               <a href={`tel:${SITE_PHONE}`} className="flex items-center gap-2 hover:text-green-light transition-colors">
@@ -163,14 +164,14 @@ export default function HomeFooter() {
                 <Mail size={14} /> {SITE_EMAIL}
               </a>
               <span className="flex items-center gap-2">
-                <MapPin size={14} /> Libreville, Gabon
+                <MapPin size={14} /> Galerie Derb Ghalef, Bd Abdelmoumen, Casablanca
               </span>
             </div>
             <div className="flex gap-3 mt-5">
               {[
-                { label: "Facebook", href: "https://www.facebook.com/odmsshopping" },
-                { label: "Instagram", href: "https://www.instagram.com/odms.shopping" },
-                { label: "TikTok", href: "https://www.tiktok.com/@odmsshopping" },
+                { label: "Facebook", href: "https://www.facebook.com/assada" },
+                { label: "Instagram", href: "https://www.instagram.com/assada" },
+                { label: "TikTok", href: "https://www.tiktok.com/@assada" },
               ].map((s) => (
                 <Link
                   key={s.label}
@@ -251,7 +252,7 @@ export default function HomeFooter() {
                 />
                 <button
                   type="submit"
-                  className="w-full bg-green hover:bg-[#15803d] text-white font-semibold py-2.5 rounded-xl transition-colors text-sm"
+                  className="w-full bg-green hover:bg-[#15803D] text-[#020B27] font-semibold py-2.5 rounded-xl transition-colors text-sm"
                 >
                   S&apos;abonner
                 </button>
@@ -265,14 +266,12 @@ export default function HomeFooter() {
       <div className="border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} Odm&apos;s Shopping — Tous droits réservés
+            © {new Date().getFullYear()} Assada — Tous droits réservés
           </p>
           <div className="flex items-center gap-2 text-xs">
             <span className="text-gray-500 mr-1">Paiement :</span>
             {[
-              { src: "/paiments/airtel-money.jpeg", alt: "Airtel Money" },
-              { src: "/paiments/moov-money.jpeg", alt: "Moov Money" },
-              { src: "/paiments/paiement-livraison.jpeg", alt: "Espèces à la livraison" },
+              { src: "/paiments/paiement-livraison.jpeg", alt: "Paiement à la livraison" },
             ].map((p) => (
               <span key={p.src} className="relative h-7 w-11 overflow-hidden rounded bg-white">
                 <Image src={p.src} alt={p.alt} fill className="object-contain p-0.5" sizes="44px" />

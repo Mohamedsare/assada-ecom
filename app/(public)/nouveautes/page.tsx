@@ -4,8 +4,8 @@ import NouveautesContent from "./NouveautesContent";
 import { getProducts, getCategories } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
-  title: "Nouveautés | Odm's Shopping",
-  description: "Découvrez les dernières nouveautés d'Odm's Shopping au Gabon. Les produits les plus récents arrivent chaque semaine.",
+  title: "Nouveautés | Assada",
+  description: "Découvrez les dernières nouveautés d'Assada à Casablanca. Les produits les plus récents arrivent chaque semaine.",
 };
 
 export default async function NouveautesPage() {

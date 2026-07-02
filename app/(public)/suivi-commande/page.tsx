@@ -3,7 +3,7 @@ import SuiviContent from "./SuiviContent";
 
 export const metadata = {
   title: "Suivi de commande",
-  description: "Suivez l'état de votre commande Odm's Shopping partout au Gabon.",
+  description: "Suivez l'état de votre commande Assada partout à Casablanca.",
 };
 
 export default function SuiviCommandePage() {

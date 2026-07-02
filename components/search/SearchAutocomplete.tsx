@@ -7,8 +7,8 @@ import { Search, X, Loader2, TrendingUp, Clock, ArrowRight } from "lucide-react"
 import { useProductSearch } from "@/hooks/useProductSearch";
 import { formatPrice, cn } from "@/lib/utils";
 
-const RECENT_KEY = "odms-recent-searches";
-const POPULAR = ["Nike", "iPhone", "Casque", "Montre", "Sac", "PC"];
+const RECENT_KEY = "assada-recent-searches";
+const POPULAR = ["Parfum", "Crème visage", "Maquillage", "Pommade", "Shampoing", "Coffret"];
 const SUGGEST_LIMIT = 6;
 
 function readRecent(): string[] {
@@ -45,7 +45,9 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
   const { results, loading } = useProductSearch(query, { limit: SUGGEST_LIMIT });
   const suggestions = results.slice(0, SUGGEST_LIMIT);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setRecent(readRecent()), [open]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setHighlight(-1), [query]);
 
   // Fermer au clic extérieur
@@ -119,7 +121,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
           aria-label="Rechercher"
           className={cn(
             "w-full bg-transparent text-sm outline-none",
-            variant === "header" ? "text-white placeholder-gray-400" : "text-[#0F172A] placeholder-gray-400"
+            variant === "header" ? "text-white placeholder-gray-400" : "text-[#020B27] placeholder-gray-400"
           )}
         />
         {query && (
@@ -152,7 +154,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                 </div>
               ) : suggestions.length === 0 ? (
                 <div className="px-4 py-6 text-center">
-                  <p className="text-sm font-medium text-[#0F172A]">Aucun résultat pour « {query} »</p>
+                  <p className="text-sm font-medium text-[#020B27]">Aucun résultat pour « {query} »</p>
                   <button onClick={() => go(query)} className="mt-2 text-xs font-medium text-green hover:underline">
                     Voir toute la boutique
                   </button>
@@ -177,7 +179,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                           )}
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-medium text-[#0F172A]">{p.name}</span>
+                          <span className="block truncate text-sm font-medium text-[#020B27]">{p.name}</span>
                           {p.category && (
                             <span className="block truncate text-[11px] text-[#64748B]">{p.category.name}</span>
                           )}
@@ -192,7 +194,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
               {/* Voir tous les résultats */}
               <button
                 onClick={() => go(query)}
-                className="flex w-full items-center justify-between border-t border-gray-100 bg-[#F8FAFC] px-4 py-2.5 text-sm font-semibold text-[#0F172A] hover:bg-gray-100 transition-colors"
+                className="flex w-full items-center justify-between border-t border-gray-100 bg-[#F8FAFC] px-4 py-2.5 text-sm font-semibold text-[#020B27] hover:bg-gray-100 transition-colors"
               >
                 <span className="flex items-center gap-2">
                   <Search size={14} className="text-green" />
@@ -214,7 +216,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                       <button
                         key={t}
                         onClick={() => { setQuery(t); go(t); }}
-                        className="rounded-full border border-gray-200 px-3 py-1 text-xs text-[#0F172A] hover:border-green hover:text-green transition-colors"
+                        className="rounded-full border border-gray-200 px-3 py-1 text-xs text-[#020B27] hover:border-green hover:text-green transition-colors"
                       >
                         {t}
                       </button>
@@ -231,7 +233,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                     <button
                       key={t}
                       onClick={() => { setQuery(t); go(t); }}
-                      className="rounded-full bg-[#F8FAFC] px-3 py-1 text-xs text-[#0F172A] hover:bg-green/10 hover:text-green transition-colors"
+                      className="rounded-full bg-[#F8FAFC] px-3 py-1 text-xs text-[#020B27] hover:bg-green/10 hover:text-green transition-colors"
                     >
                       {t}
                     </button>

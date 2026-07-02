@@ -1,5 +1,5 @@
 -- =============================================
--- ODM'S SHOPPING — Schéma base de données
+-- ASSADA — Schéma base de données
 -- À exécuter dans Supabase SQL Editor
 -- =============================================
 
@@ -531,44 +531,132 @@ create index if not exists idx_contact_messages_created on public.contact_messag
 -- =============================================
 
 -- Catégories
+-- Niveau 1 — catalogues de tête
 insert into public.categories (name, slug, sort_order) values
-  ('Chaussures Homme', 'chaussures-homme', 1),
-  ('Chaussures Femme', 'chaussures-femme', 2),
-  ('Vêtements Homme', 'vetements-homme', 3),
-  ('Vêtements Femme', 'vetements-femme', 4),
-  ('Accessoires Homme', 'accessoires-homme', 5),
-  ('Accessoires Femme', 'accessoires-femme', 6),
-  ('Électroniques', 'electroniques', 7),
-  ('Accessoires Téléphone', 'accessoires-telephone', 8),
-  ('PC & Accessoires', 'pc-accessoires', 9),
-  ('Audio', 'audio', 10);
+  ('Parfums', 'parfums', 1),
+  ('Maquillage', 'maquillage', 2),
+  ('Soins du visage', 'soins-visage', 3),
+  ('Soins du corps', 'soins-corps', 4),
+  ('Soins des cheveux', 'soins-cheveux', 5),
+  ('Hygiène', 'hygiene', 6),
+  ('Accessoires', 'accessoires', 7),
+  ('Cadeaux', 'cadeaux', 8),
+  ('Bien-être', 'bien-etre', 9);
+
+-- Niveau 2 — sous-catégories
+insert into public.categories (name, slug, sort_order, parent_id) values
+  -- Parfums
+  ('Homme',              'parfums-homme',    1, (select id from public.categories where slug = 'parfums')),
+  ('Enfant',             'parfums-enfant',   2, (select id from public.categories where slug = 'parfums')),
+  ('Luxe',               'parfums-luxe',     3, (select id from public.categories where slug = 'parfums')),
+  ('Niche',              'parfums-niche',    4, (select id from public.categories where slug = 'parfums')),
+  ('Coffrets',           'parfums-coffrets', 5, (select id from public.categories where slug = 'parfums')),
+  -- Maquillage
+  ('Teint',              'maquillage-teint',  1, (select id from public.categories where slug = 'maquillage')),
+  ('Yeux',               'maquillage-yeux',   2, (select id from public.categories where slug = 'maquillage')),
+  ('Lèvres',             'maquillage-levres', 3, (select id from public.categories where slug = 'maquillage')),
+  ('Ongles',             'maquillage-ongles', 4, (select id from public.categories where slug = 'maquillage')),
+  -- Soins du visage
+  ('Nettoyants',         'soins-visage-nettoyants',         1, (select id from public.categories where slug = 'soins-visage')),
+  ('Hydratants',         'soins-visage-hydratants',         2, (select id from public.categories where slug = 'soins-visage')),
+  ('Sérums',             'soins-visage-serums',             3, (select id from public.categories where slug = 'soins-visage')),
+  ('Masques',            'soins-visage-masques',            4, (select id from public.categories where slug = 'soins-visage')),
+  ('Contour des yeux',   'soins-visage-contour-yeux',       5, (select id from public.categories where slug = 'soins-visage')),
+  ('Anti-âge',           'soins-visage-anti-age',           6, (select id from public.categories where slug = 'soins-visage')),
+  ('Protection solaire', 'soins-visage-protection-solaire', 7, (select id from public.categories where slug = 'soins-visage')),
+  -- Soins du corps
+  ('Laits & crèmes',     'soins-corps-laits-cremes', 1, (select id from public.categories where slug = 'soins-corps')),
+  ('Huiles',             'soins-corps-huiles',       2, (select id from public.categories where slug = 'soins-corps')),
+  ('Gommages',           'soins-corps-gommages',     3, (select id from public.categories where slug = 'soins-corps')),
+  ('Déodorants',         'soins-corps-deodorants',   4, (select id from public.categories where slug = 'soins-corps')),
+  ('Savons',             'soins-corps-savons',       5, (select id from public.categories where slug = 'soins-corps')),
+  -- Soins des cheveux
+  ('Shampoings',            'soins-cheveux-shampoings',       1, (select id from public.categories where slug = 'soins-cheveux')),
+  ('Après-shampoings',      'soins-cheveux-apres-shampoings', 2, (select id from public.categories where slug = 'soins-cheveux')),
+  ('Masques',               'soins-cheveux-masques',          3, (select id from public.categories where slug = 'soins-cheveux')),
+  ('Huiles',                'soins-cheveux-huiles',           4, (select id from public.categories where slug = 'soins-cheveux')),
+  ('Produits coiffants',    'soins-cheveux-coiffants',        5, (select id from public.categories where slug = 'soins-cheveux')),
+  ('Traitement particulier','soins-cheveux-traitement',       6, (select id from public.categories where slug = 'soins-cheveux')),
+  -- Hygiène
+  ('Gel douche',            'hygiene-gel-douche',    1, (select id from public.categories where slug = 'hygiene')),
+  ('Hygiène intime',        'hygiene-intime',        2, (select id from public.categories where slug = 'hygiene')),
+  ('Hygiène bucco-dentaire','hygiene-bucco-dentaire',3, (select id from public.categories where slug = 'hygiene')),
+  ('Désinfectants',         'hygiene-desinfectants', 4, (select id from public.categories where slug = 'hygiene')),
+  -- Accessoires
+  ('Trousses',              'accessoires-trousses',      1, (select id from public.categories where slug = 'accessoires')),
+  ('Vaporisateurs',         'accessoires-vaporisateurs', 2, (select id from public.categories where slug = 'accessoires')),
+  ('Pinceaux',              'accessoires-pinceaux',      3, (select id from public.categories where slug = 'accessoires')),
+  ('Miroirs',               'accessoires-miroirs',       4, (select id from public.categories where slug = 'accessoires')),
+  ('Éponges',               'accessoires-eponges',       5, (select id from public.categories where slug = 'accessoires')),
+  -- Cadeaux
+  ('Coffrets cadeaux',      'cadeaux-coffrets',          1, (select id from public.categories where slug = 'cadeaux')),
+  ('Paniers cadeaux',       'cadeaux-paniers',           2, (select id from public.categories where slug = 'cadeaux')),
+  ('Cartes cadeaux',        'cadeaux-cartes',            3, (select id from public.categories where slug = 'cadeaux')),
+  ('Miniatures',            'cadeaux-miniatures',        4, (select id from public.categories where slug = 'cadeaux')),
+  ('Éditions limitées',     'cadeaux-editions-limitees', 5, (select id from public.categories where slug = 'cadeaux')),
+  ('Cadeaux par occasion',  'cadeaux-occasions',         6, (select id from public.categories where slug = 'cadeaux')),
+  -- Bien-être
+  ('Aromathérapie',              'bien-etre-aromatherapie', 1, (select id from public.categories where slug = 'bien-etre')),
+  ('Aérothérapie',               'bien-etre-aerotherapie',  2, (select id from public.categories where slug = 'bien-etre')),
+  ('Phytothérapie',              'bien-etre-phytotherapie', 3, (select id from public.categories where slug = 'bien-etre')),
+  ('Neurothérapie',              'bien-etre-neurotherapie', 4, (select id from public.categories where slug = 'bien-etre')),
+  ('Psychothérapie & relaxation','bien-etre-psychotherapie',5, (select id from public.categories where slug = 'bien-etre'));
+
+-- Niveau 3 — détail du catalogue bien-être
+insert into public.categories (name, slug, sort_order, parent_id) values
+  -- Aromathérapie
+  ('Huiles essentielles',       'bien-etre-aromatherapie-huiles-essentielles', 1, (select id from public.categories where slug = 'bien-etre-aromatherapie')),
+  ('Synergies',                 'bien-etre-aromatherapie-synergies',           2, (select id from public.categories where slug = 'bien-etre-aromatherapie')),
+  ('Roll-on bien-être',         'bien-etre-aromatherapie-roll-on',             3, (select id from public.categories where slug = 'bien-etre-aromatherapie')),
+  ('Diffuseurs & accessoires',  'bien-etre-aromatherapie-diffuseurs',          4, (select id from public.categories where slug = 'bien-etre-aromatherapie')),
+  ('Sprays d''ambiance',        'bien-etre-aromatherapie-sprays',              5, (select id from public.categories where slug = 'bien-etre-aromatherapie')),
+  -- Aérothérapie
+  ('Diffusion atmosphérique',        'bien-etre-aerotherapie-diffusion',        1, (select id from public.categories where slug = 'bien-etre-aerotherapie')),
+  ('Inhalation & soins respiratoires','bien-etre-aerotherapie-inhalation',      2, (select id from public.categories where slug = 'bien-etre-aerotherapie')),
+  ('Sprays purifiants d''air',       'bien-etre-aerotherapie-sprays-purifiants',3, (select id from public.categories where slug = 'bien-etre-aerotherapie')),
+  ('Mélanges respiratoires',         'bien-etre-aerotherapie-melanges',         4, (select id from public.categories where slug = 'bien-etre-aerotherapie')),
+  ('Dispositifs de diffusion',       'bien-etre-aerotherapie-dispositifs',      5, (select id from public.categories where slug = 'bien-etre-aerotherapie')),
+  -- Phytothérapie
+  ('Tisanes & infusions',            'bien-etre-phytotherapie-tisanes',      1, (select id from public.categories where slug = 'bien-etre-phytotherapie')),
+  ('Plantes médicinales',            'bien-etre-phytotherapie-plantes',      2, (select id from public.categories where slug = 'bien-etre-phytotherapie')),
+  ('Extraits naturels',              'bien-etre-phytotherapie-extraits',     3, (select id from public.categories where slug = 'bien-etre-phytotherapie')),
+  ('Compléments à base de plantes',  'bien-etre-phytotherapie-complements',  4, (select id from public.categories where slug = 'bien-etre-phytotherapie')),
+  ('Huiles végétales thérapeutiques','bien-etre-phytotherapie-huiles-vegetales',5,(select id from public.categories where slug = 'bien-etre-phytotherapie')),
+  -- Neurothérapie
+  ('Relaxation mentale',             'bien-etre-neurotherapie-relaxation',    1, (select id from public.categories where slug = 'bien-etre-neurotherapie')),
+  ('Concentration cognitive',        'bien-etre-neurotherapie-concentration', 2, (select id from public.categories where slug = 'bien-etre-neurotherapie')),
+  -- Psychothérapie & relaxation
+  ('Gestion du stress & anxiété',    'bien-etre-psychotherapie-stress',     1, (select id from public.categories where slug = 'bien-etre-psychotherapie')),
+  ('Massage bien-être',              'bien-etre-psychotherapie-massage',    2, (select id from public.categories where slug = 'bien-etre-psychotherapie')),
+  ('Sophrologie',                    'bien-etre-psychotherapie-sophrologie',3, (select id from public.categories where slug = 'bien-etre-psychotherapie')),
+  ('Produits spa',                   'bien-etre-psychotherapie-spa',        4, (select id from public.categories where slug = 'bien-etre-psychotherapie'));
 
 -- Marques
 insert into public.brands (name, slug) values
-  ('Nike', 'nike'),
-  ('Adidas', 'adidas'),
-  ('Apple', 'apple'),
-  ('Samsung', 'samsung'),
-  ('HP', 'hp'),
-  ('Lenovo', 'lenovo'),
-  ('JBL', 'jbl'),
-  ('Oraimo', 'oraimo'),
-  ('Tecno', 'tecno'),
-  ('Infinix', 'infinix');
+  ('L''Oréal Paris', 'loreal-paris'),
+  ('Garnier', 'garnier'),
+  ('Nivea', 'nivea'),
+  ('Dove', 'dove'),
+  ('Maybelline', 'maybelline'),
+  ('Bioderma', 'bioderma'),
+  ('La Roche-Posay', 'la-roche-posay'),
+  ('Vaseline', 'vaseline'),
+  ('Fair & White', 'fair-and-white'),
+  ('Palmer''s', 'palmers');
 
 -- Paramètres boutique par défaut
 insert into public.settings (key, value) values
-  ('shop_name', '"Odm''s Shopping"'),
-  ('shop_email', '"odms-shopping@gmail.com"'),
-  ('shop_phone', '"+24162573748"'),
-  ('shop_whatsapp', '"24162573748"'),
-  ('shop_address', '"Libreville, Gabon"'),
-  ('shop_city', '"Libreville"'),
-  ('shop_country', '"Gabon"'),
+  ('shop_name', '"Assada"'),
+  ('shop_email', '"contact@assada.ma"'),
+  ('shop_phone', '"+21200000000"'),
+  ('shop_whatsapp', '"21200000000"'),
+  ('shop_address', '"Boulevard Abdelmoumen, N10, Galerie Derb Ghalef, Kissariat Zemmouri, 20102 Derb Ghalef, Casablanca, Maroc"'),
+  ('shop_city', '"Casablanca"'),
+  ('shop_country', '"Maroc"'),
   ('delivery_fee', '2000'),
   ('free_delivery_threshold', '100000'),
-  ('currency', '"FCFA"'),
-  ('whatsapp_default_message', '"Bonjour Odm''s Shopping, je suis intéressé par vos produits."');
+  ('currency', '"DH"'),
+  ('whatsapp_default_message', '"Bonjour Assada, je suis intéressé par vos produits."');
 
 -- =============================================
 -- STORAGE BUCKETS (à créer dans Supabase Dashboard)

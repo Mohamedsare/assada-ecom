@@ -100,14 +100,14 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             <button
               onClick={step(-1)}
               aria-label="Image précédente"
-              className="absolute left-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#0F172A] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
+              className="absolute left-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#020B27] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={step(1)}
               aria-label="Image suivante"
-              className="absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#0F172A] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
+              className="absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#020B27] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
             >
               <ChevronRight size={16} />
             </button>
@@ -138,7 +138,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         <button
           onClick={handleQuickView}
           aria-label="Aperçu rapide"
-          className="absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-medium text-[#0F172A] opacity-0 shadow-sm transition-all duration-200 hover:bg-white group-hover:opacity-100"
+          className="absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-medium text-[#020B27] opacity-0 shadow-sm transition-all duration-200 hover:bg-white group-hover:opacity-100"
         >
           <Eye size={13} />
           Aperçu
@@ -165,7 +165,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
         {/* Name */}
         <Link href={`/produit/${product.slug}`}>
-          <h3 className="line-clamp-1 text-[13px] leading-tight text-[#475569] hover:text-[#0F172A]">
+          <h3 className="line-clamp-1 text-[13px] leading-tight text-[#475569] hover:text-[#020B27]">
             {product.name}
           </h3>
         </Link>
@@ -191,7 +191,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             className={cn(
               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors",
               product.stock_quantity > 0
-                ? "border-gray-300 text-[#0F172A] hover:border-[#0F172A] hover:bg-[#0F172A] hover:text-white"
+                ? "border-gray-300 text-[#020B27] hover:border-[#0F172A] hover:bg-[#15803D] hover:text-white"
                 : "cursor-not-allowed border-gray-200 text-gray-300"
             )}
           >
@@ -214,7 +214,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
                   size={11}
                   className={cn(
                     i < Math.round(rating)
-                      ? "fill-[#0F172A] text-[#0F172A]"
+                      ? "fill-[#0F172A] text-[#020B27]"
                       : "fill-gray-200 text-gray-200"
                   )}
                 />

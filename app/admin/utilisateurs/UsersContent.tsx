@@ -48,12 +48,12 @@ export default function UsersContent({
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-[#0F172A]">Utilisateurs admins</h1>
+          <h1 className="text-xl font-bold text-[#020B27]">Utilisateurs admins</h1>
           <p className="text-text-secondary text-sm mt-0.5">{staff.length} membre(s) du staff · gérez les rôles et accès</p>
         </div>
         <button
           onClick={() => setPromoting(true)}
-          className="flex items-center gap-2 bg-green hover:bg-[#15803d] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green hover:bg-[#15803D] text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           <UserPlus size={16} /> Promouvoir un client
         </button>
@@ -79,9 +79,9 @@ export default function UsersContent({
       {staff.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <UserCog size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#0F172A] mb-1">Aucun membre du staff</p>
+          <p className="font-semibold text-[#020B27] mb-1">Aucun membre du staff</p>
           <p className="text-text-secondary text-sm mb-5">Promouvez un client pour lui donner accès au back-office.</p>
-          <button onClick={() => setPromoting(true)} className="bg-green hover:bg-[#15803d] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+          <button onClick={() => setPromoting(true)} className="bg-green hover:bg-[#15803D] text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg transition-colors">
             Promouvoir un client
           </button>
         </div>
@@ -139,7 +139,7 @@ function UserRow({ user, isSelf }: { user: Profile; isSelf: boolean }) {
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-night rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">{initials}</div>
           <div>
-            <p className="text-sm font-medium text-[#0F172A]">{name}{isSelf && <span className="text-[10px] text-green ml-1">(vous)</span>}</p>
+            <p className="text-sm font-medium text-[#020B27]">{name}{isSelf && <span className="text-[10px] text-green ml-1">(vous)</span>}</p>
             <p className="text-xs text-text-secondary">{user.email ?? "—"}</p>
           </div>
         </div>
@@ -210,8 +210,8 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-[#0F172A]">Promouvoir un client</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-[#0F172A] transition-colors"><X size={20} /></button>
+          <h2 className="font-bold text-[#020B27]">Promouvoir un client</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-[#020B27] transition-colors"><X size={20} /></button>
         </div>
 
         <div className="p-5 space-y-4">
@@ -239,7 +239,7 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
                     className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 text-left transition-colors ${selected?.id === c.id ? "bg-green-50" : "hover:bg-gray-50"}`}
                   >
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#0F172A] truncate">{nameOf(c)}</p>
+                      <p className="text-sm font-medium text-[#020B27] truncate">{nameOf(c)}</p>
                       <p className="text-xs text-text-secondary truncate">{c.email ?? c.phone ?? "—"}</p>
                     </div>
                     {selected?.id === c.id && <ShieldCheck size={16} className="text-green shrink-0" />}
@@ -248,7 +248,7 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#0F172A] mb-1.5">Rôle à attribuer</label>
+                <label className="block text-sm font-medium text-[#020B27] mb-1.5">Rôle à attribuer</label>
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value as UserRole)}
@@ -264,7 +264,7 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
                 <button
                   onClick={promote}
                   disabled={!selected || pending}
-                  className="flex items-center gap-2 bg-green hover:bg-[#15803d] disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                  className="flex items-center gap-2 bg-green hover:bg-[#15803D] disabled:opacity-50 disabled:cursor-not-allowed text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                   {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />}
                   {selected ? `Promouvoir ${nameOf(selected)}` : "Sélectionnez un client"}

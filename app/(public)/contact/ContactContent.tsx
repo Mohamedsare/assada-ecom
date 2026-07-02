@@ -11,7 +11,7 @@ import AdvantagesSection from "@/components/sections/AdvantagesSection";
 const FAQ = [
   {
     q: "Quels sont vos délais de livraison ?",
-    a: "Nous livrons partout au Gabon en 24 à 48h ouvrables. Pour Libreville, la livraison peut être effectuée le jour même selon disponibilité.",
+    a: "Nous livrons partout à Casablanca en 24 à 48h ouvrables. Pour Casablanca, la livraison peut être effectuée le jour même selon disponibilité.",
   },
   {
     q: "Puis-je retourner un article ?",
@@ -19,7 +19,7 @@ const FAQ = [
   },
   {
     q: "Quels sont les moyens de paiement acceptés ?",
-    a: "Nous acceptons le paiement en espèces à la livraison, Airtel Money et Moov Money. Le paiement en ligne sera disponible prochainement.",
+    a: "Nous acceptons le paiement en espèces à la livraison. Le paiement en ligne sera disponible prochainement.",
   },
   {
     q: "Comment suivre ma commande ?",
@@ -69,7 +69,7 @@ export default function ContactContent() {
         <div className="grid lg:grid-cols-2 gap-10">
           {/* Contact info */}
           <div>
-            <h2 className="text-xl font-bold text-[#0F172A] mb-6">Nos coordonnées</h2>
+            <h2 className="text-xl font-bold text-[#020B27] mb-6">Nos coordonnées</h2>
             <div className="space-y-4 mb-8">
               {[
                 {
@@ -84,20 +84,20 @@ export default function ContactContent() {
                   label: "Email",
                   value: SITE_EMAIL,
                   href: `mailto:${SITE_EMAIL}`,
-                  color: "bg-green-50 text-[#16A34A]",
+                  color: "bg-green-50 text-[#020B27]",
                 },
                 {
                   icon: MapPin,
                   label: "Adresse",
-                  value: "Libreville, Gabon",
-                  href: "https://maps.google.com/?q=Libreville,Gabon",
+                  value: "Galerie Derb Ghalef, Bd Abdelmoumen, Casablanca",
+                  href: "https://maps.google.com/?q=Galerie+Derb+Ghalef+Boulevard+Abdelmoumen+Casablanca",
                   color: "bg-red-50 text-red-600",
                 },
                 {
                   icon: MessageCircle,
                   label: "WhatsApp",
                   value: `+${WHATSAPP_NUMBER}`,
-                  href: getWhatsAppUrl("Bonjour Odm's Shopping, je souhaite vous contacter."),
+                  href: getWhatsAppUrl("Bonjour Assada, je souhaite vous contacter."),
                   color: "bg-emerald-50 text-emerald-600",
                 },
               ].map((item) => {
@@ -115,7 +115,7 @@ export default function ContactContent() {
                     </div>
                     <div>
                       <p className="text-xs text-[#64748B]">{item.label}</p>
-                      <p className="font-semibold text-[#0F172A]">{item.value}</p>
+                      <p className="font-semibold text-[#020B27]">{item.value}</p>
                     </div>
                   </Link>
                 );
@@ -124,12 +124,12 @@ export default function ContactContent() {
 
             {/* Social */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5">
-              <h3 className="font-bold text-[#0F172A] mb-4">Réseaux sociaux</h3>
+              <h3 className="font-bold text-[#020B27] mb-4">Réseaux sociaux</h3>
               <div className="flex gap-3">
                 {[
-                  { label: "TikTok", href: "https://www.tiktok.com/@odmsshopping", bg: "bg-gray-900" },
-                  { label: "Facebook", href: "https://www.facebook.com/odmsshopping", bg: "bg-[#1877F2]" },
-                  { label: "WhatsApp", href: getWhatsAppUrl("Bonjour Odm's Shopping"), bg: "bg-[#25D366]" },
+                  { label: "TikTok", href: "https://www.tiktok.com/@assada", bg: "bg-gray-900" },
+                  { label: "Facebook", href: "https://www.facebook.com/assada", bg: "bg-[#1877F2]" },
+                  { label: "WhatsApp", href: getWhatsAppUrl("Bonjour Assada"), bg: "bg-[#16A34A]" },
                 ].map((s) => (
                   <Link
                     key={s.label}
@@ -147,13 +147,13 @@ export default function ContactContent() {
             {/* Map placeholder */}
             <div className="mt-6 bg-gray-100 rounded-2xl overflow-hidden aspect-video flex items-center justify-center border border-gray-200">
               <div className="text-center text-gray-500">
-                <MapPin size={36} className="mx-auto mb-2 text-[#16A34A]" />
-                <p className="font-medium">Libreville, Gabon</p>
+                <MapPin size={36} className="mx-auto mb-2 text-[#020B27]" />
+                <p className="font-medium">Galerie Derb Ghalef, Bd Abdelmoumen, Casablanca</p>
                 <Link
-                  href="https://maps.google.com/?q=Libreville,Gabon"
+                  href="https://maps.google.com/?q=Galerie+Derb+Ghalef+Boulevard+Abdelmoumen+Casablanca"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#16A34A] hover:underline mt-1 block"
+                  className="text-sm text-[#020B27] hover:underline mt-1 block"
                 >
                   Voir sur Google Maps
                 </Link>
@@ -163,18 +163,18 @@ export default function ContactContent() {
 
           {/* Contact form */}
           <div>
-            <h2 className="text-xl font-bold text-[#0F172A] mb-6">Envoyez-nous un message</h2>
+            <h2 className="text-xl font-bold text-[#020B27] mb-6">Envoyez-nous un message</h2>
 
             {sent ? (
               <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
                 <div className="w-16 h-16 bg-[#16A34A] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Send size={28} className="text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-[#0F172A] mb-2">Message envoyé !</h3>
+                <h3 className="text-lg font-bold text-[#020B27] mb-2">Message envoyé !</h3>
                 <p className="text-[#64748B]">Nous vous répondrons dans les plus brefs délais.</p>
                 <button
                   onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }}
-                  className="mt-4 text-sm text-[#16A34A] hover:underline"
+                  className="mt-4 text-sm text-[#020B27] hover:underline"
                 >
                   Envoyer un autre message
                 </button>
@@ -183,7 +183,7 @@ export default function ContactContent() {
               <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#0F172A] mb-1.5">
+                    <label className="block text-sm font-medium text-[#020B27] mb-1.5">
                       Nom complet <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -196,7 +196,7 @@ export default function ContactContent() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#0F172A] mb-1.5">
+                    <label className="block text-sm font-medium text-[#020B27] mb-1.5">
                       Email <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -211,11 +211,11 @@ export default function ContactContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#0F172A] mb-1.5">Sujet</label>
+                  <label className="block text-sm font-medium text-[#020B27] mb-1.5">Sujet</label>
                   <select
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors text-[#0F172A]"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors text-[#020B27]"
                   >
                     <option value="">Sélectionner un sujet</option>
                     <option>Question sur un produit</option>
@@ -227,7 +227,7 @@ export default function ContactContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#0F172A] mb-1.5">
+                  <label className="block text-sm font-medium text-[#020B27] mb-1.5">
                     Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -245,7 +245,7 @@ export default function ContactContent() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-white py-3 rounded-xl font-semibold hover:bg-[#15803d] disabled:opacity-60 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-[#020B27] py-3 rounded-xl font-semibold hover:bg-[#15803D] disabled:opacity-60 transition-colors"
                 >
                   <Send size={16} />
                   {sending ? "Envoi en cours…" : "Envoyer le message"}
@@ -255,7 +255,7 @@ export default function ContactContent() {
 
             {/* FAQ */}
             <div className="mt-8">
-              <h3 className="font-bold text-[#0F172A] mb-4">Questions fréquentes</h3>
+              <h3 className="font-bold text-[#020B27] mb-4">Questions fréquentes</h3>
               <div className="space-y-3">
                 {FAQ.map((item, i) => (
                   <div key={i} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
@@ -263,8 +263,8 @@ export default function ContactContent() {
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
                       className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors"
                     >
-                      <span className="font-medium text-[#0F172A] text-sm">{item.q}</span>
-                      {openFaq === i ? <ChevronUp size={16} className="text-[#16A34A]" /> : <ChevronDown size={16} className="text-gray-400" />}
+                      <span className="font-medium text-[#020B27] text-sm">{item.q}</span>
+                      {openFaq === i ? <ChevronUp size={16} className="text-[#020B27]" /> : <ChevronDown size={16} className="text-gray-400" />}
                     </button>
                     {openFaq === i && (
                       <div className="px-4 pb-3">

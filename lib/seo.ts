@@ -1,6 +1,6 @@
 import {
   SITE_URL, SITE_NAME, SITE_EMAIL, SITE_DESCRIPTION,
-  WHATSAPP_NUMBER, GABON_CITIES, SHOP_GEO, SOCIAL_LINKS,
+  WHATSAPP_NUMBER, CASABLANCA_DISTRICTS, SHOP_GEO, SOCIAL_LINKS,
 } from "@/lib/constants";
 
 const base = SITE_URL.replace(/\/$/, "");
@@ -8,7 +8,7 @@ const phone = `+${WHATSAPP_NUMBER}`;
 
 /**
  * LocalBusiness/Store — signal SEO local le plus important.
- * areaServed couvre tout le Gabon + les principales villes.
+ * areaServed couvre Casablanca et ses quartiers.
  */
 export const storeJsonLd = {
   "@context": "https://schema.org",
@@ -21,14 +21,16 @@ export const storeJsonLd = {
   logo: `${base}/logo1.png`,
   telephone: phone,
   email: SITE_EMAIL,
-  priceRange: "FCFA",
-  currenciesAccepted: "XAF",
-  paymentAccepted: "Espèces à la livraison, Airtel Money, Moov Money",
+  priceRange: "DH",
+  currenciesAccepted: "MAD",
+  paymentAccepted: "Paiement à la livraison",
   address: {
     "@type": "PostalAddress",
+    streetAddress: "Boulevard Abdelmoumen, N10, Galerie Derb Ghalef, Kissariat Zemmouri",
+    postalCode: "20102",
     addressLocality: SHOP_GEO.placename,
-    addressRegion: "Estuaire",
-    addressCountry: "GA",
+    addressRegion: "Casablanca-Settat",
+    addressCountry: "MA",
   },
   geo: {
     "@type": "GeoCoordinates",
@@ -36,15 +38,15 @@ export const storeJsonLd = {
     longitude: SHOP_GEO.longitude,
   },
   areaServed: [
-    { "@type": "Country", name: "Gabon" },
-    ...GABON_CITIES.map((city) => ({ "@type": "City", name: city })),
+    { "@type": "City", name: "Casablanca" },
+    ...CASABLANCA_DISTRICTS.map((d) => ({ "@type": "Place", name: d })),
   ],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: phone,
     contactType: "customer service",
     availableLanguage: ["French"],
-    areaServed: "GA",
+    areaServed: "MA",
   },
   sameAs: [SOCIAL_LINKS.facebook, SOCIAL_LINKS.instagram, SOCIAL_LINKS.tiktok],
 } as const;
@@ -57,7 +59,7 @@ export const websiteJsonLd = {
   url: base,
   name: SITE_NAME,
   description: SITE_DESCRIPTION,
-  inLanguage: "fr-GA",
+  inLanguage: "fr-MA",
   publisher: { "@id": `${base}/#store` },
   potentialAction: {
     "@type": "SearchAction",

@@ -69,6 +69,7 @@ function SuiviForm() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (initialNumber) doSearch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -91,7 +92,7 @@ function SuiviForm() {
       <div className="max-w-4xl mx-auto px-4 py-10">
         {/* Formulaire de recherche */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-          <h2 className="text-lg font-bold text-[#0F172A] mb-4">Rechercher votre commande</h2>
+          <h2 className="text-lg font-bold text-[#020B27] mb-4">Rechercher votre commande</h2>
 
           <div className="flex gap-2 mb-4">
             {[
@@ -119,7 +120,7 @@ function SuiviForm() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && doSearch()}
-                placeholder={searchType === "number" ? "Ex: ODMS-2025-4321" : "votre@email.com"}
+                placeholder={searchType === "number" ? "Ex: ASSADA-2025-4321" : "votre@email.com"}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-green transition-colors"
               />
               {query && (
@@ -132,7 +133,7 @@ function SuiviForm() {
             <button
               onClick={doSearch}
               disabled={loading || !query.trim()}
-              className="flex items-center gap-2 bg-green text-white px-5 py-3 rounded-xl font-medium hover:bg-[#15803d] transition-colors disabled:opacity-60"
+              className="flex items-center gap-2 bg-green text-[#020B27] px-5 py-3 rounded-xl font-medium hover:bg-[#15803D] transition-colors disabled:opacity-60"
             >
               {loading
                 ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -162,7 +163,7 @@ function SuiviForm() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <p className="text-sm text-text-secondary">Commande</p>
-                  <h3 className="text-xl font-bold text-[#0F172A]">{order.order_number}</h3>
+                  <h3 className="text-xl font-bold text-[#020B27]">{order.order_number}</h3>
                   <p className="text-xs text-gray-400 mt-0.5">{formatDate(order.created_at)}</p>
                 </div>
                 <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${STATUS_COLOR[order.order_status] ?? "bg-gray-50 text-gray-700"}`}>
@@ -173,11 +174,11 @@ function SuiviForm() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                 <div>
                   <p className="text-text-secondary">Client</p>
-                  <p className="font-medium text-[#0F172A]">{order.customer_name}</p>
+                  <p className="font-medium text-[#020B27]">{order.customer_name}</p>
                 </div>
                 <div>
                   <p className="text-text-secondary">Livraison</p>
-                  <p className="font-medium text-[#0F172A]">{order.delivery_district}, {order.delivery_city}</p>
+                  <p className="font-medium text-[#020B27]">{order.delivery_district}, {order.delivery_city}</p>
                 </div>
                 <div>
                   <p className="text-text-secondary">Total</p>
@@ -188,7 +189,7 @@ function SuiviForm() {
                     <p className="text-text-secondary flex items-center gap-1">
                       <Clock size={13} className="text-orange-500" />
                       Livraison estimée :{" "}
-                      <strong className="text-[#0F172A]">
+                      <strong className="text-[#020B27]">
                         {new Date(order.estimated_delivery_date).toLocaleDateString("fr-FR", {
                           weekday: "long", day: "numeric", month: "long",
                         })}
@@ -202,7 +203,7 @@ function SuiviForm() {
             {/* Timeline */}
             {order.order_status !== "cancelled" && order.order_status !== "returned" ? (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                <h3 className="font-bold text-[#0F172A] mb-6">Suivi de votre commande</h3>
+                <h3 className="font-bold text-[#020B27] mb-6">Suivi de votre commande</h3>
                 <div className="relative">
                   <div className="absolute left-5 top-5 bottom-5 w-0.5 bg-gray-100" />
                   {currentStep >= 0 && (
@@ -224,7 +225,7 @@ function SuiviForm() {
                             <Icon size={18} />
                           </div>
                           <div className="pt-2">
-                            <p className={`font-medium ${isDone ? "text-[#0F172A]" : "text-gray-400"}`}>
+                            <p className={`font-medium ${isDone ? "text-[#020B27]" : "text-gray-400"}`}>
                               {step.label}
                             </p>
                             {isCurrent && <p className="text-sm text-green mt-0.5">En cours...</p>}
@@ -249,11 +250,11 @@ function SuiviForm() {
 
             {/* Aide */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h3 className="font-bold text-[#0F172A] mb-4">Besoin d&apos;aide ?</h3>
+              <h3 className="font-bold text-[#020B27] mb-4">Besoin d&apos;aide ?</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
-                  { icon: MessageCircle, label: "WhatsApp", desc: "Réponse rapide", href: getWhatsAppUrl(`Bonjour Odm's Shopping, j'ai une question concernant ma commande ${order.order_number}.`), color: "text-green-600 bg-green-50" },
-                  { icon: Phone, label: "Support", desc: "+241 62 57 37 48", href: "tel:+24162573748", color: "text-blue-600 bg-blue-50" },
+                  { icon: MessageCircle, label: "WhatsApp", desc: "Réponse rapide", href: getWhatsAppUrl(`Bonjour Assada, j'ai une question concernant ma commande ${order.order_number}.`), color: "text-green-600 bg-green-50" },
+                  { icon: Phone, label: "Support", desc: "+212 00 00 00 00", href: "tel:+21200000000", color: "text-blue-600 bg-blue-50" },
                   { icon: HelpCircle, label: "FAQ", desc: "Questions fréquentes", href: "/faq", color: "text-purple-600 bg-purple-50" },
                   { icon: AlertTriangle, label: "Signaler", desc: "Un problème", href: "/contact", color: "text-orange-600 bg-orange-50" },
                 ].map((item) => {
@@ -267,7 +268,7 @@ function SuiviForm() {
                         <Icon size={20} />
                       </div>
                       <div>
-                        <p className="font-medium text-[#0F172A] text-sm">{item.label}</p>
+                        <p className="font-medium text-[#020B27] text-sm">{item.label}</p>
                         <p className="text-xs text-text-secondary">{item.desc}</p>
                       </div>
                     </Link>

@@ -73,18 +73,18 @@ export default function ParametresPage() {
   if (!profile) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-2 border-[#16A34A] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#020B27] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-bold text-[#0F172A]">Informations personnelles</h1>
+      <h1 className="text-xl font-bold text-[#020B27]">Informations personnelles</h1>
 
       {/* Profile form */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <h2 className="font-semibold text-[#0F172A] mb-4">Profil</h2>
+        <h2 className="font-semibold text-[#020B27] mb-4">Profil</h2>
         <form action={handleProfileSubmit}>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
@@ -94,7 +94,7 @@ export default function ParametresPage() {
               { label: "Email", name: "email", type: "email", value: profile.email ?? "", readOnly: true },
             ].map(({ label, name, type, value, readOnly }) => (
               <div key={name}>
-                <label className="block text-sm font-medium text-[#0F172A] mb-1.5">{label}</label>
+                <label className="block text-sm font-medium text-[#020B27] mb-1.5">{label}</label>
                 <input
                   type={type}
                   name={name}
@@ -107,7 +107,7 @@ export default function ParametresPage() {
           </div>
 
           {profileMsg && (
-            <div className={`mt-4 flex items-center gap-2 text-sm px-4 py-3 rounded-xl ${profileMsg.type === "success" ? "bg-green-50 text-[#16A34A]" : "bg-red-50 text-red-600"}`}>
+            <div className={`mt-4 flex items-center gap-2 text-sm px-4 py-3 rounded-xl ${profileMsg.type === "success" ? "bg-green-50 text-[#020B27]" : "bg-red-50 text-red-600"}`}>
               {profileMsg.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
               {profileMsg.text}
             </div>
@@ -116,7 +116,7 @@ export default function ParametresPage() {
           <button
             type="submit"
             disabled={savingProfile}
-            className="mt-4 flex items-center gap-2 bg-[#16A34A] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#15803d] transition-colors disabled:opacity-60"
+            className="mt-4 flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#15803D] transition-colors disabled:opacity-60"
           >
             {savingProfile ? (
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -130,14 +130,14 @@ export default function ParametresPage() {
 
       {/* Password form */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <h2 className="font-semibold text-[#0F172A] mb-4">Changer le mot de passe</h2>
+        <h2 className="font-semibold text-[#020B27] mb-4">Changer le mot de passe</h2>
         <form onSubmit={handlePasswordSubmit} className="space-y-4 max-w-md">
           {[
             { label: "Nouveau mot de passe", value: newPassword, onChange: setNewPassword },
             { label: "Confirmer le mot de passe", value: confirmPassword, onChange: setConfirmPassword },
           ].map(({ label, value, onChange }) => (
             <div key={label}>
-              <label className="block text-sm font-medium text-[#0F172A] mb-1.5">{label}</label>
+              <label className="block text-sm font-medium text-[#020B27] mb-1.5">{label}</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -159,7 +159,7 @@ export default function ParametresPage() {
           ))}
 
           {passwordMsg && (
-            <div className={`flex items-center gap-2 text-sm px-4 py-3 rounded-xl ${passwordMsg.type === "success" ? "bg-green-50 text-[#16A34A]" : "bg-red-50 text-red-600"}`}>
+            <div className={`flex items-center gap-2 text-sm px-4 py-3 rounded-xl ${passwordMsg.type === "success" ? "bg-green-50 text-[#020B27]" : "bg-red-50 text-red-600"}`}>
               {passwordMsg.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
               {passwordMsg.text}
             </div>

@@ -22,7 +22,7 @@ export default function DashboardToolbar({ report }: { report: ReportRow[] }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `rapport-odms-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `rapport-assada-${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -36,7 +36,7 @@ export default function DashboardToolbar({ report }: { report: ReportRow[] }) {
       {exported && <span className="text-green text-xs font-medium">✓ Rapport téléchargé</span>}
       <button
         onClick={handleExport}
-        className="flex items-center gap-1.5 bg-green hover:bg-[#15803d] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+        className="flex items-center gap-1.5 bg-green hover:bg-[#15803D] text-[#020B27] text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
       >
         <Download size={14} /> Exporter rapport
       </button>

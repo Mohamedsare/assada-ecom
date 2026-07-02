@@ -13,14 +13,15 @@ type Cat = {
 };
 
 const CATEGORIES: Cat[] = [
-  { name: "Chaussures\nHomme",  slug: "chaussures-homme",  emoji: "👟", image: "/categories/chaussure-homme.jpeg", bg: "bg-gray-100" },
-  { name: "Chaussures\nFemme",  slug: "chaussures-femme",  emoji: "👠", image: "/categories/chaussure-femme.jpeg", bg: "bg-gray-100" },
-  { name: "Vêtements\nHomme",   slug: "vetements-homme",   emoji: "👔", image: "/categories/vetement-homme.jpeg",  bg: "bg-gray-100" },
-  { name: "Vêtements\nFemme",   slug: "vetements-femme",   emoji: "👗", image: "/categories/vetement-femme.jpeg",  bg: "bg-gray-100" },
-  { name: "Accessoires\nHomme", slug: "accessoires-homme", emoji: "⌚", image: "/categories/accessoire-homme.jpeg", bg: "bg-gray-100" },
-  { name: "Accessoires\nFemme", slug: "accessoires-femme", emoji: "👜", image: "/categories/accessoire-femme.jpeg", bg: "bg-gray-100" },
-  { name: "Électroniques",      slug: "electroniques",     emoji: "📱", image: "/categories/electroniques.jpeg",     bg: "bg-gray-100" },
-  { name: "PC &\nAccessoires",  slug: "pc-accessoires",    emoji: "💻", image: "/categories/pc.jpeg",                bg: "bg-gray-100" },
+  { name: "Parfums",         slug: "parfums",       emoji: "🌸", image: "/categories/parfums.jpeg",       bg: "bg-gray-100" },
+  { name: "Maquillage",      slug: "maquillage",    emoji: "💄", image: "/categories/maquillage.jpeg",    bg: "bg-gray-100" },
+  { name: "Soins du\nvisage", slug: "soins-visage",  emoji: "✨", image: "/categories/soins-visage.jpeg",  bg: "bg-gray-100" },
+  { name: "Soins du\ncorps",  slug: "soins-corps",   emoji: "🧴", image: "/categories/soins-corps.jpeg",   bg: "bg-gray-100" },
+  { name: "Soins des\ncheveux", slug: "soins-cheveux", emoji: "💆", image: "/categories/soins-cheveux.jpeg", bg: "bg-gray-100" },
+  { name: "Hygiène",         slug: "hygiene",       emoji: "🧼", image: "/categories/hygiene.jpeg",       bg: "bg-gray-100" },
+  { name: "Accessoires",     slug: "accessoires",   emoji: "💅", image: "/categories/accessoires.jpeg",   bg: "bg-gray-100" },
+  { name: "Cadeaux",         slug: "cadeaux",       emoji: "🎁", image: "/categories/cadeaux.jpeg",       bg: "bg-gray-100" },
+  { name: "Bien-être",       slug: "bien-etre",     emoji: "🌿", image: "/categories/bien-etre.jpeg",     bg: "bg-gray-100" },
 ];
 
 function CategoryCircle({ cat }: { cat: Cat }) {
@@ -48,7 +49,7 @@ function CategoryCircle({ cat }: { cat: Cat }) {
           <span className="text-4xl">{cat.emoji}</span>
         )}
       </div>
-      <span className="text-xs md:text-sm font-medium text-[#0F172A] text-center leading-tight whitespace-pre-line group-hover:text-green transition-colors">
+      <span className="text-xs md:text-sm font-medium text-[#020B27] text-center leading-tight whitespace-pre-line group-hover:text-green transition-colors">
         {cat.name}
       </span>
     </Link>
@@ -64,7 +65,7 @@ export default function CategoriesSection() {
           <p className="text-xs font-bold text-green uppercase tracking-widest mb-2">
             Catégories
           </p>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#0F172A]">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#020B27]">
             Parcourez nos catégories
           </h2>
         </div>
@@ -80,7 +81,7 @@ export default function CategoriesSection() {
         </div>
 
         {/* Desktop : grille statique */}
-        <div className="hidden md:grid md:grid-cols-8 md:gap-4">
+        <div className="hidden md:grid md:grid-cols-9 md:gap-4">
           {CATEGORIES.map((cat) => (
             <CategoryCircle key={cat.slug} cat={cat} />
           ))}

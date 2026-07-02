@@ -18,7 +18,7 @@ type FormData = {
 const emptyForm: FormData = {
   full_name: "",
   phone: "",
-  city: "Libreville",
+  city: "Casablanca",
   district: "",
   address_details: "",
   landmark: "",
@@ -103,10 +103,10 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-[#0F172A]">Mes adresses</h1>
+        <h1 className="text-xl font-bold text-[#020B27]">Mes adresses</h1>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 bg-[#16A34A] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#15803d] transition-colors"
+          className="flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#15803D] transition-colors"
         >
           <Plus size={15} />
           Ajouter une adresse
@@ -114,7 +114,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
       </div>
 
       {msg && (
-        <div className={`mb-4 flex items-center gap-2 text-sm px-4 py-3 rounded-xl ${msg.type === "success" ? "bg-green-50 text-[#16A34A]" : "bg-red-50 text-red-600"}`}>
+        <div className={`mb-4 flex items-center gap-2 text-sm px-4 py-3 rounded-xl ${msg.type === "success" ? "bg-green-50 text-[#020B27]" : "bg-red-50 text-red-600"}`}>
           {msg.type === "success" ? <CheckCircle size={15} /> : <AlertCircle size={15} />}
           {msg.text}
         </div>
@@ -122,9 +122,9 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
 
       {/* Form modal */}
       {showForm && (
-        <div className="bg-white rounded-2xl border border-[#16A34A]/30 p-5 mb-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-[#020B27]/30 p-5 mb-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-[#0F172A]">
+            <h2 className="font-semibold text-[#020B27]">
               {editingId ? "Modifier l'adresse" : "Nouvelle adresse"}
             </h2>
             <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600">
@@ -142,7 +142,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
               { label: "Repère", name: "landmark", type: "text" },
             ].map(({ label, name, type, required }) => (
               <div key={name} className={name === "address_details" || name === "landmark" ? "sm:col-span-2" : ""}>
-                <label className="block text-sm font-medium text-[#0F172A] mb-1.5">
+                <label className="block text-sm font-medium text-[#020B27] mb-1.5">
                   {label} {required && <span className="text-red-500">*</span>}
                 </label>
                 <input
@@ -161,9 +161,9 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
                 id="is_default"
                 checked={form.is_default}
                 onChange={(e) => setForm({ ...form, is_default: e.target.checked })}
-                className="w-4 h-4 accent-[#16A34A]"
+                className="w-4 h-4 accent-[#020B27]"
               />
-              <label htmlFor="is_default" className="text-sm text-[#0F172A]">
+              <label htmlFor="is_default" className="text-sm text-[#020B27]">
                 Définir comme adresse par défaut
               </label>
             </div>
@@ -172,7 +172,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
               <button
                 type="submit"
                 disabled={saving}
-                className="flex items-center gap-2 bg-[#16A34A] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#15803d] transition-colors disabled:opacity-60"
+                className="flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#15803D] transition-colors disabled:opacity-60"
               >
                 {saving ? (
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -197,19 +197,19 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
         {addresses.map((address) => (
           <div
             key={address.id}
-            className={`bg-white rounded-2xl border p-5 relative ${address.is_default ? "border-[#16A34A]" : "border-gray-100"}`}
+            className={`bg-white rounded-2xl border p-5 relative ${address.is_default ? "border-[#020B27]" : "border-gray-100"}`}
           >
             {address.is_default && (
-              <span className="absolute top-3 right-3 bg-[#16A34A]/10 text-[#16A34A] text-xs font-bold px-2 py-0.5 rounded-full">
+              <span className="absolute top-3 right-3 bg-[#16A34A]/10 text-[#020B27] text-xs font-bold px-2 py-0.5 rounded-full">
                 Par défaut
               </span>
             )}
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center shrink-0">
-                <MapPin size={18} className="text-[#16A34A]" />
+                <MapPin size={18} className="text-[#020B27]" />
               </div>
               <div className="text-sm">
-                <p className="font-bold text-[#0F172A]">{address.full_name}</p>
+                <p className="font-bold text-[#020B27]">{address.full_name}</p>
                 <p className="text-[#64748B]">{address.phone}</p>
                 <p className="text-[#64748B]">{address.district}, {address.city}</p>
                 {address.address_details && (
@@ -223,7 +223,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
             <div className="flex gap-2">
               <button
                 onClick={() => openEdit(address)}
-                className="flex items-center gap-1.5 text-xs border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#16A34A] hover:text-[#16A34A] transition-colors"
+                className="flex items-center gap-1.5 text-xs border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#16A34A] hover:text-[#020B27] transition-colors"
               >
                 <Pencil size={12} />
                 Modifier

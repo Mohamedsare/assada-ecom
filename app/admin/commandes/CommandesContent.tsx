@@ -14,7 +14,7 @@ const STATUS_COLOR: Record<string, string> = {
   preparing:        "bg-purple-100 text-purple-700",
   shipped:          "bg-indigo-100 text-indigo-700",
   out_for_delivery: "bg-orange-100 text-orange-700",
-  delivered:        "bg-green-100 text-[#16A34A]",
+  delivered:        "bg-green-100 text-[#020B27]",
   cancelled:        "bg-red-100 text-red-700",
   returned:         "bg-gray-100 text-gray-700",
 };
@@ -97,7 +97,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#0F172A]">Gestion des commandes</h1>
+          <h1 className="text-2xl font-bold text-[#020B27]">Gestion des commandes</h1>
           <p className="text-sm text-[#64748B] mt-0.5">{orders.length} commandes</p>
         </div>
       </div>
@@ -129,9 +129,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
           </select>
           <select value={filterPayment} onChange={(e) => { setFilterPayment(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#16A34A] bg-white">
             <option value="">Tous les paiements</option>
-            <option value="cash_on_delivery">Espèces</option>
-            <option value="airtel_money">Airtel Money</option>
-            <option value="moov_money">Moov Money</option>
+            <option value="cash_on_delivery">Paiement à la livraison</option>
           </select>
           <select value={filterDate} onChange={(e) => { setFilterDate(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#16A34A] bg-white">
             {DATE_FILTERS.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
@@ -159,12 +157,12 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                 paged.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                     <td className="py-3 px-4">
-                      <Link href={`/admin/commandes/${order.id}`} className="text-sm font-bold text-[#0F172A] hover:text-[#16A34A] transition-colors">
+                      <Link href={`/admin/commandes/${order.id}`} className="text-sm font-bold text-[#020B27] hover:text-[#020B27] transition-colors">
                         {order.order_number}
                       </Link>
                     </td>
                     <td className="py-3 px-4">
-                      <p className="text-sm text-[#0F172A]">{order.customer_name}</p>
+                      <p className="text-sm text-[#020B27]">{order.customer_name}</p>
                       <p className="text-xs text-[#64748B]">{order.customer_phone}</p>
                     </td>
                     <td className="py-3 px-4">
@@ -173,7 +171,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                       </span>
                     </td>
                     <td className="py-3 px-4">
-                      <span className="text-sm font-bold text-[#16A34A] whitespace-nowrap">{formatPrice(order.total_amount)}</span>
+                      <span className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(order.total_amount)}</span>
                     </td>
                     <td className="py-3 px-4">
                       <span className="text-xs text-[#64748B] whitespace-nowrap">{PAYMENT_LABELS[order.payment_method]}</span>
@@ -193,14 +191,14 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-1">
-                        <Link href={`/admin/commandes/${order.id}`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#16A34A] transition-colors" title="Voir le détail">
+                        <Link href={`/admin/commandes/${order.id}`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Voir le détail">
                           <Eye size={15} />
                         </Link>
                         <Link
                           href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, votre commande ${order.order_number} est en cours de traitement.`)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#25D366] transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#16A34A] transition-colors"
                           title="Contacter le client sur WhatsApp"
                         >
                           <MessageCircle size={15} />
@@ -223,7 +221,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
               <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 disabled:opacity-40 disabled:hover:bg-transparent transition-colors">
                 <ChevronLeft size={16} />
               </button>
-              <span className="px-2 text-[#0F172A] font-medium">{currentPage} / {totalPages}</span>
+              <span className="px-2 text-[#020B27] font-medium">{currentPage} / {totalPages}</span>
               <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 disabled:opacity-40 disabled:hover:bg-transparent transition-colors">
                 <ChevronRight size={16} />
               </button>
@@ -237,8 +235,8 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
 
 function StatCard({ label, value, tone }: { label: string; value: string; tone: "default" | "green" | "orange" | "red" }) {
   const tones: Record<string, string> = {
-    default: "text-[#0F172A]",
-    green: "text-[#16A34A]",
+    default: "text-[#020B27]",
+    green: "text-[#020B27]",
     orange: "text-orange-600",
     red: "text-red-600",
   };

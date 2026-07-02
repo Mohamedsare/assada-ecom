@@ -13,7 +13,7 @@ import DeleteForm from "@/components/admin/DeleteForm";
 import type { Product, Category, Brand } from "@/types";
 
 const STATUS_STYLES: Record<string, string> = {
-  active:       "bg-green-100 text-[#16A34A]",
+  active:       "bg-green-100 text-[#020B27]",
   draft:        "bg-gray-100 text-gray-600",
   out_of_stock: "bg-red-100 text-red-700",
   hidden:       "bg-yellow-100 text-yellow-700",
@@ -103,12 +103,12 @@ export default function ProductsTable({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#0F172A]">Gestion des produits</h1>
+          <h1 className="text-2xl font-bold text-[#020B27]">Gestion des produits</h1>
           <p className="text-sm text-[#64748B] mt-0.5">{products.length} produits au total</p>
         </div>
         <Link
           href="/admin/produits/nouveau"
-          className="flex items-center gap-2 bg-[#16A34A] text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803d] transition-colors"
+          className="flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803D] transition-colors"
         >
           <Plus size={16} />
           Ajouter un produit
@@ -156,7 +156,7 @@ export default function ProductsTable({
       {filtered.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Package size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#0F172A] mb-2">
+          <p className="font-semibold text-[#020B27] mb-2">
             {hasFilters ? "Aucun produit ne correspond" : "Aucun produit"}
           </p>
           <p className="text-[#64748B] text-sm mb-6">
@@ -167,12 +167,12 @@ export default function ProductsTable({
           {hasFilters ? (
             <button
               onClick={() => { setSearch(""); setStatus("all"); setCategoryId("all"); setBrandId("all"); resetPage(); }}
-              className="bg-[#16A34A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803d] transition-colors"
+              className="bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803D] transition-colors"
             >
               Réinitialiser les filtres
             </button>
           ) : (
-            <Link href="/admin/produits/nouveau" className="bg-[#16A34A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803d] transition-colors">
+            <Link href="/admin/produits/nouveau" className="bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803D] transition-colors">
               Ajouter un produit
             </Link>
           )}
@@ -201,7 +201,7 @@ export default function ProductsTable({
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-[#0F172A] truncate max-w-48">{product.name}</p>
+                          <p className="text-sm font-medium text-[#020B27] truncate max-w-48">{product.name}</p>
                           <div className="flex items-center gap-1.5">
                             {product.brand && <p className="text-xs text-[#64748B]">{product.brand.name}</p>}
                             {product.variants && product.variants.length > 0 && (
@@ -215,7 +215,7 @@ export default function ProductsTable({
                       <span className="text-sm text-[#64748B]">{product.category?.name ?? "—"}</span>
                     </td>
                     <td className="py-3 px-4">
-                      <p className="text-sm font-bold text-[#16A34A] whitespace-nowrap">{formatPrice(product.current_price)}</p>
+                      <p className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(product.current_price)}</p>
                       {product.old_price && (
                         <p className="text-xs text-gray-400 line-through whitespace-nowrap">{formatPrice(product.old_price)}</p>
                       )}
@@ -224,7 +224,7 @@ export default function ProductsTable({
                       <span className={`text-sm font-medium ${
                         product.stock_quantity === 0 ? "text-red-600"
                           : product.stock_quantity <= LOW_STOCK ? "text-orange-600"
-                          : "text-[#0F172A]"
+                          : "text-[#020B27]"
                       }`}>
                         {product.stock_quantity}
                       </span>
@@ -234,10 +234,10 @@ export default function ProductsTable({
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-1">
-                        <Link href={`/produit/${product.slug}`} target="_blank" className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#16A34A] transition-colors" title="Voir sur le site">
+                        <Link href={`/produit/${product.slug}`} target="_blank" className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Voir sur le site">
                           <Eye size={15} />
                         </Link>
-                        <Link href={`/admin/produits/${product.id}/modifier`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0F172A] transition-colors" title="Modifier">
+                        <Link href={`/admin/produits/${product.id}/modifier`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Modifier">
                           <Pencil size={15} />
                         </Link>
                         <DeleteForm action={adminDeleteProduct.bind(null, product.id)} name={product.name} iconSize={15} />
@@ -262,7 +262,7 @@ export default function ProductsTable({
               >
                 <ChevronLeft size={16} />
               </button>
-              <span className="px-2 text-[#0F172A] font-medium">{currentPage} / {totalPages}</span>
+              <span className="px-2 text-[#020B27] font-medium">{currentPage} / {totalPages}</span>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
@@ -280,8 +280,8 @@ export default function ProductsTable({
 
 function StatCard({ label, value, tone }: { label: string; value: number; tone: "default" | "green" | "orange" | "red" }) {
   const tones: Record<string, string> = {
-    default: "text-[#0F172A]",
-    green: "text-[#16A34A]",
+    default: "text-[#020B27]",
+    green: "text-[#020B27]",
     orange: "text-orange-600",
     red: "text-red-600",
   };
@@ -346,7 +346,7 @@ function StatusMenu({ product }: { product: Product }) {
                 key={s}
                 type="button"
                 onClick={() => change(s)}
-                className="w-full flex items-center justify-between px-3 py-1.5 text-xs text-[#0F172A] hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between px-3 py-1.5 text-xs text-[#020B27] hover:bg-gray-50 transition-colors"
               >
                 {STATUS_LABELS[s]}
                 {s === product.status && <Check size={13} className="text-green" />}

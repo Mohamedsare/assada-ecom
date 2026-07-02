@@ -52,7 +52,7 @@ export default function AccountSidebar() {
       {/* Profile header */}
       <div className="bg-gradient-to-r from-[#020B27] to-[#0F172A] p-5">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-[#16A34A] rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0">
+          <div className="w-12 h-12 bg-[#16A34A] rounded-full flex items-center justify-center text-[#020B27] font-bold text-lg shrink-0">
             {initials}
           </div>
           <div className="min-w-0">
@@ -73,15 +73,15 @@ export default function AccountSidebar() {
               className={cn(
                 "flex items-center justify-between px-3 py-2.5 rounded-xl mb-0.5 transition-colors",
                 isActive
-                  ? "bg-[#16A34A]/10 text-[#16A34A]"
-                  : "text-[#64748B] hover:bg-gray-50 hover:text-[#0F172A]"
+                  ? "bg-[#020B27]/10 text-[#020B27]"
+                  : "text-[#64748B] hover:bg-gray-50 hover:text-[#020B27]"
               )}
             >
               <div className="flex items-center gap-3">
                 <Icon size={17} />
                 <span className="text-sm font-medium">{label}</span>
               </div>
-              <ChevronRight size={14} className={isActive ? "text-[#16A34A]" : "text-gray-300"} />
+              <ChevronRight size={14} className={isActive ? "text-[#020B27]" : "text-gray-300"} />
             </Link>
           );
         })}

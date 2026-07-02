@@ -33,11 +33,11 @@ const BANNERS: Banner[] = [
       </>
     ),
     cta: "J'en profite maintenant",
-    bgImage: "/banners/promo.png",
-    fallback: "/banners/banner2.png",
+    bgImage: "/banners/banner4-accueil.png",
+    fallback: "/banners/banner2-accueil.png",
     base: "bg-night",
     overlay: "bg-linear-to-r from-night via-night/70 to-transparent",
-    button: "bg-green hover:bg-[#15803d] text-white",
+    button: "bg-green hover:bg-[#15803D] text-white",
     badgeStyle: "bg-green/20 text-green-light border border-green-light/40",
   },
   {
@@ -53,8 +53,8 @@ const BANNERS: Banner[] = [
       </>
     ),
     cta: "Voir les nouveautés",
-    bgImage: "/banners/nouveaute.png",
-    fallback: "/banners/banner3.png",
+    bgImage: "/banners/banner3-accuiel.png",
+    fallback: "/banners/banner2-accueil.png",
     base: "bg-night-2",
     overlay: "bg-linear-to-r from-night-2 via-night-2/70 to-transparent",
     button: "bg-[#1d4ed8] hover:bg-[#1e40af] text-white",

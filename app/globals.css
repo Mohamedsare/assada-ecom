@@ -1,20 +1,37 @@
 @import "tailwindcss";
 
 @theme inline {
+  /* ── Palette « Odm's Shopping » (bleu nuit / vert e-commerce) ────────
+     Reprise exacte de la palette du projet odmshop.
+     Fond gris clair #F8FAFC · Chrome bleu nuit #020B27 (header/footer)
+     Vert de marque #16A34A (boutons, CTA, accents) · vert lumineux #22C55E
+     Texte #0F172A · texte secondaire #64748B · erreur #EF4444
+     Les tokens sémantiques (rose/gold/success/whatsapp) sont remappés
+     vers le vert/bleu nuit pour rester cohérents avec cette palette. */
   --color-background: #F8FAFC;
   --color-foreground: #0F172A;
   --font-sans: var(--font-geist-sans);
 
-  --color-night: #020B27;
+  --color-night: #be04c4;       /* chrome sombre (header, footer, bandeaux) */
   --color-night-2: #0F172A;
-  --color-green: #16A34A;
-  --color-green-light: #22C55E;
+  --color-green: #16A34A;        /* action principale = vert */
+  --color-green-light: #22C55E;  /* vert lumineux */
   --color-gray-light: #F8FAFC;
   --color-gray-border: #E5E7EB;
   --color-text-dark: #0F172A;
   --color-text-secondary: #64748B;
   --color-red: #EF4444;
   --color-orange: #F97316;
+
+  /* Tokens sémantiques remappés sur la palette bleu nuit / vert */
+  --color-cream: #F8FAFC;
+  --color-principal: #16A34A;
+  --color-rose: #16A34A;
+  --color-rose-dark: #15803D;
+  --color-gold: #22C55E;
+  --color-gold-dark: #16A34A;
+  --color-success: #16A34A;
+  --color-whatsapp: #16A34A;
 
   /* Rayons réduits globalement (tout rounded-* devient plus discret) */
   --radius-xs:  0.0625rem;  /* 1px  */
@@ -51,6 +68,9 @@ html {
 ::-webkit-scrollbar-thumb {
   background: #16A34A;
   border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #15803D;
 }
 
 /* Masquer la scrollbar (carrousels mobiles) */

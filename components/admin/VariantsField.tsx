@@ -17,11 +17,11 @@ interface VariantRow {
 let keySeq = 0;
 const newKey = () => `v${++keySeq}-${Date.now()}`;
 
-// ─── Presets de tailles ───────────────────────────────────────────────────────
+// ─── Presets de contenances ───────────────────────────────────────────────────
 const SIZE_PRESETS: { label: string; sizes: string[] }[] = [
-  { label: "Chaussures H (40-46)", sizes: ["40", "41", "42", "43", "44", "45", "46"] },
-  { label: "Chaussures F (36-41)", sizes: ["36", "37", "38", "39", "40", "41"] },
-  { label: "Vêtements (XS-XXL)", sizes: ["XS", "S", "M", "L", "XL", "XXL"] },
+  { label: "Parfum (ml)", sizes: ["30 ml", "50 ml", "100 ml"] },
+  { label: "Soin / Crème (ml)", sizes: ["15 ml", "50 ml", "100 ml", "200 ml"] },
+  { label: "Format (g)", sizes: ["50 g", "100 g", "200 g"] },
   { label: "Taille unique", sizes: ["Unique"] },
 ];
 
@@ -118,6 +118,8 @@ export default function VariantsField({
   useEffect(() => {
     if (!didMount.current) { didMount.current = true; return; }
     if (!combos.length) return;
+    // Régénération volontaire de la matrice quand couleurs/tailles changent.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRows((prev) => buildRows(prev));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [colors, sizes]);
@@ -184,7 +186,7 @@ export default function VariantsField({
         </div>
         {colors.length > 0 && (
           <p className="mt-2 text-[11px] text-text-secondary">
-            Sélectionnées : <b className="text-[#0F172A]">{colors.join(", ")}</b>
+            Sélectionnées : <b className="text-[#020B27]">{colors.join(", ")}</b>
           </p>
         )}
       </div>
@@ -198,7 +200,7 @@ export default function VariantsField({
               key={p.label}
               type="button"
               onClick={() => addSizes(p.sizes.join(","))}
-              className="rounded-full bg-[#F8FAFC] border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-[#0F172A] hover:border-green hover:text-green transition-colors"
+              className="rounded-full bg-[#F8FAFC] border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-[#020B27] hover:border-green hover:text-green transition-colors"
             >
               + {p.label}
             </button>
@@ -230,7 +232,7 @@ export default function VariantsField({
           type="button"
           onClick={generate}
           disabled={!combos.length}
-          className="inline-flex items-center gap-1.5 bg-[#020617] text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center gap-1.5 bg-[#16A34A] text-[#020B27] text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <Wand2 size={14} /> Générer les variantes{combos.length ? ` (${combos.length})` : ""}
         </button>
@@ -250,7 +252,7 @@ export default function VariantsField({
         <div className="space-y-2">
           <div className="flex items-center justify-between px-1">
             <span className="text-[11px] font-medium text-text-secondary">{rows.length} variante{rows.length > 1 ? "s" : ""}</span>
-            <span className="text-[11px] text-text-secondary">Stock total : <b className="text-[#0F172A]">{totalStock}</b></span>
+            <span className="text-[11px] text-text-secondary">Stock total : <b className="text-[#020B27]">{totalStock}</b></span>
           </div>
           <div className="hidden sm:grid grid-cols-[1fr_1fr_72px_92px_32px] gap-2 px-1 text-[11px] font-medium text-text-secondary">
             <span>Couleur</span><span>Taille</span><span>Stock</span><span>Prix +/−</span><span />
@@ -262,7 +264,7 @@ export default function VariantsField({
                 <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2 py-1.5 focus-within:border-green transition-colors">
                   <span
                     className="w-4 h-4 rounded-full shrink-0 ring-1 ring-gray-300"
-                    style={{ background: hex ?? "conic-gradient(#f87171,#facc15,#4ade80,#60a5fa,#c084fc,#f87171)" }}
+                    style={{ background: hex ?? "conic-gradient(#DC6B5C,#facc15,#4ade80,#60a5fa,#c084fc,#DC6B5C)" }}
                   />
                   <select
                     value={row.color}
@@ -287,7 +289,7 @@ export default function VariantsField({
         </div>
       )}
 
-      <button type="button" onClick={addManual} className="flex items-center gap-1.5 text-sm font-medium text-green hover:text-[#15803d] transition-colors">
+      <button type="button" onClick={addManual} className="flex items-center gap-1.5 text-sm font-medium text-green hover:text-[#0F172A] transition-colors">
         <Plus size={15} /> Ajouter une variante manuellement
       </button>
     </div>

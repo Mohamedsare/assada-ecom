@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Promotions",
-  description: "Les meilleures promotions d'Odm's Shopping au Gabon. Jusqu'à -50% sur une large sélection de produits.",
+  description: "Les meilleures promotions d'Assada à Casablanca. Jusqu'à -50% sur une large sélection de produits.",
 };
 
 export default async function PromotionsPage() {
@@ -17,7 +17,7 @@ export default async function PromotionsPage() {
       <div
         className="text-white py-14 px-4 relative overflow-hidden"
         style={{
-          backgroundImage: "url('/banners/promotions.png')",
+          backgroundImage: "url('/banners/banner4-accueil.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -55,7 +55,7 @@ export default async function PromotionsPage() {
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-xl font-bold text-[#0F172A]">
+            <h2 className="text-xl font-bold text-[#020B27]">
               {allProducts.length} produits en promotion
             </h2>
             <p className="text-[#64748B] text-sm mt-1">Offres valables jusqu&apos;à épuisement des stocks</p>
@@ -65,8 +65,8 @@ export default async function PromotionsPage() {
         {allProducts.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">🏷️</div>
-            <h3 className="text-lg font-semibold text-[#0F172A] mb-2">Aucune promotion en ce moment</h3>
-            <Link href="/boutique" className="text-[#16A34A] hover:underline">
+            <h3 className="text-lg font-semibold text-[#020B27] mb-2">Aucune promotion en ce moment</h3>
+            <Link href="/boutique" className="text-[#020B27] hover:underline">
               Voir toute la boutique
             </Link>
           </div>

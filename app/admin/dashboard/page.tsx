@@ -15,7 +15,8 @@ import {
 } from "lucide-react";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { getAdminStats, getAdminOrders, getAdminProducts } from "@/lib/supabase/queries";
-import { ORDER_STATUS_LABELS } from "@/lib/constants";
+import { requirePermission } from "@/lib/supabase/guards";
+import { ORDER_STATUS_LABELS, ORDER_CHANNEL_LABELS } from "@/lib/constants";
 import SalesAreaChart, { type SalesChartData } from "@/components/admin/charts/SalesAreaChart";
 import OrderDonutChart from "@/components/admin/charts/OrderDonutChart";
 import DeliveryTrackingCard from "@/components/admin/DeliveryTrackingCard";
@@ -28,7 +29,7 @@ const STATUS_COLOR: Record<string, string> = {
   preparing:        "bg-purple-50 text-purple-700",
   shipped:          "bg-indigo-50 text-indigo-700",
   out_for_delivery: "bg-orange-50 text-orange-700",
-  delivered:        "bg-green-50 text-[#16A34A]",
+  delivered:        "bg-green-50 text-[#020B27]",
   cancelled:        "bg-red-50 text-red-700",
   returned:         "bg-gray-50 text-gray-700",
 };
@@ -101,6 +102,42 @@ function buildStatusCounts(orders: Order[]): Record<string, number> {
   return counts;
 }
 
+/** CA encaissé (commandes livrées) du jour et du mois en cours. */
+function revenueTodayMonth(orders: Order[]): { today: number; month: number } {
+  const now = new Date();
+  let today = 0, month = 0;
+  for (const o of orders) {
+    if (o.order_status !== "delivered") continue;
+    const d = new Date(o.created_at);
+    const amount = o.total_amount ?? 0;
+    if (d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()) {
+      month += amount;
+      if (d.getDate() === now.getDate()) today += amount;
+    }
+  }
+  return { today, month };
+}
+
+/** Répartition des commandes par canal (site / whatsapp / boutique). */
+function channelCounts(orders: Order[]): Record<string, number> {
+  const counts: Record<string, number> = { site: 0, whatsapp: 0, store: 0 };
+  for (const o of orders) counts[o.channel ?? "site"] = (counts[o.channel ?? "site"] ?? 0) + 1;
+  return counts;
+}
+
+/** Top quartiers par nombre de commandes. */
+function topDistricts(orders: Order[], limit = 5): { district: string; count: number }[] {
+  const counts: Record<string, number> = {};
+  for (const o of orders) {
+    const d = o.delivery_district?.trim();
+    if (d) counts[d] = (counts[d] ?? 0) + 1;
+  }
+  return Object.entries(counts)
+    .map(([district, count]) => ({ district, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit);
+}
+
 /** Chiffre d'affaires et nombre de commandes par mois (12 derniers mois). */
 function monthlySeries(orders: Order[]): { revenue: number[]; counts: number[] } {
   const now = new Date();
@@ -137,6 +174,7 @@ function sparklinePoints(values: number[], width = 200, height = 40, pad = 5): s
 }
 
 export default async function AdminDashboardPage() {
+  await requirePermission("dashboard", "view");
   const [stats, allOrders, allProducts] = await Promise.all([
     getAdminStats(),
     getAdminOrders(),
@@ -154,6 +192,16 @@ export default async function AdminDashboardPage() {
   const series         = monthlySeries(allOrders);
   const revenueSpark   = sparklinePoints(series.revenue);
   const ordersSpark    = sparklinePoints(series.counts);
+
+  const { today: revenueToday, month: revenueMonth } = revenueTodayMonth(allOrders);
+  const channels = channelCounts(allOrders);
+  const districts = topDistricts(allOrders);
+  const validatedCount = allOrders.filter(
+    (o) => o.order_status !== "pending" && o.order_status !== "cancelled" && o.order_status !== "returned",
+  ).length;
+  const validationRate = stats.totalOrders ? Math.round((validatedCount / stats.totalOrders) * 100) : 0;
+  const cancellationRate = stats.totalOrders ? Math.round((stats.cancelledOrders / stats.totalOrders) * 100) : 0;
+  const maxDistrict = districts[0]?.count ?? 1;
 
   const deliveryRate = stats.totalOrders ? Math.round((stats.deliveredOrders / stats.totalOrders) * 100) : 0;
   const report = [
@@ -182,7 +230,7 @@ export default async function AdminDashboardPage() {
               <p className="text-blue-200 text-xs">Ventes totales</p>
               <p className="text-xl font-extrabold mt-1">
                 {Math.round(stats.totalRevenue / 1000)}K{" "}
-                <span className="text-xs font-medium text-blue-200">FCFA</span>
+                <span className="text-xs font-medium text-blue-200">DH</span>
               </p>
               <p className="text-[11px] text-green-light flex items-center gap-0.5 mt-1">
                 <ArrowUp size={10} /> Commandes livrées seulement
@@ -232,14 +280,14 @@ export default async function AdminDashboardPage() {
           <SalesAreaChart data={salesChartData} />
         </div>
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex flex-col">
-          <h3 className="font-bold text-[#0F172A] text-sm mb-3">Statut des commandes</h3>
+          <h3 className="font-bold text-[#020B27] text-sm mb-3">Statut des commandes</h3>
           <div className="flex-1 flex items-center">
             <OrderDonutChart statusCounts={statusCounts} />
           </div>
         </div>
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-            <h3 className="font-bold text-[#0F172A] text-sm">Commandes récentes</h3>
+            <h3 className="font-bold text-[#020B27] text-sm">Commandes récentes</h3>
             <Link href="/admin/commandes" className="text-xs text-green hover:underline">Voir toutes</Link>
           </div>
           <div className="p-3 space-y-1">
@@ -256,7 +304,7 @@ export default async function AdminDashboardPage() {
                     <ShoppingBag size={15} className="text-gray-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-[#0F172A] truncate">{o.order_number}</p>
+                    <p className="text-xs font-bold text-[#020B27] truncate">{o.order_number}</p>
                     <p className="text-[11px] text-text-secondary truncate">{o.customer_name} · {o.delivery_city}</p>
                   </div>
                   <div className="text-right shrink-0">
@@ -277,7 +325,7 @@ export default async function AdminDashboardPage() {
         {/* Produits récents */}
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm lg:col-span-2">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-            <h3 className="font-bold text-[#0F172A] text-sm">Produits récents</h3>
+            <h3 className="font-bold text-[#020B27] text-sm">Produits récents</h3>
             <Link href="/admin/produits" className="text-xs text-green hover:underline">Voir tout</Link>
           </div>
           <div className="p-3 space-y-1">
@@ -295,7 +343,7 @@ export default async function AdminDashboardPage() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#0F172A] truncate">{p.name}</p>
+                  <p className="text-sm font-medium text-[#020B27] truncate">{p.name}</p>
                   <p className="text-[11px] text-text-secondary">{p.category?.name ?? "—"}</p>
                 </div>
                 <span className="text-sm font-bold text-green shrink-0">{formatPrice(p.current_price)}</span>
@@ -310,7 +358,7 @@ export default async function AdminDashboardPage() {
         {/* Alertes stock faible */}
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-            <h3 className="font-bold text-[#0F172A] text-sm">Alertes stock faible</h3>
+            <h3 className="font-bold text-[#020B27] text-sm">Alertes stock faible</h3>
             <Link href="/admin/produits" className="text-xs text-green hover:underline">Voir tout</Link>
           </div>
           <div className="p-3 space-y-1">
@@ -331,7 +379,7 @@ export default async function AdminDashboardPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#0F172A] truncate">{s.name}</p>
+                    <p className="text-sm font-medium text-[#020B27] truncate">{s.name}</p>
                     <p className="text-[11px] text-text-secondary">Stock : {s.stock_quantity} unités</p>
                   </div>
                   <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full shrink-0">Faible</span>
@@ -342,6 +390,59 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
+      {/* CA jour/mois + taux (spec ASSADA) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard icon={DollarSign} iconColor="text-green bg-green-50" value={formatPrice(revenueToday)} label="CA du jour" sub="Commandes livrées" />
+        <StatCard icon={TrendingUp} iconColor="text-blue-600 bg-blue-50" value={formatPrice(revenueMonth)} label="CA du mois" sub="Commandes livrées" />
+        <StatCard icon={CheckCircle2} iconColor="text-green bg-green-50" value={`${validationRate}%`} label="Taux de validation" sub={`${validatedCount} validées`} />
+        <StatCard icon={XCircle} iconColor="text-red-600 bg-red-50" value={`${cancellationRate}%`} label="Taux d'annulation" sub={`${stats.cancelledOrders} annulées`} />
+      </div>
+
+      {/* Canal + quartiers (spec ASSADA) */}
+      <div className="grid lg:grid-cols-2 gap-4">
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
+          <h3 className="font-bold text-[#020B27] text-sm mb-3">Commandes par canal</h3>
+          <div className="space-y-2">
+            {Object.entries(ORDER_CHANNEL_LABELS).map(([key, label]) => {
+              const count = channels[key] ?? 0;
+              const pct = stats.totalOrders ? Math.round((count / stats.totalOrders) * 100) : 0;
+              return (
+                <div key={key}>
+                  <div className="flex items-center justify-between text-[11px] mb-1">
+                    <span className="text-text-secondary">{label}</span>
+                    <span className="font-medium text-[#020B27]">{count} · {pct}%</span>
+                  </div>
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-green rounded-full" style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
+          <h3 className="font-bold text-[#020B27] text-sm mb-3">Quartiers qui commandent le plus</h3>
+          {districts.length === 0 ? (
+            <p className="text-xs text-text-secondary text-center py-6">Aucune commande</p>
+          ) : (
+            <div className="space-y-2">
+              {districts.map((d) => (
+                <div key={d.district}>
+                  <div className="flex items-center justify-between text-[11px] mb-1">
+                    <span className="text-[#020B27] flex items-center gap-1"><MapPin size={11} className="text-gray-400" /> {d.district}</span>
+                    <span className="font-medium text-text-secondary">{d.count}</span>
+                  </div>
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-[#1d4ed8] rounded-full" style={{ width: `${Math.round((d.count / maxDistrict) * 100)}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Suivi livraison */}
       <DeliveryTrackingCard recentDelivery={recentDelivery} />
 
@@ -349,7 +450,7 @@ export default async function AdminDashboardPage() {
       <div className="bg-night rounded-lg p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {[
           { icon: Users, label: "Total clients", value: String(stats.totalCustomers), color: "text-blue-300" },
-          { icon: ShieldCheck, label: "Panier moyen", value: `${Math.round(stats.avgOrderValue / 1000)}K`, suffix: "FCFA", color: "text-green-light" },
+          { icon: ShieldCheck, label: "Panier moyen", value: `${Math.round(stats.avgOrderValue / 1000)}K`, suffix: "DH", color: "text-green-light" },
           { icon: TrendingUp, label: "Taux de livraison", value: `${stats.totalOrders ? Math.round((stats.deliveredOrders / stats.totalOrders) * 100) : 0}%`, color: "text-purple-300" },
           { icon: MapPin, label: "Stock faible", value: String(stats.lowStockCount), color: "text-red-300" },
           { icon: CheckCircle2, label: "Taux succès", value: `${stats.totalOrders ? Math.round(((stats.totalOrders - stats.cancelledOrders) / stats.totalOrders) * 100) : 0}%`, color: "text-green-light" },
@@ -400,7 +501,7 @@ function StatCard({
           <Icon size={15} />
         </div>
       </div>
-      <p className="text-xl font-extrabold text-[#0F172A] mt-auto">{value}</p>
+      <p className="text-xl font-extrabold text-[#020B27] mt-auto">{value}</p>
       {sub && <p className="text-[11px] text-text-secondary mt-1">{sub}</p>}
       {trend && <p className="text-[11px] text-green flex items-center gap-0.5 mt-1"><ArrowUp size={10} /> {trend}</p>}
     </div>

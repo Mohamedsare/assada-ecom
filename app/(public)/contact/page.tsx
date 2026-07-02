@@ -2,19 +2,19 @@ import type { Metadata } from "next";
 import ContactContent from "./ContactContent";
 
 export const metadata: Metadata = {
-  title: "Contact — Service client Odm's Shopping au Gabon",
+  title: "Contact — Service client Assada à Casablanca",
   description:
-    "Contactez Odm's Shopping : téléphone, email et WhatsApp. Service client 7j/7 pour vos commandes, livraisons et questions partout au Gabon. Réponse rapide à Libreville.",
+    "Contactez Assada : téléphone, email et WhatsApp. Service client 7j/7 pour vos commandes, livraisons et questions partout à Casablanca. Réponse rapide à Casablanca.",
   keywords: [
-    "contact Odm's Shopping", "service client Gabon", "WhatsApp boutique Gabon",
-    "aide commande Libreville", "support e-commerce Gabon",
+    "contact Assada", "service client Casablanca", "WhatsApp boutique Casablanca",
+    "aide commande Casablanca", "support e-commerce Casablanca",
   ],
   alternates: { canonical: "/contact" },
   openGraph: {
-    title: "Contact — Odm's Shopping",
-    description: "Une question ? Contactez notre service client 7j/7 partout au Gabon.",
+    title: "Contact — Assada",
+    description: "Une question ? Contactez notre service client 7j/7 partout à Casablanca.",
     type: "website",
-    locale: "fr_GA",
+    locale: "fr_MA",
   },
 };
 

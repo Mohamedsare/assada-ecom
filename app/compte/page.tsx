@@ -19,7 +19,7 @@ const STATUS_COLOR: Record<string, string> = {
   preparing: "bg-purple-50 text-purple-700",
   shipped: "bg-indigo-50 text-indigo-700",
   out_for_delivery: "bg-orange-50 text-orange-700",
-  delivered: "bg-green-50 text-[#16A34A]",
+  delivered: "bg-green-50 text-[#020B27]",
   cancelled: "bg-red-50 text-red-700",
   returned: "bg-gray-50 text-gray-700",
 };
@@ -57,7 +57,7 @@ export default async function ComptePage() {
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${stat.color}`}>
                 <Icon size={20} />
               </div>
-              <p className="text-2xl font-bold text-[#0F172A]">{stat.value}</p>
+              <p className="text-2xl font-bold text-[#020B27]">{stat.value}</p>
               <p className="text-sm text-[#64748B]">{stat.label}</p>
             </div>
           );
@@ -67,8 +67,8 @@ export default async function ComptePage() {
       {/* Recent orders */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-bold text-[#0F172A]">Mes dernières commandes</h2>
-          <Link href="/compte/commandes" className="text-sm text-[#16A34A] hover:underline flex items-center gap-1">
+          <h2 className="font-bold text-[#020B27]">Mes dernières commandes</h2>
+          <Link href="/compte/commandes" className="text-sm text-[#020B27] hover:underline flex items-center gap-1">
             Voir tout <ChevronRight size={14} />
           </Link>
         </div>
@@ -77,7 +77,7 @@ export default async function ComptePage() {
           <div className="text-center py-8">
             <Package size={40} className="mx-auto text-gray-200 mb-3" />
             <p className="text-[#64748B] text-sm">Aucune commande pour l&apos;instant</p>
-            <Link href="/boutique" className="text-sm text-[#16A34A] hover:underline mt-2 inline-block">
+            <Link href="/boutique" className="text-sm text-[#020B27] hover:underline mt-2 inline-block">
               Découvrir la boutique
             </Link>
           </div>
@@ -90,7 +90,7 @@ export default async function ComptePage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="font-semibold text-sm text-[#0F172A]">{order.order_number}</span>
+                    <span className="font-semibold text-sm text-[#020B27]">{order.order_number}</span>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR[order.order_status]}`}>
                       {ORDER_STATUS_LABELS[order.order_status]}
                     </span>
@@ -103,10 +103,10 @@ export default async function ComptePage() {
                   <p className="text-xs text-gray-400">{formatDate(order.created_at)}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="font-bold text-[#16A34A] text-sm">{formatPrice(order.total_amount)}</p>
+                  <p className="font-bold text-[#020B27] text-sm">{formatPrice(order.total_amount)}</p>
                   <Link
                     href={`/suivi-commande?numero=${order.order_number}`}
-                    className="text-xs text-[#16A34A] hover:underline"
+                    className="text-xs text-[#020B27] hover:underline"
                   >
                     Suivi
                   </Link>
@@ -121,25 +121,25 @@ export default async function ComptePage() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl border border-gray-100 p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-[#0F172A]">Mes adresses</h2>
-            <Link href="/compte/adresses" className="text-sm text-[#16A34A] hover:underline">
+            <h2 className="font-bold text-[#020B27]">Mes adresses</h2>
+            <Link href="/compte/adresses" className="text-sm text-[#020B27] hover:underline">
               Gérer
             </Link>
           </div>
           {defaultAddress ? (
             <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
-              <MapPin size={16} className="text-[#16A34A] mt-0.5 shrink-0" />
+              <MapPin size={16} className="text-[#020B27] mt-0.5 shrink-0" />
               <div className="text-sm">
-                <p className="font-medium text-[#0F172A]">{defaultAddress.full_name}</p>
+                <p className="font-medium text-[#020B27]">{defaultAddress.full_name}</p>
                 <p className="text-[#64748B]">{defaultAddress.district}, {defaultAddress.city}</p>
                 <p className="text-[#64748B]">{defaultAddress.phone}</p>
-                <span className="text-xs text-[#16A34A] font-medium">Adresse par défaut</span>
+                <span className="text-xs text-[#020B27] font-medium">Adresse par défaut</span>
               </div>
             </div>
           ) : (
             <Link
               href="/compte/adresses"
-              className="flex items-center gap-2 text-sm text-[#16A34A] hover:underline p-3 bg-gray-50 rounded-xl"
+              className="flex items-center gap-2 text-sm text-[#020B27] hover:underline p-3 bg-gray-50 rounded-xl"
             >
               <MapPin size={16} />
               Ajouter une adresse
@@ -149,29 +149,29 @@ export default async function ComptePage() {
 
         <div className="bg-white rounded-2xl border border-gray-100 p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-[#0F172A]">Informations personnelles</h2>
-            <Link href="/compte/parametres" className="text-sm text-[#16A34A] hover:underline">
+            <h2 className="font-bold text-[#020B27]">Informations personnelles</h2>
+            <Link href="/compte/parametres" className="text-sm text-[#020B27] hover:underline">
               Modifier
             </Link>
           </div>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-[#64748B]">Nom</span>
-              <span className="font-medium text-[#0F172A]">
+              <span className="font-medium text-[#020B27]">
                 {[profile.first_name, profile.last_name].filter(Boolean).join(" ") || "—"}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#64748B]">Email</span>
-              <span className="font-medium text-[#0F172A] truncate max-w-40">{profile.email ?? "—"}</span>
+              <span className="font-medium text-[#020B27] truncate max-w-40">{profile.email ?? "—"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#64748B]">Téléphone</span>
-              <span className="font-medium text-[#0F172A]">{profile.phone ?? "—"}</span>
+              <span className="font-medium text-[#020B27]">{profile.phone ?? "—"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#64748B]">Membre depuis</span>
-              <span className="font-medium text-[#0F172A]">
+              <span className="font-medium text-[#020B27]">
                 {new Date(profile.created_at).toLocaleDateString("fr-FR", {
                   month: "long",
                   year: "numeric",

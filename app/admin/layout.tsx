@@ -5,6 +5,7 @@ import AdminLayoutClient, { type AdminNotification } from "./AdminLayoutClient";
 const ROLE_LABELS: Record<string, string> = {
   admin: "Administrateur",
   super_admin: "Super Admin",
+  employee: "Employé",
 };
 
 function relativeTime(iso: string): string {
@@ -24,7 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/connexion?redirect=/admin/dashboard");
   }
 
-  if (profile.role !== "admin" && profile.role !== "super_admin") {
+  if (profile.role !== "admin" && profile.role !== "super_admin" && profile.role !== "employee") {
     redirect("/");
   }
 
@@ -64,6 +65,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <AdminLayoutClient
       adminName={adminName}
       adminRole={adminRole}
+      role={profile.role}
+      permissions={profile.permissions ?? {}}
       notifications={notifications}
       pendingOrders={pendingOrders}
     >

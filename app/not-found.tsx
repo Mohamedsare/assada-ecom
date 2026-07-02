@@ -7,7 +7,7 @@ import { getWhatsAppUrl, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Page introuvable (404)",
-  description: "La page que vous recherchez n'existe pas ou a été déplacée. Revenez à la boutique Odm's Shopping.",
+  description: "La page que vous recherchez n'existe pas ou a été déplacée. Revenez à la boutique Assada.",
   robots: { index: false, follow: true },
 };
 
@@ -20,11 +20,11 @@ const QUICK_LINKS = [
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-b from-[#020617] via-[#0F172A] to-[#020617] text-white">
+    <main className="min-h-screen flex flex-col bg-gradient-to-b from-[#020B27] via-[#0F172A] to-[#020B27] text-white">
       {/* Logo */}
       <div className="px-4 py-6">
-        <Link href="/" className="inline-flex items-center" aria-label="Odm's Shopping — Accueil">
-          <Image src="/logo1.png" alt="Odm's Shopping" width={200} height={130} priority className="h-12 w-auto object-contain" />
+        <Link href="/" className="inline-flex items-center" aria-label="Assada — Accueil">
+          <Image src="/logo1.png" alt="Assada" width={200} height={130} priority className="h-12 w-auto object-contain" />
         </Link>
       </div>
 
@@ -33,7 +33,7 @@ export default function NotFound() {
         <div className="w-full max-w-xl text-center">
           {/* Visuel 404 */}
           <div className="relative inline-block mb-6">
-            <span className="text-[7rem] sm:text-[9rem] font-extrabold leading-none bg-gradient-to-br from-[#22C55E] to-[#16A34A] bg-clip-text text-transparent select-none">
+            <span className="text-[7rem] sm:text-[9rem] font-extrabold leading-none bg-gradient-to-br from-[#22C55E] to-[#020B27] bg-clip-text text-transparent select-none">
               404
             </span>
             <div className="absolute -inset-6 bg-[#16A34A]/20 blur-3xl rounded-full -z-10" aria-hidden="true" />
@@ -53,14 +53,14 @@ export default function NotFound() {
               aria-label="Rechercher un produit"
               className="flex-1 bg-white/10 border border-white/20 rounded-l-xl px-4 py-3 text-sm text-white placeholder-gray-400 outline-none focus:border-[#22C55E] transition-colors"
             />
-            <button type="submit" className="bg-[#16A34A] hover:bg-[#15803d] px-5 py-3 rounded-r-xl transition-colors" aria-label="Lancer la recherche">
+            <button type="submit" className="bg-[#16A34A] hover:bg-[#15803D] px-5 py-3 rounded-r-xl transition-colors" aria-label="Lancer la recherche">
               <Search size={18} />
             </button>
           </form>
 
           {/* CTAs principaux */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#15803d] text-white font-semibold px-6 py-3 rounded-xl transition-colors">
+            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-[#020B27] font-semibold px-6 py-3 rounded-xl transition-colors">
               <Home size={18} /> Retour à l&apos;accueil
             </Link>
             <Link href="/boutique" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:bg-white/10 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
@@ -84,7 +84,7 @@ export default function NotFound() {
               <Link
                 key={cat.slug}
                 href={`/boutique?categorie=${cat.slug}`}
-                className="text-xs text-gray-300 bg-white/5 hover:bg-[#16A34A] hover:text-white border border-white/10 px-3 py-1.5 rounded-full transition-colors"
+                className="text-xs text-gray-300 bg-white/5 hover:bg-[#16A34A] hover:text-[#020B27] border border-white/10 px-3 py-1.5 rounded-full transition-colors"
               >
                 {cat.emoji} {cat.name}
               </Link>

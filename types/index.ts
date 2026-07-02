@@ -19,7 +19,23 @@ export type PaymentStatus =
 
 export type PaymentMethod = "cash_on_delivery" | "airtel_money" | "moov_money";
 
-export type UserRole = "customer" | "admin" | "super_admin" | "delivery_agent";
+export type UserRole = "customer" | "employee" | "admin" | "super_admin" | "delivery_agent";
+
+/** Canal par lequel la commande est arrivée. */
+export type OrderChannel = "site" | "whatsapp" | "store";
+
+/** Matrice de permissions d'un employé : { module: { action: boolean } } + drapeaux sensibles. */
+export type PermissionMatrix = Record<string, Record<string, boolean>>;
+
+export interface DeliveryAgent {
+  id: string;
+  name: string;
+  phone: string;
+  zones?: string;
+  is_active: boolean;
+  note?: string;
+  created_at: string;
+}
 
 export interface Category {
   id: string;
@@ -115,6 +131,8 @@ export interface Order {
   customer_note?: string;
   admin_note?: string;
   estimated_delivery_date?: string;
+  channel?: OrderChannel;
+  delivery_agent_id?: string;
   created_at: string;
   updated_at?: string;
   items?: OrderItem[];
@@ -153,6 +171,7 @@ export interface Profile {
   avatar_url?: string;
   role: UserRole;
   is_active: boolean;
+  permissions?: PermissionMatrix;
   created_at: string;
 }
 

@@ -15,8 +15,8 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Odm's Shopping — Boutique en ligne n°1 au Gabon | Livraison Libreville",
-    template: "%s | Odm's Shopping",
+    default: "Assada — Boutique en ligne n°1 à Casablanca | Livraison Casablanca",
+    template: "%s | Assada",
   },
   description: SITE_DESCRIPTION,
   keywords: [...SEO_KEYWORDS],
@@ -31,16 +31,16 @@ export const metadata: Metadata = {
   formatDetection: { telephone: true, email: true, address: true },
   openGraph: {
     type: "website",
-    locale: "fr_GA",
+    locale: "fr_MA",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Odm's Shopping — Boutique en ligne n°1 au Gabon",
+    title: "Assada — Boutique en ligne n°1 à Casablanca",
     description: SITE_DESCRIPTION,
     images: [{ url: "/logo1.png", width: 1200, height: 630, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Odm's Shopping — Boutique en ligne n°1 au Gabon",
+    title: "Assada — Boutique en ligne n°1 à Casablanca",
     description: SITE_DESCRIPTION,
     images: ["/logo1.png"],
   },

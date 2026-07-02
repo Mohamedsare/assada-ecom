@@ -17,11 +17,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
-  if (!product) return { title: "Produit introuvable | Odm's Shopping" };
+  if (!product) return { title: "Produit introuvable | Assada" };
 
-  const title = `${product.name} au Gabon | Odm's Shopping`;
+  const title = `${product.name} à Casablanca | Assada`;
   const description = product.short_description
-    ?? `Achetez ${product.name} au Gabon avec Odm's Shopping. Livraison rapide à Libreville, paiement à la livraison.`;
+    ?? `Achetez ${product.name} à Casablanca avec Assada. Livraison rapide à Casablanca, paiement à la livraison.`;
 
   return {
     title,
@@ -30,15 +30,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       product.name,
       product.brand?.name ?? "",
       product.category?.name ?? "",
-      "Gabon", "Libreville", "boutique en ligne Gabon", "Odm's Shopping",
+      "Casablanca", "Casablanca", "boutique en ligne Casablanca", "Assada",
     ].filter(Boolean),
     openGraph: {
       title,
       description,
       images: product.main_image_url ? [{ url: product.main_image_url, alt: product.name }] : [],
       type: "website",
-      locale: "fr_GA",
-      siteName: "Odm's Shopping",
+      locale: "fr_MA",
+      siteName: "Assada",
     },
     twitter: {
       card: "summary_large_image",
@@ -73,7 +73,7 @@ export default async function ProductPage({ params }: PageProps) {
     offers: {
       "@type": "Offer",
       url: productUrl,
-      priceCurrency: "XAF",
+      priceCurrency: "MAD",
       price: product.current_price,
       priceValidUntil: "2026-12-31",
       availability: product.stock_quantity > 0

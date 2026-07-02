@@ -13,7 +13,7 @@ export default function DeliveryTrackingCard({ recentDelivery }: Props) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
       <div className="flex items-center justify-between p-5 border-b border-gray-50">
-        <h3 className="font-bold text-[#0F172A]">Suivi des livraisons en cours</h3>
+        <h3 className="font-bold text-[#020B27]">Suivi des livraisons en cours</h3>
         <Link href="/admin/livraisons" className="text-sm text-green hover:underline">
           Voir toutes les livraisons
         </Link>
@@ -40,8 +40,8 @@ export default function DeliveryTrackingCard({ recentDelivery }: Props) {
               strokeDasharray="2 8"
               strokeLinecap="round"
             />
-            <circle cx="60" cy="200" r="8" fill="#16A34A" />
-            <circle cx="60" cy="200" r="14" fill="#16A34A" opacity="0.25" />
+            <circle cx="60" cy="200" r="8" fill="#020B27" />
+            <circle cx="60" cy="200" r="14" fill="#020B27" opacity="0.25" />
             <g transform="translate(200 130)">
               <circle r="10" fill="#22C55E" />
               <circle r="18" fill="#22C55E" opacity="0.2">
@@ -58,7 +58,7 @@ export default function DeliveryTrackingCard({ recentDelivery }: Props) {
           </svg>
 
           <span className="absolute top-3 left-3 bg-white/10 backdrop-blur text-white text-xs px-2.5 py-1 rounded-full">
-            Libreville
+            Casablanca
           </span>
           <span className="absolute bottom-3 right-3 bg-green/20 backdrop-blur text-green text-xs px-2.5 py-1 rounded-full font-medium">
             Module livraison V2
@@ -70,7 +70,7 @@ export default function DeliveryTrackingCard({ recentDelivery }: Props) {
           {recentDelivery ? (
             <>
               <p className="text-xs text-text-secondary mb-1">Dernière livraison en cours</p>
-              <p className="font-bold text-[#0F172A] mb-0.5">{recentDelivery.order_number}</p>
+              <p className="font-bold text-[#020B27] mb-0.5">{recentDelivery.order_number}</p>
               <p className="text-sm text-text-secondary mb-4">
                 Client : {recentDelivery.customer_name}
               </p>
@@ -80,13 +80,13 @@ export default function DeliveryTrackingCard({ recentDelivery }: Props) {
                   <span className="flex items-center gap-1.5 text-text-secondary">
                     <MapPin size={13} /> Ville
                   </span>
-                  <span className="font-semibold text-[#0F172A]">{recentDelivery.delivery_city}</span>
+                  <span className="font-semibold text-[#020B27]">{recentDelivery.delivery_city}</span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-1.5 text-text-secondary">
                     <Clock size={13} /> Livraison estimée
                   </span>
-                  <span className="font-semibold text-[#0F172A]">
+                  <span className="font-semibold text-[#020B27]">
                     {recentDelivery.estimated_delivery_date ?? "À confirmer"}
                   </span>
                 </div>
@@ -94,20 +94,20 @@ export default function DeliveryTrackingCard({ recentDelivery }: Props) {
                   <span className="flex items-center gap-1.5 text-text-secondary">
                     <Package size={13} /> Articles
                   </span>
-                  <span className="font-semibold text-[#0F172A]">
+                  <span className="font-semibold text-[#020B27]">
                     {recentDelivery.items?.length ?? "—"}
                   </span>
                 </div>
               </div>
 
               <Link href="/admin/livraisons"
-                className="block w-full bg-green hover:bg-[#15803d] text-white text-center text-sm font-semibold py-2.5 rounded-lg transition-colors mb-2">
+                className="block w-full bg-green hover:bg-[#15803D] text-[#020B27] text-center text-sm font-semibold py-2.5 rounded-lg transition-colors mb-2">
                 Gérer les livraisons
               </Link>
               <Link
                 href={getWhatsAppUrl(`Bonjour, concernant la livraison de la commande ${recentDelivery.order_number}`)}
                 target="_blank"
-                className="flex items-center justify-center gap-1.5 w-full border border-gray-200 text-[#0F172A] text-sm font-medium py-2.5 rounded-lg hover:border-green transition-colors"
+                className="flex items-center justify-center gap-1.5 w-full border border-gray-200 text-[#020B27] text-sm font-medium py-2.5 rounded-lg hover:border-green transition-colors"
               >
                 <MapPin size={14} /> Contacter le client
               </Link>
@@ -117,7 +117,7 @@ export default function DeliveryTrackingCard({ recentDelivery }: Props) {
               <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
                 <Package size={20} className="text-gray-400" />
               </div>
-              <p className="text-sm font-medium text-[#0F172A] mb-1">Aucune livraison en cours</p>
+              <p className="text-sm font-medium text-[#020B27] mb-1">Aucune livraison en cours</p>
               <p className="text-xs text-text-secondary mb-4">
                 Les commandes &quot;En cours de livraison&quot; apparaîtront ici.
               </p>

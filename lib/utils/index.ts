@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -8,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatPrice(amount: number): string {
   return new Intl.NumberFormat("fr-FR", {
     maximumFractionDigits: 0,
-  }).format(amount) + " FCFA";
+  }).format(amount) + " DH";
 }
 
 export function formatDate(date: string | Date): string {
@@ -26,11 +27,11 @@ export function calculateDiscount(oldPrice: number, currentPrice: number): numbe
 export function generateOrderNumber(): string {
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
-  return `ODMS-${year}-${random}`;
+  return `ASSADA-${year}-${random}`;
 }
 
 export function getWhatsAppUrl(message: string): string {
-  return `https://wa.me/24162573748?text=${encodeURIComponent(message)}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
 /**
@@ -47,7 +48,7 @@ export function getProductOrderWhatsAppUrl(opts: {
   url?: string;
 }): string {
   const lines: string[] = [
-    "Bonjour Odm's Shopping, je souhaite commander ce produit :",
+    "Bonjour Assada, je souhaite commander ce produit :",
     "",
     `🛍️ ${opts.name}`,
   ];
@@ -62,20 +63,20 @@ export function getProductOrderWhatsAppUrl(opts: {
 }
 
 /**
- * Lien WhatsApp vers un numéro client gabonais.
- * Normalise les formats courants (+241…, 0XX…, 241…) en msisdn international sans « + ».
+ * Lien WhatsApp vers un numéro client marocain.
+ * Normalise les formats courants (+212…, 0XX…, 212…) en msisdn international sans « + ».
  */
 export function getClientWhatsAppUrl(phone: string, message: string): string {
   let digits = (phone || "").replace(/\D/g, "");
   if (digits.startsWith("00")) digits = digits.slice(2);
-  if (digits.startsWith("241")) {
+  if (digits.startsWith("212")) {
     // déjà préfixé
   } else if (digits.startsWith("0")) {
-    digits = "241" + digits.slice(1);
+    digits = "212" + digits.slice(1);
   } else if (digits.length <= 9) {
-    digits = "241" + digits;
+    digits = "212" + digits;
   }
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
-export const WHATSAPP_DEFAULT_MESSAGE = "Bonjour Odm's Shopping, je suis intéressé par vos produits.";
+export const WHATSAPP_DEFAULT_MESSAGE = "Bonjour Assada, je suis intéressé par vos produits.";

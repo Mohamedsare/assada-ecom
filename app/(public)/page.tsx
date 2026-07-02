@@ -10,10 +10,10 @@ import ProductCarousel from "@/components/product/ProductCarousel";
 import { getProducts } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
-  title: "Odm's Shopping — Boutique en ligne n°1 au Gabon",
+  title: "Assada — Boutique cosmétique n°1 à Casablanca",
   description:
-    "Commandez facilement vos chaussures, vêtements, accessoires et produits électroniques avec livraison rapide partout au Gabon. Paiement à la livraison disponible.",
-  keywords: ["boutique en ligne Gabon", "shopping Gabon", "chaussures Libreville", "Odm's Shopping"],
+    "Commandez facilement vos parfums, soins visage & cheveux, maquillage et produits d'hygiène avec livraison rapide partout à Casablanca. Paiement à la livraison disponible.",
+  keywords: ["boutique cosmétique Casablanca", "parfums Casablanca", "maquillage Casablanca", "Assada"],
 };
 
 export default async function HomePage() {

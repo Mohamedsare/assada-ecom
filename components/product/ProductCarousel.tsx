@@ -41,7 +41,7 @@ export default function ProductCarousel({
           <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${viewAllColor}`}>
             {label}
           </p>
-          <h2 className="text-xl md:text-2xl font-bold text-[#0F172A]">{title}</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-[#020B27]">{title}</h2>
           {subtitle && <p className="text-text-secondary text-sm mt-0.5">{subtitle}</p>}
         </div>
         <Link

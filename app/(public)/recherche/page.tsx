@@ -3,7 +3,7 @@ import RechercheContent from "./RechercheContent";
 
 export const metadata = {
   title: "Recherche",
-  description: "Recherchez des produits sur Odm's Shopping — Boutique en ligne au Gabon.",
+  description: "Recherchez des produits sur Assada — Boutique en ligne à Casablanca.",
 };
 
 export default function RecherchePage() {

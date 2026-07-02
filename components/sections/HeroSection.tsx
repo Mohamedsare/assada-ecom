@@ -8,25 +8,36 @@ import { ChevronRight, ShoppingBag, Tag } from "lucide-react";
 const SLIDES = [
   {
     id: 1,
-    image: "/banners/banner2.png",
-    title: "Le meilleur du",
-    titleAccent: "Shopping",
-    titleSuffix: "au Gabon",
+    image: "/banners/banner2-accueil.png",
+    title: "La beauté au",
+    titleAccent: "meilleur prix",
+    titleSuffix: "à Casablanca",
     subtitle:
-      "Chaussures, vêtements, accessoires et produits électroniques au meilleur prix.",
+      "Parfums, soins visage & cheveux, maquillage et hygiène au meilleur prix.",
     cta1: { label: "Découvrir la boutique", href: "/boutique" },
     cta2: { label: "Voir les promotions", href: "/promotions" },
   },
   {
     id: 2,
-    image: "/banners/banner3.png",
-    title: "Nouvelle collection",
-    titleAccent: "Lacoste",
-    titleSuffix: "disponible",
+    image: "/banners/banner3-accuiel.png",
+    title: "Nouveautés",
+    titleAccent: "cosmétiques",
+    titleSuffix: "disponibles",
     subtitle:
-      "Hoodies, sacs, chaussures et accessoires premium. Payez à la livraison.",
+      "Parfums, maquillage et soins premium. Payez à la livraison.",
     cta1: { label: "Voir les nouveautés", href: "/nouveautes" },
     cta2: { label: "Voir les promotions", href: "/promotions" },
+  },
+  {
+    id: 3,
+    image: "/banners/banner4-accueil.png",
+    title: "Promotions",
+    titleAccent: "beauté",
+    titleSuffix: "à ne pas manquer",
+    subtitle:
+      "Profitez de nos offres spéciales sur une sélection de produits cosmétiques.",
+    cta1: { label: "Voir les promotions", href: "/promotions" },
+    cta2: { label: "Découvrir la boutique", href: "/boutique" },
   },
 ];
 
@@ -62,7 +73,7 @@ export default function HeroSection() {
         <Image
           key={`bg-${current}`}
           src={slide.image}
-          alt={`Odm's Shopping — ${slide.titleAccent}`}
+          alt={`Assada — ${slide.titleAccent}`}
           fill
           priority
           className="object-cover object-right animate-fade-bg"
@@ -83,7 +94,7 @@ export default function HeroSection() {
           >
             <div className="inline-flex items-center gap-2 bg-green/20 text-green-light text-xs font-semibold px-3 py-1.5 rounded-full mb-5 border border-green-light/30">
               <span className="w-1.5 h-1.5 bg-green-light rounded-full animate-pulse" />
-              Livraison rapide partout au Gabon
+              Livraison rapide partout à Casablanca
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-5">
@@ -100,7 +111,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3">
               <Link
                 href={slide.cta1.href}
-                className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#15803d] text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#15803D] text-[#020B27] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
               >
                 <ShoppingBag size={16} />
                 {slide.cta1.label}

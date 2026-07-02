@@ -40,7 +40,7 @@ export default function LivraisonsContent({ orders }: { orders: Order[] }) {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-[#0F172A]">Livraisons</h1>
+        <h1 className="text-xl font-bold text-[#020B27]">Livraisons</h1>
         <p className="text-text-secondary text-sm mt-0.5">Suivez et faites avancer les livraisons en cours</p>
       </div>
 
@@ -77,7 +77,7 @@ export default function LivraisonsContent({ orders }: { orders: Order[] }) {
       {list.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Truck size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#0F172A]">Aucune livraison {tab === "active" ? "en cours" : "terminée"}</p>
+          <p className="font-semibold text-[#020B27]">Aucune livraison {tab === "active" ? "en cours" : "terminée"}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-3">
@@ -104,11 +104,11 @@ function DeliveryCard({ order }: { order: Order }) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
       <div className="flex items-center justify-between mb-2">
-        <Link href={`/admin/commandes/${order.id}`} className="text-sm font-bold text-[#0F172A] hover:text-green transition-colors">{order.order_number}</Link>
+        <Link href={`/admin/commandes/${order.id}`} className="text-sm font-bold text-[#020B27] hover:text-green transition-colors">{order.order_number}</Link>
         <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">{ORDER_STATUS_LABELS[status] ?? status}</span>
       </div>
 
-      <p className="text-sm text-[#0F172A]">{order.customer_name}</p>
+      <p className="text-sm text-[#020B27]">{order.customer_name}</p>
       <p className="text-xs text-text-secondary flex items-center gap-1 mt-0.5">
         <MapPin size={12} /> {order.delivery_district}, {order.delivery_city}
       </p>
@@ -126,7 +126,7 @@ function DeliveryCard({ order }: { order: Order }) {
 
       <div className="flex items-center gap-2 mt-3">
         {nextStatus ? (
-          <button onClick={advance} disabled={pending} className="flex-1 text-xs font-semibold bg-green text-white px-3 py-2 rounded-lg hover:bg-[#15803d] disabled:opacity-60 transition-colors">
+          <button onClick={advance} disabled={pending} className="flex-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg hover:bg-[#15803D] disabled:opacity-60 transition-colors">
             {pending ? "…" : `Passer à : ${ORDER_STATUS_LABELS[nextStatus]}`}
           </button>
         ) : (
@@ -137,7 +137,7 @@ function DeliveryCard({ order }: { order: Order }) {
             href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant la livraison de votre commande ${order.order_number}`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg bg-gray-100 hover:bg-[#25D366] hover:text-white text-gray-500 transition-colors"
+            className="p-2 rounded-lg bg-gray-100 hover:bg-[#16A34A] hover:text-white text-gray-500 transition-colors"
             title="WhatsApp client"
           >
             <MessageCircle size={15} />
@@ -153,7 +153,7 @@ function Kpi({ icon: Icon, label, value, color }: { icon: typeof Truck; label: s
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex items-center gap-3">
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${color}`}><Icon size={18} /></div>
       <div className="min-w-0">
-        <p className="text-lg font-extrabold text-[#0F172A] leading-none truncate">{value}</p>
+        <p className="text-lg font-extrabold text-[#020B27] leading-none truncate">{value}</p>
         <p className="text-xs text-text-secondary mt-1">{label}</p>
       </div>
     </div>

@@ -32,7 +32,7 @@ export default function ClientsContent({ customers, stats }: { customers: Profil
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-[#0F172A]">Clients</h1>
+          <h1 className="text-xl font-bold text-[#020B27]">Clients</h1>
           <p className="text-text-secondary text-sm mt-0.5">{customers.length} clients enregistrés</p>
         </div>
         <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2 w-56">
@@ -42,7 +42,7 @@ export default function ClientsContent({ customers, stats }: { customers: Profil
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Rechercher un client..."
-            className="bg-transparent text-sm outline-none flex-1 text-[#0F172A]"
+            className="bg-transparent text-sm outline-none flex-1 text-[#020B27]"
           />
         </div>
       </div>
@@ -58,7 +58,7 @@ export default function ClientsContent({ customers, stats }: { customers: Profil
       {customers.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Users size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#0F172A] mb-2">Aucun client</p>
+          <p className="font-semibold text-[#020B27] mb-2">Aucun client</p>
           <p className="text-text-secondary text-sm">Les clients apparaîtront ici après inscription</p>
         </div>
       ) : (
@@ -111,16 +111,16 @@ function ClientRow({ client, stat }: { client: Profile; stat?: { count: number; 
     <tr className="hover:bg-gray-50 transition-colors">
       <td className="py-3 px-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-green rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">{initials}</div>
+          <div className="w-9 h-9 bg-green rounded-full flex items-center justify-center text-[#020B27] font-bold text-xs shrink-0">{initials}</div>
           <div>
-            <Link href={`/admin/clients/${client.id}`} className="text-sm font-medium text-[#0F172A] hover:text-green transition-colors">{displayName}</Link>
+            <Link href={`/admin/clients/${client.id}`} className="text-sm font-medium text-[#020B27] hover:text-green transition-colors">{displayName}</Link>
             <p className="text-xs text-text-secondary">{client.email ?? "—"}</p>
           </div>
         </div>
       </td>
       <td className="py-3 px-4"><span className="text-sm text-text-secondary">{client.phone ?? "—"}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-medium text-[#0F172A]">{count}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-medium text-[#16A34A]">{total > 0 ? formatPrice(total) : "—"}</span></td>
+      <td className="py-3 px-4"><span className="text-sm font-medium text-[#020B27]">{count}</span></td>
+      <td className="py-3 px-4"><span className="text-sm font-medium text-[#020B27]">{total > 0 ? formatPrice(total) : "—"}</span></td>
       <td className="py-3 px-4">
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${active ? "bg-green-50 text-green" : "bg-red-50 text-red-600"}`}>
           {active ? "Actif" : "Bloqué"}
@@ -145,7 +145,7 @@ function ClientRow({ client, stat }: { client: Profile; stat?: { count: number; 
               href={getClientWhatsAppUrl(client.phone, `Bonjour ${client.first_name ?? ""}`)}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#25D366] transition-colors"
+              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#16A34A] transition-colors"
               title="WhatsApp"
             >
               <MessageCircle size={15} />
@@ -167,8 +167,8 @@ function ClientRow({ client, stat }: { client: Profile; stat?: { count: number; 
 
 function StatCard({ label, value, tone }: { label: string; value: number; tone: "default" | "green" | "red" }) {
   const tones: Record<string, string> = {
-    default: "text-[#0F172A]",
-    green: "text-[#16A34A]",
+    default: "text-[#020B27]",
+    green: "text-[#020B27]",
     red: "text-red-600",
   };
   return (

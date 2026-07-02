@@ -1,6 +1,10 @@
 "use server";
 
 import { createClient } from "./server";
+import { getCurrentProfile } from "./queries";
+import { ensurePermission, ensureSensitive } from "./guards";
+import { isFullAccessRole } from "@/lib/permissions";
+import type { PermissionMatrix } from "@/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
@@ -239,7 +243,7 @@ export async function createOrder(data: {
 
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
-  const order_number = `ODMS-${year}-${random}`;
+  const order_number = `ASSADA-${year}-${random}`;
 
   const estimatedDate = new Date();
   estimatedDate.setDate(estimatedDate.getDate() + 2);
@@ -352,6 +356,8 @@ function readProductVariants(formData: FormData): VariantInput[] {
 }
 
 export async function adminCreateProduct(formData: FormData) {
+  const gate = await ensurePermission("products", "create");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
 
   const name = formData.get("name") as string;
@@ -403,6 +409,8 @@ export async function adminCreateProduct(formData: FormData) {
 }
 
 export async function adminUpdateProduct(id: string, formData: FormData) {
+  const gate = await ensurePermission("products", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
 
   const images = readProductImages(formData);
@@ -455,6 +463,8 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
 }
 
 export async function adminDeleteProduct(id: string) {
+  const gate = await ensurePermission("products", "delete");
+  if (!gate.ok) throw new Error(gate.error);
   const supabase = await createClient();
   const { error } = await supabase.from("products").delete().eq("id", id);
   if (error) throw new Error(error.message);
@@ -463,6 +473,8 @@ export async function adminDeleteProduct(id: string) {
 }
 
 export async function adminToggleProductStatus(id: string, status: string) {
+  const gate = await ensurePermission("products", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("products")
     .update({ status, updated_at: new Date().toISOString() })
@@ -475,6 +487,8 @@ export async function adminToggleProductStatus(id: string, status: string) {
 // ─── ADMIN — CATEGORIES ───────────────────────────────────────────────────────
 
 export async function adminCreateCategory(formData: FormData) {
+  const gate = await ensurePermission("categories", "create");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const name = formData.get("name") as string;
   const slug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
@@ -496,6 +510,8 @@ export async function adminCreateCategory(formData: FormData) {
 }
 
 export async function adminUpdateCategory(id: string, formData: FormData) {
+  const gate = await ensurePermission("categories", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("categories").update({
     name: formData.get("name"),
@@ -513,6 +529,8 @@ export async function adminUpdateCategory(id: string, formData: FormData) {
 }
 
 export async function adminToggleCategoryActive(id: string, is_active: boolean) {
+  const gate = await ensurePermission("categories", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("categories")
     .update({ is_active, updated_at: new Date().toISOString() })
@@ -524,6 +542,8 @@ export async function adminToggleCategoryActive(id: string, is_active: boolean) 
 }
 
 export async function adminDeleteCategory(id: string) {
+  const gate = await ensurePermission("categories", "delete");
+  if (!gate.ok) throw new Error(gate.error);
   const supabase = await createClient();
 
   // Empêche la suppression d'une catégorie contenant des produits ou des sous-catégories.
@@ -546,6 +566,8 @@ export async function adminDeleteCategory(id: string) {
 // ─── ADMIN — BRANDS ──────────────────────────────────────────────────────────
 
 export async function adminCreateBrand(formData: FormData) {
+  const gate = await ensurePermission("brands", "create");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const name = formData.get("name") as string;
   const slug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
@@ -565,6 +587,8 @@ export async function adminCreateBrand(formData: FormData) {
 }
 
 export async function adminUpdateBrand(id: string, formData: FormData) {
+  const gate = await ensurePermission("brands", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("brands").update({
     name: formData.get("name"),
@@ -580,6 +604,8 @@ export async function adminUpdateBrand(id: string, formData: FormData) {
 }
 
 export async function adminToggleBrandActive(id: string, is_active: boolean) {
+  const gate = await ensurePermission("brands", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("brands")
     .update({ is_active, updated_at: new Date().toISOString() })
@@ -591,6 +617,8 @@ export async function adminToggleBrandActive(id: string, is_active: boolean) {
 }
 
 export async function adminDeleteBrand(id: string) {
+  const gate = await ensurePermission("brands", "delete");
+  if (!gate.ok) throw new Error(gate.error);
   const supabase = await createClient();
 
   // Empêche la suppression d'une marque rattachée à des produits (évite l'orphelinage silencieux).
@@ -608,6 +636,12 @@ export async function adminDeleteBrand(id: string) {
 // ─── ADMIN — ORDERS ───────────────────────────────────────────────────────────
 
 export async function adminUpdateOrderStatus(id: string, status: string) {
+  // Annulation & passage en « livrée » = permissions sensibles ; sinon édition commande.
+  const gate =
+    status === "cancelled" ? await ensureSensitive("cancel_order")
+    : status === "delivered" ? await ensureSensitive("mark_delivered")
+    : await ensurePermission("orders", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
 
   const { error } = await supabase.from("orders").update({
@@ -631,6 +665,8 @@ export async function adminUpdateOrderStatus(id: string, status: string) {
 }
 
 export async function adminUpdatePaymentStatus(id: string, status: string) {
+  const gate = await ensurePermission("orders", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("orders").update({
     payment_status: status,
@@ -651,6 +687,8 @@ export async function adminUpdatePaymentStatus(id: string, status: string) {
 }
 
 export async function adminUpdateOrderNote(id: string, note: string) {
+  const gate = await ensurePermission("orders", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("orders").update({
     admin_note: note || null,
@@ -678,12 +716,15 @@ function getStatusMessage(status: string): string {
 // ─── ADMIN — SETTINGS ────────────────────────────────────────────────────────
 
 export async function adminUpdateSettings(formData: FormData) {
+  const gate = await ensurePermission("settings", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
 
   const keys = [
     "shop_name", "shop_email", "shop_phone", "shop_whatsapp",
     "shop_address", "shop_city", "delivery_fee", "free_delivery_threshold",
     "facebook_url", "tiktok_url", "instagram_url",
+    "invoice_format", "invoice_footer",
   ];
 
   const upserts = keys.map((key) => ({
@@ -702,6 +743,8 @@ export async function adminUpdateSettings(formData: FormData) {
 // ─── ADMIN — REVIEWS ──────────────────────────────────────────────────────────
 
 export async function adminUpdateReviewApproval(id: string, is_approved: boolean) {
+  const gate = await ensurePermission("products", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("reviews").update({ is_approved }).eq("id", id);
   if (error) return { error: error.message };
@@ -710,6 +753,8 @@ export async function adminUpdateReviewApproval(id: string, is_approved: boolean
 }
 
 export async function adminDeleteReview(id: string) {
+  const gate = await ensurePermission("products", "delete");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("reviews").delete().eq("id", id);
   if (error) return { error: error.message };
@@ -720,6 +765,8 @@ export async function adminDeleteReview(id: string) {
 // ─── ADMIN — PAYMENTS (table) ─────────────────────────────────────────────────
 
 export async function adminUpdatePayment(id: string, status: string) {
+  const gate = await ensurePermission("orders", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { data: payment, error } = await supabase
     .from("payments")
@@ -745,6 +792,8 @@ export async function adminUpdatePayment(id: string, status: string) {
 // ─── ADMIN — STOCK ────────────────────────────────────────────────────────────
 
 export async function adminUpdateStock(id: string, stock_quantity: number) {
+  const gate = await ensurePermission("products", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const qty = Math.max(0, Math.floor(stock_quantity));
 
@@ -775,6 +824,8 @@ export async function adminUpdateStock(id: string, stock_quantity: number) {
 // ─── ADMIN — USERS (rôles) ────────────────────────────────────────────────────
 
 export async function adminUpdateUserRole(id: string, role: string) {
+  const current = await getCurrentProfile();
+  if (!current || !isFullAccessRole(current.role)) return { error: "Accès refusé." };
   const supabase = await createClient();
   const { error } = await supabase.from("profiles")
     .update({ role, updated_at: new Date().toISOString() })
@@ -786,6 +837,8 @@ export async function adminUpdateUserRole(id: string, role: string) {
 }
 
 export async function adminToggleUserActive(id: string, is_active: boolean) {
+  const current = await getCurrentProfile();
+  if (!current || !isFullAccessRole(current.role)) return { error: "Accès refusé." };
   const supabase = await createClient();
   const { error } = await supabase.from("profiles")
     .update({ is_active, updated_at: new Date().toISOString() })
@@ -799,6 +852,8 @@ export async function adminToggleUserActive(id: string, is_active: boolean) {
 // ─── ADMIN — MESSAGES ─────────────────────────────────────────────────────────
 
 export async function adminMarkMessageRead(id: string, is_read: boolean) {
+  const gate = await ensurePermission("clients", "edit");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("contact_messages").update({ is_read }).eq("id", id);
   if (error) return { error: error.message };
@@ -807,10 +862,107 @@ export async function adminMarkMessageRead(id: string, is_read: boolean) {
 }
 
 export async function adminDeleteMessage(id: string) {
+  const gate = await ensurePermission("clients", "delete");
+  if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("contact_messages").delete().eq("id", id);
   if (error) return { error: error.message };
   revalidatePath("/admin/messages");
+  return { success: true };
+}
+
+// ─── ADMIN — LIVREURS (delivery agents) ───────────────────────────────────────
+
+export async function adminCreateDeliveryAgent(formData: FormData) {
+  const gate = await ensurePermission("delivery", "create");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+  const { error } = await supabase.from("delivery_agents").insert({
+    name: (formData.get("name") as string)?.trim(),
+    phone: (formData.get("phone") as string)?.trim(),
+    zones: ((formData.get("zones") as string) ?? "").trim() || null,
+    note: ((formData.get("note") as string) ?? "").trim() || null,
+    is_active: formData.get("is_active") === "on" || formData.get("is_active") === "true",
+  });
+  if (error) return { error: error.message };
+  revalidatePath("/admin/livreurs");
+  return { success: true };
+}
+
+export async function adminUpdateDeliveryAgent(id: string, formData: FormData) {
+  const gate = await ensurePermission("delivery", "edit");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+  const { error } = await supabase.from("delivery_agents").update({
+    name: (formData.get("name") as string)?.trim(),
+    phone: (formData.get("phone") as string)?.trim(),
+    zones: ((formData.get("zones") as string) ?? "").trim() || null,
+    note: ((formData.get("note") as string) ?? "").trim() || null,
+    updated_at: new Date().toISOString(),
+  }).eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/livreurs");
+  return { success: true };
+}
+
+export async function adminToggleDeliveryAgentActive(id: string, is_active: boolean) {
+  const gate = await ensurePermission("delivery", "edit");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+  const { error } = await supabase.from("delivery_agents")
+    .update({ is_active, updated_at: new Date().toISOString() }).eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/livreurs");
+  return { success: true };
+}
+
+export async function adminDeleteDeliveryAgent(id: string) {
+  const gate = await ensurePermission("delivery", "delete");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+  const { error } = await supabase.from("delivery_agents").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/livreurs");
+  return { success: true };
+}
+
+export async function adminAssignOrderAgent(orderId: string, agentId: string) {
+  const gate = await ensurePermission("delivery", "edit");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+  const { error } = await supabase.from("orders")
+    .update({ delivery_agent_id: agentId || null, updated_at: new Date().toISOString() })
+    .eq("id", orderId);
+  if (error) return { error: error.message };
+  revalidatePath(`/admin/commandes/${orderId}`);
+  revalidatePath("/admin/livreurs");
+  return { success: true };
+}
+
+export async function adminUpdateOrderChannel(orderId: string, channel: string) {
+  const gate = await ensurePermission("orders", "edit");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+  const { error } = await supabase.from("orders")
+    .update({ channel, updated_at: new Date().toISOString() }).eq("id", orderId);
+  if (error) return { error: error.message };
+  revalidatePath(`/admin/commandes/${orderId}`);
+  return { success: true };
+}
+
+// ─── ADMIN — PERMISSIONS (employés) ────────────────────────────────────────────
+
+/** Met à jour la matrice de permissions d'un employé. Réservé aux admins. */
+export async function adminUpdateEmployeePermissions(userId: string, permissions: PermissionMatrix) {
+  const current = await getCurrentProfile();
+  if (!current || !isFullAccessRole(current.role)) return { error: "Accès refusé." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("profiles")
+    .update({ permissions, updated_at: new Date().toISOString() })
+    .eq("id", userId);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/permissions");
   return { success: true };
 }
 
@@ -878,15 +1030,15 @@ export async function generateProductInfo(
   if (!apiKey) return { error: "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local." };
   if (!imageUrl) return { error: "Aucune image à analyser." };
 
-  const prompt = `Analyse cette photo de produit destinée à la boutique en ligne Odm's Shopping (Gabon, prix en FCFA).
-À partir de ce que tu vois (type de produit, marque visible, couleur, matière, style), génère une fiche produit commerciale en français pour le marché gabonais.
+  const prompt = `Analyse cette photo de produit destinée à la boutique en ligne Assada (Casablanca, prix en DH).
+À partir de ce que tu vois (type de produit, marque visible, couleur, matière, style), génère une fiche produit commerciale en français pour le marché marocain (Casablanca).
 
 Réponds STRICTEMENT en JSON (sans markdown) avec ces clés :
 - "name": nom court et précis du produit (max 60 caractères), inclut la marque uniquement si elle est clairement visible.
 - "short_description": accroche d'une seule phrase (max 120 caractères).
 - "description": description détaillée et vendeuse (3 à 5 phrases) mettant en avant caractéristiques et bénéfices.
-- "seo_title": titre SEO au format « {Produit} au Gabon | Odm's Shopping » (max 60 caractères).
-- "seo_description": meta description SEO (max 155 caractères) incitant à l'achat, mentionnant livraison rapide partout au Gabon et paiement à la livraison.
+- "seo_title": titre SEO au format « {Produit} à Casablanca | Assada » (max 60 caractères).
+- "seo_description": meta description SEO (max 155 caractères) incitant à l'achat, mentionnant livraison rapide partout à Casablanca et paiement à la livraison.
 
 N'invente jamais une marque dont tu n'es pas sûr.`;
 
@@ -905,7 +1057,7 @@ N'invente jamais une marque dont tu n'es pas sûr.`;
           {
             role: "system",
             content:
-              "Tu es un expert e-commerce qui rédige des fiches produits en français, commerciales, claires et optimisées SEO pour Odm's Shopping, une boutique en ligne au Gabon.",
+              "Tu es un expert e-commerce qui rédige des fiches produits en français, commerciales, claires et optimisées SEO pour Assada, une boutique en ligne à Casablanca.",
           },
           {
             role: "user",

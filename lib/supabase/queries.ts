@@ -2,7 +2,7 @@ import { createClient } from "./server";
 import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD } from "@/lib/constants";
 import type {
   Product, Category, Brand, Order, Profile, Address,
-  Review, Payment, ContactMessage,
+  Review, Payment, ContactMessage, DeliveryAgent,
 } from "@/types";
 
 function logError(fn: string, error: unknown) {
@@ -448,6 +448,40 @@ export async function getAdminMessages(): Promise<ContactMessage[]> {
 
   if (error) { logError("getAdminMessages", error); return []; }
   return (data ?? []) as ContactMessage[];
+}
+
+// ─── DELIVERY AGENTS (livreurs) ───────────────────────────────────────────────
+
+export async function getDeliveryAgents(): Promise<DeliveryAgent[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("delivery_agents")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) { logError("getDeliveryAgents", error); return []; }
+  return (data ?? []) as DeliveryAgent[];
+}
+
+/** Stats par livreur : commandes assignées, livrées et montant encaissé (livrées). */
+export async function getDeliveryAgentStats(): Promise<
+  Record<string, { assigned: number; delivered: number; collected: number }>
+> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("orders")
+    .select("delivery_agent_id, order_status, total_amount");
+  if (error) { logError("getDeliveryAgentStats", error); return {}; }
+  const stats: Record<string, { assigned: number; delivered: number; collected: number }> = {};
+  for (const o of (data ?? []) as { delivery_agent_id: string | null; order_status: string; total_amount: number }[]) {
+    if (!o.delivery_agent_id) continue;
+    if (!stats[o.delivery_agent_id]) stats[o.delivery_agent_id] = { assigned: 0, delivered: 0, collected: 0 };
+    stats[o.delivery_agent_id].assigned += 1;
+    if (o.order_status === "delivered") {
+      stats[o.delivery_agent_id].delivered += 1;
+      stats[o.delivery_agent_id].collected += o.total_amount ?? 0;
+    }
+  }
+  return stats;
 }
 
 // ─── SETTINGS ────────────────────────────────────────────────────────────────

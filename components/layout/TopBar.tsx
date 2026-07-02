@@ -21,12 +21,12 @@ export default function TopBar() {
 
         <div className="flex items-center gap-1.5 text-[#22C55E] font-medium">
           <Truck size={13} />
-          <span>Livraison rapide partout au Gabon</span>
+          <span>Livraison rapide partout à Casablanca</span>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
-            href={`https://www.tiktok.com/@odmsshopping`}
+            href={`https://www.tiktok.com/@assada`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
@@ -37,7 +37,7 @@ export default function TopBar() {
             </svg>
           </Link>
           <Link
-            href={`https://www.facebook.com/odmsshopping`}
+            href={`https://www.facebook.com/assada`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"

@@ -68,7 +68,7 @@ export default function PaiementsContent({ payments }: { payments: Payment[] }) 
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-[#0F172A]">Paiements</h1>
+        <h1 className="text-xl font-bold text-[#020B27]">Paiements</h1>
         <p className="text-text-secondary text-sm mt-0.5">{payments.length} transaction(s) enregistrée(s)</p>
       </div>
 
@@ -105,7 +105,7 @@ export default function PaiementsContent({ payments }: { payments: Payment[] }) 
       {filtered.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <CreditCard size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#0F172A]">Aucun paiement</p>
+          <p className="font-semibold text-[#020B27]">Aucun paiement</p>
         </div>
       ) : (
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
@@ -132,7 +132,7 @@ export default function PaiementsContent({ payments }: { payments: Payment[] }) 
               <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 disabled:opacity-40 disabled:hover:bg-transparent transition-colors">
                 <ChevronLeft size={16} />
               </button>
-              <span className="px-2 text-[#0F172A] font-medium">{currentPage} / {totalPages}</span>
+              <span className="px-2 text-[#020B27] font-medium">{currentPage} / {totalPages}</span>
               <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 disabled:opacity-40 disabled:hover:bg-transparent transition-colors">
                 <ChevronRight size={16} />
               </button>
@@ -157,16 +157,16 @@ function PaymentRow({ payment }: { payment: Payment }) {
     <tr className="hover:bg-gray-50 transition-colors">
       <td className="py-3 px-4">
         {payment.order ? (
-          <Link href={`/admin/commandes/${payment.order.id}`} className="text-sm font-bold text-[#0F172A] hover:text-green transition-colors">
+          <Link href={`/admin/commandes/${payment.order.id}`} className="text-sm font-bold text-[#020B27] hover:text-green transition-colors">
             {payment.order.order_number}
           </Link>
         ) : (
-          <p className="text-sm font-bold text-[#0F172A]">—</p>
+          <p className="text-sm font-bold text-[#020B27]">—</p>
         )}
         <p className="text-xs text-text-secondary">{payment.order?.customer_name ?? "—"}</p>
       </td>
       <td className="py-3 px-4"><span className="text-sm text-text-secondary whitespace-nowrap">{METHOD_LABELS[payment.method] ?? payment.method}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-bold text-[#0F172A] whitespace-nowrap">{formatPrice(payment.amount)}</span></td>
+      <td className="py-3 px-4"><span className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(payment.amount)}</span></td>
       <td className="py-3 px-4"><span className="text-xs text-text-secondary">{payment.reference ?? "—"}</span></td>
       <td className="py-3 px-4"><span className="text-sm text-text-secondary whitespace-nowrap">{formatDate(payment.created_at)}</span></td>
       <td className="py-3 px-4">
@@ -188,7 +188,7 @@ function Kpi({ icon: Icon, label, value, color }: { icon: typeof CreditCard; lab
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex items-center gap-3">
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${color}`}><Icon size={18} /></div>
       <div className="min-w-0">
-        <p className="text-lg font-extrabold text-[#0F172A] leading-none truncate">{value}</p>
+        <p className="text-lg font-extrabold text-[#020B27] leading-none truncate">{value}</p>
         <p className="text-xs text-text-secondary mt-1">{label}</p>
       </div>
     </div>

@@ -11,7 +11,7 @@ const STATUS_COLORS: Record<string, string> = {
   preparing: "#8b5cf6",
   shipped: "#06b6d4",
   out_for_delivery: "#f59e0b",
-  delivered: "#16A34A",
+  delivered: "#020B27",
   cancelled: "#EF4444",
   returned: "#94a3b8",
 };
@@ -51,7 +51,7 @@ export default function OrderDonutChart({ statusCounts }: Props) {
             <circle cx={SIZE / 2} cy={SIZE / 2} r={RADIUS} fill="none" stroke="#f1f5f9" strokeWidth={STROKE} />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-2xl font-extrabold text-[#0F172A]">0</span>
+            <span className="text-2xl font-extrabold text-[#020B27]">0</span>
             <span className="text-xs text-text-secondary">Total</span>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function OrderDonutChart({ statusCounts }: Props) {
           })}
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-2xl font-extrabold text-[#0F172A]">{total}</span>
+          <span className="text-2xl font-extrabold text-[#020B27]">{total}</span>
           <span className="text-xs text-text-secondary">Total</span>
         </div>
       </div>
@@ -100,7 +100,7 @@ export default function OrderDonutChart({ statusCounts }: Props) {
               <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: seg.color }} />
               <span className="text-text-secondary">{seg.label}</span>
             </div>
-            <span className="font-medium text-[#0F172A] shrink-0 whitespace-nowrap">
+            <span className="font-medium text-[#020B27] shrink-0 whitespace-nowrap">
               {seg.value}{" "}
               <span className="text-text-secondary font-normal">
                 ({Math.round((seg.value / total) * 100)}%)

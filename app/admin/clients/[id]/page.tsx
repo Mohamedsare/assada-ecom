@@ -5,6 +5,7 @@ import {
   ArrowLeft, Mail, Phone, User, MapPin, ShoppingBag, MessageCircle, Calendar,
 } from "lucide-react";
 import { getProfileById, getUserOrders, getUserAddresses } from "@/lib/supabase/queries";
+import { requirePermission } from "@/lib/supabase/guards";
 import { formatPrice, formatDate, getClientWhatsAppUrl } from "@/lib/utils";
 import { ORDER_STATUS_LABELS } from "@/lib/constants";
 
@@ -16,12 +17,13 @@ const STATUS_COLOR: Record<string, string> = {
   preparing:        "bg-purple-100 text-purple-700",
   shipped:          "bg-indigo-100 text-indigo-700",
   out_for_delivery: "bg-orange-100 text-orange-700",
-  delivered:        "bg-green-100 text-[#16A34A]",
+  delivered:        "bg-green-100 text-[#020B27]",
   cancelled:        "bg-red-100 text-red-700",
   returned:         "bg-gray-100 text-gray-700",
 };
 
 export default async function AdminClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  await requirePermission("clients", "view");
   const { id } = await params;
   const profile = await getProfileById(id);
   if (!profile) notFound();
@@ -37,13 +39,13 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <Link href="/admin/clients" className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0F172A] transition-colors">
+          <Link href="/admin/clients" className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors">
             <ArrowLeft size={18} />
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-green rounded-full flex items-center justify-center text-white font-bold shrink-0">{initials}</div>
+            <div className="w-11 h-11 bg-green rounded-full flex items-center justify-center text-[#020B27] font-bold shrink-0">{initials}</div>
             <div>
-              <h1 className="text-2xl font-bold text-[#0F172A]">{displayName}</h1>
+              <h1 className="text-2xl font-bold text-[#020B27]">{displayName}</h1>
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${profile.is_active ? "bg-green-50 text-green" : "bg-red-50 text-red-600"}`}>
                 {profile.is_active ? "Compte actif" : "Compte bloqué"}
               </span>
@@ -52,10 +54,10 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
         </div>
         {profile.phone && (
           <Link
-            href={getClientWhatsAppUrl(profile.phone, `Bonjour ${profile.first_name ?? ""}, ici Odm's Shopping.`)}
+            href={getClientWhatsAppUrl(profile.phone, `Bonjour ${profile.first_name ?? ""}, ici Assada.`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 border border-gray-200 text-[#0F172A] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#25D366] hover:text-[#25D366] transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#16A34A] hover:text-[#16A34A] transition-colors"
           >
             <MessageCircle size={16} /> WhatsApp
           </Link>
@@ -85,7 +87,7 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
                     className="flex items-center justify-between gap-3 py-3 hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors"
                   >
                     <div className="min-w-0">
-                      <p className="text-sm font-bold text-[#0F172A]">{o.order_number}</p>
+                      <p className="text-sm font-bold text-[#020B27]">{o.order_number}</p>
                       <p className="text-xs text-text-secondary flex items-center gap-1">
                         <Calendar size={11} /> {formatDate(o.created_at)} · {o.items?.length ?? 0} article(s)
                       </p>
@@ -94,7 +96,7 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
                       <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_COLOR[o.order_status]}`}>
                         {ORDER_STATUS_LABELS[o.order_status]}
                       </span>
-                      <span className="text-sm font-bold text-[#16A34A]">{formatPrice(o.total_amount)}</span>
+                      <span className="text-sm font-bold text-[#020B27]">{formatPrice(o.total_amount)}</span>
                     </div>
                   </Link>
                 ))}
@@ -119,7 +121,7 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
               addresses.map((a) => (
                 <div key={a.id} className="text-sm border border-gray-100 rounded-lg p-3">
                   <div className="flex items-center justify-between">
-                    <p className="font-medium text-[#0F172A]">{a.full_name}</p>
+                    <p className="font-medium text-[#020B27]">{a.full_name}</p>
                     {a.is_default && <span className="text-[10px] bg-green-50 text-green px-1.5 py-0.5 rounded-full font-medium">Par défaut</span>}
                   </div>
                   <p className="text-text-secondary">{a.phone}</p>
@@ -139,7 +141,7 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
 function Card({ title, icon, children }: { title: string; icon?: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
-      <h2 className="font-semibold text-[#0F172A] mb-4 flex items-center gap-2">
+      <h2 className="font-semibold text-[#020B27] mb-4 flex items-center gap-2">
         {icon && <span className="text-green">{icon}</span>}{title}
       </h2>
       <div className="space-y-3">{children}</div>
@@ -149,7 +151,7 @@ function Card({ title, icon, children }: { title: string; icon?: React.ReactNode
 
 function InfoLine({ icon, value }: { icon: React.ReactNode; value: string }) {
   return (
-    <div className="flex items-center gap-2 text-sm text-[#0F172A]">
+    <div className="flex items-center gap-2 text-sm text-[#020B27]">
       <span className="text-gray-400">{icon}</span>{value}
     </div>
   );
@@ -159,7 +161,7 @@ function StatCard({ label, value, tone = "default" }: { label: string; value: st
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
       <p className="text-xs text-text-secondary mb-1">{label}</p>
-      <p className={`text-xl font-bold ${tone === "green" ? "text-[#16A34A]" : "text-[#0F172A]"}`}>{value}</p>
+      <p className={`text-xl font-bold ${tone === "green" ? "text-[#020B27]" : "text-[#020B27]"}`}>{value}</p>
     </div>
   );
 }

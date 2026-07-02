@@ -14,14 +14,14 @@ export default function Footer() {
             <Link href="/" className="inline-flex items-center mb-4">
               <Image
                 src="/logo1.png"
-                alt="Odm's Shopping"
+                alt="Assada"
                 width={180}
                 height={120}
                 className="h-14 w-auto object-contain"
               />
             </Link>
             <p className="text-sm leading-relaxed mb-4">
-              Votre boutique en ligne n°1 au Gabon. Chaussures, vêtements, accessoires et électroniques avec livraison rapide partout au Gabon.
+              Votre boutique cosmétique à Casablanca. Parfums, soins, maquillage et hygiène avec livraison rapide partout à Casablanca.
             </p>
             <div className="flex flex-col gap-2 text-sm">
               <a href={`tel:${SITE_PHONE}`} className="flex items-center gap-2 hover:text-[#22C55E] transition-colors">
@@ -34,7 +34,7 @@ export default function Footer() {
               </a>
               <span className="flex items-center gap-2">
                 <MapPin size={14} />
-                Libreville, Gabon
+                Galerie Derb Ghalef, Bd Abdelmoumen, Casablanca
               </span>
             </div>
           </div>
@@ -65,12 +65,12 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4">Catégories</h3>
             <ul className="space-y-2 text-sm">
               {[
-                { label: "Chaussures Homme", href: "/boutique?categorie=chaussures-homme" },
-                { label: "Chaussures Femme", href: "/boutique?categorie=chaussures-femme" },
-                { label: "Vêtements Homme", href: "/boutique?categorie=vetements-homme" },
-                { label: "Vêtements Femme", href: "/boutique?categorie=vetements-femme" },
-                { label: "Électroniques", href: "/boutique?categorie=electroniques" },
-                { label: "PC & Accessoires", href: "/boutique?categorie=pc-accessoires" },
+                { label: "Parfums", href: "/boutique?categorie=parfums" },
+                { label: "Maquillage", href: "/boutique?categorie=maquillage" },
+                { label: "Soins du visage", href: "/boutique?categorie=soins-visage" },
+                { label: "Soins des cheveux", href: "/boutique?categorie=soins-cheveux" },
+                { label: "Hygiène", href: "/boutique?categorie=hygiene" },
+                { label: "Cadeaux", href: "/boutique?categorie=cadeaux" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="hover:text-[#22C55E] transition-colors">
@@ -104,13 +104,13 @@ export default function Footer() {
             <div>
               <h4 className="text-white font-medium mb-3 text-sm">Suivez-nous</h4>
               <div className="flex gap-3">
-                <Link href="https://www.tiktok.com/@odmsshopping" target="_blank" rel="noopener noreferrer"
+                <Link href="https://www.tiktok.com/@assada" target="_blank" rel="noopener noreferrer"
                   className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#16A34A] transition-colors">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.17 8.17 0 004.78 1.52V6.79a4.85 4.85 0 01-1.01-.1z"/>
                   </svg>
                 </Link>
-                <Link href="https://www.facebook.com/odmsshopping" target="_blank" rel="noopener noreferrer"
+                <Link href="https://www.facebook.com/assada" target="_blank" rel="noopener noreferrer"
                   className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center hover:bg-[#16A34A] transition-colors">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -132,9 +132,7 @@ export default function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
             <span className="text-gray-500">Moyens de paiement :</span>
             {[
-              { src: "/paiments/paiement-livraison.jpeg", alt: "Espèces à la livraison" },
-              { src: "/paiments/airtel-money.jpeg", alt: "Airtel Money" },
-              { src: "/paiments/moov-money.jpeg", alt: "Moov Money" },
+              { src: "/paiments/paiement-livraison.jpeg", alt: "Paiement à la livraison" },
             ].map((p) => (
               <span key={p.src} className="relative h-8 w-12 overflow-hidden rounded bg-white">
                 <Image src={p.src} alt={p.alt} fill className="object-contain p-0.5" sizes="48px" />
@@ -145,7 +143,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="border-t border-white/10 pt-5 text-center text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} Odm&apos;s Shopping — Tous droits réservés — Libreville, Gabon</p>
+          <p>© {new Date().getFullYear()} Assada — Tous droits réservés — Casablanca, Maroc</p>
         </div>
       </div>
     </footer>

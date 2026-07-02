@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Save, Store, Truck, Share2 } from "lucide-react";
+import { Save, Store, Truck, Share2, Receipt } from "lucide-react";
 import { adminUpdateSettings } from "@/lib/supabase/actions";
 
 export interface SettingsValues {
@@ -16,6 +16,8 @@ export interface SettingsValues {
   facebook_url: string;
   tiktok_url: string;
   instagram_url: string;
+  invoice_format: string;
+  invoice_footer: string;
 }
 
 const inputCls =
@@ -50,7 +52,7 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
       <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
         <div className="flex items-center gap-2 mb-4">
           <Store size={18} className="text-green" />
-          <h2 className="font-semibold text-[#0F172A]">Informations générales</h2>
+          <h2 className="font-semibold text-[#020B27]">Informations générales</h2>
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
           <Field label="Nom de la boutique" name="shop_name" defaultValue={initial.shop_name} />
@@ -66,11 +68,29 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
       <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
         <div className="flex items-center gap-2 mb-4">
           <Truck size={18} className="text-green" />
-          <h2 className="font-semibold text-[#0F172A]">Livraison</h2>
+          <h2 className="font-semibold text-[#020B27]">Livraison</h2>
         </div>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="Frais de livraison (FCFA)" name="delivery_fee" type="number" defaultValue={initial.delivery_fee} />
-          <Field label="Livraison gratuite à partir de (FCFA)" name="free_delivery_threshold" type="number" defaultValue={initial.free_delivery_threshold} />
+          <Field label="Frais de livraison (DH)" name="delivery_fee" type="number" defaultValue={initial.delivery_fee} />
+          <Field label="Livraison gratuite à partir de (DH)" name="free_delivery_threshold" type="number" defaultValue={initial.free_delivery_threshold} />
+        </div>
+      </div>
+
+      {/* Facturation */}
+      <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <Receipt size={18} className="text-green" />
+          <h2 className="font-semibold text-[#020B27]">Facturation</h2>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="invoice_format" className="block text-sm font-medium text-[#020B27] mb-1.5">Format de facture</label>
+            <select id="invoice_format" name="invoice_format" defaultValue={initial.invoice_format} className={inputCls}>
+              <option value="a4">A4</option>
+              <option value="thermique">Thermique (80 mm)</option>
+            </select>
+          </div>
+          <Field label="Texte de pied de facture" name="invoice_footer" defaultValue={initial.invoice_footer} />
         </div>
       </div>
 
@@ -78,7 +98,7 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
       <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
         <div className="flex items-center gap-2 mb-4">
           <Share2 size={18} className="text-green" />
-          <h2 className="font-semibold text-[#0F172A]">Réseaux sociaux</h2>
+          <h2 className="font-semibold text-[#020B27]">Réseaux sociaux</h2>
         </div>
         <div className="grid sm:grid-cols-3 gap-4">
           <Field label="Facebook" name="facebook_url" type="url" defaultValue={initial.facebook_url} />
@@ -91,7 +111,7 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 bg-green hover:bg-[#15803d] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green hover:bg-[#15803D] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
         >
           <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer les modifications"}
         </button>
@@ -109,7 +129,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="block text-sm font-medium text-[#0F172A] mb-1.5">{label}</label>
+      <label htmlFor={name} className="block text-sm font-medium text-[#020B27] mb-1.5">{label}</label>
       <input id={name} name={name} type={type} defaultValue={defaultValue} className={inputCls} />
     </div>
   );

@@ -48,11 +48,11 @@ export default function PanierPage() {
           <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShoppingCart size={40} className="text-gray-300" />
           </div>
-          <h1 className="text-2xl font-bold text-[#0F172A] mb-2">Votre panier est vide</h1>
+          <h1 className="text-2xl font-bold text-[#020B27] mb-2">Votre panier est vide</h1>
           <p className="text-[#64748B] mb-8">Découvrez nos produits et commencez vos achats</p>
           <Link
             href="/boutique"
-            className="inline-flex items-center gap-2 bg-[#16A34A] text-white px-8 py-4 rounded-2xl font-semibold text-base active:scale-95 transition-all"
+            className="inline-flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-8 py-4 rounded-2xl font-semibold text-base active:scale-95 transition-all"
           >
             <ShoppingCart size={18} />
             Voir la boutique
@@ -69,7 +69,7 @@ export default function PanierPage() {
       <div
         className="relative text-white py-10 md:py-14 px-4 overflow-hidden"
         style={{
-          backgroundImage: "url('/banners/panier.png')",
+          backgroundImage: "url('/banners/banner2-accueil.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -98,7 +98,7 @@ export default function PanierPage() {
 
             {/* Header articles */}
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-[#0F172A]">
+              <h2 className="font-bold text-[#020B27]">
                 Articles <span className="text-gray-400 font-normal">({items.length})</span>
               </h2>
               <button
@@ -139,7 +139,7 @@ export default function PanierPage() {
                               {item.product.category.name}
                             </p>
                           )}
-                          <h3 className="font-semibold text-[#0F172A] text-sm leading-snug line-clamp-2">
+                          <h3 className="font-semibold text-[#020B27] text-sm leading-snug line-clamp-2">
                             {item.product.name}
                           </h3>
                           {item.variant && (
@@ -178,7 +178,7 @@ export default function PanierPage() {
                       >
                         <Minus size={16} />
                       </button>
-                      <span className="w-10 text-center text-sm font-bold text-[#0F172A]">
+                      <span className="w-10 text-center text-sm font-bold text-[#020B27]">
                         {item.quantity}
                       </span>
                       <button
@@ -191,7 +191,7 @@ export default function PanierPage() {
 
                     {/* Prix */}
                     <div className="text-right">
-                      <p className="font-bold text-[#16A34A] text-base">
+                      <p className="font-bold text-[#020B27] text-base">
                         {formatPrice(unitPrice * item.quantity)}
                       </p>
                       {item.quantity > 1 && (
@@ -210,7 +210,7 @@ export default function PanierPage() {
           {/* ── Récapitulatif (sidebar desktop / card mobile) ── */}
           <div className="lg:sticky lg:top-24 lg:self-start space-y-4">
             <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-              <h2 className="font-bold text-[#0F172A] text-lg mb-5">Récapitulatif</h2>
+              <h2 className="font-bold text-[#020B27] text-lg mb-5">Récapitulatif</h2>
 
               <div className="space-y-3 mb-4">
                 <div className="flex justify-between text-sm">
@@ -241,7 +241,7 @@ export default function PanierPage() {
 
               <div className="border-t border-gray-100 pt-4 mb-5">
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-[#0F172A] text-base">Total</span>
+                  <span className="font-bold text-[#020B27] text-base">Total</span>
                   <span className="font-extrabold text-xl text-green">{formatPrice(total)}</span>
                 </div>
               </div>
@@ -249,14 +249,14 @@ export default function PanierPage() {
               {/* CTA desktop */}
               <Link
                 href="/checkout"
-                className="w-full flex items-center justify-center gap-2 bg-green text-white py-4 rounded-2xl font-bold text-base hover:bg-[#15803d] active:scale-95 transition-all"
+                className="w-full flex items-center justify-center gap-2 bg-green text-[#020B27] py-4 rounded-2xl font-bold text-base hover:bg-[#15803D] active:scale-95 transition-all"
               >
                 Passer la commande
                 <ChevronRight size={18} />
               </Link>
               <Link
                 href="/boutique"
-                className="w-full flex items-center justify-center gap-2 border border-gray-200 text-[#0F172A] py-3.5 rounded-2xl font-medium text-sm mt-3 hover:bg-gray-50 active:scale-95 transition-all"
+                className="w-full flex items-center justify-center gap-2 border border-gray-200 text-[#020B27] py-3.5 rounded-2xl font-medium text-sm mt-3 hover:bg-gray-50 active:scale-95 transition-all"
               >
                 Continuer mes achats
               </Link>
@@ -289,7 +289,7 @@ export default function PanierPage() {
           </div>
           <Link
             href="/checkout"
-            className="flex-1 flex items-center justify-center gap-2 bg-green text-white py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all"
+            className="flex-1 flex items-center justify-center gap-2 bg-green text-[#020B27] py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all"
           >
             Commander
             <ChevronRight size={18} />

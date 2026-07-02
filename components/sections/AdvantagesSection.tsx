@@ -4,13 +4,13 @@ const advantages = [
   {
     icon: CreditCard,
     title: "Paiement à la livraison",
-    description: "Espèces, Airtel Money ou Moov Money",
+    description: "En espèces à la réception",
     color: "text-blue-600 bg-blue-50",
   },
   {
     icon: Truck,
     title: "Livraison rapide",
-    description: "Partout au Gabon en 24 à 48h",
+    description: "Partout à Casablanca en 24 à 48h",
     color: "text-green bg-green/10",
   },
   {
@@ -42,7 +42,7 @@ export default function AdvantagesSection() {
                 <Icon size={18} />
               </div>
               <div className="min-w-0">
-                <p className="font-semibold text-[#0F172A] text-xs leading-tight">{adv.title}</p>
+                <p className="font-semibold text-[#020B27] text-xs leading-tight">{adv.title}</p>
                 <p className="text-text-secondary text-[11px] mt-0.5 leading-tight">{adv.description}</p>
               </div>
             </div>
