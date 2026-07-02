@@ -118,14 +118,14 @@ function StockRow({ product }: { product: Product }) {
 
   return (
     <tr className="hover:bg-gray-50 transition-colors">
-      <td className="py-3 px-4">
-        <Link href={`/admin/produits/${product.id}/modifier`} className="text-sm font-medium text-[#020B27] hover:text-green transition-colors line-clamp-1">{product.name}</Link>
+      <td className="py-3 px-4 whitespace-nowrap">
+        <Link href={`/admin/produits/${product.id}/modifier`} className="text-sm font-medium text-[#020B27] hover:text-green transition-colors">{product.name}</Link>
         <p className="text-xs text-text-secondary">{product.category?.name ?? "—"}</p>
       </td>
-      <td className="py-3 px-4"><span className="text-xs text-text-secondary">{product.sku ?? "—"}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-semibold text-[#020B27]">{formatPrice(product.current_price)}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-bold text-[#020B27]">{stock}</span></td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-xs text-text-secondary">{product.sku ?? "—"}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-semibold text-[#020B27]">{formatPrice(product.current_price)}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-bold text-[#020B27]">{stock}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap">
         <div className="flex items-center gap-1.5">
           <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
             <button onClick={() => setStock((s) => Math.max(0, s - 1))} className="w-7 h-7 flex items-center justify-center hover:bg-gray-50" aria-label="Diminuer"><Minus size={12} /></button>
@@ -145,7 +145,7 @@ function StockRow({ product }: { product: Product }) {
           {saved && <Check size={15} className="text-green" />}
         </div>
       </td>
-      <td className="py-3 px-4"><span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badge.cls}`}>{badge.label}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badge.cls}`}>{badge.label}</span></td>
     </tr>
   );
 }

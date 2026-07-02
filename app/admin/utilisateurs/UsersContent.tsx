@@ -135,7 +135,7 @@ function UserRow({ user, isSelf }: { user: Profile; isSelf: boolean }) {
 
   return (
     <tr className="hover:bg-gray-50 transition-colors">
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-night rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">{initials}</div>
           <div>
@@ -144,12 +144,12 @@ function UserRow({ user, isSelf }: { user: Profile; isSelf: boolean }) {
           </div>
         </div>
       </td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full capitalize ${ROLE_BADGE[role] ?? "bg-gray-100"}`}>
           {roleLabel(role)}
         </span>
       </td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <select
           value={role}
           disabled={isSelf || pending}
@@ -159,7 +159,7 @@ function UserRow({ user, isSelf }: { user: Profile; isSelf: boolean }) {
           {ROLE_OPTIONS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
         </select>
       </td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <button
           onClick={toggleActive}
           disabled={isSelf || pending}
@@ -168,7 +168,7 @@ function UserRow({ user, isSelf }: { user: Profile; isSelf: boolean }) {
           {active ? "Actif" : "Bloqué"}
         </button>
       </td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <span className="text-sm text-text-secondary whitespace-nowrap">
           {new Date(user.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
         </span>

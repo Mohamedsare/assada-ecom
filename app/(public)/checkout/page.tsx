@@ -182,7 +182,7 @@ export default function CheckoutPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-28 lg:pb-12">
+    <div className="min-h-screen bg-[#F8FAFC] pb-44 lg:pb-12">
       <div className="bg-[#020B27] text-white px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link href="/panier" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition-colors">
@@ -401,7 +401,10 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      <div className="lg:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 px-4 py-3 z-40 shadow-2xl">
+      <div
+        className="lg:hidden fixed inset-x-0 bg-white border-t border-gray-200 px-4 py-3 z-40 shadow-2xl"
+        style={{ bottom: "calc(4rem + env(safe-area-inset-bottom))" }}
+      >
         <div className="flex gap-3">
           {step > 1 && (
             <button onClick={goPrev}

@@ -191,7 +191,7 @@ export default function ProductsTable({
               <tbody className="divide-y divide-gray-50">
                 {paged.map((product) => (
                   <tr key={product.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
                           {product.main_image_url ? (
@@ -201,7 +201,7 @@ export default function ProductsTable({
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-[#020B27] truncate max-w-48">{product.name}</p>
+                          <p className="text-sm font-medium text-[#020B27]">{product.name}</p>
                           <div className="flex items-center gap-1.5">
                             {product.brand && <p className="text-xs text-[#64748B]">{product.brand.name}</p>}
                             {product.variants && product.variants.length > 0 && (
@@ -211,16 +211,16 @@ export default function ProductsTable({
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <span className="text-sm text-[#64748B]">{product.category?.name ?? "—"}</span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <p className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(product.current_price)}</p>
                       {product.old_price && (
                         <p className="text-xs text-gray-400 line-through whitespace-nowrap">{formatPrice(product.old_price)}</p>
                       )}
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <span className={`text-sm font-medium ${
                         product.stock_quantity === 0 ? "text-red-600"
                           : product.stock_quantity <= LOW_STOCK ? "text-orange-600"
@@ -229,10 +229,10 @@ export default function ProductsTable({
                         {product.stock_quantity}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <StatusMenu product={product} />
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
                         <Link href={`/produit/${product.slug}`} target="_blank" className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Voir sur le site">
                           <Eye size={15} />

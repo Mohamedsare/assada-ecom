@@ -155,7 +155,7 @@ function PaymentRow({ payment }: { payment: Payment }) {
 
   return (
     <tr className="hover:bg-gray-50 transition-colors">
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         {payment.order ? (
           <Link href={`/admin/commandes/${payment.order.id}`} className="text-sm font-bold text-[#020B27] hover:text-green transition-colors">
             {payment.order.order_number}
@@ -165,11 +165,11 @@ function PaymentRow({ payment }: { payment: Payment }) {
         )}
         <p className="text-xs text-text-secondary">{payment.order?.customer_name ?? "—"}</p>
       </td>
-      <td className="py-3 px-4"><span className="text-sm text-text-secondary whitespace-nowrap">{METHOD_LABELS[payment.method] ?? payment.method}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(payment.amount)}</span></td>
-      <td className="py-3 px-4"><span className="text-xs text-text-secondary">{payment.reference ?? "—"}</span></td>
-      <td className="py-3 px-4"><span className="text-sm text-text-secondary whitespace-nowrap">{formatDate(payment.created_at)}</span></td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm text-text-secondary whitespace-nowrap">{METHOD_LABELS[payment.method] ?? payment.method}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(payment.amount)}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-xs text-text-secondary">{payment.reference ?? "—"}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm text-text-secondary whitespace-nowrap">{formatDate(payment.created_at)}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap">
         <div className="flex items-center gap-2">
           <span className={`text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${STATUS_BADGE[status] ?? "bg-gray-100"}`}>
             {STATUS_OPTIONS.find((s) => s.value === status)?.label ?? status}

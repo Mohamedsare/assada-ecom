@@ -1127,6 +1127,7 @@ export async function createContactMessage(formData: FormData) {
   const { error } = await supabase.from("contact_messages").insert({
     name,
     email: formData.get("email") || null,
+    phone: (formData.get("phone") as string)?.trim() || null,
     subject: formData.get("subject") || null,
     message,
   });

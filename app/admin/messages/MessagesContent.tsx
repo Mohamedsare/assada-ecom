@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useTransition } from "react";
-import { MessageSquare, Mail, Trash2, MailOpen, Inbox } from "lucide-react";
+import { MessageSquare, Mail, Trash2, MailOpen, Inbox, Phone } from "lucide-react";
 import { adminMarkMessageRead, adminDeleteMessage } from "@/lib/supabase/actions";
 import { formatDate } from "@/lib/utils";
 import type { ContactMessage } from "@/types";
@@ -66,6 +66,7 @@ function MessageCard({ message }: { message: ContactMessage }) {
             {!read && <span className="w-2 h-2 rounded-full bg-green shrink-0" />}
             <p className="text-sm font-semibold text-[#020B27]">{message.name}</p>
             {message.email && <span className="text-xs text-text-secondary">· {message.email}</span>}
+            {message.phone && <span className="text-xs text-text-secondary">· {message.phone}</span>}
           </div>
           {message.subject && <p className="text-xs font-medium text-[#020B27] mt-1">Sujet : {message.subject}</p>}
         </div>
@@ -75,6 +76,18 @@ function MessageCard({ message }: { message: ContactMessage }) {
       <p className="text-sm text-[#020B27] mt-2 whitespace-pre-wrap">{message.message}</p>
 
       <div className="flex items-center gap-2 mt-3">
+        {message.phone && (
+          <a href={`https://wa.me/${message.phone.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-1 text-xs font-semibold bg-whatsapp text-white px-3 py-1.5 rounded-lg hover:bg-whatsapp-dark transition-colors">
+            <MessageSquare size={13} /> WhatsApp
+          </a>
+        )}
+        {message.phone && (
+          <a href={`tel:${message.phone}`}
+            className="flex items-center gap-1 text-xs font-medium text-text-secondary hover:bg-gray-100 px-3 py-1.5 rounded-lg transition-colors">
+            <Phone size={13} /> Appeler
+          </a>
+        )}
         {message.email && (
           <a href={`mailto:${message.email}?subject=${encodeURIComponent("Re: " + (message.subject ?? "Votre message"))}`}
             className="flex items-center gap-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-1.5 rounded-lg hover:bg-[#9E7A45] transition-colors">

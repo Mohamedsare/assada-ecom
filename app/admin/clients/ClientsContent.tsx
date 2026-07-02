@@ -109,7 +109,7 @@ function ClientRow({ client, stat }: { client: Profile; stat?: { count: number; 
 
   return (
     <tr className="hover:bg-gray-50 transition-colors">
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 bg-green rounded-full flex items-center justify-center text-[#020B27] font-bold text-xs shrink-0">{initials}</div>
           <div>
@@ -118,20 +118,20 @@ function ClientRow({ client, stat }: { client: Profile; stat?: { count: number; 
           </div>
         </div>
       </td>
-      <td className="py-3 px-4"><span className="text-sm text-text-secondary">{client.phone ?? "—"}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-medium text-[#020B27]">{count}</span></td>
-      <td className="py-3 px-4"><span className="text-sm font-medium text-[#020B27]">{total > 0 ? formatPrice(total) : "—"}</span></td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm text-text-secondary">{client.phone ?? "—"}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-medium text-[#020B27]">{count}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-medium text-[#020B27]">{total > 0 ? formatPrice(total) : "—"}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap">
         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${active ? "bg-green-50 text-green" : "bg-red-50 text-red-600"}`}>
           {active ? "Actif" : "Bloqué"}
         </span>
       </td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <span className="text-sm text-text-secondary whitespace-nowrap">
           {new Date(client.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short", year: "numeric" })}
         </span>
       </td>
-      <td className="py-3 px-4">
+      <td className="py-3 px-4 whitespace-nowrap">
         <div className="flex items-center gap-1">
           <Link
             href={`/admin/clients/${client.id}`}

@@ -156,27 +156,27 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
               ) : (
                 paged.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <Link href={`/admin/commandes/${order.id}`} className="text-sm font-bold text-[#020B27] hover:text-[#020B27] transition-colors">
                         {order.order_number}
                       </Link>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <p className="text-sm text-[#020B27]">{order.customer_name}</p>
                       <p className="text-xs text-[#64748B]">{order.customer_phone}</p>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <span className="text-sm text-[#64748B]">
                         {order.items?.length ?? 0} article{(order.items?.length ?? 0) !== 1 ? "s" : ""}
                       </span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <span className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(order.total_amount)}</span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <span className="text-xs text-[#64748B] whitespace-nowrap">{PAYMENT_LABELS[order.payment_method]}</span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <select
                         value={order.order_status}
                         disabled={updating === order.id}
@@ -186,10 +186,10 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                         {Object.entries(ORDER_STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                       </select>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <span className="text-xs text-[#64748B] whitespace-nowrap">{formatDate(order.created_at)}</span>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
                         <Link href={`/admin/commandes/${order.id}`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Voir le détail">
                           <Eye size={15} />

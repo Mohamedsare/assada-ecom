@@ -4,7 +4,9 @@ import HeroSection from "@/components/sections/HeroSection";
 import CategoriesSection from "@/components/sections/CategoriesSection";
 import BannersSection from "@/components/sections/BannersSection";
 import AdvantagesSection from "@/components/sections/AdvantagesSection";
+import OrderStepsSection from "@/components/sections/OrderStepsSection";
 import SocialSection from "@/components/sections/SocialSection";
+import FindUsSection from "@/components/sections/FindUsSection";
 import ProductCarousel from "@/components/product/ProductCarousel";
 
 import { getProducts, getCategories } from "@/lib/supabase/queries";
@@ -76,8 +78,14 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 7 — Réseaux sociaux */}
+      {/* 7 — Commander en quelques clics */}
+      <OrderStepsSection />
+
+      {/* 8 — Réseaux sociaux */}
       <SocialSection />
+
+      {/* 9 — Trouvez notre boutique (carte + contact) */}
+      <FindUsSection />
     </>
   );
 }

@@ -76,7 +76,7 @@ export default function CategoriesContent({
                 const parentName = cat.parent_id ? nameById[cat.parent_id] : null;
                 return (
                   <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 bg-green/10 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
                           {cat.image_url ? (
@@ -95,13 +95,13 @@ export default function CategoriesContent({
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 px-4"><span className="text-sm text-text-secondary">{cat.slug}</span></td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm text-text-secondary">{cat.slug}</span></td>
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <span className={`text-sm font-medium ${count > 0 ? "text-[#020B27]" : "text-gray-400"}`}>{count}</span>
                     </td>
-                    <td className="py-3 px-4"><span className="text-sm text-text-secondary">{cat.sort_order}</span></td>
-                    <td className="py-3 px-4"><ActiveToggle category={cat} /></td>
-                    <td className="py-3 px-4">
+                    <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm text-text-secondary">{cat.sort_order}</span></td>
+                    <td className="py-3 px-4 whitespace-nowrap"><ActiveToggle category={cat} /></td>
+                    <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => setEditing(cat)}
