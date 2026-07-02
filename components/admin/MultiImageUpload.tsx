@@ -35,11 +35,20 @@ export default function MultiImageUpload({
     onChange?.(next);
   };
 
+  const MAX_SIZE = 3 * 1024 * 1024; // 3 Mo par photo
+
   const handleFiles = (files: FileList) => {
     setError(null);
     const room = max - urls.length;
     if (room <= 0) return;
-    const toUpload = Array.from(files).slice(0, room);
+    const selected = Array.from(files).slice(0, room);
+
+    const tooLarge = selected.filter((f) => f.size > MAX_SIZE);
+    if (tooLarge.length) {
+      setError(`Chaque photo doit faire 3 Mo maximum (${tooLarge.map((f) => f.name).join(", ")}).`);
+    }
+    const toUpload = selected.filter((f) => f.size <= MAX_SIZE);
+    if (!toUpload.length) return;
 
     startTransition(async () => {
       const uploaded: string[] = [];

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Package, Eye, Truck } from "lucide-react";
+import { Package } from "lucide-react";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { ORDER_STATUS_LABELS } from "@/lib/constants";
 import { getCurrentProfile, getUserOrders } from "@/lib/supabase/queries";
@@ -38,7 +38,7 @@ export default async function CommandesPage() {
           <p className="text-[#64748B] mb-6">Vous n&apos;avez pas encore passé de commande</p>
           <Link
             href="/boutique"
-            className="bg-[#16A34A] text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#15803D] transition-colors"
+            className="bg-[#B8925A] text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
           >
             Découvrir la boutique
           </Link>
@@ -72,22 +72,6 @@ export default async function CommandesPage() {
                   </p>
                 )}
 
-                <div className="flex gap-3">
-                  <Link
-                    href={`/suivi-commande?numero=${order.order_number}`}
-                    className="flex items-center gap-1.5 text-sm border border-gray-200 px-4 py-2 rounded-xl hover:border-[#16A34A] hover:text-[#020B27] transition-colors"
-                  >
-                    <Eye size={14} />
-                    Détail
-                  </Link>
-                  <Link
-                    href={`/suivi-commande?numero=${order.order_number}`}
-                    className="flex items-center gap-1.5 text-sm border border-gray-200 px-4 py-2 rounded-xl hover:border-[#16A34A] hover:text-[#020B27] transition-colors"
-                  >
-                    <Truck size={14} />
-                    Suivi
-                  </Link>
-                </div>
               </div>
             );
           })}

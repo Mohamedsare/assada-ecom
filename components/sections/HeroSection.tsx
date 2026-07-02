@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { ChevronRight, ShoppingBag, Tag } from "lucide-react";
+import { useConfigStore } from "@/stores/config";
 
 const SLIDES = [
   {
@@ -44,6 +45,9 @@ const SLIDES = [
 export default function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  // Images éditables depuis « Gestion des pages » (repli sur les images par défaut du slide).
+  const images = useConfigStore((s) => s.images);
+  const heroImages = [images.home_hero_1, images.home_hero_2, images.home_hero_3];
 
   const goTo = useCallback(
     (index: number) => {
@@ -72,7 +76,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-0">
         <Image
           key={`bg-${current}`}
-          src={slide.image}
+          src={heroImages[current] ?? slide.image}
           alt={`Assada — ${slide.titleAccent}`}
           fill
           priority
@@ -111,7 +115,7 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3">
               <Link
                 href={slide.cta1.href}
-                className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#15803D] text-[#020B27] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#9E7A45] text-[#020B27] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
               >
                 <ShoppingBag size={16} />
                 {slide.cta1.label}

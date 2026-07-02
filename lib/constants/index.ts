@@ -183,6 +183,66 @@ export const ORDER_CHANNEL_LABELS: Record<string, string> = {
   store: "Boutique",
 };
 
+/**
+ * Images éditables du site (page « Gestion des pages »).
+ * Clés = clés de la table settings ; valeurs = image par défaut (repli si non défini).
+ * Les composants publics lisent ces images via le store de config (ConfigHydrator).
+ */
+export const PAGE_IMAGE_DEFAULTS: Record<string, string> = {
+  home_hero_1: "/banners/banner2-accueil.png",
+  home_hero_2: "/banners/banner3-accuiel.png",
+  home_hero_3: "/banners/banner4-accueil.png",
+  home_banner_promo: "/banners/banner4-accueil.png",
+  home_banner_nouveaute: "/banners/banner3-accuiel.png",
+  banner_boutique: "/banners/banner2-accueil.png",
+  banner_nouveautes: "/banners/banner3-accuiel.png",
+  banner_promotions: "/banners/banner4-accueil.png",
+  banner_panier: "/banners/banner2-accueil.png",
+  gallery_1: "/categories/parfums.jpeg",
+  gallery_2: "/categories/soins-visage.jpeg",
+  gallery_3: "/categories/maquillage.jpeg",
+  gallery_4: "/categories/soins-cheveux.jpeg",
+  gallery_5: "/categories/cadeaux.jpeg",
+};
+
+/** Métadonnées d'affichage pour l'éditeur « Gestion des pages » (groupes + libellés). */
+export const PAGE_IMAGE_GROUPS: { group: string; items: { key: string; label: string }[] }[] = [
+  {
+    group: "Accueil — bannières du slider",
+    items: [
+      { key: "home_hero_1", label: "Bannière 1" },
+      { key: "home_hero_2", label: "Bannière 2" },
+      { key: "home_hero_3", label: "Bannière 3" },
+    ],
+  },
+  {
+    group: "Accueil — bannières promotionnelles",
+    items: [
+      { key: "home_banner_promo", label: "Bannière « Offre spéciale »" },
+      { key: "home_banner_nouveaute", label: "Bannière « Nouveautés »" },
+    ],
+  },
+  {
+    group: "Bannières des pages",
+    items: [
+      { key: "banner_boutique", label: "Page Boutique" },
+      { key: "banner_nouveautes", label: "Page Nouveautés" },
+      { key: "banner_promotions", label: "Page Promotions" },
+      { key: "banner_panier", label: "Page Panier" },
+    ],
+  },
+  {
+    group: "Accueil — galerie (réseaux sociaux)",
+    items: [
+      { key: "gallery_1", label: "Photo 1" },
+      { key: "gallery_2", label: "Photo 2" },
+      { key: "gallery_3", label: "Photo 3" },
+      { key: "gallery_4", label: "Photo 4" },
+      { key: "gallery_5", label: "Photo 5" },
+    ],
+  },
+];
+
 export const NAV_LINKS = [
   { label: "Accueil", href: "/" },
   { label: "Boutique", href: "/boutique" },

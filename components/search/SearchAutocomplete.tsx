@@ -104,7 +104,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
         className={cn(
           "flex items-center gap-2 rounded-xl transition-colors",
           variant === "header"
-            ? "bg-white/10 border border-white/20 px-3 h-9 focus-within:bg-white/15 focus-within:border-[#22C55E]/50"
+            ? "bg-white/10 border border-white/20 px-3 h-9 focus-within:bg-white/15 focus-within:border-[#C9A063]/50"
             : "bg-white border border-gray-200 px-3.5 h-11 focus-within:border-green shadow-sm"
         )}
       >

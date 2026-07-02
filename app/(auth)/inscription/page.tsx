@@ -80,7 +80,7 @@ export default function InscriptionPage() {
             Vérifiez votre email pour confirmer votre compte, puis connectez-vous.
           </p>
           <Link href="/connexion"
-            className="mt-5 inline-block bg-[#16A34A] text-[#020B27] px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#15803D] transition-colors">
+            className="mt-5 inline-block bg-[#B8925A] text-[#020B27] px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#9E7A45] transition-colors">
             Se connecter
           </Link>
         </div>
@@ -88,7 +88,7 @@ export default function InscriptionPage() {
     );
   }
 
-  const inputCls = "w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#16A34A]/10 transition-all";
+  const inputCls = "w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all";
 
   return (
     <div className="relative min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4 py-12">
@@ -100,7 +100,7 @@ export default function InscriptionPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/">
-            <Image src="/logo1.png" alt="Assada" width={160} height={56} className="h-14 w-auto mx-auto object-contain" />
+            <Image src="/logo.png" alt="Assada" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
           </Link>
           <h1 className="text-2xl font-bold text-[#020B27] mt-4">Créer un compte</h1>
           <p className="text-[#64748B] text-sm mt-1">Rejoignez Assada dès aujourd&apos;hui</p>
@@ -149,10 +149,10 @@ export default function InscriptionPage() {
               <label className="block text-sm font-semibold text-[#020B27]">Téléphone WhatsApp</label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
-                  <span className="text-base">🇬🇦</span>
-                  <span className="text-sm font-semibold text-gray-500 border-r border-gray-200 pr-2">+241</span>
+                  <span className="text-base">🇲🇦</span>
+                  <span className="text-sm font-semibold text-gray-500 border-r border-gray-200 pr-2">+212</span>
                 </div>
-                <input className={`${inputCls} pl-[4.5rem]`} type="tel" placeholder="62 57 37 48"
+                <input className={`${inputCls} pl-[4.5rem]`} type="tel" placeholder="612 345 678"
                   value={form.phone} onChange={set("phone")} />
               </div>
             </div>
@@ -184,7 +184,7 @@ export default function InscriptionPage() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-[#020B27] py-3.5 rounded-xl font-bold text-sm hover:bg-[#15803D] active:scale-95 transition-all disabled:opacity-60">
+              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3.5 rounded-xl font-bold text-sm hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
               {loading ? <><Loader2 size={17} className="animate-spin" /> Création…</> : "Créer mon compte"}
             </button>
           </form>

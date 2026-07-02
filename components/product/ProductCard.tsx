@@ -191,7 +191,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             className={cn(
               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors",
               product.stock_quantity > 0
-                ? "border-gray-300 text-[#020B27] hover:border-[#0F172A] hover:bg-[#15803D] hover:text-white"
+                ? "border-gray-300 text-[#020B27] hover:border-[#0F172A] hover:bg-[#9E7A45] hover:text-white"
                 : "cursor-not-allowed border-gray-200 text-gray-300"
             )}
           >

@@ -106,7 +106,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
         <h1 className="text-xl font-bold text-[#020B27]">Mes adresses</h1>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#15803D] transition-colors"
+          className="flex items-center gap-2 bg-[#B8925A] text-[#020B27] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#9E7A45] transition-colors"
         >
           <Plus size={15} />
           Ajouter une adresse
@@ -150,7 +150,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
                   value={form[name as keyof FormData] as string}
                   onChange={(e) => setForm({ ...form, [name]: e.target.value })}
                   required={required}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors"
                 />
               </div>
             ))}
@@ -172,7 +172,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
               <button
                 type="submit"
                 disabled={saving}
-                className="flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#15803D] transition-colors disabled:opacity-60"
+                className="flex items-center gap-2 bg-[#B8925A] text-[#020B27] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#9E7A45] transition-colors disabled:opacity-60"
               >
                 {saving ? (
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -200,7 +200,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
             className={`bg-white rounded-2xl border p-5 relative ${address.is_default ? "border-[#020B27]" : "border-gray-100"}`}
           >
             {address.is_default && (
-              <span className="absolute top-3 right-3 bg-[#16A34A]/10 text-[#020B27] text-xs font-bold px-2 py-0.5 rounded-full">
+              <span className="absolute top-3 right-3 bg-[#B8925A]/10 text-[#020B27] text-xs font-bold px-2 py-0.5 rounded-full">
                 Par défaut
               </span>
             )}
@@ -223,7 +223,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
             <div className="flex gap-2">
               <button
                 onClick={() => openEdit(address)}
-                className="flex items-center gap-1.5 text-xs border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#16A34A] hover:text-[#020B27] transition-colors"
+                className="flex items-center gap-1.5 text-xs border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#B8925A] hover:text-[#020B27] transition-colors"
               >
                 <Pencil size={12} />
                 Modifier
@@ -248,7 +248,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
 
         <button
           onClick={openAdd}
-          className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:border-[#16A34A] hover:bg-[#16A34A]/5 transition-colors min-h-[140px]"
+          className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 hover:border-[#B8925A] hover:bg-[#B8925A]/5 transition-colors min-h-[140px]"
         >
           <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
             <Plus size={20} className="text-gray-400" />

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft, MessageCircle, Printer, MapPin, Phone, Mail, User,
-  Package, CreditCard, Save, Loader2, CheckCircle2, FileText, Truck, Radio,
+  Package, CreditCard, Save, Loader2, FileText, Truck, Radio,
 } from "lucide-react";
 import { formatPrice, formatDate, getClientWhatsAppUrl } from "@/lib/utils";
 import { ORDER_STATUS_LABELS, ORDER_CHANNEL_LABELS } from "@/lib/constants";
@@ -48,9 +48,6 @@ const PAYMENT_STATUS_COLOR: Record<string, string> = {
   refunded:         "bg-gray-100 text-gray-700",
   cash_on_delivery: "bg-blue-100 text-blue-700",
 };
-
-// Étapes normales de progression (hors annulation / retour)
-const TIMELINE_STEPS = ["pending", "confirmed", "preparing", "shipped", "out_for_delivery", "delivered"];
 
 export default function OrderDetailClient({ order, agents = [] }: { order: Order; agents?: DeliveryAgent[] }) {
   const router = useRouter();
@@ -96,13 +93,6 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
     });
   };
 
-  const tracking = (order.tracking ?? [])
-    .slice()
-    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-
-  const currentStepIndex = TIMELINE_STEPS.indexOf(status);
-  const isCancelledOrReturned = status === "cancelled" || status === "returned";
-
   return (
     <div className="space-y-6">
       {/* En-tête */}
@@ -124,13 +114,13 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
             href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant votre commande ${order.order_number} chez Assada.`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#16A34A] hover:text-[#16A34A] transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#B8925A] hover:text-[#B8925A] transition-colors"
           >
             <MessageCircle size={16} /> WhatsApp client
           </Link>
           <Link
             href={`/admin/commandes/${order.id}/facture`}
-            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#16A34A] hover:text-[#16A34A] transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#B8925A] hover:text-[#B8925A] transition-colors"
           >
             <FileText size={16} /> Générer la facture
           </Link>
@@ -182,47 +172,6 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
             </div>
           </Card>
 
-          {/* Timeline */}
-          <Card title="Suivi de la commande" icon={<CheckCircle2 size={16} />}>
-            {isCancelledOrReturned ? (
-              <div className={`rounded-lg p-3 text-sm font-medium ${STATUS_COLOR[status]}`}>
-                Cette commande est {ORDER_STATUS_LABELS[status].toLowerCase()}.
-              </div>
-            ) : (
-              <div className="space-y-0">
-                {TIMELINE_STEPS.map((step, i) => {
-                  const done = i <= currentStepIndex;
-                  const isLast = i === TIMELINE_STEPS.length - 1;
-                  return (
-                    <div key={step} className="flex gap-3">
-                      <div className="flex flex-col items-center">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${done ? "bg-green text-white" : "bg-gray-100 text-gray-400"}`}>
-                          {done ? <CheckCircle2 size={14} /> : i + 1}
-                        </div>
-                        {!isLast && <div className={`w-0.5 flex-1 min-h-6 ${i < currentStepIndex ? "bg-green" : "bg-gray-100"}`} />}
-                      </div>
-                      <div className={`pb-4 ${done ? "" : "opacity-50"}`}>
-                        <p className="text-sm font-medium text-[#020B27]">{ORDER_STATUS_LABELS[step]}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {tracking.length > 0 && (
-              <div className="border-t border-gray-100 mt-2 pt-3 space-y-2">
-                <p className="text-xs font-medium text-[#64748B]">Historique</p>
-                {tracking.map((t) => (
-                  <div key={t.id} className="flex items-start justify-between gap-3 text-xs">
-                    <span className="text-[#020B27]">{t.message ?? ORDER_STATUS_LABELS[t.status]}</span>
-                    <span className="text-[#64748B] whitespace-nowrap">{formatDate(t.created_at)}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Card>
-
           {/* Note admin */}
           <Card title="Note interne (admin)">
             <textarea
@@ -236,7 +185,7 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
               <button
                 onClick={saveNote}
                 disabled={pending}
-                className="flex items-center gap-2 bg-green hover:bg-[#15803D] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
               >
                 {pending ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Enregistrer la note
               </button>

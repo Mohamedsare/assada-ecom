@@ -15,7 +15,7 @@ export interface InvoiceShop {
   footer: string;
 }
 
-type InvoiceFormat = "a4" | "thermique";
+export type InvoiceFormat = "a4" | "thermique_80" | "thermique_58";
 
 const PAYMENT_METHOD_LABELS: Record<string, string> = {
   cash_on_delivery: "Paiement à la livraison",
@@ -43,10 +43,13 @@ export default function Invoice({
   const items = order.items ?? [];
   const paymentLabel = PAYMENT_METHOD_LABELS[order.payment_method] ?? order.payment_method;
 
+  const isThermal = format !== "a4";
+  const widthMm = format === "thermique_58" ? 58 : 80;
+
   return (
     <div className="space-y-4">
-      {/* Le format thermique impose une largeur de page de 80 mm à l'impression. */}
-      <style>{`@media print { @page { size: ${format === "thermique" ? "80mm auto" : "A4"}; margin: ${format === "thermique" ? "4mm" : "14mm"}; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .no-print { display: none !important; } }`}</style>
+      {/* Le format thermique impose la largeur de page du rouleau à l'impression. */}
+      <style>{`@media print { @page { size: ${isThermal ? `${widthMm}mm auto` : "A4"}; margin: ${isThermal ? "3mm" : "14mm"}; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .no-print { display: none !important; } }`}</style>
 
       {/* Barre d'actions — masquée à l'impression */}
       <div className="no-print flex flex-wrap items-center justify-between gap-3">
@@ -71,15 +74,21 @@ export default function Invoice({
               <FileText size={15} /> A4
             </button>
             <button
-              onClick={() => setFormat("thermique")}
-              className={`flex items-center gap-1.5 px-3 py-2 transition-colors ${format === "thermique" ? "bg-[#0F172A] text-white" : "text-[#020B27] hover:bg-gray-50"}`}
+              onClick={() => setFormat("thermique_80")}
+              className={`flex items-center gap-1.5 px-3 py-2 border-l border-gray-200 transition-colors ${format === "thermique_80" ? "bg-[#0F172A] text-white" : "text-[#020B27] hover:bg-gray-50"}`}
             >
-              <Receipt size={15} /> Thermique
+              <Receipt size={15} /> 80 mm
+            </button>
+            <button
+              onClick={() => setFormat("thermique_58")}
+              className={`flex items-center gap-1.5 px-3 py-2 border-l border-gray-200 transition-colors ${format === "thermique_58" ? "bg-[#0F172A] text-white" : "text-[#020B27] hover:bg-gray-50"}`}
+            >
+              <Receipt size={15} /> 58 mm
             </button>
           </div>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-2 bg-green hover:bg-[#15803D] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
           >
             <Printer size={16} /> Imprimer
           </button>
@@ -89,7 +98,7 @@ export default function Invoice({
       {format === "a4" ? (
         <InvoiceA4 order={order} items={items} invoiceNumber={invoiceNumber} shop={shop} paymentLabel={paymentLabel} />
       ) : (
-        <InvoiceThermal order={order} items={items} invoiceNumber={invoiceNumber} shop={shop} paymentLabel={paymentLabel} />
+        <InvoiceThermal order={order} items={items} invoiceNumber={invoiceNumber} shop={shop} paymentLabel={paymentLabel} widthMm={widthMm} />
       )}
     </div>
   );
@@ -189,15 +198,18 @@ function InvoiceA4({
   );
 }
 
-/* ─── Format thermique (80 mm) ──────────────────────────────────────────────── */
+/* ─── Format thermique (rouleau 80 mm ou 58 mm) ─────────────────────────────── */
 
 function InvoiceThermal({
-  order, items, invoiceNumber, shop, paymentLabel,
+  order, items, invoiceNumber, shop, paymentLabel, widthMm,
 }: {
-  order: Order; items: NonNullable<Order["items"]>; invoiceNumber: string; shop: InvoiceShop; paymentLabel: string;
+  order: Order; items: NonNullable<Order["items"]>; invoiceNumber: string; shop: InvoiceShop; paymentLabel: string; widthMm: number;
 }) {
   return (
-    <div className="bg-white text-[#0F172A] mx-auto w-[80mm] p-3 rounded-lg border border-gray-100 shadow-sm print:border-0 print:shadow-none print:rounded-none font-mono text-[11px] leading-tight">
+    <div
+      style={{ width: `${widthMm}mm` }}
+      className="bg-white text-[#0F172A] mx-auto p-3 rounded-lg border border-gray-100 shadow-sm print:border-0 print:shadow-none print:rounded-none font-mono text-[11px] leading-tight"
+    >
       <div className="text-center">
         <p className="text-base font-extrabold tracking-tight">{shop.name}</p>
         <p>{shop.address}</p>

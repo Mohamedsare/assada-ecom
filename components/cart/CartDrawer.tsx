@@ -94,7 +94,7 @@ export default function CartDrawer() {
             <ShoppingCart size={18} />
             <h2 className="font-bold text-base">Mon panier</h2>
             {totalItems() > 0 && (
-              <span className="bg-[#16A34A] text-[#020B27] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="bg-[#B8925A] text-[#020B27] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                 {totalItems() > 9 ? "9+" : totalItems()}
               </span>
             )}
@@ -120,7 +120,7 @@ export default function CartDrawer() {
             </div>
             <button
               onClick={closeCartDrawer}
-              className="mt-2 bg-[#16A34A] text-[#020B27] px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#15803D] transition-colors"
+              className="mt-2 bg-[#B8925A] text-[#020B27] px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#9E7A45] transition-colors"
             >
               Voir la boutique
             </button>
@@ -267,7 +267,7 @@ export default function CartDrawer() {
               <Link
                 href="/checkout"
                 onClick={closeCartDrawer}
-                className="w-full flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-[#020B27] py-3.5 rounded-xl font-bold text-sm transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-[#020B27] py-3.5 rounded-xl font-bold text-sm transition-colors"
               >
                 Passer la commande
                 <ArrowRight size={16} />

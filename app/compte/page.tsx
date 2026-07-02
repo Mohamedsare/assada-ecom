@@ -104,12 +104,6 @@ export default async function ComptePage() {
                 </div>
                 <div className="text-right shrink-0">
                   <p className="font-bold text-[#020B27] text-sm">{formatPrice(order.total_amount)}</p>
-                  <Link
-                    href={`/suivi-commande?numero=${order.order_number}`}
-                    className="text-xs text-[#020B27] hover:underline"
-                  >
-                    Suivi
-                  </Link>
                 </div>
               </div>
             ))}

@@ -3,14 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { usePageImage } from "@/stores/config";
 
 type Banner = {
   href: string;
   badge: string;
   title: React.ReactNode;
   cta: string;
-  /** image d'arrière-plan finale */
-  bgImage: string;
+  /** clé de l'image éditable (Gestion des pages) */
+  imageKey: string;
   /** image de secours tant que la finale n'est pas fournie */
   fallback: string;
   base: string;        // couleur de fond sous l'image
@@ -33,11 +34,11 @@ const BANNERS: Banner[] = [
       </>
     ),
     cta: "J'en profite maintenant",
-    bgImage: "/banners/banner4-accueil.png",
+    imageKey: "home_banner_promo",
     fallback: "/banners/banner2-accueil.png",
     base: "bg-night",
     overlay: "bg-linear-to-r from-night via-night/70 to-transparent",
-    button: "bg-green hover:bg-[#15803D] text-white",
+    button: "bg-green hover:bg-[#9E7A45] text-white",
     badgeStyle: "bg-green/20 text-green-light border border-green-light/40",
   },
   {
@@ -53,7 +54,7 @@ const BANNERS: Banner[] = [
       </>
     ),
     cta: "Voir les nouveautés",
-    bgImage: "/banners/banner3-accuiel.png",
+    imageKey: "home_banner_nouveaute",
     fallback: "/banners/banner2-accueil.png",
     base: "bg-night-2",
     overlay: "bg-linear-to-r from-night-2 via-night-2/70 to-transparent",
@@ -64,7 +65,8 @@ const BANNERS: Banner[] = [
 
 function BannerCard({ banner }: { banner: Banner }) {
   const [bgError, setBgError] = useState(false);
-  const src = bgError ? banner.fallback : banner.bgImage;
+  const dynImg = usePageImage(banner.imageKey);
+  const src = bgError ? banner.fallback : dynImg;
 
   return (
     <Link

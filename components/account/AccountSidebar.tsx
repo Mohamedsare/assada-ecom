@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -29,31 +30,41 @@ export default function AccountSidebar() {
   const [displayName, setDisplayName] = useState("Mon compte");
   const [email, setEmail] = useState("");
   const [initials, setInitials] = useState("?");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadUser() {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const { data } = await supabase.from("profiles").select("first_name, last_name, email").eq("id", user.id).single();
+      const { data } = await supabase.from("profiles").select("first_name, last_name, email, avatar_url").eq("id", user.id).single();
       if (data) {
         const name = [data.first_name, data.last_name].filter(Boolean).join(" ");
         setDisplayName(name || user.email?.split("@")[0] || "Compte");
         setEmail(data.email ?? user.email ?? "");
+        setAvatarUrl(data.avatar_url ?? null);
         const parts = [data.first_name, data.last_name].filter(Boolean);
         setInitials(parts.length > 0 ? parts.map((p: string) => p[0]).join("").toUpperCase().slice(0, 2) : "?");
       }
     }
     loadUser();
+    // Rafraîchit en direct quand le profil est modifié ailleurs (page Paramètres)
+    const onUpdate = () => loadUser();
+    window.addEventListener("assada:profile-updated", onUpdate);
+    return () => window.removeEventListener("assada:profile-updated", onUpdate);
   }, []);
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
       {/* Profile header */}
-      <div className="bg-gradient-to-r from-[#020B27] to-[#0F172A] p-5">
+      <div className="bg-linear-to-r from-[#020B27] to-[#0F172A] p-5">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-[#16A34A] rounded-full flex items-center justify-center text-[#020B27] font-bold text-lg shrink-0">
-            {initials}
+          <div className="w-12 h-12 bg-[#B8925A] rounded-full overflow-hidden flex items-center justify-center text-[#020B27] font-bold text-lg shrink-0 ring-2 ring-white/20">
+            {avatarUrl ? (
+              <Image src={avatarUrl} alt={displayName} width={48} height={48} className="object-cover w-full h-full" />
+            ) : (
+              initials
+            )}
           </div>
           <div className="min-w-0">
             <p className="text-white font-semibold truncate">{displayName}</p>

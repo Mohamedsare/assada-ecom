@@ -65,6 +65,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <AdminLayoutClient
       adminName={adminName}
       adminRole={adminRole}
+      adminAvatar={profile.avatar_url ?? null}
       role={profile.role}
       permissions={profile.permissions ?? {}}
       notifications={notifications}

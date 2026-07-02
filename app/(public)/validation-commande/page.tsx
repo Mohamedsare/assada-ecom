@@ -5,12 +5,13 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  CheckCircle, Package, Truck, MapPin,
-  MessageCircle, Store, ClipboardList,
-  User, CreditCard, ChevronRight,
+  CheckCircle, MapPin,
+  MessageCircle,
+  User, CreditCard, ChevronRight, Sparkles, ShoppingBag,
 } from "lucide-react";
 import { formatPrice, getWhatsAppUrl } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
+import { getOrderByNumber } from "@/lib/supabase/actions";
+import SuccessConfetti from "@/components/ui/SuccessConfetti";
 import type { Order } from "@/types";
 
 const PAYMENT_LABELS: Record<string, string> = {
@@ -18,17 +19,6 @@ const PAYMENT_LABELS: Record<string, string> = {
   airtel_money:     "Airtel Money",
   moov_money:       "Moov Money",
 };
-
-const TIMELINE = [
-  { label: "Commande reçue",          icon: CheckCircle, status: "pending"  },
-  { label: "Confirmée",               icon: CheckCircle, status: "confirmed" },
-  { label: "En préparation",          icon: Package,     status: "preparing" },
-  { label: "Expédiée",               icon: Truck,       status: "shipped"   },
-  { label: "En cours de livraison",   icon: MapPin,      status: "out_for_delivery" },
-  { label: "Livrée",                 icon: CheckCircle, status: "delivered" },
-];
-
-const STATUS_ORDER = ["pending", "confirmed", "preparing", "shipped", "out_for_delivery", "delivered"];
 
 function ValidationContent() {
   const searchParams = useSearchParams();
@@ -40,20 +30,15 @@ function ValidationContent() {
 
   useEffect(() => {
     if (!orderNumber) { router.replace("/"); return; }
+    const number = orderNumber;
 
     async function fetchOrder() {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*, items:order_items(*)")
-        .eq("order_number", orderNumber)
-        .single();
-
-      if (error || !data) {
+      const { order, error } = await getOrderByNumber(number);
+      if (error || !order) {
         router.replace("/");
         return;
       }
-      setOrder(data as Order);
+      setOrder(order as unknown as Order);
       setLoading(false);
     }
 
@@ -68,30 +53,43 @@ function ValidationContent() {
     );
   }
 
-  const currentStepIndex = STATUS_ORDER.indexOf(order.order_status);
   const estimatedDate = order.estimated_delivery_date
     ? new Date(order.estimated_delivery_date).toLocaleDateString("fr-FR", {
         weekday: "long", day: "numeric", month: "long",
       })
     : null;
-  const createdLabel = new Date(order.created_at).toLocaleString("fr-FR", {
-    day: "numeric", month: "long", hour: "2-digit", minute: "2-digit",
-  });
   const whatsappUrl = getWhatsAppUrl(
     `Bonjour Assada, j'ai une question concernant ma commande ${order.order_number}.`
   );
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-12">
-      <div className="bg-gradient-to-b from-[#020B27] to-[#0F172A] text-white px-4 pt-10 pb-16 text-center">
-        <div className="w-20 h-20 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle size={44} className="text-white" strokeWidth={1.5} />
-        </div>
-        <h1 className="text-2xl font-extrabold mb-1">Commande confirmée !</h1>
-        <p className="text-green-100 text-sm">Merci pour votre confiance 🎉</p>
-        <div className="mt-5 inline-block bg-white/15 backdrop-blur rounded-2xl px-6 py-3 border border-white/20">
-          <p className="text-xs text-green-100 mb-0.5">Numéro de commande</p>
-          <p className="font-extrabold text-xl tracking-widest">{order.order_number}</p>
+      <SuccessConfetti />
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#020B27] to-[#0F172A] text-white px-4 pt-12 pb-16 text-center">
+        {/* Halo lumineux décoratif */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_at_top,rgba(34,197,94,0.25),transparent_70%)]" />
+
+        <div className="relative">
+          {/* Pastille de victoire avec étincelles et pulsation */}
+          <div className="relative mx-auto mb-5 w-24 h-24">
+            <span className="absolute inset-0 rounded-full bg-[#22C55E]/30 animate-ping" />
+            <div className="relative w-24 h-24 rounded-full bg-linear-to-br from-[#22C55E] to-[#16A34A] flex items-center justify-center shadow-2xl shadow-green-500/40 animate-victory-pop">
+              <CheckCircle size={52} className="text-white" strokeWidth={2} />
+            </div>
+            <Sparkles size={18} className="absolute -top-1 -right-1 text-[#B8925A] animate-twinkle" />
+            <Sparkles size={14} className="absolute -bottom-1 -left-2 text-white animate-twinkle [animation-delay:0.5s]" />
+          </div>
+
+          <h1 className="text-3xl font-extrabold mb-2 tracking-tight">Commande validée&nbsp;! 🎉</h1>
+          <p className="text-green-100 text-sm max-w-sm mx-auto leading-relaxed">
+            Bravo <strong className="text-white">{order.customer_name.split(" ")[0]}</strong>, votre commande est bien enregistrée.
+            Vous serez livré très bientôt — pas besoin de compte, on s&apos;occupe de tout&nbsp;!
+          </p>
+
+          <div className="mt-6 inline-block bg-white/15 backdrop-blur rounded-2xl px-6 py-3 border border-white/20">
+            <p className="text-xs text-green-100 mb-0.5">Numéro de commande</p>
+            <p className="font-extrabold text-xl tracking-widest">{order.order_number}</p>
+          </div>
         </div>
       </div>
 
@@ -121,38 +119,6 @@ function ValidationContent() {
               🎉 Vous bénéficiez de la livraison gratuite !
             </div>
           )}
-        </div>
-
-        {/* Timeline */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <h3 className="font-bold text-[#020B27] mb-5">Suivi de votre commande</h3>
-          <div className="space-y-0">
-            {TIMELINE.map((item, i) => {
-              const isDone = i <= currentStepIndex;
-              return (
-                <div key={i} className="flex gap-4">
-                  <div className="flex flex-col items-center">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                      isDone ? "bg-[#020B27]" : "bg-gray-100"
-                    }`}>
-                      <item.icon size={15} className={isDone ? "text-white" : "text-gray-400"} />
-                    </div>
-                    {i < TIMELINE.length - 1 && (
-                      <div className={`w-0.5 h-7 ${isDone ? "bg-[#020B27]" : "bg-gray-200"}`} />
-                    )}
-                  </div>
-                  <div className="pb-7 pt-1 last:pb-0">
-                    <p className={`text-sm font-semibold ${isDone ? "text-[#020B27]" : "text-gray-400"}`}>
-                      {item.label}
-                    </p>
-                    {i === 0 && isDone && (
-                      <p className="text-xs text-gray-400 mt-0.5">{createdLabel}</p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </div>
 
         {/* Détails */}
@@ -229,22 +195,17 @@ function ValidationContent() {
         </div>
 
         <div className="space-y-3 pb-4">
+          <Link href="/boutique"
+            className="w-full flex items-center justify-center gap-3 bg-linear-to-r from-[#16A34A] to-[#22C55E] text-white py-4 rounded-2xl font-bold text-base shadow-lg shadow-green-500/25 active:scale-95 transition-all hover:brightness-105">
+            <ShoppingBag size={20} />
+            Continuer mes achats
+            <ChevronRight size={18} />
+          </Link>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-3 bg-[#16A34A] text-[#020B27] py-4 rounded-2xl font-bold text-base active:scale-95 transition-all hover:bg-[#15803D]">
+            className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-[#020B27] py-4 rounded-2xl font-bold text-base active:scale-95 transition-all hover:bg-[#9E7A45]">
             <MessageCircle size={20} />
             Contacter via WhatsApp
           </a>
-          <Link href={`/suivi-commande?numero=${order.order_number}`}
-            className="w-full flex items-center justify-center gap-2 border-2 border-[#020B27] text-[#020B27] py-4 rounded-2xl font-bold text-base active:scale-95 transition-all hover:bg-gray-50">
-            <ClipboardList size={18} />
-            Suivre ma commande
-            <ChevronRight size={16} />
-          </Link>
-          <Link href="/boutique"
-            className="w-full flex items-center justify-center gap-2 border border-gray-200 text-gray-500 py-3.5 rounded-2xl font-medium text-sm active:scale-95 transition-all hover:bg-gray-50">
-            <Store size={16} />
-            Retourner à la boutique
-          </Link>
         </div>
       </div>
     </div>

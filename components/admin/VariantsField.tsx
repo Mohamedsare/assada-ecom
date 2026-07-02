@@ -232,7 +232,7 @@ export default function VariantsField({
           type="button"
           onClick={generate}
           disabled={!combos.length}
-          className="inline-flex items-center gap-1.5 bg-[#16A34A] text-[#020B27] text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center gap-1.5 bg-[#B8925A] text-[#020B27] text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <Wand2 size={14} /> Générer les variantes{combos.length ? ` (${combos.length})` : ""}
         </button>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CATEGORY_TREE } from "@/lib/constants";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 
 /**
  * Accordéon catégories pour le tiroir mobile (2 niveaux).
@@ -34,7 +35,7 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
               className="w-full flex items-center justify-between px-5 py-3.5 text-sm font-semibold text-[#020B27] hover:bg-gray-50 transition-colors"
             >
               <span className="flex items-center gap-2.5">
-                <span aria-hidden className="text-base">{branch.emoji}</span>
+                <CategoryIcon slug={branch.slug} size={18} className="text-[#B8925A] shrink-0" />
                 {branch.name}
               </span>
               <ChevronDown

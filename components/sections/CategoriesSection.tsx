@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 
 type Cat = {
   name: string;
@@ -46,7 +47,7 @@ function CategoryCircle({ cat }: { cat: Cat }) {
             onError={() => setImgError(true)}
           />
         ) : (
-          <span className="text-4xl">{cat.emoji}</span>
+          <CategoryIcon slug={cat.slug} size={38} strokeWidth={1.5} className="text-[#B8925A]" />
         )}
       </div>
       <span className="text-xs md:text-sm font-medium text-[#020B27] text-center leading-tight whitespace-pre-line group-hover:text-green transition-colors">
@@ -56,7 +57,13 @@ function CategoryCircle({ cat }: { cat: Cat }) {
   );
 }
 
-export default function CategoriesSection() {
+export type CategoryItem = { name: string; slug: string; image?: string; emoji: string };
+
+export default function CategoriesSection({ items }: { items?: CategoryItem[] }) {
+  // Catégories issues de la base (avec image_url) si fournies, sinon liste par défaut.
+  const cats: Cat[] = items && items.length
+    ? items.map((i) => ({ ...i, bg: "bg-gray-100" }))
+    : CATEGORIES;
   return (
     <section className="py-12 px-4 bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto">
@@ -74,7 +81,7 @@ export default function CategoriesSection() {
         <div className="md:hidden overflow-hidden">
           <div className="flex gap-5 w-max animate-marquee">
             {/* liste dupliquée pour une boucle infinie sans coupure */}
-            {[...CATEGORIES, ...CATEGORIES].map((cat, i) => (
+            {[...cats, ...cats].map((cat, i) => (
               <CategoryCircle key={`${cat.slug}-${i}`} cat={cat} />
             ))}
           </div>
@@ -82,7 +89,7 @@ export default function CategoriesSection() {
 
         {/* Desktop : grille statique */}
         <div className="hidden md:grid md:grid-cols-9 md:gap-4">
-          {CATEGORIES.map((cat) => (
+          {cats.map((cat) => (
             <CategoryCircle key={cat.slug} cat={cat} />
           ))}
         </div>

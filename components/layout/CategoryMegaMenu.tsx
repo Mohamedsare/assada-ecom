@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CATEGORY_TREE } from "@/lib/constants";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 
 /**
  * Méga-menu desktop « Boutique » : panneau pleine largeur au survol/focus,
@@ -47,8 +48,8 @@ export default function CategoryMegaMenu({ active }: { active: boolean }) {
         onFocus={openMenu}
         onClick={() => setOpen(false)}
         className={cn(
-          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-green-light hover:bg-white/5",
-          active || open ? "text-green-light bg-white/10" : "text-gray-300"
+          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-[#B8925A] hover:bg-gray-50",
+          active || open ? "text-[#B8925A] bg-[#B8925A]/10" : "text-gray-600"
         )}
       >
         Boutique
@@ -74,9 +75,9 @@ export default function CategoryMegaMenu({ active }: { active: boolean }) {
                 <Link
                   href={`/boutique?categorie=${branch.slug}`}
                   onClick={() => setOpen(false)}
-                  className="group flex items-center gap-1.5 mb-1.5 font-bold text-[#020B27] hover:text-green transition-colors"
+                  className="group flex items-center gap-2 mb-1.5 font-bold text-[#020B27] hover:text-green transition-colors"
                 >
-                  <span aria-hidden className="text-sm">{branch.emoji}</span>
+                  <CategoryIcon slug={branch.slug} size={16} className="text-[#B8925A] shrink-0 group-hover:text-green transition-colors" />
                   <span className="text-[13px]">{branch.name}</span>
                 </Link>
                 <ul className="space-y-0.5">

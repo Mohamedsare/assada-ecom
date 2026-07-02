@@ -108,7 +108,7 @@ export default function ProductsTable({
         </div>
         <Link
           href="/admin/produits/nouveau"
-          className="flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803D] transition-colors"
+          className="flex items-center gap-2 bg-[#B8925A] text-[#020B27] px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#9E7A45] transition-colors"
         >
           <Plus size={16} />
           Ajouter un produit
@@ -167,12 +167,12 @@ export default function ProductsTable({
           {hasFilters ? (
             <button
               onClick={() => { setSearch(""); setStatus("all"); setCategoryId("all"); setBrandId("all"); resetPage(); }}
-              className="bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803D] transition-colors"
+              className="bg-[#B8925A] text-[#020B27] px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#9E7A45] transition-colors"
             >
               Réinitialiser les filtres
             </button>
           ) : (
-            <Link href="/admin/produits/nouveau" className="bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#15803D] transition-colors">
+            <Link href="/admin/produits/nouveau" className="bg-[#B8925A] text-[#020B27] px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#9E7A45] transition-colors">
               Ajouter un produit
             </Link>
           )}

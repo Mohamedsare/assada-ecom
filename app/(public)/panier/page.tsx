@@ -7,7 +7,7 @@ import {
   Truck, ShieldCheck, RotateCcw, Headphones, ChevronRight,
 } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
-import { useConfigStore } from "@/stores/config";
+import { useConfigStore, usePageImage } from "@/stores/config";
 import { addToast } from "@/lib/ui-actions";
 import { formatPrice } from "@/lib/utils";
 
@@ -20,6 +20,7 @@ export default function PanierPage() {
   const _clearCart  = useCartStore((s) => s.clearCart);
   const DELIVERY_FEE = useConfigStore((s) => s.deliveryFee);
   const FREE_DELIVERY_THRESHOLD = useConfigStore((s) => s.freeDeliveryThreshold);
+  const bannerImg = usePageImage("banner_panier");
 
   const removeItem = (id: string, name?: string) => {
     _removeItem(id);
@@ -52,7 +53,7 @@ export default function PanierPage() {
           <p className="text-[#64748B] mb-8">Découvrez nos produits et commencez vos achats</p>
           <Link
             href="/boutique"
-            className="inline-flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-8 py-4 rounded-2xl font-semibold text-base active:scale-95 transition-all"
+            className="inline-flex items-center gap-2 bg-[#B8925A] text-[#020B27] px-8 py-4 rounded-2xl font-semibold text-base active:scale-95 transition-all"
           >
             <ShoppingCart size={18} />
             Voir la boutique
@@ -69,7 +70,7 @@ export default function PanierPage() {
       <div
         className="relative text-white py-10 md:py-14 px-4 overflow-hidden"
         style={{
-          backgroundImage: "url('/banners/banner2-accueil.png')",
+          backgroundImage: `url('${bannerImg}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -249,7 +250,7 @@ export default function PanierPage() {
               {/* CTA desktop */}
               <Link
                 href="/checkout"
-                className="w-full flex items-center justify-center gap-2 bg-green text-[#020B27] py-4 rounded-2xl font-bold text-base hover:bg-[#15803D] active:scale-95 transition-all"
+                className="w-full flex items-center justify-center gap-2 bg-green text-[#020B27] py-4 rounded-2xl font-bold text-base hover:bg-[#9E7A45] active:scale-95 transition-all"
               >
                 Passer la commande
                 <ChevronRight size={18} />

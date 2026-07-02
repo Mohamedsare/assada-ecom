@@ -57,7 +57,7 @@ export default async function AdminClientDetailPage({ params }: { params: Promis
             href={getClientWhatsAppUrl(profile.phone, `Bonjour ${profile.first_name ?? ""}, ici Assada.`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#16A34A] hover:text-[#16A34A] transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#B8925A] hover:text-[#B8925A] transition-colors"
           >
             <MessageCircle size={16} /> WhatsApp
           </Link>

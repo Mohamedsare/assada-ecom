@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      // Photos jusqu'à 3 Mo + surcharge multipart → marge à 4 Mo
+      bodySizeLimit: "4mb",
+    },
+  },
   images: {
     remotePatterns: [
       {

@@ -49,10 +49,10 @@ export async function GET(request: Request) {
         await supabase.from("profiles").update(updates).eq("id", user.id);
       }
 
-      // Rediriger l'admin vers son espace, sinon vers la destination demandée
+      // Rediriger le staff (admin/employé) vers l'espace admin, sinon la destination demandée
       const destination =
-        profile?.role === "admin" || profile?.role === "super_admin"
-          ? "/admin/dashboard"
+        ["admin", "super_admin", "employee"].includes(profile?.role ?? "")
+          ? "/admin"
           : next;
 
       return NextResponse.redirect(`${origin}${destination}`);

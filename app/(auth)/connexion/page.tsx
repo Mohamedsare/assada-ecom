@@ -54,8 +54,8 @@ function ConnexionForm() {
         .eq("id", authData.user.id)
         .single();
 
-      if (profile?.role === "admin" || profile?.role === "super_admin") {
-        destination = "/admin/dashboard";
+      if (["admin", "super_admin", "employee"].includes(profile?.role ?? "")) {
+        destination = "/admin";
       }
     }
 
@@ -74,7 +74,7 @@ function ConnexionForm() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/">
-            <Image src="/logo1.png" alt="Assada" width={160} height={56} className="h-14 w-auto mx-auto object-contain" />
+            <Image src="/logo.png" alt="Assada" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
           </Link>
           <h1 className="text-2xl font-bold text-[#020B27] mt-4">Connexion</h1>
           <p className="text-[#64748B] text-sm mt-1">Connectez-vous à votre compte</p>
@@ -118,7 +118,7 @@ function ConnexionForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="votre@email.com"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#16A34A]/10 transition-all"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all"
               />
             </div>
 
@@ -136,7 +136,7 @@ function ConnexionForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#16A34A]/10 transition-all pr-12"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all pr-12"
                 />
                 <button type="button" onClick={() => setShowPwd((v) => !v)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -146,7 +146,7 @@ function ConnexionForm() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-[#020B27] py-3.5 rounded-xl font-bold text-sm hover:bg-[#15803D] active:scale-95 transition-all disabled:opacity-60">
+              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3.5 rounded-xl font-bold text-sm hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
               {loading ? <><Loader2 size={17} className="animate-spin" /> Connexion…</> : "Se connecter"}
             </button>
           </form>

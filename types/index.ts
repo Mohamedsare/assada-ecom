@@ -136,17 +136,6 @@ export interface Order {
   created_at: string;
   updated_at?: string;
   items?: OrderItem[];
-  tracking?: OrderTracking[];
-}
-
-export interface OrderTracking {
-  id: string;
-  order_id: string;
-  status: OrderStatus;
-  message?: string;
-  latitude?: number;
-  longitude?: number;
-  created_at: string;
 }
 
 export interface OrderItem {

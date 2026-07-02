@@ -19,7 +19,6 @@ import { requirePermission } from "@/lib/supabase/guards";
 import { ORDER_STATUS_LABELS, ORDER_CHANNEL_LABELS } from "@/lib/constants";
 import SalesAreaChart, { type SalesChartData } from "@/components/admin/charts/SalesAreaChart";
 import OrderDonutChart from "@/components/admin/charts/OrderDonutChart";
-import DeliveryTrackingCard from "@/components/admin/DeliveryTrackingCard";
 import DashboardToolbar from "@/components/admin/DashboardToolbar";
 import type { Order } from "@/types";
 
@@ -185,7 +184,6 @@ export default async function AdminDashboardPage() {
   const lowStock = allProducts
     .filter((p) => p.stock_quantity < 5 && p.status === "active")
     .slice(0, 5);
-  const recentDelivery = allOrders.find((o) => o.order_status === "out_for_delivery") ?? null;
 
   const salesChartData = buildSalesChartData(allOrders);
   const statusCounts   = buildStatusCounts(allOrders);
@@ -442,9 +440,6 @@ export default async function AdminDashboardPage() {
           )}
         </div>
       </div>
-
-      {/* Suivi livraison */}
-      <DeliveryTrackingCard recentDelivery={recentDelivery} />
 
       {/* Stats bas */}
       <div className="bg-night rounded-lg p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">

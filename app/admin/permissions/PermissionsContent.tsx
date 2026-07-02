@@ -9,7 +9,7 @@ import {
   PERMISSION_MODULES, PERMISSION_ACTIONS, PERMISSION_ACTION_LABELS, SENSITIVE_PERMISSIONS,
   defaultEmployeePermissions,
 } from "@/lib/permissions";
-import { adminUpdateEmployeePermissions, adminUpdateUserRole } from "@/lib/supabase/actions";
+import { adminUpdateEmployeePermissions, adminUpdateUserRole, adminCreateEmployee } from "@/lib/supabase/actions";
 import type { Profile, PermissionMatrix } from "@/types";
 
 const nameOf = (p: Profile) => [p.first_name, p.last_name].filter(Boolean).join(" ") || p.email || "Utilisateur";
@@ -22,6 +22,7 @@ export default function PermissionsContent({
 }) {
   const [editing, setEditing] = useState<Profile | null>(null);
   const [promoting, setPromoting] = useState(false);
+  const [creating, setCreating] = useState(false);
 
   return (
     <div className="space-y-5">
@@ -30,12 +31,20 @@ export default function PermissionsContent({
           <h1 className="text-xl font-bold text-[#020B27]">Permissions</h1>
           <p className="text-text-secondary text-sm mt-0.5">Contrôlez précisément les droits de chaque employé</p>
         </div>
-        <button
-          onClick={() => setPromoting(true)}
-          className="flex items-center gap-2 bg-green hover:bg-[#15803D] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-        >
-          <UserPlus size={16} /> Ajouter un employé
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCreating(true)}
+            className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          >
+            <UserPlus size={16} /> Créer un employé
+          </button>
+          <button
+            onClick={() => setPromoting(true)}
+            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg hover:border-green hover:text-green transition-colors"
+          >
+            Promouvoir un client
+          </button>
+        </div>
       </div>
 
       <div className="bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 flex items-start gap-2">
@@ -82,6 +91,7 @@ export default function PermissionsContent({
 
       {editing && <PermissionModal profile={editing} onClose={() => setEditing(null)} />}
       {promoting && <PromoteModal customers={customers} onClose={() => setPromoting(false)} />}
+      {creating && <CreateEmployeeModal onClose={() => setCreating(false)} />}
     </div>
   );
 }
@@ -224,7 +234,7 @@ function PermissionModal({ profile, onClose }: { profile: Profile; onClose: () =
           <button
             onClick={save}
             disabled={pending}
-            className="flex items-center gap-2 bg-green hover:bg-[#15803D] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             {pending ? <Loader2 size={15} className="animate-spin" /> : <ShieldCheck size={15} />} Enregistrer les permissions
           </button>
@@ -307,7 +317,7 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
                 <button
                   onClick={promote}
                   disabled={!selected || pending}
-                  className="flex items-center gap-2 bg-green hover:bg-[#15803D] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                  className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                   {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />}
                   {selected ? `Nommer ${nameOf(selected)} employé` : "Sélectionnez un client"}
@@ -317,6 +327,112 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
             </>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState<{ email: string; password: string } | null>(null);
+  const [showPwd, setShowPwd] = useState(false);
+
+  const submit = (formData: FormData) => {
+    setError(null);
+    const email = String(formData.get("email") ?? "");
+    const password = String(formData.get("password") ?? "");
+    startTransition(async () => {
+      const res = await adminCreateEmployee(formData);
+      if (res?.error) setError(res.error);
+      else { setDone({ email, password }); router.refresh(); }
+    });
+  };
+
+  const inputCls = "w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors";
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+          <h2 className="font-bold text-[#020B27]">Créer un employé</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-[#020B27] transition-colors"><X size={20} /></button>
+        </div>
+
+        {done ? (
+          <div className="p-5 space-y-4">
+            <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+              <p className="text-sm font-semibold text-[#020B27] flex items-center gap-2 mb-2">
+                <ShieldCheck size={16} className="text-green" /> Compte créé avec succès
+              </p>
+              <p className="text-xs text-text-secondary mb-3">
+                Communiquez ces identifiants à l&apos;employé. Il pourra se connecter immédiatement.
+              </p>
+              <div className="space-y-1.5 text-sm">
+                <div className="flex justify-between gap-2 bg-white rounded-lg border border-gray-100 px-3 py-2">
+                  <span className="text-text-secondary">Email</span>
+                  <span className="font-medium text-[#020B27] break-all">{done.email}</span>
+                </div>
+                <div className="flex justify-between gap-2 bg-white rounded-lg border border-gray-100 px-3 py-2">
+                  <span className="text-text-secondary">Mot de passe</span>
+                  <span className="font-medium text-[#020B27]">{done.password}</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-text-secondary">
+              Vous pouvez maintenant configurer ses permissions depuis la carte de l&apos;employé.
+            </p>
+            <button onClick={onClose} className="w-full bg-green hover:bg-[#9E7A45] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors">
+              Terminé
+            </button>
+          </div>
+        ) : (
+          <form action={submit} className="p-5 space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="first_name" className="block text-sm font-medium text-[#020B27] mb-1.5">Prénom</label>
+                <input id="first_name" name="first_name" className={inputCls} />
+              </div>
+              <div>
+                <label htmlFor="last_name" className="block text-sm font-medium text-[#020B27] mb-1.5">Nom</label>
+                <input id="last_name" name="last_name" className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-[#020B27] mb-1.5">Téléphone</label>
+              <input id="phone" name="phone" type="tel" placeholder="612 345 678" className={inputCls} />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-[#020B27] mb-1.5">Email <span className="text-red-500">*</span></label>
+              <input id="email" name="email" type="email" required placeholder="employe@assada.ma" className={inputCls} />
+            </div>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-[#020B27] mb-1.5">Mot de passe <span className="text-red-500">*</span></label>
+              <div className="relative">
+                <input id="password" name="password" type={showPwd ? "text" : "password"} required minLength={6} placeholder="Min. 6 caractères" className={`${inputCls} pr-11`} />
+                <button type="button" onClick={() => setShowPwd((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-medium">
+                  {showPwd ? "Cacher" : "Voir"}
+                </button>
+              </div>
+              <p className="text-[11px] text-text-secondary mt-1">Ces identifiants seront à transmettre à l&apos;employé.</p>
+            </div>
+
+            {error && <p className="text-xs text-red-600">{error}</p>}
+
+            <div className="flex gap-2 pt-1">
+              <button
+                type="submit"
+                disabled={pending}
+                className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+              >
+                {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />} Créer le compte
+              </button>
+              <button type="button" onClick={onClose} className="text-text-secondary text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">Annuler</button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );

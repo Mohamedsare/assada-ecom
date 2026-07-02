@@ -7,7 +7,8 @@ import AdvantagesSection from "@/components/sections/AdvantagesSection";
 import SocialSection from "@/components/sections/SocialSection";
 import ProductCarousel from "@/components/product/ProductCarousel";
 
-import { getProducts } from "@/lib/supabase/queries";
+import { getProducts, getCategories } from "@/lib/supabase/queries";
+import { CATEGORIES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Assada — Boutique cosmétique n°1 à Casablanca",
@@ -17,10 +18,17 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [latestProducts, promoProducts] = await Promise.all([
+  const [latestProducts, promoProducts, allCategories] = await Promise.all([
     getProducts({ limit: 8 }),
     getProducts({ is_promo: true, limit: 8 }),
+    getCategories(),
   ]);
+
+  // Catégories de tête (parent_id vide) avec leur image gérée en admin ; emoji de repli.
+  const emojiBySlug = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.emoji]));
+  const categoryItems = allCategories
+    .filter((c) => !c.parent_id)
+    .map((c) => ({ name: c.name, slug: c.slug, image: c.image_url, emoji: emojiBySlug[c.slug] ?? "🛍️" }));
 
   return (
     <>
@@ -28,7 +36,7 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* 2 — Catégories */}
-      <CategoriesSection />
+      <CategoriesSection items={categoryItems} />
 
       {/* 3 — Bannières promos */}
       <BannersSection />

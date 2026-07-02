@@ -6,6 +6,7 @@ import { SlidersHorizontal, Grid3X3, List, X } from "lucide-react";
 import ProductCard from "@/components/product/ProductCard";
 import type { Product, Category, Brand } from "@/types";
 import { formatPrice } from "@/lib/utils";
+import { usePageImage } from "@/stores/config";
 
 const SORT_OPTIONS = [
   { value: "newest", label: "Plus récents" },
@@ -24,6 +25,7 @@ interface Props {
 export default function BoutiqueContent({ products, categories, brands }: Props) {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("categorie") || "";
+  const bannerImg = usePageImage("banner_boutique");
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     initialCategory ? [initialCategory] : []
@@ -127,7 +129,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
                 type="checkbox"
                 checked={selectedCategories.includes(cat.slug)}
                 onChange={() => toggleCategory(cat.slug)}
-                className="rounded border-gray-300 text-[#020B27] focus:ring-[#16A34A]"
+                className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]"
               />
               <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">
                 {cat.name}
@@ -147,7 +149,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
                   type="checkbox"
                   checked={selectedBrands.includes(brand.slug)}
                   onChange={() => toggleBrand(brand.slug)}
-                  className="rounded border-gray-300 text-[#020B27] focus:ring-[#16A34A]"
+                  className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]"
                 />
                 <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">
                   {brand.name}
@@ -183,7 +185,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
             type="checkbox"
             checked={onlyPromo}
             onChange={(e) => setOnlyPromo(e.target.checked)}
-            className="rounded border-gray-300 text-[#020B27] focus:ring-[#16A34A]"
+            className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]"
           />
           <span className="text-sm font-medium text-gray-700">Promotions uniquement</span>
         </label>
@@ -206,7 +208,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
       <div
         className="relative text-white py-16 px-4 overflow-hidden"
         style={{
-          backgroundImage: "url('/banners/banner2-accueil.png')",
+          backgroundImage: `url('${bannerImg}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -278,7 +280,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
                 <p className="text-[#64748B] mb-6">Essayez de modifier vos filtres</p>
                 <button
                   onClick={resetFilters}
-                  className="bg-green text-white px-6 py-2.5 rounded-xl font-medium hover:bg-[#15803D] transition-colors"
+                  className="bg-green text-white px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
                 >
                   Réinitialiser les filtres
                 </button>
@@ -310,7 +312,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
             <div className="p-4 border-t">
               <button
                 onClick={() => setFiltersOpen(false)}
-                className="w-full bg-green text-white py-3 rounded-xl font-medium hover:bg-[#15803D] transition-colors"
+                className="w-full bg-green text-white py-3 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
               >
                 Afficher {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
               </button>

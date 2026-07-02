@@ -126,7 +126,7 @@ function DeliveryCard({ order }: { order: Order }) {
 
       <div className="flex items-center gap-2 mt-3">
         {nextStatus ? (
-          <button onClick={advance} disabled={pending} className="flex-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg hover:bg-[#15803D] disabled:opacity-60 transition-colors">
+          <button onClick={advance} disabled={pending} className="flex-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
             {pending ? "…" : `Passer à : ${ORDER_STATUS_LABELS[nextStatus]}`}
           </button>
         ) : (
@@ -137,7 +137,7 @@ function DeliveryCard({ order }: { order: Order }) {
             href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant la livraison de votre commande ${order.order_number}`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-lg bg-gray-100 hover:bg-[#16A34A] hover:text-white text-gray-500 transition-colors"
+            className="p-2 rounded-lg bg-gray-100 hover:bg-[#B8925A] hover:text-white text-gray-500 transition-colors"
             title="WhatsApp client"
           >
             <MessageCircle size={15} />

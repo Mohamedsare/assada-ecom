@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import ProductCard from "@/components/product/ProductCard";
-import { getProducts } from "@/lib/supabase/queries";
+import { getProducts, getPageImages } from "@/lib/supabase/queries";
+import { PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
 import { ChevronRight, Tag } from "lucide-react";
 import Link from "next/link";
 
@@ -10,14 +11,15 @@ export const metadata: Metadata = {
 };
 
 export default async function PromotionsPage() {
-  const allProducts = await getProducts({ is_promo: true });
+  const [allProducts, images] = await Promise.all([getProducts({ is_promo: true }), getPageImages()]);
+  const bannerImg = images.banner_promotions ?? PAGE_IMAGE_DEFAULTS.banner_promotions;
 
   return (
     <div>
       <div
         className="text-white py-14 px-4 relative overflow-hidden"
         style={{
-          backgroundImage: "url('/banners/banner4-accueil.png')",
+          backgroundImage: `url('${bannerImg}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -32,7 +34,7 @@ export default async function PromotionsPage() {
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-3">
                 Des promotions<br />
-                <span className="text-[#22C55E]">qui font plaisir !</span>
+                <span className="text-[#C9A063]">qui font plaisir !</span>
               </h1>
               <p className="text-gray-300 text-lg">
                 Profitez de réductions exceptionnelles sur une large sélection de produits.

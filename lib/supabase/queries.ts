@@ -1,5 +1,5 @@
 import { createClient } from "./server";
-import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD } from "@/lib/constants";
+import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
 import type {
   Product, Category, Brand, Order, Profile, Address,
   Review, Payment, ContactMessage, DeliveryAgent,
@@ -255,12 +255,12 @@ export async function getAdminOrders(): Promise<Order[]> {
   return (data ?? []) as Order[];
 }
 
-/** Une commande complète (articles + timeline de suivi) pour le détail admin. */
+/** Une commande complète (articles) pour le détail admin. */
 export async function getAdminOrderById(id: string): Promise<Order | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("orders")
-    .select(`*, items:order_items(*), tracking:order_tracking(*)`)
+    .select(`*, items:order_items(*)`)
     .eq("id", id)
     .single();
 
@@ -514,4 +514,26 @@ export async function getStoreConfig(): Promise<{ deliveryFee: number; freeDeliv
     deliveryFee: readSettingNumber(s.delivery_fee, DEFAULT_DELIVERY_FEE),
     freeDeliveryThreshold: readSettingNumber(s.free_delivery_threshold, DEFAULT_FREE_DELIVERY_THRESHOLD),
   };
+}
+
+/** Décode une valeur de réglage texte (potentiellement encodée en JSON). */
+function readSettingString(raw: unknown): string {
+  if (raw == null) return "";
+  let v: unknown = raw;
+  if (typeof v === "string") { try { v = JSON.parse(v); } catch { /* valeur brute */ } }
+  return typeof v === "string" ? v : "";
+}
+
+/**
+ * Images éditables du site (page « Gestion des pages »). Ne renvoie que les clés
+ * réellement définies en base (non vides) ; le reste utilise les défauts côté client.
+ */
+export async function getPageImages(): Promise<Record<string, string>> {
+  const s = await getSettings();
+  const out: Record<string, string> = {};
+  for (const key of Object.keys(PAGE_IMAGE_DEFAULTS)) {
+    const v = readSettingString(s[key]).trim();
+    if (v) out[key] = v;
+  }
+  return out;
 }

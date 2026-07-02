@@ -1,9 +1,11 @@
 "use server";
 
 import { createClient } from "./server";
+import { createAdminClient } from "./admin";
 import { getCurrentProfile } from "./queries";
 import { ensurePermission, ensureSensitive } from "./guards";
-import { isFullAccessRole } from "@/lib/permissions";
+import { isFullAccessRole, defaultEmployeePermissions } from "@/lib/permissions";
+import { PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
 import type { PermissionMatrix } from "@/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -86,17 +88,22 @@ export async function updateProfile(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { error: "Non connecté" };
 
-  const updates = {
+  const updates: Record<string, unknown> = {
     first_name: formData.get("first_name") as string,
     last_name: formData.get("last_name") as string,
     phone: formData.get("phone") as string,
     updated_at: new Date().toISOString(),
   };
+  // N'écrase l'avatar que si le champ est présent dans le formulaire (page profil admin)
+  if (formData.has("avatar_url")) {
+    updates.avatar_url = (formData.get("avatar_url") as string) || null;
+  }
 
   const { error } = await supabase.from("profiles").update(updates).eq("id", user.id);
   if (error) return { error: error.message };
 
   revalidatePath("/compte");
+  revalidatePath("/admin", "layout");
   return { success: true };
 }
 
@@ -238,8 +245,19 @@ export async function createOrder(data: {
   discount?: number;
   coupon_code?: string | null;
 }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  // On lit l'éventuelle session via le client standard (pour rattacher la commande
+  // à un compte s'il est connecté), mais TOUTES les écritures passent par le client
+  // service_role : la commande invité (user_id null) ne dépend ainsi d'aucune règle
+  // RLS et fonctionne de façon garantie, sans compte ni connexion.
+  const authClient = await createClient();
+  const { data: { user } } = await authClient.auth.getUser();
+
+  let supabase;
+  try {
+    supabase = createAdminClient();
+  } catch {
+    return { error: "Configuration serveur incomplète. Réessayez plus tard ou contactez-nous sur WhatsApp." };
+  }
 
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
@@ -299,13 +317,6 @@ export async function createOrder(data: {
     reference: data.payment.payment_phone || null,
   });
 
-  // Premier tracking
-  await supabase.from("order_tracking").insert({
-    order_id: order.id,
-    status: "pending",
-    message: "Commande reçue et en attente de confirmation.",
-  });
-
   // Incrémente l'usage du coupon si présent (via fonction SQL security definer,
   // car l'écriture sur coupons est protégée par RLS côté client). Échec silencieux.
   if (data.coupon_code) {
@@ -314,6 +325,40 @@ export async function createOrder(data: {
   }
 
   return { success: true, order_number };
+}
+
+/**
+ * Récupère une commande par son numéro pour la page de confirmation / suivi.
+ * Passe par le client service_role afin que la commande invité (user_id null)
+ * soit lisible sans compte ni connexion, indépendamment des règles RLS.
+ * On ne renvoie que des champs publics (jamais admin_note).
+ */
+export async function getOrderByNumber(orderNumber: string) {
+  const number = orderNumber?.trim().toUpperCase();
+  if (!number) return { error: "Numéro de commande manquant." };
+
+  let supabase;
+  try {
+    supabase = createAdminClient();
+  } catch {
+    return { error: "Configuration serveur incomplète." };
+  }
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select(
+      `order_number, order_status, payment_method, payment_status,
+       customer_name, customer_email, customer_phone,
+       delivery_city, delivery_district, delivery_address_details,
+       subtotal, delivery_fee, discount_amount, total_amount,
+       estimated_delivery_date, created_at,
+       items:order_items(*)`,
+    )
+    .eq("order_number", number)
+    .maybeSingle();
+
+  if (error || !data) return { error: "Commande introuvable." };
+  return { order: data };
 }
 
 // ─── ADMIN — PRODUCTS ────────────────────────────────────────────────────────
@@ -651,13 +696,6 @@ export async function adminUpdateOrderStatus(id: string, status: string) {
 
   if (error) return { error: error.message };
 
-  // Ajouter un événement de tracking
-  await supabase.from("order_tracking").insert({
-    order_id: id,
-    status,
-    message: getStatusMessage(status),
-  });
-
   revalidatePath("/admin/commandes");
   revalidatePath(`/admin/commandes/${id}`);
   revalidatePath("/admin/livraisons");
@@ -700,19 +738,6 @@ export async function adminUpdateOrderNote(id: string, note: string) {
   return { success: true };
 }
 
-function getStatusMessage(status: string): string {
-  const messages: Record<string, string> = {
-    confirmed: "Votre commande a été confirmée.",
-    preparing: "Votre commande est en cours de préparation.",
-    shipped: "Votre commande a été expédiée.",
-    out_for_delivery: "Votre livreur est en route.",
-    delivered: "Votre commande a été livrée avec succès.",
-    cancelled: "Votre commande a été annulée.",
-    returned: "Votre commande a été retournée.",
-  };
-  return messages[status] ?? "Statut mis à jour.";
-}
-
 // ─── ADMIN — SETTINGS ────────────────────────────────────────────────────────
 
 export async function adminUpdateSettings(formData: FormData) {
@@ -737,6 +762,25 @@ export async function adminUpdateSettings(formData: FormData) {
   }
 
   revalidatePath("/admin/parametres");
+  return { success: true };
+}
+
+// ─── ADMIN — GESTION DES PAGES (images éditables) ─────────────────────────────
+
+/** Met à jour les images éditables du site (bannières hero, bannières de pages). Réservé aux admins. */
+export async function adminUpdatePageImages(formData: FormData) {
+  const current = await getCurrentProfile();
+  if (!current || !isFullAccessRole(current.role)) return { error: "Accès refusé." };
+
+  const supabase = await createClient();
+  for (const key of Object.keys(PAGE_IMAGE_DEFAULTS)) {
+    const value = ((formData.get(key) as string) ?? "").trim();
+    // Valeur vide = on revient à l'image par défaut (getPageImages ignore les vides).
+    await supabase.from("settings").upsert({ key, value: JSON.stringify(value) }, { onConflict: "key" });
+  }
+
+  revalidatePath("/", "layout");   // rafraîchit les bannières publiques
+  revalidatePath("/admin/reglages");
   return { success: true };
 }
 
@@ -952,6 +996,55 @@ export async function adminUpdateOrderChannel(orderId: string, channel: string) 
 
 // ─── ADMIN — PERMISSIONS (employés) ────────────────────────────────────────────
 
+/**
+ * Crée directement un compte employé (email + mot de passe) via la clé service_role.
+ * Réservé aux admins/super_admins. Le trigger SQL crée la ligne profiles, qu'on
+ * complète ensuite avec le rôle « employee » et des permissions par défaut.
+ */
+export async function adminCreateEmployee(formData: FormData) {
+  const current = await getCurrentProfile();
+  if (!current || !isFullAccessRole(current.role)) return { error: "Accès refusé." };
+
+  const email = ((formData.get("email") as string) ?? "").trim().toLowerCase();
+  const password = (formData.get("password") as string) ?? "";
+  const first_name = ((formData.get("first_name") as string) ?? "").trim() || null;
+  const last_name = ((formData.get("last_name") as string) ?? "").trim() || null;
+  const phone = ((formData.get("phone") as string) ?? "").trim() || null;
+
+  if (!email) return { error: "L'email est requis." };
+  if (password.length < 6) return { error: "Le mot de passe doit contenir au moins 6 caractères." };
+
+  const admin = createAdminClient();
+
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true, // compte utilisable immédiatement, sans email de confirmation
+    user_metadata: { first_name, last_name },
+  });
+  if (error) {
+    return { error: error.message.includes("already been registered")
+      ? "Un compte existe déjà avec cet email."
+      : error.message };
+  }
+
+  const userId = data.user?.id;
+  if (!userId) return { error: "La création du compte a échoué." };
+
+  const { error: upErr } = await admin.from("profiles").update({
+    role: "employee",
+    first_name,
+    last_name,
+    phone,
+    permissions: defaultEmployeePermissions(),
+    updated_at: new Date().toISOString(),
+  }).eq("id", userId);
+  if (upErr) return { error: upErr.message };
+
+  revalidatePath("/admin/permissions");
+  return { success: true };
+}
+
 /** Met à jour la matrice de permissions d'un employé. Réservé aux admins. */
 export async function adminUpdateEmployeePermissions(userId: string, permissions: PermissionMatrix) {
   const current = await getCurrentProfile();
@@ -964,6 +1057,63 @@ export async function adminUpdateEmployeePermissions(userId: string, permissions
   if (error) return { error: error.message };
   revalidatePath("/admin/permissions");
   return { success: true };
+}
+
+// ─── ADMIN — RECHERCHE GLOBALE ────────────────────────────────────────────────
+
+/**
+ * Recherche transverse (produits, commandes, clients) pour la barre de recherche admin.
+ * Réservée au staff ; renvoie des résultats groupés et limités.
+ */
+export async function adminSearch(query: string) {
+  const q = query.trim();
+  const empty = { products: [], orders: [], clients: [] };
+
+  const current = await getCurrentProfile();
+  const isStaff = !!current && (isFullAccessRole(current.role) || current.role === "employee");
+  if (!isStaff || q.length < 2) return empty;
+
+  const supabase = await createClient();
+  const like = `%${q}%`;
+
+  const [prodRes, orderRes, clientRes] = await Promise.all([
+    supabase.from("products")
+      .select("id, name, main_image_url, current_price, status")
+      .or(`name.ilike.${like},sku.ilike.${like}`)
+      .limit(6),
+    supabase.from("orders")
+      .select("id, order_number, customer_name, order_status, total_amount")
+      .or(`order_number.ilike.${like},customer_name.ilike.${like},customer_phone.ilike.${like}`)
+      .order("created_at", { ascending: false })
+      .limit(6),
+    supabase.from("profiles")
+      .select("id, first_name, last_name, email, phone")
+      .eq("role", "customer")
+      .or(`first_name.ilike.${like},last_name.ilike.${like},email.ilike.${like},phone.ilike.${like}`)
+      .limit(6),
+  ]);
+
+  return {
+    products: (prodRes.data ?? []).map((p) => ({
+      id: p.id as string,
+      name: p.name as string,
+      image: (p.main_image_url as string | null) ?? null,
+      price: (p.current_price as number) ?? 0,
+      status: p.status as string,
+    })),
+    orders: (orderRes.data ?? []).map((o) => ({
+      id: o.id as string,
+      order_number: o.order_number as string,
+      customer_name: o.customer_name as string,
+      status: o.order_status as string,
+      total: (o.total_amount as number) ?? 0,
+    })),
+    clients: (clientRes.data ?? []).map((c) => ({
+      id: c.id as string,
+      name: [c.first_name, c.last_name].filter(Boolean).join(" ") || (c.email as string) || "Client",
+      email: (c.email as string | null) ?? (c.phone as string | null) ?? "",
+    })),
+  };
 }
 
 // ─── CONTACT (public) ─────────────────────────────────────────────────────────

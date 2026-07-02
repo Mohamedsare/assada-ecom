@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Save, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
 import { updateProfile, updatePassword } from "@/lib/supabase/actions";
 import { createClient } from "@/lib/supabase/client";
+import AvatarUpload from "@/components/ui/AvatarUpload";
 import type { Profile } from "@/types";
 
 export default function ParametresPage() {
@@ -41,6 +42,8 @@ export default function ParametresPage() {
         const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
         if (data) setProfile(data as Profile);
       }
+      // Notifie les autres composants (ex : la sidebar) de rafraîchir l'avatar/nom
+      window.dispatchEvent(new Event("assada:profile-updated"));
     }
     setSavingProfile(false);
   }
@@ -86,7 +89,14 @@ export default function ParametresPage() {
       <div className="bg-white rounded-2xl border border-gray-100 p-5">
         <h2 className="font-semibold text-[#020B27] mb-4">Profil</h2>
         <form action={handleProfileSubmit}>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <AvatarUpload
+            name="avatar_url"
+            bucket="products"
+            fallback={[profile.first_name, profile.last_name].filter(Boolean).join(" ") || profile.email || "Client"}
+            defaultValue={profile.avatar_url ?? ""}
+          />
+
+          <div className="grid sm:grid-cols-2 gap-4 mt-5">
             {[
               { label: "Prénom", name: "first_name", type: "text", value: profile.first_name ?? "" },
               { label: "Nom", name: "last_name", type: "text", value: profile.last_name ?? "" },
@@ -100,7 +110,7 @@ export default function ParametresPage() {
                   name={name}
                   defaultValue={value}
                   readOnly={readOnly}
-                  className={`w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors ${readOnly ? "bg-gray-50 text-gray-400 cursor-not-allowed" : "focus:border-[#16A34A]"}`}
+                  className={`w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none transition-colors ${readOnly ? "bg-gray-50 text-gray-400 cursor-not-allowed" : "focus:border-[#B8925A]"}`}
                 />
               </div>
             ))}
@@ -116,7 +126,7 @@ export default function ParametresPage() {
           <button
             type="submit"
             disabled={savingProfile}
-            className="mt-4 flex items-center gap-2 bg-[#16A34A] text-[#020B27] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#15803D] transition-colors disabled:opacity-60"
+            className="mt-4 flex items-center gap-2 bg-[#B8925A] text-[#020B27] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#9E7A45] transition-colors disabled:opacity-60"
           >
             {savingProfile ? (
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -145,7 +155,7 @@ export default function ParametresPage() {
                   onChange={(e) => onChange(e.target.value)}
                   required
                   minLength={6}
-                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors pr-10"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors pr-10"
                 />
                 <button
                   type="button"

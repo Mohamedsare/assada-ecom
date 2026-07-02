@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getAdminOrderById, getSettings } from "@/lib/supabase/queries";
 import { requirePermission } from "@/lib/supabase/guards";
 import { SITE_NAME, SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
-import Invoice, { type InvoiceShop } from "@/components/admin/Invoice";
+import Invoice, { type InvoiceShop, type InvoiceFormat } from "@/components/admin/Invoice";
 
 export const metadata = { title: "Facture" };
 export const dynamic = "force-dynamic";
@@ -37,7 +37,10 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
   };
 
   const rawFormat = read(settings.invoice_format, "a4");
-  const defaultFormat = rawFormat === "thermique" ? "thermique" : "a4";
+  const defaultFormat: InvoiceFormat =
+    rawFormat === "thermique_58" ? "thermique_58"
+    : rawFormat === "thermique_80" || rawFormat === "thermique" ? "thermique_80"
+    : "a4";
 
   // Numéro de facture dérivé du numéro de commande (préfixe FAC-).
   const invoiceNumber = `FAC-${order.order_number}`;

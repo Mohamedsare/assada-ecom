@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Save, Store, Truck, Share2, Receipt } from "lucide-react";
 import { adminUpdateSettings } from "@/lib/supabase/actions";
+import InvoiceFormatField from "@/components/admin/InvoiceFormatField";
 
 export interface SettingsValues {
   shop_name: string;
@@ -82,14 +83,8 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
           <Receipt size={18} className="text-green" />
           <h2 className="font-semibold text-[#020B27]">Facturation</h2>
         </div>
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="invoice_format" className="block text-sm font-medium text-[#020B27] mb-1.5">Format de facture</label>
-            <select id="invoice_format" name="invoice_format" defaultValue={initial.invoice_format} className={inputCls}>
-              <option value="a4">A4</option>
-              <option value="thermique">Thermique (80 mm)</option>
-            </select>
-          </div>
+        <div className="space-y-4">
+          <InvoiceFormatField defaultValue={initial.invoice_format} />
           <Field label="Texte de pied de facture" name="invoice_footer" defaultValue={initial.invoice_footer} />
         </div>
       </div>
@@ -111,7 +106,7 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 bg-green hover:bg-[#15803D] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
         >
           <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer les modifications"}
         </button>

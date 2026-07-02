@@ -16,7 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/nouveautes`,     lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     { url: `${base}/promotions`,     lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     { url: `${base}/contact`,        lastModified: now, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${base}/suivi-commande`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
   ];
 
   // 2 — Pages catégories (filtres boutique = vraies pages indexables)

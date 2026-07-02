@@ -131,7 +131,7 @@ function CartDrawerInner() {
             <ShoppingCart size={18} />
             <h2 className="font-bold text-base">Mon panier</h2>
             {totalItems() > 0 && (
-              <span className="bg-[#16A34A] text-[#020B27] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="bg-[#B8925A] text-[#020B27] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                 {totalItems() > 9 ? "9+" : totalItems()}
               </span>
             )}
@@ -150,7 +150,7 @@ function CartDrawerInner() {
               <p className="font-bold text-[#020B27] text-lg">Votre panier est vide</p>
               <p className="text-[#64748B] text-sm mt-1">Découvrez nos produits</p>
             </div>
-            <button onClick={onClose} className="mt-2 bg-[#16A34A] text-[#020B27] px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#15803D] transition-colors">
+            <button onClick={onClose} className="mt-2 bg-[#B8925A] text-[#020B27] px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#9E7A45] transition-colors">
               Voir la boutique
             </button>
           </div>
@@ -224,7 +224,7 @@ function CartDrawerInner() {
                 <span className="font-bold text-[#020B27]">Total</span>
                 <span className="text-xl font-extrabold text-[#020B27]">{formatPrice(total)}</span>
               </div>
-              <Link href="/checkout" onClick={onClose} className="w-full flex items-center justify-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-[#020B27] py-3.5 rounded-xl font-bold text-sm transition-colors">
+              <Link href="/checkout" onClick={onClose} className="w-full flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-[#020B27] py-3.5 rounded-xl font-bold text-sm transition-colors">
                 Passer la commande <ArrowRight size={16} />
               </Link>
               <Link href="/panier" onClick={onClose} className="w-full flex items-center justify-center gap-1 text-[#64748B] hover:text-[#020B27] py-2 text-sm font-medium transition-colors">

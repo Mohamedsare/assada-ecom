@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,7 +54,7 @@ function Field({ label, required, error, children }: {
   );
 }
 
-const inputCls = "w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#16A34A] focus:ring-2 focus:ring-[#16A34A]/10 transition-all placeholder:text-gray-400 bg-white";
+const inputCls = "w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all placeholder:text-gray-400 bg-white";
 
 export default function CheckoutPage() {
   const router    = useRouter();
@@ -69,6 +69,10 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errors,     setErrors]     = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState<string | null>(null);
+  // Empêche la redirection « panier vide → /panier » de se déclencher juste après
+  // le vidage du panier consécutif à une commande réussie (sinon elle écrase la
+  // navigation vers la page de confirmation).
+  const orderPlaced = useRef(false);
 
   const [customer, setCustomer] = useState<CustomerData>({ first_name: "", last_name: "", phone: "" });
   const [address,  setAddress]  = useState<AddressData>({ city: "Casablanca", district: "" });
@@ -80,7 +84,7 @@ export default function CheckoutPage() {
   const total       = subtotal + deliveryFee;
 
   useEffect(() => {
-    if (items.length === 0) router.replace("/panier");
+    if (items.length === 0 && !orderPlaced.current) router.replace("/panier");
   }, [items.length, router]);
 
   const goNext = () => {
@@ -129,8 +133,11 @@ export default function CheckoutPage() {
       return;
     }
 
-    clearCart();
+    // On marque la commande comme passée AVANT de vider le panier, pour neutraliser
+    // la redirection automatique vers /panier, puis on navigue vers la confirmation.
+    orderPlaced.current = true;
     router.push(`/validation-commande?order=${result.order_number}`);
+    clearCart();
   };
 
   if (items.length === 0) return null;
@@ -147,7 +154,7 @@ export default function CheckoutPage() {
                 {item.product.main_image_url
                   ? <Image src={item.product.main_image_url} alt={item.product.name} fill className="object-cover" />
                   : <div className="w-full h-full flex items-center justify-center text-lg">📦</div>}
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#16A34A] text-[#020B27] text-[9px] font-bold rounded-full flex items-center justify-center">{item.quantity}</span>
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#B8925A] text-[#020B27] text-[9px] font-bold rounded-full flex items-center justify-center">{item.quantity}</span>
               </div>
               <p className="flex-1 text-xs font-medium text-[#020B27] line-clamp-2 leading-snug">{item.product.name}</p>
               <p className="text-xs font-bold text-[#020B27] shrink-0">{formatPrice(unit * item.quantity)}</p>
@@ -221,7 +228,7 @@ export default function CheckoutPage() {
             {step === 1 && (
               <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-[#16A34A] rounded-full flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 bg-[#B8925A] rounded-full flex items-center justify-center shrink-0">
                     <User size={16} className="text-white" />
                   </div>
                   <div>
@@ -242,10 +249,10 @@ export default function CheckoutPage() {
                 <Field label="Téléphone WhatsApp" required error={errors.phone}>
                   <div className="relative">
                     <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
-                      <span className="text-base">🇬🇦</span>
-                      <span className="text-sm font-semibold text-gray-500 border-r border-gray-200 pr-2">+241</span>
+                      <span className="text-base">🇲🇦</span>
+                      <span className="text-sm font-semibold text-gray-500 border-r border-gray-200 pr-2">+212</span>
                     </div>
-                    <input className={`${inputCls} pl-[4.5rem]`} type="tel" placeholder="62 57 37 48"
+                    <input className={`${inputCls} pl-[4.5rem]`} type="tel" placeholder="612 345 678"
                       value={customer.phone} onChange={e => setCustomer(c => ({ ...c, phone: e.target.value }))} />
                   </div>
                 </Field>
@@ -255,7 +262,7 @@ export default function CheckoutPage() {
             {step === 2 && (
               <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-[#16A34A] rounded-full flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 bg-[#B8925A] rounded-full flex items-center justify-center shrink-0">
                     <MapPin size={16} className="text-white" />
                   </div>
                   <div>
@@ -282,7 +289,7 @@ export default function CheckoutPage() {
                   <h2 className="font-bold text-[#020B27] pb-4">Vérifiez votre commande</h2>
                   {[
                     { icon: User, title: "Client", stepBack: 1 as number | undefined,
-                      lines: [`${customer.first_name} ${customer.last_name}`, `+241 ${customer.phone}`].filter(Boolean) },
+                      lines: [`${customer.first_name} ${customer.last_name}`, `+212 ${customer.phone}`].filter(Boolean) },
                     { icon: MapPin, title: "Livraison", stepBack: 2 as number | undefined,
                       lines: [`${address.city}, ${address.district}`].filter(Boolean) },
                     { icon: CreditCard, title: "Paiement", stepBack: undefined as number | undefined,
@@ -360,7 +367,7 @@ export default function CheckoutPage() {
 
                 <div className="hidden lg:block space-y-3">
                   <button onClick={handleSubmit} disabled={submitting}
-                    className="w-full flex items-center justify-center gap-3 bg-[#16A34A] text-[#020B27] py-4 rounded-2xl font-bold text-base hover:bg-[#15803D] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                    className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-[#020B27] py-4 rounded-2xl font-bold text-base hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
                     {submitting
                       ? <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Traitement…</>
                       : <><Lock size={17} /> Confirmer ma commande</>}
@@ -381,7 +388,7 @@ export default function CheckoutPage() {
                   </button>
                 )}
                 <button onClick={goNext}
-                  className="flex-1 flex items-center justify-center gap-2 bg-[#16A34A] text-[#020B27] py-3.5 rounded-2xl font-bold text-base hover:bg-[#15803D] active:scale-95 transition-all">
+                  className="flex-1 flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3.5 rounded-2xl font-bold text-base hover:bg-[#9E7A45] active:scale-95 transition-all">
                   Continuer <ChevronRight size={18} />
                 </button>
               </div>
@@ -404,12 +411,12 @@ export default function CheckoutPage() {
           )}
           {step < 3 ? (
             <button onClick={goNext}
-              className="flex-1 flex items-center justify-center gap-2 bg-[#16A34A] text-[#020B27] py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all">
+              className="flex-1 flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all">
               Continuer <ChevronRight size={18} />
             </button>
           ) : (
             <button onClick={handleSubmit} disabled={submitting}
-              className="flex-1 flex items-center justify-center gap-2 bg-[#16A34A] text-[#020B27] py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all disabled:opacity-60">
+              className="flex-1 flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all disabled:opacity-60">
               {submitting
                 ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> En cours…</>
                 : <><Lock size={16} /> Confirmer</>}

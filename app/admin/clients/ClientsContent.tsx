@@ -145,7 +145,7 @@ function ClientRow({ client, stat }: { client: Profile; stat?: { count: number; 
               href={getClientWhatsAppUrl(client.phone, `Bonjour ${client.first_name ?? ""}`)}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#16A34A] transition-colors"
+              className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#B8925A] transition-colors"
               title="WhatsApp"
             >
               <MessageCircle size={15} />

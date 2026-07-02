@@ -25,6 +25,15 @@ function niceMax(v: number) {
   return Math.ceil((v * 1.25) / mag) * mag;
 }
 
+/** Formate une graduation exprimée en millions de DH, quelle que soit l'échelle. */
+function formatTick(millions: number): string {
+  if (millions === 0) return "0";
+  const dh = millions * 1_000_000;
+  if (dh >= 1_000_000) return `${+(dh / 1_000_000).toFixed(1)}M`;
+  if (dh >= 1_000) return `${Math.round(dh / 1_000)}K`;
+  return `${Math.round(dh)}`;
+}
+
 export default function SalesAreaChart({ data }: { data?: SalesChartData }) {
   const [period, setPeriod] = useState<Period>("Mois");
 
@@ -54,7 +63,8 @@ export default function SalesAreaChart({ data }: { data?: SalesChartData }) {
       ? `${linePath} L ${xFn(points.length - 1)} ${PAD.top + innerH} L ${xFn(0)} ${PAD.top + innerH} Z`
       : "";
 
-  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(MAX * f * 10) / 10);
+  // Valeurs brutes (non arrondies) pour un positionnement exact ; l'index sert de clé.
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => MAX * f);
 
   return (
     <div>
@@ -95,8 +105,8 @@ export default function SalesAreaChart({ data }: { data?: SalesChartData }) {
           </linearGradient>
         </defs>
 
-        {yTicks.map((t) => (
-          <g key={t}>
+        {yTicks.map((t, i) => (
+          <g key={i}>
             <line
               x1={PAD.left}
               y1={yFn(t)}
@@ -112,7 +122,7 @@ export default function SalesAreaChart({ data }: { data?: SalesChartData }) {
               className="fill-gray-400"
               fontSize="10"
             >
-              {t === 0 ? "0" : t >= 1 ? `${t}M` : `${Math.round(t * 1000)}K`}
+              {formatTick(t)}
             </text>
           </g>
         ))}

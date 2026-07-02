@@ -119,19 +119,19 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
             value={search}
             onChange={(e) => { setSearch(e.target.value); resetPage(); }}
             placeholder="N° commande, client ou téléphone…"
-            className="w-full text-sm border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 outline-none focus:border-[#16A34A] transition-colors"
+            className="w-full text-sm border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 outline-none focus:border-[#B8925A] transition-colors"
           />
         </div>
         <div className="grid sm:grid-cols-3 gap-3">
-          <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#16A34A] bg-white">
+          <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#B8925A] bg-white">
             <option value="">Tous les statuts</option>
             {Object.entries(ORDER_STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
           </select>
-          <select value={filterPayment} onChange={(e) => { setFilterPayment(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#16A34A] bg-white">
+          <select value={filterPayment} onChange={(e) => { setFilterPayment(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#B8925A] bg-white">
             <option value="">Tous les paiements</option>
             <option value="cash_on_delivery">Paiement à la livraison</option>
           </select>
-          <select value={filterDate} onChange={(e) => { setFilterDate(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#16A34A] bg-white">
+          <select value={filterDate} onChange={(e) => { setFilterDate(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#B8925A] bg-white">
             {DATE_FILTERS.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
           </select>
         </div>
@@ -198,7 +198,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                           href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, votre commande ${order.order_number} est en cours de traitement.`)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#16A34A] transition-colors"
+                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#B8925A] transition-colors"
                           title="Contacter le client sur WhatsApp"
                         >
                           <MessageCircle size={15} />

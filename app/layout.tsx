@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "Assada — Boutique en ligne n°1 à Casablanca",
     description: SITE_DESCRIPTION,
-    images: [{ url: "/logo1.png", width: 1200, height: 630, alt: SITE_NAME }],
+    images: [{ url: "/logo1.png", width: 500, height: 500, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",

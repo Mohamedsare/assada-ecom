@@ -55,7 +55,7 @@ export default function RechercheContent() {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Hero + barre de recherche */}
-      <div className="bg-[#16A34A] text-[#020B27] py-10 px-4">
+      <div className="bg-[#B8925A] text-[#020B27] py-10 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-4">Rechercher</h1>
           <div className="relative">
@@ -135,14 +135,14 @@ export default function RechercheContent() {
             <h2 className="text-xl font-bold text-[#020B27] mb-2">Aucun résultat pour « {input.trim()} »</h2>
             <p className="text-[#64748B] mb-6">Vérifiez l&apos;orthographe ou essayez d&apos;autres mots-clés.</p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link href="/boutique" className="bg-green text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#15803D] transition-colors">
+              <Link href="/boutique" className="bg-green text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors">
                 Voir toute la boutique
               </Link>
               <Link
                 href={getWhatsAppUrl(`Bonjour Assada, je cherche "${input.trim()}". Est-ce que vous l'avez ?`)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-[#16A34A] text-white px-6 py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity"
+                className="bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity"
               >
                 Contacter WhatsApp
               </Link>

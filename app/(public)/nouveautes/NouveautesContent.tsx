@@ -4,24 +4,16 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import { ShieldCheck, Tag, Truck, SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import ProductCard from "@/components/product/ProductCard";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 import type { Product, Category } from "@/types";
+import { usePageImage } from "@/stores/config";
+import { CATEGORIES } from "@/lib/constants";
 
 const SORT_OPTIONS = [
   { value: "newest", label: "Plus récents" },
   { value: "price_asc", label: "Prix croissant" },
   { value: "price_desc", label: "Prix décroissant" },
   { value: "popular", label: "Popularité" },
-];
-
-const VISUAL_CATEGORIES = [
-  { name: "Parfums", slug: "parfums", image: "/categories/parfums.jpeg" },
-  { name: "Maquillage", slug: "maquillage", image: "/categories/maquillage.jpeg" },
-  { name: "Soins du visage", slug: "soins-visage", image: "/categories/soins-visage.jpeg" },
-  { name: "Soins du corps", slug: "soins-corps", image: "/categories/soins-corps.jpeg" },
-  { name: "Soins des cheveux", slug: "soins-cheveux", image: "/categories/soins-cheveux.jpeg" },
-  { name: "Hygiène", slug: "hygiene", image: "/categories/hygiene.jpeg" },
-  { name: "Accessoires", slug: "accessoires", image: "/categories/accessoires.jpeg" },
-  { name: "Cadeaux", slug: "cadeaux", image: "/categories/cadeaux.jpeg" },
 ];
 
 const TRUST_BADGES = [
@@ -37,6 +29,13 @@ interface Props {
 
 export default function NouveautesContent({ products, categories }: Props) {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const bannerImg = usePageImage("banner_nouveautes");
+
+  // Bande de catégories : catégories de tête de la base (image_url gérée en admin, emoji de repli).
+  const emojiBySlug = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.emoji]));
+  const visualCats = categories
+    .filter((c) => !c.parent_id)
+    .map((c) => ({ name: c.name, slug: c.slug, image: c.image_url, emoji: emojiBySlug[c.slug] ?? "🛍️" }));
   const [sort, setSort] = useState("newest");
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -100,7 +99,7 @@ export default function NouveautesContent({ products, categories }: Props) {
       <div
         className="relative text-white overflow-hidden"
         style={{
-          backgroundImage: "url('/banners/banner3-accuiel.png')",
+          backgroundImage: `url('${bannerImg}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
@@ -130,7 +129,7 @@ export default function NouveautesContent({ products, categories }: Props) {
       <div className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6 overflow-x-auto pb-1 scrollbar-hide">
-            {VISUAL_CATEGORIES.map((cat) => (
+            {visualCats.map((cat) => (
               <button
                 key={cat.slug}
                 onClick={() => toggleCategory(cat.slug)}
@@ -138,12 +137,16 @@ export default function NouveautesContent({ products, categories }: Props) {
                   selectedCategories.includes(cat.slug) ? "opacity-100" : "opacity-80 hover:opacity-100"
                 }`}
               >
-                <div className={`w-20 h-20 rounded-full overflow-hidden border-2 transition-colors ${
+                <div className={`w-20 h-20 rounded-full overflow-hidden border-2 flex items-center justify-center bg-gray-50 transition-colors ${
                   selectedCategories.includes(cat.slug)
                     ? "border-green"
                     : "border-gray-200 group-hover:border-green"
                 }`}>
-                  <Image src={cat.image} alt={cat.name} width={80} height={80} className="object-cover w-full h-full" />
+                  {cat.image ? (
+                    <Image src={cat.image} alt={cat.name} width={80} height={80} className="object-cover w-full h-full" />
+                  ) : (
+                    <CategoryIcon slug={cat.slug} size={30} strokeWidth={1.5} className="text-[#B8925A]" />
+                  )}
                 </div>
                 <span className="text-xs font-medium text-[#020B27] text-center w-20 leading-tight">
                   {cat.name}
@@ -209,7 +212,7 @@ export default function NouveautesContent({ products, categories }: Props) {
                 <p className="text-text-secondary mb-6">Essayez de modifier vos filtres</p>
                 <button
                   onClick={resetFilters}
-                  className="bg-green text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#15803D] transition-colors"
+                  className="bg-green text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
                 >
                   Réinitialiser les filtres
                 </button>

@@ -22,8 +22,8 @@ const FAQ = [
     a: "Nous acceptons le paiement en espèces à la livraison. Le paiement en ligne sera disponible prochainement.",
   },
   {
-    q: "Comment suivre ma commande ?",
-    a: "Rendez-vous sur notre page Suivi commande et entrez votre numéro de commande ou votre email. Vous pouvez aussi nous contacter sur WhatsApp.",
+    q: "Comment connaître l'état de ma commande ?",
+    a: "Notre équipe vous contacte sur WhatsApp après votre commande pour la confirmer et organiser la livraison. Écrivez-nous sur WhatsApp avec votre numéro de commande à tout moment.",
   },
 ];
 
@@ -53,11 +53,11 @@ export default function ContactContent() {
     <div>
       {/* Hero */}
       <div className="bg-gradient-to-r from-[#020B27] to-[#0F172A] text-white py-14 px-4 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#16A34A]/10 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#B8925A]/10 rounded-full blur-3xl" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-3">
             Nous sommes là<br />
-            <span className="text-[#22C55E]">pour vous aider !</span>
+            <span className="text-[#C9A063]">pour vous aider !</span>
           </h1>
           <p className="text-gray-300 text-lg">
             Une question, un problème ? Contactez-nous, nous répondons vite.
@@ -108,7 +108,7 @@ export default function ContactContent() {
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 hover:border-[#16A34A] hover:shadow-sm transition-all"
+                    className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 hover:border-[#B8925A] hover:shadow-sm transition-all"
                   >
                     <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${item.color}`}>
                       <Icon size={20} />
@@ -129,7 +129,7 @@ export default function ContactContent() {
                 {[
                   { label: "TikTok", href: "https://www.tiktok.com/@assada", bg: "bg-gray-900" },
                   { label: "Facebook", href: "https://www.facebook.com/assada", bg: "bg-[#1877F2]" },
-                  { label: "WhatsApp", href: getWhatsAppUrl("Bonjour Assada"), bg: "bg-[#16A34A]" },
+                  { label: "WhatsApp", href: getWhatsAppUrl("Bonjour Assada"), bg: "bg-whatsapp" },
                 ].map((s) => (
                   <Link
                     key={s.label}
@@ -167,7 +167,7 @@ export default function ContactContent() {
 
             {sent ? (
               <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
-                <div className="w-16 h-16 bg-[#16A34A] rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#B8925A] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Send size={28} className="text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-[#020B27] mb-2">Message envoyé !</h3>
@@ -192,7 +192,7 @@ export default function ContactContent() {
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       placeholder="Jean Dupont"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors"
                     />
                   </div>
                   <div>
@@ -205,7 +205,7 @@ export default function ContactContent() {
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       placeholder="jean@example.com"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors"
                     />
                   </div>
                 </div>
@@ -215,11 +215,11 @@ export default function ContactContent() {
                   <select
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors text-[#020B27]"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors text-[#020B27]"
                   >
                     <option value="">Sélectionner un sujet</option>
                     <option>Question sur un produit</option>
-                    <option>Suivi de commande</option>
+                    <option>Ma commande</option>
                     <option>Retour / Remboursement</option>
                     <option>Problème de livraison</option>
                     <option>Autre</option>
@@ -236,7 +236,7 @@ export default function ContactContent() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Décrivez votre demande..."
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#16A34A] transition-colors resize-none"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors resize-none"
                   />
                 </div>
 
@@ -245,7 +245,7 @@ export default function ContactContent() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full flex items-center justify-center gap-2 bg-[#16A34A] text-[#020B27] py-3 rounded-xl font-semibold hover:bg-[#15803D] disabled:opacity-60 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3 rounded-xl font-semibold hover:bg-[#9E7A45] disabled:opacity-60 transition-colors"
                 >
                   <Send size={16} />
                   {sending ? "Envoi en cours…" : "Envoyer le message"}

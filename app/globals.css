@@ -12,10 +12,10 @@
   --color-foreground: #0F172A;
   --font-sans: var(--font-geist-sans);
 
-  --color-night: #be04c4;       /* chrome sombre (header, footer, bandeaux) */
+  --color-night: #020617;       /* chrome sombre (header, footer, bandeaux) */
   --color-night-2: #0F172A;
-  --color-green: #16A34A;        /* action principale = vert */
-  --color-green-light: #22C55E;  /* vert lumineux */
+  --color-green: #B8925A;        /* action principale = or champagne */
+  --color-green-light: #C9A063;  /* or clair */
   --color-gray-light: #F8FAFC;
   --color-gray-border: #E5E7EB;
   --color-text-dark: #0F172A;
@@ -25,13 +25,14 @@
 
   /* Tokens sémantiques remappés sur la palette bleu nuit / vert */
   --color-cream: #F8FAFC;
-  --color-principal: #16A34A;
-  --color-rose: #16A34A;
-  --color-rose-dark: #15803D;
-  --color-gold: #22C55E;
-  --color-gold-dark: #16A34A;
-  --color-success: #16A34A;
-  --color-whatsapp: #16A34A;
+  --color-principal: #B8925A;
+  --color-rose: #B8925A;
+  --color-rose-dark: #9E7A45;
+  --color-gold: #B8925A;
+  --color-gold-dark: #9E7A45;
+  --color-success: #16A34A;       /* succès reste vert */
+  --color-whatsapp: #16A34A;      /* WhatsApp reste vert */
+  --color-whatsapp-dark: #326B4D; /* survol WhatsApp */
 
   /* Rayons réduits globalement (tout rounded-* devient plus discret) */
   --radius-xs:  0.0625rem;  /* 1px  */
@@ -66,11 +67,11 @@ html {
   background: #f1f1f1;
 }
 ::-webkit-scrollbar-thumb {
-  background: #16A34A;
+  background: #B8925A;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #15803D;
+  background: #9E7A45;
 }
 
 /* Masquer la scrollbar (carrousels mobiles) */
@@ -134,4 +135,27 @@ html {
 }
 @media (prefers-reduced-motion: reduce) {
   .animate-quickview { animation: none; }
+}
+
+/* Page de victoire : apparition rebondissante de la pastille de confirmation */
+@keyframes victoryPop {
+  0%   { opacity: 0; transform: scale(0.4); }
+  60%  { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.animate-victory-pop {
+  animation: victoryPop 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Étincelles scintillantes autour de la pastille */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8) rotate(0deg); }
+  50%      { opacity: 1;   transform: scale(1.2) rotate(15deg); }
+}
+.animate-twinkle {
+  animation: twinkle 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-victory-pop { animation: none; }
+  .animate-twinkle { animation: none; }
 }

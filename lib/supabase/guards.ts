@@ -17,17 +17,18 @@ export async function requireStaff(): Promise<Profile> {
 /** Exige un accès complet (admin/super_admin) — pour Permissions, Utilisateurs, Réglages. */
 export async function requireAdmin(): Promise<Profile> {
   const profile = await requireStaff();
-  if (!isFullAccessRole(profile.role)) redirect("/admin/dashboard");
+  // Redirige vers l'index admin (qui route vers une page autorisée) — évite toute boucle.
+  if (!isFullAccessRole(profile.role)) redirect("/admin");
   return profile;
 }
 
-/** Exige un droit module × action ; redirige vers le dashboard si refusé. */
+/** Exige un droit module × action ; redirige vers une page autorisée si refusé. */
 export async function requirePermission(
   module: PermissionModuleKey,
   action: PermissionAction = "view",
 ): Promise<Profile> {
   const profile = await requireStaff();
-  if (!hasPermission(profile, module, action)) redirect("/admin/dashboard");
+  if (!hasPermission(profile, module, action)) redirect("/admin");
   return profile;
 }
 
