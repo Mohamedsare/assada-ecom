@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
-import { SlidersHorizontal, Grid3X3, List, X } from "lucide-react";
+import { SlidersHorizontal, Grid3X3, List, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/product/ProductCard";
 import type { Product, Category, Brand } from "@/types";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, cn } from "@/lib/utils";
 import { usePageImage } from "@/stores/config";
 
 const SORT_OPTIONS = [
@@ -15,6 +15,8 @@ const SORT_OPTIONS = [
   { value: "promo", label: "Meilleures offres" },
   { value: "popular", label: "Popularité" },
 ];
+
+const PAGE_SIZE = 20;
 
 interface Props {
   products: Product[];
@@ -51,6 +53,17 @@ export default function BoutiqueContent({
   const [sort, setSort] = useState("newest");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  // Verrouille le scroll du body + fermeture au clavier (Échap) quand le drawer mobile est ouvert.
+  useEffect(() => {
+    if (!filtersOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setFiltersOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => { document.body.style.overflow = ""; document.removeEventListener("keydown", onKey); };
+  }, [filtersOpen]);
 
   // Catégories de tête pour la sidebar (le méga-menu gère les sous-catégories).
   const topCategories = useMemo(() => categories.filter((c) => !c.parent_id), [categories]);
@@ -108,6 +121,36 @@ export default function BoutiqueContent({
     }
     return list;
   }, [products, selectedCategories, selectedBrands, priceRange, onlyPromo, sort, descendantsBySlug]);
+
+  // Pagination — 20 produits par page.
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  // Revient à la page 1 quand un filtre / tri change.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPage(1);
+  }, [selectedCategories, selectedBrands, onlyPromo, priceRange, sort]);
+
+  const goToPage = (p: number) => {
+    setPage(Math.min(Math.max(1, p), totalPages));
+    resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // Numéros affichés : 1, page-1..page+1, dernier (avec ellipses).
+  const pageNumbers = useMemo(() => {
+    const nums: (number | "…")[] = [];
+    let last = 0;
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+        if (last && i - last > 1) nums.push("…");
+        nums.push(i);
+        last = i;
+      }
+    }
+    return nums;
+  }, [totalPages, currentPage]);
 
   const resetFilters = () => {
     setSelectedCategories([]);
@@ -294,40 +337,114 @@ export default function BoutiqueContent({
                 </button>
               </div>
             ) : (
-              <div className={`grid gap-4 ${view === "grid" ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"}`}>
-                {filtered.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <>
+                <div ref={resultsRef} className={`grid gap-4 scroll-mt-24 ${view === "grid" ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"}`}>
+                  {paged.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <nav className="mt-8 flex items-center justify-center gap-1.5" aria-label="Pagination">
+                    <button
+                      onClick={() => goToPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      aria-label="Page précédente"
+                      className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-[#020B27] disabled:opacity-40 disabled:cursor-not-allowed hover:border-green active:scale-95 transition-all"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+
+                    {pageNumbers.map((n, i) =>
+                      n === "…" ? (
+                        <span key={`e${i}`} className="w-9 h-9 flex items-center justify-center text-[#64748B]">…</span>
+                      ) : (
+                        <button
+                          key={n}
+                          onClick={() => goToPage(n)}
+                          aria-current={n === currentPage ? "page" : undefined}
+                          className={cn(
+                            "w-9 h-9 rounded-lg text-sm font-semibold transition-all active:scale-95",
+                            n === currentPage
+                              ? "bg-green text-white"
+                              : "border border-gray-200 text-[#020B27] hover:border-green"
+                          )}
+                        >
+                          {n}
+                        </button>
+                      )
+                    )}
+
+                    <button
+                      onClick={() => goToPage(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      aria-label="Page suivante"
+                      className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-[#020B27] disabled:opacity-40 disabled:cursor-not-allowed hover:border-green active:scale-95 transition-all"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </nav>
+                )}
+              </>
             )}
           </div>
         </div>
       </div>
 
-      {filtersOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setFiltersOpen(false)} />
-          <div className="absolute right-0 top-0 bottom-0 w-80 bg-white shadow-xl overflow-y-auto">
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="font-bold text-[#020B27]">Filtres</h2>
-              <button onClick={() => setFiltersOpen(false)}>
-                <X size={20} />
-              </button>
-            </div>
-            <div className="p-4">
-              {renderFilterPanel()}
-            </div>
-            <div className="p-4 border-t">
-              <button
-                onClick={() => setFiltersOpen(false)}
-                className="w-full bg-green text-white py-3 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
-              >
-                Afficher {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
-              </button>
-            </div>
+      {/* Drawer de filtres (mobile) — aside glissant depuis la gauche */}
+      <div
+        className={cn(
+          "fixed inset-0 z-50 lg:hidden",
+          filtersOpen ? "pointer-events-auto" : "pointer-events-none"
+        )}
+        aria-hidden={!filtersOpen}
+      >
+        {/* Voile */}
+        <div
+          className={cn(
+            "absolute inset-0 bg-black/50 transition-opacity duration-300 ease-out",
+            filtersOpen ? "opacity-100" : "opacity-0"
+          )}
+          onClick={() => setFiltersOpen(false)}
+        />
+        {/* Panneau */}
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Filtres"
+          className={cn(
+            "absolute left-0 top-0 bottom-0 w-[70%] max-w-[230px] bg-white shadow-2xl rounded-r-2xl flex flex-col",
+            "transition-transform duration-300 ease-out will-change-transform",
+            filtersOpen ? "translate-x-0" : "-translate-x-full"
+          )}
+        >
+          <div className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 shrink-0">
+            <h2 className="font-bold text-[#020B27] flex items-center gap-2">
+              <SlidersHorizontal size={17} className="text-green" /> Filtres
+            </h2>
+            <button
+              onClick={() => setFiltersOpen(false)}
+              aria-label="Fermer les filtres"
+              className="p-1.5 -mr-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#020B27] active:scale-95 transition-all"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
+            {renderFilterPanel()}
+          </div>
+
+          <div className="px-4 py-3 border-t border-gray-100 shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+            <button
+              onClick={() => setFiltersOpen(false)}
+              className="w-full bg-green text-white py-3 rounded-xl font-semibold hover:bg-[#9E7A45] active:scale-[0.98] transition-all"
+            >
+              Afficher {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
+            </button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
