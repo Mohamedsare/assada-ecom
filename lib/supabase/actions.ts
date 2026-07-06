@@ -529,6 +529,43 @@ export async function adminToggleProductStatus(id: string, status: string) {
   return { success: true };
 }
 
+/** Édition rapide des champs courants d'un produit (modale « modif rapide »). */
+export async function adminQuickUpdateProduct(
+  id: string,
+  fields: {
+    name: string;
+    current_price: number;
+    old_price: number | null;
+    stock_quantity: number;
+    status: string;
+    is_new: boolean;
+    is_promo: boolean;
+    is_featured: boolean;
+  },
+) {
+  const gate = await ensurePermission("products", "edit");
+  if (!gate.ok) return { error: gate.error };
+  if (!fields.name?.trim()) return { error: "Le nom est requis." };
+  if (!Number.isFinite(fields.current_price) || fields.current_price < 0) return { error: "Prix invalide." };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("products").update({
+    name: fields.name.trim(),
+    current_price: fields.current_price,
+    old_price: fields.old_price,
+    stock_quantity: fields.stock_quantity,
+    status: fields.status,
+    is_new: fields.is_new,
+    is_promo: fields.is_promo,
+    is_featured: fields.is_featured,
+    updated_at: new Date().toISOString(),
+  }).eq("id", id);
+
+  if (error) return { error: error.message };
+  revalidatePath("/admin/produits");
+  return { success: true };
+}
+
 // ─── ADMIN — CATEGORIES ───────────────────────────────────────────────────────
 
 export async function adminCreateCategory(formData: FormData) {
@@ -755,13 +792,16 @@ export async function adminUpdateSettings(formData: FormData) {
   const upserts = keys.map((key) => ({
     key,
     value: formData.get(key) !== null ? JSON.stringify(formData.get(key)) : null,
-  })).filter((u) => u.value !== null);
+  })).filter((u) => u.value !== null) as { key: string; value: string }[];
 
-  for (const u of upserts) {
-    await supabase.from("settings").upsert({ key: u.key, value: u.value }, { onConflict: "key" });
+  const { error } = await supabase.from("settings").upsert(upserts, { onConflict: "key" });
+  if (error) {
+    console.error("adminUpdateSettings:", error);
+    return { error: "Enregistrement impossible (droits base de données ?). " + error.message };
   }
 
   revalidatePath("/admin/parametres");
+  revalidatePath("/", "layout");
   return { success: true };
 }
 
@@ -773,10 +813,16 @@ export async function adminUpdatePageImages(formData: FormData) {
   if (!current || !isFullAccessRole(current.role)) return { error: "Accès refusé." };
 
   const supabase = await createClient();
-  for (const key of Object.keys(PAGE_IMAGE_DEFAULTS)) {
-    const value = ((formData.get(key) as string) ?? "").trim();
+  const rows = Object.keys(PAGE_IMAGE_DEFAULTS).map((key) => ({
+    key,
     // Valeur vide = on revient à l'image par défaut (getPageImages ignore les vides).
-    await supabase.from("settings").upsert({ key, value: JSON.stringify(value) }, { onConflict: "key" });
+    value: JSON.stringify(((formData.get(key) as string) ?? "").trim()),
+  }));
+
+  const { error } = await supabase.from("settings").upsert(rows, { onConflict: "key" });
+  if (error) {
+    console.error("adminUpdatePageImages:", error);
+    return { error: "Enregistrement impossible (droits base de données ?). " + error.message };
   }
 
   revalidatePath("/", "layout");   // rafraîchit les bannières publiques

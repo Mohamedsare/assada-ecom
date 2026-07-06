@@ -487,11 +487,15 @@ create policy "Admin gère avis" on public.reviews
   for all using (public.is_admin());
 
 -- ---- SETTINGS ----
-create policy "Admin lit les paramètres" on public.settings
-  for select using (public.is_admin());
+-- Lecture PUBLIQUE : le site (bannières, images de pages, frais de livraison,
+-- coordonnées, réseaux sociaux…) lit ces réglages en tant que visiteur non-admin.
+-- Toutes les clés de settings sont destinées à l'affichage public (aucun secret ici).
+create policy "Lecture publique des paramètres" on public.settings
+  for select using (true);
 
+-- Écriture réservée aux admins.
 create policy "Admin gère paramètres" on public.settings
-  for all using (public.is_admin());
+  for all using (public.is_admin()) with check (public.is_admin());
 
 -- ---- COUPONS ----
 -- (RLS était activé sans policy : la table était inaccessible. Ajout des policies.)
