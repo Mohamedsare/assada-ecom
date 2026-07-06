@@ -37,7 +37,7 @@ export default async function AdminParametresPage() {
     tiktok_url:              read(s.tiktok_url, SOCIAL_LINKS.tiktok),
     instagram_url:           read(s.instagram_url, SOCIAL_LINKS.instagram),
     invoice_format:          read(s.invoice_format, "a4"),
-    invoice_footer:          read(s.invoice_footer, "Merci pour votre confiance et à très bientôt chez Assada."),
+    invoice_footer:          read(s.invoice_footer, "Merci pour votre confiance et à très bientôt chez RYTA."),
   };
 
   return (

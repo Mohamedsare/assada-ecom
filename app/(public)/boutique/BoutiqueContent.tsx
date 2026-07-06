@@ -20,9 +20,17 @@ interface Props {
   products: Product[];
   categories: Category[];
   brands: Brand[];
+  bannerTitle?: string;
+  bannerSubtitle?: string;
 }
 
-export default function BoutiqueContent({ products, categories, brands }: Props) {
+export default function BoutiqueContent({
+  products,
+  categories,
+  brands,
+  bannerTitle = "Boutique",
+  bannerSubtitle = "Découvrez toute notre sélection de produits au meilleur prix",
+}: Props) {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("categorie") || "";
   const bannerImg = usePageImage("banner_boutique");
@@ -187,7 +195,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
             onChange={(e) => setOnlyPromo(e.target.checked)}
             className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]"
           />
-          <span className="text-sm font-medium text-gray-700">Promotions uniquement</span>
+          <span className="text-sm font-medium text-gray-700">Promo uniquement</span>
         </label>
       </div>
 
@@ -215,14 +223,14 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
       >
         <div className="absolute inset-0 bg-night/35" />
         <div className="relative max-w-7xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Boutique</h1>
-          <p className="text-gray-300">Découvrez toute notre sélection de produits au meilleur prix</p>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2">{bannerTitle}</h1>
+          <p className="text-gray-300">{bannerSubtitle}</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-8">
-          <aside className="hidden lg:block w-60 shrink-0">
+          <aside className="hidden lg:block w-44 shrink-0">
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
               <h2 className="font-bold text-[#020B27] mb-5 text-base">Filtres</h2>
               {renderFilterPanel()}
@@ -286,7 +294,7 @@ export default function BoutiqueContent({ products, categories, brands }: Props)
                 </button>
               </div>
             ) : (
-              <div className={`grid gap-4 ${view === "grid" ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4" : "grid-cols-1"}`}>
+              <div className={`grid gap-4 ${view === "grid" ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"}`}>
                 {filtered.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

@@ -4,12 +4,12 @@ import LegalPage from "@/components/legal/LegalPage";
 import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Livraison & Retours — Assada Casablanca",
+  title: "Livraison & Retours — RYTA Casablanca",
   description:
-    "Modalités de livraison et de retour Assada : délais, frais, zones desservies à Casablanca, paiement à la livraison et droit de rétractation de 7 jours conforme à la loi marocaine 31-08.",
-  keywords: ["livraison cosmétique Casablanca", "retours Assada", "paiement à la livraison Casablanca"],
+    "Modalités de livraison et de retour RYTA : délais, frais, zones desservies à Casablanca, paiement à la livraison et droit de rétractation de 7 jours conforme à la loi marocaine 31-08.",
+  keywords: ["livraison cosmétique Casablanca", "retours RYTA", "paiement à la livraison Casablanca"],
   alternates: { canonical: "/livraison-retours" },
-  openGraph: { title: "Livraison & Retours — Assada", type: "website", locale: "fr_MA" },
+  openGraph: { title: "Livraison & Retours — RYTA", type: "website", locale: "fr_MA" },
 };
 
 export default function LivraisonRetoursPage() {
@@ -21,7 +21,7 @@ export default function LivraisonRetoursPage() {
     >
       <h2>1. Zones de livraison</h2>
       <p>
-        Assada livre partout à <strong>Casablanca</strong> et ses quartiers : Derb Ghalef, Maârif,
+        RYTA livre partout à <strong>Casablanca</strong> et ses quartiers : Derb Ghalef, Maârif,
         Boulevard Abdelmoumen, Gauthier, Racine, Bourgogne, Anfa, Ain Diab, Oasis, Sidi Maarouf,
         Hay Hassani, Ain Chock, Californie, Belvédère, Mers Sultan, Sidi Belyout, Hay Mohammadi,
         Ain Sebaâ, Sidi Bernoussi, Sidi Moumen, Ben M’sik, Sidi Othmane et Moulay Rachid.

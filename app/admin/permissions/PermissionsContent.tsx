@@ -406,7 +406,7 @@ function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-[#020B27] mb-1.5">Email <span className="text-red-500">*</span></label>
-              <input id="email" name="email" type="email" required placeholder="employe@assada.ma" className={inputCls} />
+              <input id="email" name="email" type="email" required placeholder="employe@ryta.ma" className={inputCls} />
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-[#020B27] mb-1.5">Mot de passe <span className="text-red-500">*</span></label>

@@ -50,8 +50,8 @@ export default function AccountSidebar() {
     loadUser();
     // Rafraîchit en direct quand le profil est modifié ailleurs (page Paramètres)
     const onUpdate = () => loadUser();
-    window.addEventListener("assada:profile-updated", onUpdate);
-    return () => window.removeEventListener("assada:profile-updated", onUpdate);
+    window.addEventListener("ryta:profile-updated", onUpdate);
+    return () => window.removeEventListener("ryta:profile-updated", onUpdate);
   }, []);
 
   return (

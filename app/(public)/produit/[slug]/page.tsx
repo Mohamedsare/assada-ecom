@@ -17,11 +17,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
-  if (!product) return { title: "Produit introuvable | Assada" };
+  if (!product) return { title: "Produit introuvable | RYTA" };
 
-  const title = `${product.name} à Casablanca | Assada`;
+  const title = `${product.name} à Casablanca | RYTA`;
   const description = product.short_description
-    ?? `Achetez ${product.name} à Casablanca avec Assada. Livraison rapide à Casablanca, paiement à la livraison.`;
+    ?? `Achetez ${product.name} à Casablanca avec RYTA. Livraison rapide à Casablanca, paiement à la livraison.`;
 
   return {
     title,
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       product.name,
       product.brand?.name ?? "",
       product.category?.name ?? "",
-      "Casablanca", "Casablanca", "boutique en ligne Casablanca", "Assada",
+      "Casablanca", "Casablanca", "boutique en ligne Casablanca", "RYTA",
     ].filter(Boolean),
     openGraph: {
       title,
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: product.main_image_url ? [{ url: product.main_image_url, alt: product.name }] : [],
       type: "website",
       locale: "fr_MA",
-      siteName: "Assada",
+      siteName: "RYTA",
     },
     twitter: {
       card: "summary_large_image",

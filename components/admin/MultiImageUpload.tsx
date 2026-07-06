@@ -2,8 +2,8 @@
 
 import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
-import { ImagePlus, Loader2, X } from "lucide-react";
-import { uploadImage } from "@/lib/supabase/actions";
+import { ImagePlus, Loader2, X, Sparkles } from "lucide-react";
+import { uploadImage, studioProductImage } from "@/lib/supabase/actions";
 
 /**
  * Upload de plusieurs photos (max `max`, 5 par défaut).
@@ -17,6 +17,7 @@ export default function MultiImageUpload({
   defaultValues,
   max = 5,
   onChange,
+  studio = false,
 }: {
   name: string;
   bucket: string;
@@ -24,15 +25,33 @@ export default function MultiImageUpload({
   defaultValues?: string[];
   max?: number;
   onChange?: (urls: string[]) => void;
+  /** Active le bouton « ✨ Studio » (shooting IA) sur chaque photo. */
+  studio?: boolean;
 }) {
   const [urls, setUrls] = useState<string[]>(defaultValues ?? []);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const [studioUrl, setStudioUrl] = useState<string | null>(null);
+  const [studioPending, startStudio] = useTransition();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const update = (next: string[]) => {
     setUrls(next);
     onChange?.(next);
+  };
+
+  const runStudio = (url: string) => {
+    setError(null);
+    setStudioUrl(url);
+    startStudio(async () => {
+      const res = await studioProductImage(url);
+      if (res.error || !res.url) {
+        setError(res.error ?? "Traitement studio impossible.");
+      } else {
+        update(urls.map((u) => (u === url ? res.url! : u)));
+      }
+      setStudioUrl(null);
+    });
   };
 
   const MAX_SIZE = 3 * 1024 * 1024; // 3 Mo par photo
@@ -85,11 +104,29 @@ export default function MultiImageUpload({
             <button
               type="button"
               onClick={() => remove(url)}
-              className="absolute top-1 right-1 bg-black/60 hover:bg-red-500 text-white rounded-full p-1 transition-colors"
+              disabled={studioPending}
+              className="absolute top-1 right-1 bg-black/60 hover:bg-red-500 text-white rounded-full p-1 transition-colors disabled:opacity-50"
               title="Retirer"
             >
               <X size={13} />
             </button>
+            {studio && (
+              <button
+                type="button"
+                onClick={() => runStudio(url)}
+                disabled={studioPending}
+                className="absolute bottom-1 right-1 bg-[#B8925A] hover:bg-[#9E7A45] text-white rounded-full p-1 shadow-md transition-colors disabled:opacity-50"
+                title="Shooting studio IA (détourage + fond blanc)"
+              >
+                <Sparkles size={13} />
+              </button>
+            )}
+            {studioUrl === url && (
+              <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center gap-1 text-white">
+                <Loader2 size={18} className="animate-spin" />
+                <span className="text-[9px] font-medium">Studio…</span>
+              </div>
+            )}
           </div>
         ))}
 

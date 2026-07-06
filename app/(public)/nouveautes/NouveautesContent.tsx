@@ -159,7 +159,7 @@ export default function NouveautesContent({ products, categories }: Props) {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex gap-8">
-          <aside className="hidden lg:block w-56 shrink-0">
+          <aside className="hidden lg:block w-44 shrink-0">
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="font-bold text-[#020B27] text-base">Filtres</h2>

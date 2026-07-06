@@ -388,7 +388,7 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* CA jour/mois + taux (spec ASSADA) */}
+      {/* CA jour/mois + taux (spec RYTA) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={DollarSign} iconColor="text-green bg-green-50" value={formatPrice(revenueToday)} label="CA du jour" sub="Commandes livrées" />
         <StatCard icon={TrendingUp} iconColor="text-blue-600 bg-blue-50" value={formatPrice(revenueMonth)} label="CA du mois" sub="Commandes livrées" />
@@ -396,7 +396,7 @@ export default async function AdminDashboardPage() {
         <StatCard icon={XCircle} iconColor="text-red-600 bg-red-50" value={`${cancellationRate}%`} label="Taux d'annulation" sub={`${stats.cancelledOrders} annulées`} />
       </div>
 
-      {/* Canal + quartiers (spec ASSADA) */}
+      {/* Canal + quartiers (spec RYTA) */}
       <div className="grid lg:grid-cols-2 gap-4">
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
           <h3 className="font-bold text-[#020B27] text-sm mb-3">Commandes par canal</h3>

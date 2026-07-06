@@ -139,7 +139,7 @@ export default function RechercheContent() {
                 Voir toute la boutique
               </Link>
               <Link
-                href={getWhatsAppUrl(`Bonjour Assada, je cherche "${input.trim()}". Est-ce que vous l'avez ?`)}
+                href={getWhatsAppUrl(`Bonjour RYTA, je cherche "${input.trim()}". Est-ce que vous l'avez ?`)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-medium hover:opacity-90 transition-opacity"

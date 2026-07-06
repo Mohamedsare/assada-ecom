@@ -70,6 +70,6 @@ export const useCartStore = create<CartStore>()(
           return sum + price * item.quantity;
         }, 0),
     }),
-    { name: "assada-cart" }
+    { name: "ryta-cart" }
   )
 );

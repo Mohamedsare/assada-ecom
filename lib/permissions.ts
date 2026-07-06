@@ -1,7 +1,7 @@
 import type { PermissionMatrix, Profile, UserRole } from "@/types";
 
 /**
- * Système de permissions (spec ASSADA § Permissions).
+ * Système de permissions (spec RYTA § Permissions).
  * Fichier pur (aucun import serveur) → utilisable côté client et serveur.
  * L'application des permissions côté backend se fait via lib/supabase/guards.ts.
  */

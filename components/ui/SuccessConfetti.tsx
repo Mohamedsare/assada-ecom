@@ -33,7 +33,7 @@ export default function SuccessConfetti() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Palette Assada : or, bleu nuit, vert, blanc.
+    // Palette RYTA : or, bleu nuit, vert, blanc.
     const colors = ["#B8925A", "#020B27", "#16A34A", "#22C55E", "#FFFFFF", "#E8C88A"];
 
     type Piece = {

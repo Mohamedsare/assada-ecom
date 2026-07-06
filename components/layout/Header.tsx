@@ -21,9 +21,9 @@ import CategoryMegaMenu from "@/components/layout/CategoryMegaMenu";
 import MobileCategoryMenu from "@/components/layout/MobileCategoryMenu";
 
 const SOCIAL_LINKS = [
-  { label: "TikTok", href: "https://www.tiktok.com/@assada" },
-  { label: "Facebook", href: "https://www.facebook.com/assada" },
-  { label: "Instagram", href: "https://www.instagram.com/assada" },
+  { label: "TikTok", href: "https://www.tiktok.com/@ryta" },
+  { label: "Facebook", href: "https://www.facebook.com/ryta" },
+  { label: "Instagram", href: "https://www.instagram.com/ryta" },
 ] as const;
 
 export default function Header() {
@@ -56,8 +56,8 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
             <Image
-              src="/logo.png"
-              alt="Assada"
+              src="/ryta.png"
+              alt="RYTA"
               width={220}
               height={150}
               priority

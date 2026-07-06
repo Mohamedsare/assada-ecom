@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Promotions",
-  description: "Les meilleures promotions d'Assada à Casablanca. Jusqu'à -50% sur une large sélection de produits.",
+  description: "Les meilleures promotions d'RYTA à Casablanca. Jusqu'à -50% sur une large sélection de produits.",
 };
 
 export default async function PromotionsPage() {

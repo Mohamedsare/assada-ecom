@@ -5,12 +5,12 @@ import LegalPage from "@/components/legal/LegalPage";
 import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "À propos — Assada, boutique cosmétique à Casablanca",
+  title: "À propos — RYTA, boutique cosmétique à Casablanca",
   description:
-    "Découvrez Assada, votre boutique de cosmétiques, parfums et soins beauté à Derb Ghalef, Casablanca. Produits authentiques, meilleurs prix, livraison rapide et paiement à la livraison.",
-  keywords: ["à propos Assada", "boutique cosmétique Casablanca", "parfums Derb Ghalef"],
+    "Découvrez RYTA, votre boutique de cosmétiques, parfums et soins beauté à Derb Ghalef, Casablanca. Produits authentiques, meilleurs prix, livraison rapide et paiement à la livraison.",
+  keywords: ["à propos RYTA", "boutique cosmétique Casablanca", "parfums Derb Ghalef"],
   alternates: { canonical: "/a-propos" },
-  openGraph: { title: "À propos — Assada", type: "website", locale: "fr_MA" },
+  openGraph: { title: "À propos — RYTA", type: "website", locale: "fr_MA" },
 };
 
 const VALUES = [
@@ -23,13 +23,13 @@ const VALUES = [
 export default function AProposPage() {
   return (
     <LegalPage
-      title="À propos d’Assada"
+      title="À propos d’RYTA"
       subtitle="Votre boutique de cosmétiques, parfums et soins beauté à Casablanca — qualité, confiance et satisfaction garanties."
       heroImage="/banners/banner-a-propos.png"
     >
       <h2>Qui sommes-nous ?</h2>
       <p>
-        <strong>Assada</strong> est une boutique spécialisée dans la vente de produits cosmétiques,
+        <strong>RYTA</strong> est une boutique spécialisée dans la vente de produits cosmétiques,
         parfums, pommades, soins du visage, du corps et des cheveux, maquillage, produits d’hygiène,
         accessoires beauté et coffrets cadeaux. Installée au cœur de <strong>Derb Ghalef à Casablanca</strong>,
         nous proposons une sélection premium au meilleur prix, en boutique physique comme en ligne.

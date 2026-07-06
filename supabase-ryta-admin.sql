@@ -1,5 +1,5 @@
 -- ============================================================================
--- Assada — Livreurs, rôle Employé, permissions & canal de commande
+-- RYTA — Livreurs, rôle Employé, permissions & canal de commande
 -- Migration ADDITIVE : ne modifie aucune table/policy existante, ajoute
 -- uniquement de nouvelles colonnes, tables, fonctions et policies.
 -- À exécuter après supabase-schema.sql.

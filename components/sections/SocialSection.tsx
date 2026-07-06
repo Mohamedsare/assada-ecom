@@ -48,7 +48,7 @@ function CategoryCard({ cat }: { cat: (typeof CATEGORIES)[number] }) {
 const SOCIALS = [
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@assada",
+    href: "https://www.tiktok.com/@ryta",
     bg: "bg-[#010101] hover:bg-black",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -58,7 +58,7 @@ const SOCIALS = [
   },
   {
     label: "Facebook",
-    href: "https://www.facebook.com/assada",
+    href: "https://www.facebook.com/ryta",
     bg: "bg-[#1877F2] hover:bg-[#1565c0]",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -68,7 +68,7 @@ const SOCIALS = [
   },
   {
     label: "WhatsApp",
-    href: getWhatsAppUrl("Bonjour Assada, je suis intéressé par vos produits."),
+    href: getWhatsAppUrl("Bonjour RYTA, je suis intéressé par vos produits."),
     bg: "bg-whatsapp hover:bg-whatsapp-dark",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -85,7 +85,7 @@ export default function SocialSection() {
         <div className="text-center mb-6">
           <p className="text-xs font-bold text-green uppercase tracking-widest mb-1">Réseaux sociaux</p>
           <h2 className="text-xl md:text-2xl font-bold text-[#020B27]">
-            Suivez <span className="text-green">Assada</span>
+            Suivez <span className="text-green">RYTA</span>
           </h2>
           <p className="text-text-secondary text-sm mt-1">
             Rejoignez notre communauté et ne ratez aucune nouveauté

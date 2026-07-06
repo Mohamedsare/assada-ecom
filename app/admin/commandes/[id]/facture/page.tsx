@@ -33,7 +33,7 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
     city: read(settings.shop_city, "Casablanca, Maroc"),
     phone: read(settings.shop_phone, SITE_PHONE),
     email: read(settings.shop_email, SITE_EMAIL),
-    footer: read(settings.invoice_footer, "Merci pour votre confiance et à très bientôt chez Assada."),
+    footer: read(settings.invoice_footer, "Merci pour votre confiance et à très bientôt chez RYTA."),
   };
 
   const rawFormat = read(settings.invoice_format, "a4");

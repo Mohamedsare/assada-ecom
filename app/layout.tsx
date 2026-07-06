@@ -15,8 +15,8 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Assada — Boutique en ligne n°1 à Casablanca | Livraison Casablanca",
-    template: "%s | Assada",
+    default: "RYTA — Boutique en ligne n°1 à Casablanca | Livraison Casablanca",
+    template: "%s | RYTA",
   },
   description: SITE_DESCRIPTION,
   keywords: [...SEO_KEYWORDS],
@@ -34,15 +34,15 @@ export const metadata: Metadata = {
     locale: "fr_MA",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Assada — Boutique en ligne n°1 à Casablanca",
+    title: "RYTA — Boutique en ligne n°1 à Casablanca",
     description: SITE_DESCRIPTION,
-    images: [{ url: "/logo1.png", width: 500, height: 500, alt: SITE_NAME }],
+    images: [{ url: "/ryta.png", width: 500, height: 500, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Assada — Boutique en ligne n°1 à Casablanca",
+    title: "RYTA — Boutique en ligne n°1 à Casablanca",
     description: SITE_DESCRIPTION,
-    images: ["/logo1.png"],
+    images: ["/ryta.png"],
   },
   robots: {
     index: true,

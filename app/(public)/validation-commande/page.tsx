@@ -59,7 +59,7 @@ function ValidationContent() {
       })
     : null;
   const whatsappUrl = getWhatsAppUrl(
-    `Bonjour Assada, j'ai une question concernant ma commande ${order.order_number}.`
+    `Bonjour RYTA, j'ai une question concernant ma commande ${order.order_number}.`
   );
 
   return (

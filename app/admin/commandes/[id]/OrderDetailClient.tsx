@@ -111,7 +111,7 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
         </div>
         <div className="flex items-center gap-2">
           <Link
-            href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant votre commande ${order.order_number} chez Assada.`)}
+            href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant votre commande ${order.order_number} chez RYTA.`)}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#B8925A] hover:text-[#B8925A] transition-colors"

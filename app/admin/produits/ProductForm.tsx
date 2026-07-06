@@ -163,7 +163,7 @@ export default function ProductForm({
           <Card title="Référencement (SEO)">
             <div>
               <label className="block text-sm font-medium text-[#020B27] mb-1.5">Titre SEO</label>
-              <input name="seo_title" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Parfum Oud Intense à Casablanca | Assada" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              <input name="seo_title" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Parfum Oud Intense à Casablanca | RYTA" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#020B27] mb-1.5">Description SEO</label>
@@ -182,8 +182,10 @@ export default function ProductForm({
               defaultValues={initialImages}
               max={5}
               onChange={handleImagesChange}
+              studio
             />
             <p className="text-[11px] text-text-secondary">{"La 1re photo est l'image principale. L'IA génère la fiche dès son ajout."}</p>
+            <p className="text-[11px] text-text-secondary">{"Astuce : le bouton ✨ sur une photo lance un shooting studio (détourage + fond blanc, carré) sans altérer le produit."}</p>
             <div className="pt-1">
               <VideoUploadField
                 name="video_url"

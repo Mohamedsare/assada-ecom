@@ -22,7 +22,7 @@ export default function DashboardToolbar({ report }: { report: ReportRow[] }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `rapport-assada-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `rapport-ryta-${new Date().toISOString().slice(0, 10)}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

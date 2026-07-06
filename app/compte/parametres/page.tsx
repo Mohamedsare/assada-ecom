@@ -43,7 +43,7 @@ export default function ParametresPage() {
         if (data) setProfile(data as Profile);
       }
       // Notifie les autres composants (ex : la sidebar) de rafraîchir l'avatar/nom
-      window.dispatchEvent(new Event("assada:profile-updated"));
+      window.dispatchEvent(new Event("ryta:profile-updated"));
     }
     setSavingProfile(false);
   }

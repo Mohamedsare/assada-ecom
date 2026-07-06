@@ -4,23 +4,23 @@ import LegalPage from "@/components/legal/LegalPage";
 import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Politique de confidentialité — Assada",
+  title: "Politique de confidentialité — RYTA",
   description:
-    "Politique de protection des données personnelles d’Assada, conforme à la loi marocaine n° 09-08 relative à la protection des personnes physiques à l’égard du traitement des données à caractère personnel (CNDP).",
+    "Politique de protection des données personnelles d’RYTA, conforme à la loi marocaine n° 09-08 relative à la protection des personnes physiques à l’égard du traitement des données à caractère personnel (CNDP).",
   alternates: { canonical: "/confidentialite" },
-  openGraph: { title: "Politique de confidentialité — Assada", type: "website", locale: "fr_MA" },
+  openGraph: { title: "Politique de confidentialité — RYTA", type: "website", locale: "fr_MA" },
 };
 
 export default function ConfidentialitePage() {
   return (
     <LegalPage
       title="Politique de confidentialité"
-      subtitle="Assada s’engage à protéger vos données personnelles, conformément à la loi marocaine n° 09-08."
+      subtitle="RYTA s’engage à protéger vos données personnelles, conformément à la loi marocaine n° 09-08."
       updatedAt="Janvier 2026"
     >
       <h2>1. Préambule</h2>
       <p>
-        La présente politique décrit la manière dont <strong>Assada</strong> collecte, utilise et protège
+        La présente politique décrit la manière dont <strong>RYTA</strong> collecte, utilise et protège
         les données à caractère personnel de ses clients et visiteurs. Elle est établie conformément à la{" "}
         <strong>loi n° 09-08</strong> relative à la protection des personnes physiques à l’égard du
         traitement des données à caractère personnel, et aux directives de la{" "}
@@ -29,7 +29,7 @@ export default function ConfidentialitePage() {
 
       <h2>2. Responsable du traitement</h2>
       <p>
-        Le responsable du traitement des données est <strong>Assada</strong>, dont la boutique est située
+        Le responsable du traitement des données est <strong>RYTA</strong>, dont la boutique est située
         Galerie Derb Ghalef, Boulevard Abdelmoumen, Kissariat Zemmouri, 20102 Derb Ghalef, Casablanca, Maroc.
         Contact : <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a> — <a href={`tel:${SITE_PHONE}`}>{SITE_PHONE}</a>.
       </p>
@@ -61,8 +61,8 @@ export default function ConfidentialitePage() {
 
       <h2>6. Destinataires des données</h2>
       <p>
-        Vos données sont destinées aux services internes d’Assada habilités et, le cas échéant, à nos
-        prestataires de livraison, strictement pour les besoins de l’exécution de votre commande. Assada
+        Vos données sont destinées aux services internes d’RYTA habilités et, le cas échéant, à nos
+        prestataires de livraison, strictement pour les besoins de l’exécution de votre commande. RYTA
         ne vend ni ne loue vos données personnelles à des tiers.
       </p>
 
@@ -75,7 +75,7 @@ export default function ConfidentialitePage() {
 
       <h2>8. Sécurité</h2>
       <p>
-        Assada met en œuvre les mesures techniques et organisationnelles appropriées afin de protéger vos
+        RYTA met en œuvre les mesures techniques et organisationnelles appropriées afin de protéger vos
         données contre la perte, l’accès non autorisé, la divulgation ou l’altération.
       </p>
 
@@ -98,7 +98,7 @@ export default function ConfidentialitePage() {
 
       <h2>11. Modifications</h2>
       <p>
-        Assada se réserve le droit de modifier la présente politique afin de l’adapter aux évolutions
+        RYTA se réserve le droit de modifier la présente politique afin de l’adapter aux évolutions
         légales ou de ses services. La version applicable est celle en vigueur au moment de votre visite.
       </p>
 

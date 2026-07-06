@@ -7,7 +7,7 @@ import { Search, X, Loader2, TrendingUp, Clock, ArrowRight } from "lucide-react"
 import { useProductSearch } from "@/hooks/useProductSearch";
 import { formatPrice, cn } from "@/lib/utils";
 
-const RECENT_KEY = "assada-recent-searches";
+const RECENT_KEY = "ryta-recent-searches";
 const POPULAR = ["Parfum", "Crème visage", "Maquillage", "Pommade", "Shampoing", "Coffret"];
 const SUGGEST_LIMIT = 6;
 

@@ -1,5 +1,5 @@
 -- =============================================
--- ASSADA — Schéma base de données
+-- RYTA — Schéma base de données
 -- À exécuter dans Supabase SQL Editor
 -- =============================================
 
@@ -646,8 +646,8 @@ insert into public.brands (name, slug) values
 
 -- Paramètres boutique par défaut
 insert into public.settings (key, value) values
-  ('shop_name', '"Assada"'),
-  ('shop_email', '"contact@assada.ma"'),
+  ('shop_name', '"RYTA"'),
+  ('shop_email', '"contact@ryta.ma"'),
   ('shop_phone', '"+21200000000"'),
   ('shop_whatsapp', '"21200000000"'),
   ('shop_address', '"Boulevard Abdelmoumen, N10, Galerie Derb Ghalef, Kissariat Zemmouri, 20102 Derb Ghalef, Casablanca, Maroc"'),
@@ -656,7 +656,7 @@ insert into public.settings (key, value) values
   ('delivery_fee', '2000'),
   ('free_delivery_threshold', '100000'),
   ('currency', '"DH"'),
-  ('whatsapp_default_message', '"Bonjour Assada, je suis intéressé par vos produits."');
+  ('whatsapp_default_message', '"Bonjour RYTA, je suis intéressé par vos produits."');
 
 -- =============================================
 -- STORAGE BUCKETS (à créer dans Supabase Dashboard)

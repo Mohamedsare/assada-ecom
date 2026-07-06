@@ -4,8 +4,8 @@ import NouveautesContent from "./NouveautesContent";
 import { getProducts, getCategories } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
-  title: "Nouveautés | Assada",
-  description: "Découvrez les dernières nouveautés d'Assada à Casablanca. Les produits les plus récents arrivent chaque semaine.",
+  title: "Nouveautés | RYTA",
+  description: "Découvrez les dernières nouveautés d'RYTA à Casablanca. Les produits les plus récents arrivent chaque semaine.",
 };
 
 export default async function NouveautesPage() {

@@ -1,17 +1,17 @@
-export const SITE_NAME = "Assada";
+export const SITE_NAME = "RYTA";
 
 /** Valeurs de livraison par défaut (surchargées par les Paramètres boutique en base). */
 export const DEFAULT_DELIVERY_FEE = 2000;
 export const DEFAULT_FREE_DELIVERY_THRESHOLD = 100_000;
 
-export const SITE_EMAIL = "contact@assada.ma";
-// ⚠️ Numéro placeholder — à remplacer par le vrai numéro ASSADA.
+export const SITE_EMAIL = "contact@ryta.ma";
+// ⚠️ Numéro placeholder — à remplacer par le vrai numéro RYTA.
 export const SITE_PHONE = "+212 00 00 00 00";
 export const WHATSAPP_NUMBER = "21200000000";
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://assada.ma";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ryta.ma";
 
 export const SITE_DESCRIPTION =
-  "Assada, votre boutique cosmétique à Casablanca. Parfums, maquillage, soins du visage, du corps et des cheveux, hygiène, accessoires et coffrets cadeaux. Livraison à Casablanca — Derb Ghalef, Maârif, Anfa et tous les quartiers. Paiement à la livraison. Boutique physique à Derb Ghalef. Support WhatsApp.";
+  "RYTA, votre boutique cosmétique à Casablanca. Parfums, maquillage, soins du visage, du corps et des cheveux, hygiène, accessoires et coffrets cadeaux. Livraison à Casablanca — Derb Ghalef, Maârif, Anfa et tous les quartiers. Paiement à la livraison. Boutique physique à Derb Ghalef. Support WhatsApp.";
 
 /** Quartiers de Casablanca desservis — utilisés pour le SEO local (areaServed) et le checkout. */
 export const CASABLANCA_DISTRICTS = [
@@ -32,9 +32,9 @@ export const SHOP_GEO = {
 } as const;
 
 export const SOCIAL_LINKS = {
-  tiktok: "https://www.tiktok.com/@assada",
-  facebook: "https://www.facebook.com/assada",
-  instagram: "https://www.instagram.com/assada",
+  tiktok: "https://www.tiktok.com/@ryta",
+  facebook: "https://www.facebook.com/ryta",
+  instagram: "https://www.instagram.com/ryta",
 } as const;
 
 /** Mots-clés SEO Casablanca (marché cosmétique + intentions d'achat locales). */
@@ -43,7 +43,7 @@ export const SEO_KEYWORDS = [
   "parfums Derb Ghalef", "cosmétique Derb Ghalef", "boutique parfum Maârif",
   "soins corps Casablanca", "soins visage Casablanca", "soins cheveux Casablanca",
   "maquillage Casablanca", "livraison cosmétique Casablanca",
-  "paiement à la livraison Casablanca", "Assada Casablanca", "Assada",
+  "paiement à la livraison Casablanca", "RYTA Casablanca", "RYTA",
 ] as const;
 
 export const CATEGORIES = [

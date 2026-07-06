@@ -71,7 +71,7 @@ function A4Preview() {
     <div className="bg-white shadow-md text-[#0F172A] w-[210px] min-h-[297px] p-4 text-[7px] leading-tight">
       <div className="flex justify-between items-start border-b-2 border-[#0F172A] pb-2">
         <div>
-          <p className="text-[11px] font-extrabold">ASSADA</p>
+          <p className="text-[11px] font-extrabold">RYTA</p>
           <p className="text-text-secondary">Derb Ghalef, Casablanca</p>
         </div>
         <div className="text-right">
@@ -112,7 +112,7 @@ function ThermalPreview({ mm }: { mm: number }) {
   return (
     <div style={{ width }} className="bg-white shadow-md text-[#0F172A] p-2.5 font-mono text-[7px] leading-snug">
       <div className="text-center">
-        <p className="text-[10px] font-extrabold">ASSADA</p>
+        <p className="text-[10px] font-extrabold">RYTA</p>
         <p>Derb Ghalef, Casablanca</p>
         <p>+212 6 12 34 56 78</p>
       </div>

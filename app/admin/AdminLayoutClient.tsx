@@ -161,7 +161,7 @@ export default function AdminLayoutClient({
         {!collapsed && (
           <Link href="/admin/dashboard" className="flex items-center">
             <span className="bg-white rounded-lg px-2.5 py-1.5 inline-flex">
-              <Image src="/logo.png" alt="Assada" width={180} height={120} className="h-11 w-auto object-contain" />
+              <Image src="/ryta.png" alt="RYTA" width={180} height={120} className="h-11 w-auto object-contain" />
             </span>
           </Link>
         )}
@@ -278,7 +278,7 @@ export default function AdminLayoutClient({
       <div className="px-2.5 pb-3">
         <div className="bg-white/5 border border-white/10 rounded-lg p-2.5 text-center">
           <div className="flex items-center justify-center mb-1.5">
-            <span className="text-white font-bold text-xs">Assada</span>
+            <span className="text-white font-bold text-xs">RYTA</span>
           </div>
           <div className="space-y-0.5 text-[10px] text-gray-400">
             <a href={`tel:${SITE_PHONE}`} className="block hover:text-gray-200 transition-colors">

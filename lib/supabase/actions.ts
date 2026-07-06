@@ -261,7 +261,7 @@ export async function createOrder(data: {
 
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
-  const order_number = `ASSADA-${year}-${random}`;
+  const order_number = `RYTA-${year}-${random}`;
 
   const estimatedDate = new Date();
   estimatedDate.setDate(estimatedDate.getDate() + 2);
@@ -1160,6 +1160,66 @@ export async function uploadImage(bucket: string, formData: FormData): Promise<{
   return { url: publicUrl };
 }
 
+// ─── ADMIN — IA (shooting studio photo produit via Photoroom) ────────────────
+
+/**
+ * « Shooting » studio d'une photo produit via l'API Photoroom v2.
+ * Détoure le produit (sans l'altérer), le pose sur un fond studio blanc avec
+ * une ombre douce, recadre en carré 1200×1200 (format de la carte produit) et
+ * ré-uploade le résultat dans le bucket `products`. Renvoie la nouvelle URL.
+ */
+export async function studioProductImage(
+  imageUrl: string,
+): Promise<{ url?: string; error?: string }> {
+  const apiKey = process.env.PHOTOROOM_API_KEY;
+  if (!apiKey) return { error: "Clé Photoroom manquante : ajoutez PHOTOROOM_API_KEY dans .env.local." };
+  if (!imageUrl) return { error: "Aucune image à traiter." };
+
+  try {
+    const params = new URLSearchParams({
+      imageUrl,
+      removeBackground: "true",
+      "background.color": "FFFFFF",
+      "shadow.mode": "ai.soft",
+      outputSize: "1200x1200",
+      padding: "0.1",
+      "export.format": "jpg",
+    });
+
+    const res = await fetch(`https://image-api.photoroom.com/v2/edit?${params.toString()}`, {
+      method: "GET",
+      headers: { "x-api-key": apiKey, Accept: "image/jpeg" },
+    });
+
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error("studioProductImage Photoroom:", res.status, body.slice(0, 300));
+      if (res.status === 402) return { error: "Crédit Photoroom épuisé. Rechargez votre compte Photoroom." };
+      if (res.status === 401 || res.status === 403) return { error: "Clé Photoroom invalide. Vérifiez PHOTOROOM_API_KEY." };
+      return { error: `Photoroom a renvoyé une erreur (${res.status}).` };
+    }
+
+    const buffer = Buffer.from(await res.arrayBuffer());
+
+    const supabase = await createClient();
+    const filename = `studio-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`;
+    const { data, error } = await supabase.storage
+      .from("products")
+      .upload(filename, buffer, { contentType: "image/jpeg", upsert: false });
+
+    if (error) {
+      console.error("studioProductImage upload:", error);
+      return { error: error.message };
+    }
+
+    const { data: { publicUrl } } = supabase.storage.from("products").getPublicUrl(data.path);
+    return { url: publicUrl };
+  } catch (e) {
+    console.error("studioProductImage:", e);
+    return { error: "Traitement studio impossible. Réessayez." };
+  }
+}
+
 // ─── ADMIN — IA (génération fiche produit via OpenAI) ─────────────────────────
 
 export interface GeneratedProductInfo {
@@ -1181,14 +1241,14 @@ export async function generateProductInfo(
   if (!apiKey) return { error: "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local." };
   if (!imageUrl) return { error: "Aucune image à analyser." };
 
-  const prompt = `Analyse cette photo de produit destinée à la boutique en ligne Assada (Casablanca, prix en DH).
+  const prompt = `Analyse cette photo de produit destinée à la boutique en ligne RYTA (Casablanca, prix en DH).
 À partir de ce que tu vois (type de produit, marque visible, couleur, matière, style), génère une fiche produit commerciale en français pour le marché marocain (Casablanca).
 
 Réponds STRICTEMENT en JSON (sans markdown) avec ces clés :
 - "name": nom court et précis du produit (max 60 caractères), inclut la marque uniquement si elle est clairement visible.
 - "short_description": accroche d'une seule phrase (max 120 caractères).
 - "description": description détaillée et vendeuse (3 à 5 phrases) mettant en avant caractéristiques et bénéfices.
-- "seo_title": titre SEO au format « {Produit} à Casablanca | Assada » (max 60 caractères).
+- "seo_title": titre SEO au format « {Produit} à Casablanca | RYTA » (max 60 caractères).
 - "seo_description": meta description SEO (max 155 caractères) incitant à l'achat, mentionnant livraison rapide partout à Casablanca et paiement à la livraison.
 
 N'invente jamais une marque dont tu n'es pas sûr.`;
@@ -1208,7 +1268,7 @@ N'invente jamais une marque dont tu n'es pas sûr.`;
           {
             role: "system",
             content:
-              "Tu es un expert e-commerce qui rédige des fiches produits en français, commerciales, claires et optimisées SEO pour Assada, une boutique en ligne à Casablanca.",
+              "Tu es un expert e-commerce qui rédige des fiches produits en français, commerciales, claires et optimisées SEO pour RYTA, une boutique en ligne à Casablanca.",
           },
           {
             role: "user",

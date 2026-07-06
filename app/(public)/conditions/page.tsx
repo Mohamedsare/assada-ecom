@@ -4,25 +4,25 @@ import LegalPage from "@/components/legal/LegalPage";
 import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Conditions Générales de Vente et d’Utilisation — Assada",
+  title: "Conditions Générales de Vente et d’Utilisation — RYTA",
   description:
-    "Conditions Générales de Vente et d’Utilisation d’Assada, conformes au droit marocain (loi 31-08 sur la protection du consommateur, loi 53-05 sur l’échange électronique de données et le Dahir des Obligations et Contrats).",
+    "Conditions Générales de Vente et d’Utilisation d’RYTA, conformes au droit marocain (loi 31-08 sur la protection du consommateur, loi 53-05 sur l’échange électronique de données et le Dahir des Obligations et Contrats).",
   alternates: { canonical: "/conditions" },
   robots: { index: true, follow: true },
-  openGraph: { title: "Conditions Générales — Assada", type: "website", locale: "fr_MA" },
+  openGraph: { title: "Conditions Générales — RYTA", type: "website", locale: "fr_MA" },
 };
 
 export default function ConditionsPage() {
   return (
     <LegalPage
       title="Conditions Générales de Vente et d’Utilisation"
-      subtitle="Les présentes conditions régissent l’utilisation du site Assada et les ventes qui y sont conclues. Elles sont soumises au droit marocain."
+      subtitle="Les présentes conditions régissent l’utilisation du site RYTA et les ventes qui y sont conclues. Elles sont soumises au droit marocain."
       updatedAt="Janvier 2026"
     >
       <h2>1. Objet et champ d’application</h2>
       <p>
         Les présentes Conditions Générales de Vente et d’Utilisation (ci-après les « CGVU ») ont pour
-        objet de définir les modalités de vente des produits proposés par <strong>Assada</strong> sur son
+        objet de définir les modalités de vente des produits proposés par <strong>RYTA</strong> sur son
         site, ainsi que les conditions d’utilisation de ce dernier. Toute commande implique l’acceptation
         pleine et entière des présentes CGVU par le client. Elles sont établies conformément au droit
         marocain, notamment la <strong>loi n° 31-08</strong> édictant des mesures de protection du
@@ -32,7 +32,7 @@ export default function ConditionsPage() {
 
       <h2>2. Identification du vendeur</h2>
       <ul>
-        <li><strong>Dénomination :</strong> Assada — Cosmétiques & Parfums</li>
+        <li><strong>Dénomination :</strong> RYTA — Cosmétiques & Parfums</li>
         <li><strong>Adresse :</strong> Galerie Derb Ghalef, Boulevard Abdelmoumen, Kissariat Zemmouri, 20102 Derb Ghalef, Casablanca, Maroc</li>
         <li><strong>Email :</strong> <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a></li>
         <li><strong>Téléphone / WhatsApp :</strong> <a href={`tel:${SITE_PHONE}`}>{SITE_PHONE}</a></li>
@@ -49,7 +49,7 @@ export default function ConditionsPage() {
       <h2>4. Prix</h2>
       <p>
         Les prix sont indiqués en <strong>dirhams marocains (DH / MAD)</strong>, toutes taxes comprises (TTC).
-        Assada se réserve le droit de modifier ses prix à tout moment ; les produits sont facturés sur la
+        RYTA se réserve le droit de modifier ses prix à tout moment ; les produits sont facturés sur la
         base des tarifs en vigueur au moment de la validation de la commande. Les éventuels frais de
         livraison sont indiqués séparément avant la validation de la commande.
       </p>
@@ -58,7 +58,7 @@ export default function ConditionsPage() {
       <p>
         Le client peut passer commande sur le site sans obligation de créer un compte, ou via WhatsApp.
         Toute commande fait l’objet d’une confirmation, généralement par téléphone, avant préparation et
-        expédition. Assada se réserve le droit d’annuler ou de refuser toute commande émanant d’un client
+        expédition. RYTA se réserve le droit d’annuler ou de refuser toute commande émanant d’un client
         avec lequel existerait un litige, ou en cas de commande manifestement frauduleuse.
       </p>
 
@@ -96,8 +96,8 @@ export default function ConditionsPage() {
       <p>
         Les produits sont destinés à un usage cosmétique normal. Le client est tenu de lire les précautions
         d’emploi et la composition figurant sur l’emballage, en particulier en cas d’allergie connue.
-        La responsabilité d’Assada ne saurait être engagée en cas de mauvaise utilisation d’un produit.
-        Assada ne saurait être tenue responsable des dommages résultant d’un cas de force majeure ou d’une
+        La responsabilité d’RYTA ne saurait être engagée en cas de mauvaise utilisation d’un produit.
+        RYTA ne saurait être tenue responsable des dommages résultant d’un cas de force majeure ou d’une
         interruption temporaire du site.
       </p>
 
@@ -105,7 +105,7 @@ export default function ConditionsPage() {
       <p>
         L’ensemble des éléments du site (marque, logo, textes, visuels, mise en page) est protégé par les
         lois marocaines et internationales relatives à la propriété intellectuelle. Toute reproduction,
-        représentation ou exploitation, totale ou partielle, sans autorisation écrite préalable d’Assada,
+        représentation ou exploitation, totale ou partielle, sans autorisation écrite préalable d’RYTA,
         est interdite.
       </p>
 

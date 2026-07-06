@@ -123,10 +123,10 @@ export default function HomeFooter() {
             <p className="text-xs font-bold text-[#B8925A] uppercase tracking-widest mb-2">
               Suivez-nous
             </p>
-            <p className="text-[#020B27] text-2xl font-extrabold mb-1">@assada</p>
+            <p className="text-[#020B27] text-2xl font-extrabold mb-1">@ryta</p>
             <p className="text-gray-400 text-sm mb-5">Découvrez nos produits en images</p>
             <Link
-              href="https://www.instagram.com/assada"
+              href="https://www.instagram.com/ryta"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
@@ -154,8 +154,8 @@ export default function HomeFooter() {
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <Link href="/" className="inline-flex items-center mb-4">
               <Image
-                src="/logo.png"
-                alt="Assada"
+                src="/ryta.png"
+                alt="RYTA"
                 width={180}
                 height={120}
                 className="h-16 w-auto object-contain"
@@ -177,9 +177,9 @@ export default function HomeFooter() {
             </div>
             <div className="flex gap-3 mt-5">
               {[
-                { label: "Facebook", href: "https://www.facebook.com/assada" },
-                { label: "Instagram", href: "https://www.instagram.com/assada" },
-                { label: "TikTok", href: "https://www.tiktok.com/@assada" },
+                { label: "Facebook", href: "https://www.facebook.com/ryta" },
+                { label: "Instagram", href: "https://www.instagram.com/ryta" },
+                { label: "TikTok", href: "https://www.tiktok.com/@ryta" },
               ].map((s) => (
                 <Link
                   key={s.label}
@@ -274,7 +274,7 @@ export default function HomeFooter() {
       <div className="border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} Assada — Tous droits réservés
+            © {new Date().getFullYear()} RYTA — Tous droits réservés
           </p>
           <div className="flex items-center gap-2 text-xs">
             <span className="text-gray-500 mr-1">Paiement :</span>

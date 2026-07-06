@@ -8,7 +8,7 @@ import { getWhatsAppUrl, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Page introuvable (404)",
-  description: "La page que vous recherchez n'existe pas ou a été déplacée. Revenez à la boutique Assada.",
+  description: "La page que vous recherchez n'existe pas ou a été déplacée. Revenez à la boutique RYTA.",
   robots: { index: false, follow: true },
 };
 
@@ -23,8 +23,8 @@ export default function NotFound() {
     <main className="min-h-screen flex flex-col bg-gradient-to-b from-[#020B27] via-[#0F172A] to-[#020B27] text-white">
       {/* Logo */}
       <div className="px-4 py-6">
-        <Link href="/" className="inline-flex items-center" aria-label="Assada — Accueil">
-          <Image src="/logo1.png" alt="Assada" width={200} height={130} priority className="h-12 w-auto object-contain" />
+        <Link href="/" className="inline-flex items-center" aria-label="RYTA — Accueil">
+          <Image src="/ryta.png" alt="RYTA" width={200} height={130} priority className="h-12 w-auto object-contain" />
         </Link>
       </div>
 

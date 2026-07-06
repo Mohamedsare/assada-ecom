@@ -1,22 +1,22 @@
 @claude
 Tu es un développeur full-stack senior expert en e-commerce, UI/UX, SEO local, conversion, dashboard administratif, gestion de rôles et développement d’applications modernes.
 
-Je veux créer un site e-commerce ultra moderne, ultra professionnel et très convertisseur pour une boutique cosmétique appelée ASSADA.
+Je veux créer un site e-commerce ultra moderne, ultra professionnel et très convertisseur pour une boutique cosmétique appelée RYTA.
 
 ## Contexte du projet
 
-ASSADA est une boutique physique située à Casablanca, Maroc.
+RYTA est une boutique physique située à Casablanca, Maroc.
 
 Informations boutique :
 
-Nom : ASSADA
+Nom : RYTA
 Activité : vente de produits cosmétiques, parfums, pommades, soins beauté, soins cheveux, soins visage, soins corps, maquillage, accessoires beauté, coffrets cadeaux et produits promotionnels.
 
 Adresse :
 Boulevard Abdelmoumen, N10, Galerie Derb Ghalef, Kissariat Zemmouri
 20102 - DERB GHALEF - CASABLANCA, Maroc
 
-Email : [contact@assada.ma](mailto:contact@assada.ma)
+Email : [contact@ryta.ma](mailto:contact@ryta.ma)
 Téléphone / WhatsApp : +212 00000000
 Réseaux sociaux : Facebook, Instagram, TikTok
 
@@ -375,7 +375,7 @@ Quand une commande arrive :
 
 La facture doit contenir :
 
-- logo ASSADA ;
+- logo RYTA ;
 - nom boutique ;
 - adresse ;
 - téléphone ;
@@ -484,7 +484,7 @@ Le site doit être optimisé SEO Maroc et Casablanca.
 
 Créer une stratégie SEO local autour de :
 
-- ASSADA Casablanca
+- RYTA Casablanca
 - boutique cosmétique Casablanca
 - produits cosmétiques Casablanca
 - parfums Casablanca

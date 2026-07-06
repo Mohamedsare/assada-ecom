@@ -189,13 +189,13 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             aria-label={hasVariants ? "Choisir les options" : "Ajouter au panier"}
             title={hasVariants ? "Choisir couleur / taille" : "Ajouter au panier"}
             className={cn(
-              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors",
+              "flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-150",
               product.stock_quantity > 0
-                ? "border-gray-300 text-[#020B27] hover:border-[#0F172A] hover:bg-[#9E7A45] hover:text-white"
-                : "cursor-not-allowed border-gray-200 text-gray-300"
+                ? "bg-[#B8925A] text-white shadow-md shadow-[#B8925A]/30 hover:bg-[#9E7A45] hover:shadow-lg hover:scale-105 active:scale-95"
+                : "cursor-not-allowed bg-gray-100 text-gray-300"
             )}
           >
-            <ShoppingCart size={15} />
+            <ShoppingCart size={17} strokeWidth={2.4} />
           </button>
         </div>
 

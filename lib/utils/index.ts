@@ -27,7 +27,7 @@ export function calculateDiscount(oldPrice: number, currentPrice: number): numbe
 export function generateOrderNumber(): string {
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
-  return `ASSADA-${year}-${random}`;
+  return `RYTA-${year}-${random}`;
 }
 
 export function getWhatsAppUrl(message: string): string {
@@ -48,7 +48,7 @@ export function getProductOrderWhatsAppUrl(opts: {
   url?: string;
 }): string {
   const lines: string[] = [
-    "Bonjour Assada, je souhaite commander ce produit :",
+    "Bonjour RYTA, je souhaite commander ce produit :",
     "",
     `🛍️ ${opts.name}`,
   ];
@@ -79,4 +79,4 @@ export function getClientWhatsAppUrl(phone: string, message: string): string {
   return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 }
 
-export const WHATSAPP_DEFAULT_MESSAGE = "Bonjour Assada, je suis intéressé par vos produits.";
+export const WHATSAPP_DEFAULT_MESSAGE = "Bonjour RYTA, je suis intéressé par vos produits.";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -70,7 +70,16 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
   const goPrevMedia = () => setActiveImage((i) => (i - 1 + media.length) % media.length);
   const goNextMedia = () => setActiveImage((i) => (i + 1) % media.length);
 
-  // Zoom-loupe sur l'image principale (suit le curseur)
+  // Zoom-loupe sur l'image principale (suit le curseur).
+  // Désactivé sur mobile / écrans tactiles (pas de survol réel).
+  const [canZoom, setCanZoom] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => setCanZoom(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
   const [zooming, setZooming] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
   const handleZoomMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -124,7 +133,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
 
   // Question générale (sans détails de commande)
   const whatsappMsg = getWhatsAppUrl(
-    `Bonjour Assada, je suis intéressé par ce produit : ${product.name}\nLien : ${pageUrl}`
+    `Bonjour RYTA, je suis intéressé par ce produit : ${product.name}\nLien : ${pageUrl}`
   );
 
   // Commande complète : reprend toutes les options choisies par le client
@@ -176,11 +185,11 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             <div
               className={cn(
                 "relative aspect-square rounded-2xl overflow-hidden bg-[#F8FAFC] border border-gray-100",
-                activeMedia?.kind === "image" && "cursor-zoom-in"
+                canZoom && activeMedia?.kind === "image" && "cursor-zoom-in"
               )}
-              onMouseEnter={() => activeMedia?.kind === "image" && setZooming(true)}
+              onMouseEnter={() => canZoom && activeMedia?.kind === "image" && setZooming(true)}
               onMouseLeave={() => setZooming(false)}
-              onMouseMove={activeMedia?.kind === "image" ? handleZoomMove : undefined}
+              onMouseMove={canZoom && activeMedia?.kind === "image" ? handleZoomMove : undefined}
             >
               {activeMedia?.kind === "video" ? (
                 <video src={activeMedia.url} controls className="w-full h-full object-contain bg-black" />

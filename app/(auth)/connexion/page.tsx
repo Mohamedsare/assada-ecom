@@ -74,7 +74,7 @@ function ConnexionForm() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/">
-            <Image src="/logo.png" alt="Assada" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
+            <Image src="/ryta.png" alt="RYTA" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
           </Link>
           <h1 className="text-2xl font-bold text-[#020B27] mt-4">Connexion</h1>
           <p className="text-[#64748B] text-sm mt-1">Connectez-vous à votre compte</p>

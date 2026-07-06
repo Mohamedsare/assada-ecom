@@ -97,7 +97,7 @@ export default function ContactContent() {
                   icon: MessageCircle,
                   label: "WhatsApp",
                   value: `+${WHATSAPP_NUMBER}`,
-                  href: getWhatsAppUrl("Bonjour Assada, je souhaite vous contacter."),
+                  href: getWhatsAppUrl("Bonjour RYTA, je souhaite vous contacter."),
                   color: "bg-emerald-50 text-emerald-600",
                 },
               ].map((item) => {
@@ -127,9 +127,9 @@ export default function ContactContent() {
               <h3 className="font-bold text-[#020B27] mb-4">Réseaux sociaux</h3>
               <div className="flex gap-3">
                 {[
-                  { label: "TikTok", href: "https://www.tiktok.com/@assada", bg: "bg-gray-900" },
-                  { label: "Facebook", href: "https://www.facebook.com/assada", bg: "bg-[#1877F2]" },
-                  { label: "WhatsApp", href: getWhatsAppUrl("Bonjour Assada"), bg: "bg-whatsapp" },
+                  { label: "TikTok", href: "https://www.tiktok.com/@ryta", bg: "bg-gray-900" },
+                  { label: "Facebook", href: "https://www.facebook.com/ryta", bg: "bg-[#1877F2]" },
+                  { label: "WhatsApp", href: getWhatsAppUrl("Bonjour RYTA"), bg: "bg-whatsapp" },
                 ].map((s) => (
                   <Link
                     key={s.label}

@@ -3,7 +3,7 @@ import RechercheContent from "./RechercheContent";
 
 export const metadata = {
   title: "Recherche",
-  description: "Recherchez des produits sur Assada — Boutique en ligne à Casablanca.",
+  description: "Recherchez des produits sur RYTA — Boutique en ligne à Casablanca.",
 };
 
 export default function RecherchePage() {

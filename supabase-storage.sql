@@ -1,5 +1,5 @@
 -- =============================================================
--- STORAGE — Buckets & policies pour Assada
+-- STORAGE — Buckets & policies pour RYTA
 -- À exécuter dans Supabase → SQL Editor (une seule fois).
 -- Corrige l'erreur "Bucket not found" lors de l'upload d'images.
 -- =============================================================

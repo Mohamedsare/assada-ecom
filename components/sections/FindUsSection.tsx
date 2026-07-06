@@ -131,7 +131,7 @@ export default function FindUsSection() {
           {/* Droite — Carte + infos */}
           <div className="rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col order-1 lg:order-2 min-h-[360px]">
             <iframe
-              title="Localisation de la boutique Assada à Casablanca"
+              title="Localisation de la boutique RYTA à Casablanca"
               src={MAP_EMBED}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -141,7 +141,7 @@ export default function FindUsSection() {
               <div className="flex items-start gap-3">
                 <MapPin size={17} className="text-green-light shrink-0 mt-0.5" />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold">Assada — Cosmétiques &amp; Parfums</p>
+                  <p className="text-sm font-semibold">RYTA — Cosmétiques &amp; Parfums</p>
                   <p className="text-xs text-gray-400 mt-0.5">{SHOP_ADDRESS}</p>
                 </div>
               </div>

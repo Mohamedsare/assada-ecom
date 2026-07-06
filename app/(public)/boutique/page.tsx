@@ -4,7 +4,7 @@ import { getProducts, getCategories, getBrands } from "@/lib/supabase/queries";
 
 export const metadata = {
   title: "Boutique",
-  description: "Découvrez toute la sélection de produits Assada à Casablanca.",
+  description: "Découvrez toute la sélection de produits RYTA à Casablanca.",
 };
 
 export default async function BoutiquePage() {

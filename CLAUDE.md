@@ -16,7 +16,7 @@ Odm’s Shopping doit donner l’image d’une boutique en ligne sérieuse, mode
 ## 2. Informations officielles
 
 - **Nom :** Odm’s Shopping
-- **Email :** [assada@gmail.com](mailto:assada@gmail.com)
+- **Email :** [ryta@gmail.com](mailto:ryta@gmail.com)
 - **Téléphone / WhatsApp :** +241 62 57 37 48
 - **Pays cible :** Gabon
 - **Ville principale :** Libreville
@@ -1280,13 +1280,13 @@ formatPrice(amount: number): string
 Format recommandé :
 
 ```txt
-ASSADA-YYYY-XXXX
+RYTA-YYYY-XXXX
 ```
 
 Exemple :
 
 ```txt
-ASSADA-2025-4321
+RYTA-2025-4321
 ```
 
 ---
@@ -1560,7 +1560,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 NEXT_PUBLIC_SITE_URL=
 NEXT_PUBLIC_WHATSAPP_NUMBER=24162573748
-NEXT_PUBLIC_SHOP_EMAIL=assada@gmail.com
+NEXT_PUBLIC_SHOP_EMAIL=ryta@gmail.com
 NEXT_PUBLIC_SHOP_PHONE=+24162573748
 ```
 

@@ -4,12 +4,12 @@ import LegalPage from "@/components/legal/LegalPage";
 import FaqAccordion, { type FaqItem } from "@/components/legal/FaqAccordion";
 
 export const metadata: Metadata = {
-  title: "FAQ — Questions fréquentes | Assada Casablanca",
+  title: "FAQ — Questions fréquentes | RYTA Casablanca",
   description:
-    "Réponses aux questions fréquentes sur Assada : commandes, livraison à Casablanca, paiement à la livraison, retours, authenticité des produits et commande via WhatsApp.",
-  keywords: ["FAQ Assada", "aide commande Casablanca", "livraison cosmétique Casablanca"],
+    "Réponses aux questions fréquentes sur RYTA : commandes, livraison à Casablanca, paiement à la livraison, retours, authenticité des produits et commande via WhatsApp.",
+  keywords: ["FAQ RYTA", "aide commande Casablanca", "livraison cosmétique Casablanca"],
   alternates: { canonical: "/faq" },
-  openGraph: { title: "FAQ — Assada", type: "website", locale: "fr_MA" },
+  openGraph: { title: "FAQ — RYTA", type: "website", locale: "fr_MA" },
 };
 
 const FAQ: FaqItem[] = [

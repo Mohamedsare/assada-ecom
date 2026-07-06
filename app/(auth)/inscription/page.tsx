@@ -100,10 +100,10 @@ export default function InscriptionPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/">
-            <Image src="/logo.png" alt="Assada" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
+            <Image src="/ryta.png" alt="RYTA" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
           </Link>
           <h1 className="text-2xl font-bold text-[#020B27] mt-4">Créer un compte</h1>
-          <p className="text-[#64748B] text-sm mt-1">Rejoignez Assada dès aujourd&apos;hui</p>
+          <p className="text-[#64748B] text-sm mt-1">Rejoignez RYTA dès aujourd&apos;hui</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-5">

@@ -26,7 +26,7 @@ export default function TopBar() {
 
         <div className="flex items-center gap-3">
           <Link
-            href={`https://www.tiktok.com/@assada`}
+            href={`https://www.tiktok.com/@ryta`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
@@ -37,7 +37,7 @@ export default function TopBar() {
             </svg>
           </Link>
           <Link
-            href={`https://www.facebook.com/assada`}
+            href={`https://www.facebook.com/ryta`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"

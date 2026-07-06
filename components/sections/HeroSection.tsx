@@ -77,7 +77,7 @@ export default function HeroSection() {
         <Image
           key={`bg-${current}`}
           src={heroImages[current] ?? slide.image}
-          alt={`Assada — ${slide.titleAccent}`}
+          alt={`RYTA — ${slide.titleAccent}`}
           fill
           priority
           className="object-cover object-right animate-fade-bg"
