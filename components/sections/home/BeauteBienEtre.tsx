@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Product } from "@/types";
+import { useConfigStore } from "@/stores/config";
 import MiniProductCard from "./MiniProductCard";
 
 export interface BeautyCat {
@@ -21,6 +22,11 @@ export default function BeauteBienEtre({ cats }: { cats: BeautyCat[] }) {
   const [drag, setDrag] = useState<number | null>(null); // position continue 0..1 pendant le glissement
   const barRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
+
+  // Images des cercles gérées en admin (« Gestion des pages » → Bien-être), par position.
+  const pageImages = useConfigStore((s) => s.images);
+  // Priorité : image admin du cercle → image de la sous-catégorie → emoji.
+  const circleImage = (i: number) => (pageImages[`bien_etre_${i + 1}`] || "").trim() || cats[i]?.image;
 
   const steps = Math.max(1, cats.length - 1);
   const current = cats[Math.min(active, cats.length - 1)];
@@ -77,15 +83,17 @@ export default function BeauteBienEtre({ cats }: { cats: BeautyCat[] }) {
 
         {/* Boutons ronds — mobile : rangée unique scrollable ; desktop : centrés */}
         <div className="flex items-start justify-start sm:justify-center sm:flex-wrap gap-6 sm:gap-10 mb-6 overflow-x-auto sm:overflow-visible scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-          {cats.map((c, i) => (
+          {cats.map((c, i) => {
+            const img = circleImage(i);
+            return (
             <button key={c.slug} onClick={() => setActive(i)} className="shrink-0 flex flex-col items-center gap-2 group">
               <span
                 className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden flex items-center justify-center bg-white transition-all ${
                   i === active ? "ring-2 ring-[#B8925A] ring-offset-2 scale-105" : "ring-1 ring-gray-200 group-hover:ring-gray-300"
                 }`}
               >
-                {c.image ? (
-                  <Image src={c.image} alt={c.name} fill sizes="80px" className="object-cover" />
+                {img ? (
+                  <Image src={img} alt={c.name} fill sizes="80px" className="object-cover" />
                 ) : (
                   <span className="text-2xl">{c.emoji ?? "🧴"}</span>
                 )}
@@ -94,7 +102,8 @@ export default function BeauteBienEtre({ cats }: { cats: BeautyCat[] }) {
                 {c.name}
               </span>
             </button>
-          ))}
+            );
+          })}
         </div>
 
         {/* Rail à curseur : on le glisse pour passer d'une sous-catégorie à l'autre */}

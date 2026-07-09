@@ -1,13 +1,16 @@
 import { create } from "zustand";
-import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
+import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, DEFAULT_HERO_SLIDES, PAGE_IMAGE_DEFAULTS, type HeroSlide } from "@/lib/constants";
 
 interface StoreConfig {
   deliveryFee: number;
   freeDeliveryThreshold: number;
-  /** Images éditables du site (bannières hero, bannières de pages…). */
+  /** Images éditables du site (bannières promo, bannières de pages…). */
   images: Record<string, string>;
+  /** Slides du slider d'accueil (images ou vidéos), gérés en admin. */
+  heroSlides: HeroSlide[];
   setConfig: (c: { deliveryFee: number; freeDeliveryThreshold: number }) => void;
   setImages: (images: Record<string, string>) => void;
+  setHeroSlides: (slides: HeroSlide[]) => void;
 }
 
 /**
@@ -19,8 +22,10 @@ export const useConfigStore = create<StoreConfig>((set) => ({
   deliveryFee: DEFAULT_DELIVERY_FEE,
   freeDeliveryThreshold: DEFAULT_FREE_DELIVERY_THRESHOLD,
   images: { ...PAGE_IMAGE_DEFAULTS },
+  heroSlides: DEFAULT_HERO_SLIDES,
   setConfig: (c) => set(c),
   setImages: (images) => set((s) => ({ images: { ...s.images, ...images } })),
+  setHeroSlides: (heroSlides) => set({ heroSlides }),
 }));
 
 /** Hook pratique : URL d'une image de page (repli sur le défaut). */

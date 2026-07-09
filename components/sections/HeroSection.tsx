@@ -5,11 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { ChevronRight, ShoppingBag, Tag, Truck, RotateCcw, ShieldCheck, MessageCircle } from "lucide-react";
 import { useConfigStore } from "@/stores/config";
-
-/** Images supplémentaires du dossier /public/banners ajoutées au slider (après les 3 éditables). */
-const EXTRA_HERO_IMAGES = ["/banners/b1.png", "/banners/b2.png", "/banners/b3.png"];
-/** Nombre total de slides = 3 éditables (home_hero_1/2/3) + les images supplémentaires. */
-const HERO_COUNT = 3 + EXTRA_HERO_IMAGES.length;
+import { DEFAULT_HERO_SLIDES } from "@/lib/constants";
 
 /** Bande de réassurance qui défile en boucle sous la bannière (façon apia). */
 const MARQUEE_ITEMS = [
@@ -58,13 +54,10 @@ const SLIDES = [
 export default function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  // Images éditables depuis « Gestion des pages » (repli sur les images par défaut du slide),
-  // suivies des images supplémentaires du dossier /public/banners.
-  const images = useConfigStore((s) => s.images);
-  const heroImages = [
-    images.home_hero_1, images.home_hero_2, images.home_hero_3,
-    ...EXTRA_HERO_IMAGES,
-  ];
+  // Slides (images ou vidéos) gérés depuis « Gestion des pages » → slider d'accueil.
+  const storeSlides = useConfigStore((s) => s.heroSlides);
+  const heroSlides = storeSlides.length > 0 ? storeSlides : DEFAULT_HERO_SLIDES;
+  const heroCount = heroSlides.length;
 
   const goTo = useCallback(
     (index: number) => {
@@ -77,31 +70,46 @@ export default function HeroSection() {
   );
 
   const next = useCallback(() => {
-    goTo((current + 1) % HERO_COUNT);
-  }, [current, goTo]);
+    setCurrent((c) => (c + 1) % heroCount);
+  }, [heroCount]);
 
   useEffect(() => {
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
   }, [next]);
 
-  // Le texte (titre, CTA…) tourne sur les 3 slides ; les images, elles, défilent sur toutes.
-  const slide = SLIDES[current % SLIDES.length];
+  // Index borné au rendu : si le nombre de slides change (édition admin), on reste valide.
+  const index = heroCount > 0 ? current % heroCount : 0;
+  // Le texte (titre, CTA…) tourne sur les 3 slides éditoriaux ; le fond défile sur tous les slides.
+  const slide = SLIDES[index % SLIDES.length];
+  const media = heroSlides[index] ?? heroSlides[0];
 
   return (
     <>
     <section className="relative bg-night text-white overflow-hidden select-none">
-      {/* ── Image en arrière-plan (slider) ── */}
+      {/* ── Média en arrière-plan (slider : image ou vidéo) ── */}
       <div className="absolute inset-0 z-0">
-        <Image
-          key={`bg-${current}`}
-          src={heroImages[current] ?? slide.image}
-          alt={`RYTA — ${slide.titleAccent}`}
-          fill
-          priority
-          className="object-cover object-right animate-fade-bg"
-          sizes="100vw"
-        />
+        {media?.type === "video" ? (
+          <video
+            key={`bg-${index}`}
+            src={media.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-right animate-fade-bg"
+          />
+        ) : (
+          <Image
+            key={`bg-${index}`}
+            src={media?.url ?? slide.image}
+            alt={`RYTA — ${slide.titleAccent}`}
+            fill
+            priority
+            className="object-cover object-right animate-fade-bg"
+            sizes="100vw"
+          />
+        )}
         {/* Dégradé pour lisibilité — plus léger sur mobile pour mieux voir l'image */}
         <div className="absolute inset-0 bg-night/25 lg:hidden" />
         <div className="absolute inset-0 bg-linear-to-r from-night/60 via-night/25 to-transparent lg:from-night/80 lg:via-night/50" />
@@ -112,26 +120,21 @@ export default function HeroSection() {
 
           {/* ── Texte gauche ── */}
           <div
-            key={`text-${current}`}
+            key={`text-${index}`}
             className="py-5 md:py-6 lg:pr-8 z-10 animate-fade-slide-in"
           >
-            <div className="inline-flex items-center gap-2 bg-green/20 text-green-light text-xs font-semibold px-3 py-1.5 rounded-full mb-5 border border-green-light/30">
-              <span className="w-1.5 h-1.5 bg-green-light rounded-full animate-pulse" />
-              Livraison partout au Maroc en 24–72h
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-5">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-3 md:mb-5">
               {slide.title}{" "}
               <span className="text-green-light">{slide.titleAccent}</span>
               <br />
               {slide.titleSuffix}
             </h1>
 
-            <p className="text-gray-400 text-base md:text-lg mb-6 leading-relaxed max-w-md">
+            <p className="text-gray-400 text-sm md:text-lg mb-4 md:mb-6 leading-relaxed max-w-md">
               {slide.subtitle}
             </p>
 
-            <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3">
+            <div className="flex flex-col items-start sm:flex-row sm:items-center sm:flex-nowrap gap-3">
               <Link
                 href={slide.cta1.href}
                 className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#9E7A45] text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
@@ -148,20 +151,6 @@ export default function HeroSection() {
                 {slide.cta2.label}
               </Link>
             </div>
-
-            {/* Stats */}
-            <div className="flex gap-8 mt-5 pt-4 border-t border-white/10">
-              {[
-                { value: "500+", label: "Produits" },
-                { value: "24h", label: "Livraison" },
-                { value: "100%", label: "Authentiques" },
-              ].map((s) => (
-                <div key={s.label}>
-                  <p className="text-xl font-extrabold text-green-light">{s.value}</p>
-                  <p className="text-gray-500 text-xs mt-0.5">{s.label}</p>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Colonne droite vide : l'image est en arrière-plan */}
@@ -171,13 +160,13 @@ export default function HeroSection() {
 
       {/* Dots */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-        {heroImages.map((_, i) => (
+        {heroSlides.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
             aria-label={`Slide ${i + 1}`}
             className={`transition-all rounded-full ${
-              i === current
+              i === index
                 ? "w-6 h-2 bg-green-light"
                 : "w-2 h-2 bg-white/30 hover:bg-white/60"
             }`}

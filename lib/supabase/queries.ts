@@ -1,5 +1,5 @@
 import { createClient } from "./server";
-import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
+import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, DEFAULT_HERO_SLIDES, PAGE_IMAGE_DEFAULTS, type HeroSlide } from "@/lib/constants";
 import type {
   Product, Category, Brand, Order, Profile, Address,
   Review, Payment, ContactMessage, DeliveryAgent,
@@ -536,4 +536,23 @@ export async function getPageImages(): Promise<Record<string, string>> {
     if (v) out[key] = v;
   }
   return out;
+}
+
+/**
+ * Slides du slider d'accueil (images ou vidéos), gérés dans « Gestion des pages ».
+ * Renvoie les slides par défaut si le réglage `hero_slides` est absent ou invalide.
+ */
+export async function getHeroSlides(): Promise<HeroSlide[]> {
+  const s = await getSettings();
+  let raw: unknown = s.hero_slides;
+  if (typeof raw === "string") { try { raw = JSON.parse(raw); } catch { raw = null; } }
+  if (!Array.isArray(raw)) return DEFAULT_HERO_SLIDES;
+  const slides = raw
+    .filter((v): v is HeroSlide =>
+      !!v && typeof v === "object" &&
+      typeof (v as HeroSlide).url === "string" && (v as HeroSlide).url.trim() !== "" &&
+      ((v as HeroSlide).type === "image" || (v as HeroSlide).type === "video"),
+    )
+    .map((v) => ({ type: v.type, url: v.url.trim() }));
+  return slides.length > 0 ? slides : DEFAULT_HERO_SLIDES;
 }

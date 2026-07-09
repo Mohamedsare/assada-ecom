@@ -24,19 +24,25 @@ export default function AProposPage() {
   return (
     <LegalPage
       title="À propos d’RYTA"
-      subtitle="Votre boutique de cosmétiques, parfums et soins beauté à Casablanca — qualité, confiance et satisfaction garanties."
+      subtitle="Beauté, compléments alimentaires et produits du terroir marocain à Casablanca — qualité, confiance et satisfaction garanties."
       heroImage="/banners/banner-a-propos.png"
     >
       <h2>Qui sommes-nous ?</h2>
       <p>
-        <strong>RYTA</strong> est une boutique spécialisée dans la vente de produits cosmétiques,
-        parfums, pommades, soins du visage, du corps et des cheveux, maquillage, produits d’hygiène,
-        accessoires beauté et coffrets cadeaux. Installée au cœur de <strong>Derb Ghalef à Casablanca</strong>,
-        nous proposons une sélection premium au meilleur prix, en boutique physique comme en ligne.
+        Chez <strong>RYTA</strong>, la beauté et le bien-être sont une affaire de passion. Depuis notre
+        boutique au cœur de <strong>Derb Ghalef, à Casablanca</strong>, nous réunissons trois univers
+        complémentaires : la <strong>Beauté</strong> (parfums, maquillage, soins du visage, du corps et des
+        cheveux, hygiène, accessoires et coffrets cadeaux), les <strong>Compléments alimentaires</strong>
+        (vitalité, immunité, beauté de la peau…) et les <strong>Produits du terroir marocain</strong>
+        (miel, huiles, amlou, épices, dattes…). Une sélection <strong>premium</strong>, choisie avec soin
+        et proposée au meilleur prix, en boutique physique comme en ligne.
       </p>
       <p>
-        Notre mission : rendre la beauté accessible à toutes et à tous, avec des produits authentiques,
-        un conseil de proximité et une expérience d’achat simple, rapide et rassurante.
+        Notre mission est simple : <strong>rendre la beauté et le bien-être accessibles à toutes et à
+        tous</strong>. Nous ne proposons que des produits <strong>100 % authentiques</strong>, nous vous
+        conseillons avec la proximité d’une véritable boutique de quartier, et nous vous offrons une
+        expérience d’achat fluide, rapide et rassurante — du choix du produit à la livraison chez vous,
+        partout au Maroc.
       </p>
 
       <h2>Nos valeurs</h2>

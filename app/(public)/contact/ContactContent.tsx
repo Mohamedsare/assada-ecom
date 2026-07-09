@@ -8,6 +8,10 @@ import { getWhatsAppUrl } from "@/lib/utils";
 import { createContactMessage } from "@/lib/supabase/actions";
 import AdvantagesSection from "@/components/sections/AdvantagesSection";
 
+// Même localisation que la carte de l'accueil (FindUsSection).
+const MAP_QUERY = encodeURIComponent("N 10 Galerie Zemouri, Boulevard Abdelmoumen, Casablanca, Maroc");
+const MAP_EMBED = `https://maps.google.com/maps?q=${MAP_QUERY}&z=16&output=embed`;
+
 const FAQ = [
   {
     q: "Quels sont vos délais de livraison ?",
@@ -51,18 +55,14 @@ export default function ContactContent() {
 
   return (
     <div>
-      {/* Hero */}
-      <div className="bg-gradient-to-r from-[#020B27] to-[#0F172A] text-white py-14 px-4 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#B8925A]/10 rounded-full blur-3xl" />
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">
-            Nous sommes là<br />
-            <span className="text-[#C9A063]">pour vous aider !</span>
-          </h1>
-          <p className="text-gray-300 text-lg">
-            Une question, un problème ? Contactez-nous, nous répondons vite.
-          </p>
-        </div>
+      {/* En-tête */}
+      <div className="max-w-4xl mx-auto text-center px-4 pt-12">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#020B27] mb-3">
+          Nous sommes là <span className="text-[#B8925A]">pour vous aider !</span>
+        </h1>
+        <p className="text-text-secondary text-lg">
+          Une question, un problème ? Contactez-nous, nous répondons vite.
+        </p>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -144,20 +144,15 @@ export default function ContactContent() {
               </div>
             </div>
 
-            {/* Map placeholder */}
-            <div className="mt-6 bg-gray-100 rounded-2xl overflow-hidden aspect-video flex items-center justify-center border border-gray-200">
-              <div className="text-center text-gray-500">
-                <MapPin size={36} className="mx-auto mb-2 text-[#020B27]" />
-                <p className="font-medium">Galerie Derb Ghalef, Bd Abdelmoumen, Casablanca</p>
-                <Link
-                  href="https://maps.google.com/?q=Galerie+Derb+Ghalef+Boulevard+Abdelmoumen+Casablanca"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-[#020B27] hover:underline mt-1 block"
-                >
-                  Voir sur Google Maps
-                </Link>
-              </div>
+            {/* Carte Google Maps interactive — identique à celle de l'accueil */}
+            <div className="mt-6 rounded-2xl overflow-hidden aspect-video border border-gray-200">
+              <iframe
+                title="Localisation de la boutique RYTA à Casablanca"
+                src={MAP_EMBED}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="w-full h-full border-0"
+              />
             </div>
           </div>
 

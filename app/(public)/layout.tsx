@@ -5,17 +5,17 @@ import WhatsAppButton from "@/components/layout/WhatsAppButton";
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import UIShell from "@/components/layout/UIShell";
 import ConfigHydrator from "@/components/layout/ConfigHydrator";
-import { getStoreConfig, getPageImages } from "@/lib/supabase/queries";
+import { getStoreConfig, getPageImages, getHeroSlides } from "@/lib/supabase/queries";
 
 export default async function PublicLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [config, images] = await Promise.all([getStoreConfig(), getPageImages()]);
+  const [config, images, heroSlides] = await Promise.all([getStoreConfig(), getPageImages(), getHeroSlides()]);
   return (
     <>
-      <ConfigHydrator deliveryFee={config.deliveryFee} freeDeliveryThreshold={config.freeDeliveryThreshold} images={images} />
+      <ConfigHydrator deliveryFee={config.deliveryFee} freeDeliveryThreshold={config.freeDeliveryThreshold} images={images} heroSlides={heroSlides} />
       <TopBar />
       <Header />
       <main className="flex-1">{children}</main>

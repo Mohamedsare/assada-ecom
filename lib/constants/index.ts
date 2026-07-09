@@ -226,9 +226,6 @@ export const ORDER_CHANNEL_LABELS: Record<string, string> = {
  * Les composants publics lisent ces images via le store de config (ConfigHydrator).
  */
 export const PAGE_IMAGE_DEFAULTS: Record<string, string> = {
-  home_hero_1: "/banners/banner2-accueil.png",
-  home_hero_2: "/banners/banner3-accuiel.png",
-  home_hero_3: "/banners/banner4-accueil.png",
   home_banner_promo: "/banners/banner4-accueil.png",
   home_banner_nouveaute: "/banners/banner3-accuiel.png",
   banner_boutique: "/banners/banner2-accueil.png",
@@ -240,6 +237,13 @@ export const PAGE_IMAGE_DEFAULTS: Record<string, string> = {
   gallery_3: "/categories/maquillage.jpeg",
   gallery_4: "/categories/soins-cheveux.jpeg",
   gallery_5: "/categories/cadeaux.jpeg",
+  // Cercles « Beauté & bien-être » (accueil) — vide par défaut : repli sur l'emoji de la sous-catégorie
+  bien_etre_1: "",
+  bien_etre_2: "",
+  bien_etre_3: "",
+  bien_etre_4: "",
+  bien_etre_5: "",
+  bien_etre_6: "",
   // Images des méga-menus de navigation (« Images liens »)
   menu_univers_1: "/banners/banner2-accueil.png",
   menu_univers_2: "/banners/banner4-accueil.png",
@@ -249,16 +253,29 @@ export const PAGE_IMAGE_DEFAULTS: Record<string, string> = {
   menu_locaux_2: "/banners/banner4-accueil.png",
 };
 
+/**
+ * Un slide de la bannière d'accueil : image ou vidéo en arrière-plan.
+ * La liste est entièrement gérée en admin (« Gestion des pages » → slider) et
+ * stockée dans le réglage `hero_slides`.
+ */
+export type HeroSlideType = "image" | "video";
+export interface HeroSlide {
+  type: HeroSlideType;
+  url: string;
+}
+
+/** Slides par défaut du slider d'accueil (repli si aucun slide n'est configuré en admin). */
+export const DEFAULT_HERO_SLIDES: HeroSlide[] = [
+  { type: "image", url: "/banners/banner2-accueil.png" },
+  { type: "image", url: "/banners/banner3-accuiel.png" },
+  { type: "image", url: "/banners/banner4-accueil.png" },
+  { type: "image", url: "/banners/b1.png" },
+  { type: "image", url: "/banners/b2.png" },
+  { type: "image", url: "/banners/b3.png" },
+];
+
 /** Métadonnées d'affichage pour l'éditeur « Gestion des pages » (groupes + libellés). */
 export const PAGE_IMAGE_GROUPS: { group: string; items: { key: string; label: string }[] }[] = [
-  {
-    group: "Accueil — bannières du slider",
-    items: [
-      { key: "home_hero_1", label: "Bannière 1" },
-      { key: "home_hero_2", label: "Bannière 2" },
-      { key: "home_hero_3", label: "Bannière 3" },
-    ],
-  },
   {
     group: "Accueil — bannières promotionnelles",
     items: [
@@ -283,6 +300,17 @@ export const PAGE_IMAGE_GROUPS: { group: string; items: { key: string; label: st
       { key: "gallery_3", label: "Photo 3" },
       { key: "gallery_4", label: "Photo 4" },
       { key: "gallery_5", label: "Photo 5" },
+    ],
+  },
+  {
+    group: "Bien-être — cercles des sous-catégories (accueil)",
+    items: [
+      { key: "bien_etre_1", label: "Cercle 1 (1ʳᵉ sous-catégorie)" },
+      { key: "bien_etre_2", label: "Cercle 2 (2ᵉ sous-catégorie)" },
+      { key: "bien_etre_3", label: "Cercle 3 (3ᵉ sous-catégorie)" },
+      { key: "bien_etre_4", label: "Cercle 4 (4ᵉ sous-catégorie)" },
+      { key: "bien_etre_5", label: "Cercle 5 (5ᵉ sous-catégorie)" },
+      { key: "bien_etre_6", label: "Cercle 6 (6ᵉ sous-catégorie)" },
     ],
   },
   {

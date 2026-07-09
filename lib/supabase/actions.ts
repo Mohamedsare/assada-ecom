@@ -5,7 +5,7 @@ import { createAdminClient } from "./admin";
 import { getCurrentProfile } from "./queries";
 import { ensurePermission, ensureSensitive } from "./guards";
 import { isFullAccessRole, defaultEmployeePermissions } from "@/lib/permissions";
-import { PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
+import { PAGE_IMAGE_DEFAULTS, type HeroSlide } from "@/lib/constants";
 import type { PermissionMatrix } from "@/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -830,6 +830,33 @@ export async function adminUpdatePageImages(formData: FormData) {
   }
 
   revalidatePath("/", "layout");   // rafraîchit les bannières publiques
+  revalidatePath("/admin/reglages");
+  return { success: true };
+}
+
+/**
+ * Enregistre la liste des slides du slider d'accueil (images/vidéos). Réservé aux admins.
+ * La liste est stockée dans le réglage `hero_slides` (tableau JSON ordonné).
+ */
+export async function adminUpdateHeroSlides(slides: HeroSlide[]) {
+  const current = await getCurrentProfile();
+  if (!current || !isFullAccessRole(current.role)) return { error: "Accès refusé." };
+
+  // Nettoyage / validation : on ne garde que des entrées bien formées.
+  const clean = (Array.isArray(slides) ? slides : [])
+    .filter((s) => s && typeof s.url === "string" && s.url.trim() !== "" && (s.type === "image" || s.type === "video"))
+    .map((s) => ({ type: s.type, url: s.url.trim() }));
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("settings")
+    .upsert({ key: "hero_slides", value: JSON.stringify(clean) }, { onConflict: "key" });
+  if (error) {
+    console.error("adminUpdateHeroSlides:", error);
+    return { error: "Enregistrement impossible (droits base de données ?). " + error.message };
+  }
+
+  revalidatePath("/", "layout");
   revalidatePath("/admin/reglages");
   return { success: true };
 }

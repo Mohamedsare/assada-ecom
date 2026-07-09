@@ -7,7 +7,7 @@ import {
   Truck, ShieldCheck, RotateCcw, Headphones, ChevronRight,
 } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
-import { useConfigStore, usePageImage } from "@/stores/config";
+import { useConfigStore } from "@/stores/config";
 import { addToast } from "@/lib/ui-actions";
 import { formatPrice } from "@/lib/utils";
 
@@ -20,7 +20,6 @@ export default function PanierPage() {
   const _clearCart  = useCartStore((s) => s.clearCart);
   const DELIVERY_FEE = useConfigStore((s) => s.deliveryFee);
   const FREE_DELIVERY_THRESHOLD = useConfigStore((s) => s.freeDeliveryThreshold);
-  const bannerImg = usePageImage("banner_panier");
 
   const removeItem = (id: string, name?: string) => {
     _removeItem(id);
@@ -66,29 +65,19 @@ export default function PanierPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-28 lg:pb-0">
 
-      {/* ── Bannière ── */}
-      <div
-        className="relative text-white py-10 md:py-14 px-4 overflow-hidden"
-        style={{
-          backgroundImage: `url('${bannerImg}')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-night/35" />
-        <div className="relative max-w-6xl mx-auto">
-          <Link
-            href="/boutique"
-            className="inline-flex items-center gap-2 text-gray-300 hover:text-white text-sm mb-3 transition-colors"
-          >
-            <ArrowLeft size={16} />
-            Continuer mes achats
-          </Link>
-          <h1 className="text-3xl font-bold">Votre panier</h1>
-          <p className="text-gray-300 mt-1">
-            {totalItems()} article{totalItems() !== 1 ? "s" : ""}
-          </p>
-        </div>
+      {/* ── En-tête ── */}
+      <div className="max-w-6xl mx-auto px-4 pt-6">
+        <Link
+          href="/boutique"
+          className="inline-flex items-center gap-2 text-[#64748B] hover:text-[#020B27] text-sm mb-3 transition-colors"
+        >
+          <ArrowLeft size={16} />
+          Continuer mes achats
+        </Link>
+        <h1 className="text-2xl md:text-3xl font-bold text-[#020B27]">Votre panier</h1>
+        <p className="text-[#64748B] mt-1">
+          {totalItems()} article{totalItems() !== 1 ? "s" : ""}
+        </p>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">

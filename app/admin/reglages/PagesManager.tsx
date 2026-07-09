@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { LayoutTemplate, Save, Info } from "lucide-react";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import HeroSlidesEditor from "./HeroSlidesEditor";
 import { adminUpdatePageImages } from "@/lib/supabase/actions";
-import { PAGE_IMAGE_GROUPS } from "@/lib/constants";
+import { PAGE_IMAGE_GROUPS, type HeroSlide } from "@/lib/constants";
 
-export default function PagesManager({ images }: { images: Record<string, string> }) {
+export default function PagesManager({ images, heroSlides }: { images: Record<string, string>; heroSlides: HeroSlide[] }) {
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +42,11 @@ export default function PagesManager({ images }: { images: Record<string, string
           Formats conseillés : bannières larges et de bonne qualité (JPG/PNG, ~1600×600 px). Laissez un champ
           vide pour revenir à l&apos;image par défaut.
         </p>
+      </div>
+
+      {/* Slider d'accueil : liste dynamique (images/vidéos), avec sa propre sauvegarde. */}
+      <div className="max-w-3xl mb-5">
+        <HeroSlidesEditor initialSlides={heroSlides} />
       </div>
 
       <form action={handleAction} className="space-y-5 max-w-3xl">
