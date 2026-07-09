@@ -84,11 +84,11 @@ export default async function HomePage() {
       {/* Sections éditoriales façon apia */}
       <HomeShowcase products={allProducts} categories={allCategories} />
 
-      {/* 7 — Commander en quelques clics */}
-      <OrderStepsSection />
-
       {/* Histoires de la communauté */}
       <CommunityStories products={allProducts} />
+
+      {/* 7 — Commander en quelques clics — juste après Histoires de la communauté */}
+      <OrderStepsSection />
 
       {/* 9 — Trouvez notre boutique (carte + contact) */}
       <FindUsSection />

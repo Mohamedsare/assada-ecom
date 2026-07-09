@@ -19,7 +19,10 @@ export default async function PublicLayout({
       <Header />
       <main className="flex-1">{children}</main>
       <SiteFooter />
+      {/* Espace bas pour ne pas passer sous la barre fixe (mobile uniquement) */}
+      <div className="h-16 lg:hidden" aria-hidden="true" />
       <WhatsAppButton />
+      <MobileBottomNav />
       <UIShell />
     </>
   );
