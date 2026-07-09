@@ -6,7 +6,7 @@ import FaqAccordion, { type FaqItem } from "@/components/legal/FaqAccordion";
 export const metadata: Metadata = {
   title: "FAQ — Questions fréquentes | RYTA Casablanca",
   description:
-    "Réponses aux questions fréquentes sur RYTA : commandes, livraison à Casablanca, paiement à la livraison, retours, authenticité des produits et commande via WhatsApp.",
+    "Réponses aux questions fréquentes sur RYTA : commandes, livraison partout au Maroc, paiement à la livraison, retours, authenticité des produits et commande via WhatsApp.",
   keywords: ["FAQ RYTA", "aide commande Casablanca", "livraison cosmétique Casablanca"],
   alternates: { canonical: "/faq" },
   openGraph: { title: "FAQ — RYTA", type: "website", locale: "fr_MA" },
@@ -22,16 +22,16 @@ const FAQ: FaqItem[] = [
     a: "Le paiement s'effectue à la livraison, en espèces, directement auprès du livreur au moment de la réception de votre commande.",
   },
   {
-    q: "Livrez-vous partout à Casablanca ?",
-    a: "Oui. Nous livrons dans tous les quartiers de Casablanca : Derb Ghalef, Maârif, Anfa, Gauthier, Racine, Ain Diab, Hay Hassani, Sidi Maarouf et bien d'autres.",
+    q: "Livrez-vous partout au Maroc ?",
+    a: "Oui. Nous livrons partout au Maroc — Casablanca, Rabat, Marrakech, Tanger, Fès, Agadir et toutes les villes du Royaume.",
   },
   {
     q: "Quels sont les délais de livraison ?",
-    a: "La livraison à Casablanca s'effectue généralement sous 24 à 72 heures ouvrées après confirmation de votre commande par téléphone.",
+    a: "La livraison s'effectue partout au Maroc généralement sous 24 à 72 heures ouvrées après confirmation de votre commande par téléphone.",
   },
   {
     q: "Quels sont les frais de livraison ?",
-    a: "Les frais sont calculés automatiquement selon votre quartier et affichés dans votre panier avant paiement. La livraison est offerte à partir d'un certain montant d'achat.",
+    a: "Les frais sont affichés dans votre panier avant paiement. La livraison est gratuite à partir de 500 DH d'achat, partout au Maroc.",
   },
   {
     q: "Vos produits sont-ils authentiques ?",

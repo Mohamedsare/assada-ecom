@@ -657,8 +657,8 @@ insert into public.settings (key, value) values
   ('shop_address', '"Boulevard Abdelmoumen, N10, Galerie Derb Ghalef, Kissariat Zemmouri, 20102 Derb Ghalef, Casablanca, Maroc"'),
   ('shop_city', '"Casablanca"'),
   ('shop_country', '"Maroc"'),
-  ('delivery_fee', '2000'),
-  ('free_delivery_threshold', '100000'),
+  ('delivery_fee', '30'),
+  ('free_delivery_threshold', '500'),
   ('currency', '"DH"'),
   ('whatsapp_default_message', '"Bonjour RYTA, je suis intéressé par vos produits."');
 

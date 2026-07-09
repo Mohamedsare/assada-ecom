@@ -1,6 +1,6 @@
 import { getSettings } from "@/lib/supabase/queries";
 import { requireAdmin } from "@/lib/supabase/guards";
-import { SITE_NAME, SITE_EMAIL, SITE_PHONE, SOCIAL_LINKS } from "@/lib/constants";
+import { SITE_NAME, SITE_EMAIL, SITE_PHONE, SOCIAL_LINKS, DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD } from "@/lib/constants";
 import SettingsForm, { type SettingsValues } from "./SettingsForm";
 
 export const metadata = { title: "Paramètres de la boutique" };
@@ -31,8 +31,8 @@ export default async function AdminParametresPage() {
     shop_whatsapp:           read(s.shop_whatsapp, SITE_PHONE),
     shop_city:               read(s.shop_city, "Casablanca"),
     shop_address:            read(s.shop_address, ""),
-    delivery_fee:            read(s.delivery_fee, "2000"),
-    free_delivery_threshold: read(s.free_delivery_threshold, "100000"),
+    delivery_fee:            read(s.delivery_fee, String(DEFAULT_DELIVERY_FEE)),
+    free_delivery_threshold: read(s.free_delivery_threshold, String(DEFAULT_FREE_DELIVERY_THRESHOLD)),
     facebook_url:            read(s.facebook_url, SOCIAL_LINKS.facebook),
     tiktok_url:              read(s.tiktok_url, SOCIAL_LINKS.tiktok),
     instagram_url:           read(s.instagram_url, SOCIAL_LINKS.instagram),

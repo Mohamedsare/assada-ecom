@@ -80,7 +80,7 @@ export default function InscriptionPage() {
             Vérifiez votre email pour confirmer votre compte, puis connectez-vous.
           </p>
           <Link href="/connexion"
-            className="mt-5 inline-block bg-[#B8925A] text-[#020B27] px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#9E7A45] transition-colors">
+            className="mt-5 inline-block bg-[#B8925A] text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-[#9E7A45] transition-colors">
             Se connecter
           </Link>
         </div>
@@ -184,7 +184,7 @@ export default function InscriptionPage() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3.5 rounded-xl font-bold text-sm hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
+              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
               {loading ? <><Loader2 size={17} className="animate-spin" /> Création…</> : "Créer mon compte"}
             </button>
           </form>

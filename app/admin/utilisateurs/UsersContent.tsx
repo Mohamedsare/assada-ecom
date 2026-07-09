@@ -53,7 +53,7 @@ export default function UsersContent({
         </div>
         <button
           onClick={() => setPromoting(true)}
-          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           <UserPlus size={16} /> Promouvoir un client
         </button>
@@ -81,7 +81,7 @@ export default function UsersContent({
           <UserCog size={48} className="mx-auto text-gray-200 mb-4" />
           <p className="font-semibold text-[#020B27] mb-1">Aucun membre du staff</p>
           <p className="text-text-secondary text-sm mb-5">Promouvez un client pour lui donner accès au back-office.</p>
-          <button onClick={() => setPromoting(true)} className="bg-green hover:bg-[#9E7A45] text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+          <button onClick={() => setPromoting(true)} className="bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
             Promouvoir un client
           </button>
         </div>

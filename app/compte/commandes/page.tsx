@@ -38,7 +38,7 @@ export default async function CommandesPage() {
           <p className="text-[#64748B] mb-6">Vous n&apos;avez pas encore passé de commande</p>
           <Link
             href="/boutique"
-            className="bg-[#B8925A] text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
+            className="bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
           >
             Découvrir la boutique
           </Link>

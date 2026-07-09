@@ -60,7 +60,7 @@ export default function NotFound() {
 
           {/* CTAs principaux */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-[#020B27] font-semibold px-6 py-3 rounded-xl transition-colors">
+            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-white font-semibold px-6 py-3 rounded-xl transition-colors">
               <Home size={18} /> Retour à l&apos;accueil
             </Link>
             <Link href="/boutique" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:bg-white/10 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
@@ -84,7 +84,7 @@ export default function NotFound() {
               <Link
                 key={cat.slug}
                 href={`/boutique?categorie=${cat.slug}`}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-300 bg-white/5 hover:bg-[#B8925A] hover:text-[#020B27] border border-white/10 px-3 py-1.5 rounded-full transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-gray-300 bg-white/5 hover:bg-[#B8925A] hover:text-white border border-white/10 px-3 py-1.5 rounded-full transition-colors"
               >
                 <CategoryIcon slug={cat.slug} size={13} />
                 {cat.name}

@@ -2,23 +2,25 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   Search,
   ShoppingCart,
   User,
-  Menu,
   X,
   ChevronRight,
 } from "lucide-react";
 import { cn, getWhatsAppUrl, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/utils";
-import { NAV_LINKS, WHATSAPP_NUMBER } from "@/lib/constants";
+import { AXES, WHATSAPP_NUMBER } from "@/lib/constants";
 import { useCartStore } from "@/stores/cart";
 import { useUIStore } from "@/stores/ui";
 import SearchAutocomplete from "@/components/search/SearchAutocomplete";
-import CategoryMegaMenu from "@/components/layout/CategoryMegaMenu";
+import SearchDrawer from "@/components/search/SearchDrawer";
+import UniversMenu from "@/components/layout/UniversMenu";
+import AxisMegaMenu from "@/components/layout/AxisMegaMenu";
+import MobileUniversMenu from "@/components/layout/MobileUniversMenu";
 import MobileCategoryMenu from "@/components/layout/MobileCategoryMenu";
+import { useScrollDirection } from "@/hooks/useScrollDirection";
 
 const SOCIAL_LINKS = [
   { label: "TikTok", href: "https://www.tiktok.com/@ryta" },
@@ -27,10 +29,8 @@ const SOCIAL_LINKS = [
 ] as const;
 
 export default function Header() {
-  const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   // On s'abonne à la valeur dérivée (et non à la fonction) pour que le badge
   // se re-rende dès que le panier change, sans attendre un changement de page.
@@ -38,6 +38,11 @@ export default function Header() {
     s.items.reduce((sum, item) => sum + item.quantity, 0)
   );
   const openCartDrawer = useUIStore((s) => s.openCartDrawer);
+
+  // Header façon app : glisse hors de l'écran en descendant, revient en montant.
+  // On le garde visible en haut de page et tant que le menu mobile est ouvert.
+  const { scrolledDown, atTop } = useScrollDirection();
+  const hidden = scrolledDown && !atTop && !mobileOpen;
 
   // Évite l'erreur d'hydratation : le panier (localStorage) n'existe qu'au client
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -50,9 +55,34 @@ export default function Header() {
   }, [mobileOpen]);
 
   return (
-    <header className="bg-white text-[#020B27] sticky top-0 z-50 shadow-sm border-b border-gray-100">
+    <header
+      className={cn(
+        "bg-white text-[#020B27] sticky top-0 z-50 shadow-sm border-b border-gray-100 transition-transform duration-300 ease-out",
+        hidden && "-translate-y-full"
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Menu burger — mobile uniquement, à gauche */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
+            aria-label="Menu"
+          >
+            {mobileOpen ? (
+              <X size={22} />
+            ) : (
+              <svg
+                width="22" height="22" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"
+              >
+                <line x1="3.5" y1="7" x2="20.5" y2="7" />
+                <line x1="3.5" y1="12" x2="18" y2="12" />
+                <line x1="3.5" y1="17" x2="15.5" y2="17" />
+              </svg>
+            )}
+          </button>
+
           {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
             <Image
@@ -65,52 +95,23 @@ export default function Header() {
             />
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation — les 3 grands axes + L'univers RYTA (à droite) */}
           <nav className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) =>
-              link.href === "/boutique" ? (
-                <CategoryMegaMenu key={link.href} active={pathname === "/boutique"} />
-              ) : (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-[#B8925A] hover:bg-gray-50",
-                    pathname === link.href
-                      ? "text-[#B8925A] bg-[#B8925A]/10"
-                      : "text-gray-600"
-                  )}
-                >
-                  {link.label}
-                </Link>
-              )
-            )}
+            {AXES.map((axis) => (
+              <AxisMegaMenu key={axis.slug} axis={axis} active={false} />
+            ))}
+            <UniversMenu />
           </nav>
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
-            {/* Search - Desktop */}
-            {searchOpen ? (
-              <div className="hidden md:block w-72">
-                <SearchAutocomplete variant="header" autoFocus onClose={() => setSearchOpen(false)} />
-              </div>
-            ) : (
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="hidden md:flex p-2 rounded-lg hover:bg-gray-100 hover:text-[#B8925A] transition-colors"
-                aria-label="Rechercher"
-              >
-                <Search size={20} />
-              </button>
-            )}
-
-            {/* Search - Mobile (toggle) */}
+            {/* Search — ouvre le tiroir latéral droit */}
             <button
-              onClick={() => setMobileSearchOpen((v) => !v)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 hover:text-[#B8925A] transition-colors"
+              onClick={() => setSearchOpen(true)}
+              className="flex p-2 rounded-lg hover:bg-gray-100 hover:text-[#B8925A] transition-colors"
               aria-label="Rechercher"
             >
-              {mobileSearchOpen ? <X size={20} /> : <Search size={20} />}
+              <Search size={20} />
             </button>
 
             {/* Cart */}
@@ -127,7 +128,7 @@ export default function Header() {
               )}
             </button>
 
-            {/* Account */}
+            {/* Account — desktop uniquement */}
             <Link
               href="/compte"
               className="hidden md:flex p-2 rounded-lg hover:bg-gray-100 hover:text-[#B8925A] transition-colors"
@@ -135,39 +136,13 @@ export default function Header() {
             >
               <User size={20} />
             </Link>
-
-            {/* WhatsApp */}
-            <Link
-              href={getWhatsAppUrl(WHATSAPP_DEFAULT_MESSAGE)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-1.5 bg-[#B8925A] hover:bg-[#9E7A45] text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-              </svg>
-              <span className="hidden lg:inline">WhatsApp</span>
-            </Link>
-
-            {/* Mobile menu toggle */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-              aria-label="Menu"
-            >
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-            </button>
           </div>
         </div>
 
-        {/* Search - Mobile (barre déroulante) */}
-        {mobileSearchOpen && (
-          <div className="md:hidden pb-3">
-            <SearchAutocomplete variant="block" autoFocus onClose={() => setMobileSearchOpen(false)} />
-          </div>
-        )}
-
       </div>
+
+      {/* Tiroir de recherche latéral droit */}
+      <SearchDrawer open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* ── Menu Mobile — tiroir latéral gauche ── */}
       <div
@@ -210,28 +185,10 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Liens */}
+          {/* Liens — les 3 grands axes + L'univers RYTA en accordéon */}
           <nav className="flex-1 overflow-y-auto">
-            {NAV_LINKS.map((link) => {
-              if (link.href === "/boutique") {
-                return <MobileCategoryMenu key={link.href} onNavigate={() => setMobileOpen(false)} />;
-              }
-              const active = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className={cn(
-                    "flex items-center justify-between px-5 py-4 border-b border-gray-100 text-sm font-bold uppercase tracking-wide transition-colors",
-                    active ? "text-green" : "text-[#020B27] hover:bg-gray-50"
-                  )}
-                >
-                  {link.label}
-                  <ChevronRight size={16} className={active ? "text-green" : "text-gray-300"} />
-                </Link>
-              );
-            })}
+            <MobileCategoryMenu onNavigate={() => setMobileOpen(false)} />
+            <MobileUniversMenu onNavigate={() => setMobileOpen(false)} />
             <Link
               href="/compte"
               onClick={() => setMobileOpen(false)}
@@ -275,7 +232,7 @@ export default function Header() {
               href={getWhatsAppUrl(WHATSAPP_DEFAULT_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3 rounded-xl text-sm font-semibold hover:bg-[#9E7A45] transition-colors"
+              className="flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3 rounded-xl text-sm font-semibold hover:bg-[#9E7A45] transition-colors"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>

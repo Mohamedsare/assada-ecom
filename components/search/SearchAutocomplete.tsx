@@ -31,9 +31,12 @@ interface Props {
   autoFocus?: boolean;
   onClose?: () => void;
   className?: string;
+  /** N'affiche le panneau flottant que lorsqu'il y a une requête (récents/populaires masqués).
+   *  Utile dans le tiroir de recherche qui gère ses propres suggestions. */
+  hideEmptyState?: boolean;
 }
 
-export default function SearchAutocomplete({ variant = "header", autoFocus, onClose, className }: Props) {
+export default function SearchAutocomplete({ variant = "header", autoFocus, onClose, className, hideEmptyState }: Props) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -94,8 +97,8 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
     }
   };
 
-  const showPanel = open;
   const hasQuery = query.trim().length >= 2;
+  const showPanel = open && (hasQuery || !hideEmptyState);
 
   return (
     <div ref={wrapRef} className={cn("relative", className)}>

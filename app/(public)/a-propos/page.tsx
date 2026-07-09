@@ -7,7 +7,7 @@ import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "À propos — RYTA, boutique cosmétique à Casablanca",
   description:
-    "Découvrez RYTA, votre boutique de cosmétiques, parfums et soins beauté à Derb Ghalef, Casablanca. Produits authentiques, meilleurs prix, livraison rapide et paiement à la livraison.",
+    "Découvrez RYTA : produits de beauté, compléments alimentaires et produits du terroir marocain. Boutique physique à Derb Ghalef, Casablanca. Produits authentiques, meilleurs prix, livraison partout au Maroc et paiement à la livraison.",
   keywords: ["à propos RYTA", "boutique cosmétique Casablanca", "parfums Derb Ghalef"],
   alternates: { canonical: "/a-propos" },
   openGraph: { title: "À propos — RYTA", type: "website", locale: "fr_MA" },
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const VALUES = [
   { icon: Sparkles, title: "Produits authentiques", desc: "Des cosmétiques, parfums et soins 100 % originaux, sélectionnés avec soin." },
-  { icon: Truck, title: "Livraison rapide", desc: "Partout à Casablanca — Derb Ghalef, Maârif, Anfa et tous les quartiers." },
+  { icon: Truck, title: "Livraison rapide", desc: "Partout au Maroc en 24 à 72h, gratuite à partir de 500 DH." },
   { icon: ShieldCheck, title: "Paiement à la livraison", desc: "Payez en espèces à la réception, en toute confiance." },
   { icon: MessageCircle, title: "Support WhatsApp", desc: "Une équipe à votre écoute 7j/7 pour vous conseiller." },
 ];

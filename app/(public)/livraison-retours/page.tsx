@@ -6,7 +6,7 @@ import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Livraison & Retours — RYTA Casablanca",
   description:
-    "Modalités de livraison et de retour RYTA : délais, frais, zones desservies à Casablanca, paiement à la livraison et droit de rétractation de 7 jours conforme à la loi marocaine 31-08.",
+    "Modalités de livraison et de retour RYTA : délais, frais, zones desservies partout au Maroc, paiement à la livraison et droit de rétractation de 7 jours conforme à la loi marocaine 31-08.",
   keywords: ["livraison cosmétique Casablanca", "retours RYTA", "paiement à la livraison Casablanca"],
   alternates: { canonical: "/livraison-retours" },
   openGraph: { title: "Livraison & Retours — RYTA", type: "website", locale: "fr_MA" },
@@ -21,25 +21,24 @@ export default function LivraisonRetoursPage() {
     >
       <h2>1. Zones de livraison</h2>
       <p>
-        RYTA livre partout à <strong>Casablanca</strong> et ses quartiers : Derb Ghalef, Maârif,
-        Boulevard Abdelmoumen, Gauthier, Racine, Bourgogne, Anfa, Ain Diab, Oasis, Sidi Maarouf,
-        Hay Hassani, Ain Chock, Californie, Belvédère, Mers Sultan, Sidi Belyout, Hay Mohammadi,
-        Ain Sebaâ, Sidi Bernoussi, Sidi Moumen, Ben M’sik, Sidi Othmane et Moulay Rachid.
+        RYTA livre <strong>partout au Maroc</strong> : Casablanca, Rabat, Marrakech, Tanger, Fès,
+        Meknès, Agadir, Oujda, Kénitra, Tétouan et toutes les autres villes du Royaume. À Casablanca,
+        nous desservons tous les quartiers — Derb Ghalef, Maârif, Boulevard Abdelmoumen, Gauthier,
+        Anfa, Ain Diab, Sidi Maarouf, Hay Hassani et bien d’autres.
       </p>
 
       <h2>2. Délais de livraison</h2>
       <p>
-        Les commandes sont préparées et expédiées dans les meilleurs délais. La livraison à Casablanca
-        s’effectue généralement sous <strong>24 à 72 heures ouvrées</strong> après confirmation de la
+        Les commandes sont préparées et expédiées dans les meilleurs délais. La livraison s’effectue{" "}
+        <strong>partout au Maroc en 24 à 72 heures ouvrées</strong> après confirmation de la
         commande par téléphone. Un membre de notre équipe vous appelle pour confirmer votre commande
         avant expédition.
       </p>
 
       <h2>3. Frais de livraison</h2>
       <p>
-        Les frais de livraison sont calculés automatiquement lors de la validation de votre commande,
-        selon votre quartier, et affichés clairement dans votre panier avant paiement. La{" "}
-        <strong>livraison est offerte</strong> à partir d’un certain montant d’achat, indiqué dans le récapitulatif de commande.
+        Les frais de livraison sont affichés clairement dans votre panier avant paiement. La{" "}
+        <strong>livraison est gratuite à partir de 500 DH d’achat</strong>, partout au Maroc.
       </p>
 
       <h2>4. Paiement à la livraison</h2>

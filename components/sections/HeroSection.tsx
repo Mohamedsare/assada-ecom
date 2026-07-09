@@ -3,18 +3,31 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
-import { ChevronRight, ShoppingBag, Tag } from "lucide-react";
+import { ChevronRight, ShoppingBag, Tag, Truck, RotateCcw, ShieldCheck, MessageCircle } from "lucide-react";
 import { useConfigStore } from "@/stores/config";
+
+/** Images supplémentaires du dossier /public/banners ajoutées au slider (après les 3 éditables). */
+const EXTRA_HERO_IMAGES = ["/banners/b1.png", "/banners/b2.png", "/banners/b3.png"];
+/** Nombre total de slides = 3 éditables (home_hero_1/2/3) + les images supplémentaires. */
+const HERO_COUNT = 3 + EXTRA_HERO_IMAGES.length;
+
+/** Bande de réassurance qui défile en boucle sous la bannière (façon apia). */
+const MARQUEE_ITEMS = [
+  { icon: Truck, text: "Livraison gratuite à partir de 500 DH" },
+  { icon: RotateCcw, text: "Retours gratuits sous 30 jours" },
+  { icon: ShieldCheck, text: "Paiement sécurisé" },
+  { icon: MessageCircle, text: "Support WhatsApp 7j/7" },
+];
 
 const SLIDES = [
   {
     id: 1,
     image: "/banners/banner2-accueil.png",
-    title: "La beauté au",
-    titleAccent: "meilleur prix",
+    title: "Beauté, bien-être &",
+    titleAccent: "terroir marocain",
     titleSuffix: "à Casablanca",
     subtitle:
-      "Parfums, soins visage & cheveux, maquillage et hygiène au meilleur prix.",
+      "Produits de beauté, compléments alimentaires et produits du terroir marocain, livrés partout au Maroc en 24 à 72h.",
     cta1: { label: "Découvrir la boutique", href: "/boutique" },
     cta2: { label: "Voir les promotions", href: "/promotions" },
   },
@@ -22,10 +35,10 @@ const SLIDES = [
     id: 2,
     image: "/banners/banner3-accuiel.png",
     title: "Nouveautés",
-    titleAccent: "cosmétiques",
+    titleAccent: "de la semaine",
     titleSuffix: "disponibles",
     subtitle:
-      "Parfums, maquillage et soins premium. Payez à la livraison.",
+      "Beauté, compléments alimentaires et produits locaux. Payez à la livraison.",
     cta1: { label: "Voir les nouveautés", href: "/nouveautes" },
     cta2: { label: "Voir les promotions", href: "/promotions" },
   },
@@ -33,10 +46,10 @@ const SLIDES = [
     id: 3,
     image: "/banners/banner4-accueil.png",
     title: "Promotions",
-    titleAccent: "beauté",
+    titleAccent: "du moment",
     titleSuffix: "à ne pas manquer",
     subtitle:
-      "Profitez de nos offres spéciales sur une sélection de produits cosmétiques.",
+      "Profitez de nos offres spéciales sur une sélection de produits.",
     cta1: { label: "Voir les promotions", href: "/promotions" },
     cta2: { label: "Découvrir la boutique", href: "/boutique" },
   },
@@ -45,9 +58,13 @@ const SLIDES = [
 export default function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  // Images éditables depuis « Gestion des pages » (repli sur les images par défaut du slide).
+  // Images éditables depuis « Gestion des pages » (repli sur les images par défaut du slide),
+  // suivies des images supplémentaires du dossier /public/banners.
   const images = useConfigStore((s) => s.images);
-  const heroImages = [images.home_hero_1, images.home_hero_2, images.home_hero_3];
+  const heroImages = [
+    images.home_hero_1, images.home_hero_2, images.home_hero_3,
+    ...EXTRA_HERO_IMAGES,
+  ];
 
   const goTo = useCallback(
     (index: number) => {
@@ -60,7 +77,7 @@ export default function HeroSection() {
   );
 
   const next = useCallback(() => {
-    goTo((current + 1) % SLIDES.length);
+    goTo((current + 1) % HERO_COUNT);
   }, [current, goTo]);
 
   useEffect(() => {
@@ -68,9 +85,11 @@ export default function HeroSection() {
     return () => clearInterval(timer);
   }, [next]);
 
-  const slide = SLIDES[current];
+  // Le texte (titre, CTA…) tourne sur les 3 slides ; les images, elles, défilent sur toutes.
+  const slide = SLIDES[current % SLIDES.length];
 
   return (
+    <>
     <section className="relative bg-night text-white overflow-hidden select-none">
       {/* ── Image en arrière-plan (slider) ── */}
       <div className="absolute inset-0 z-0">
@@ -89,16 +108,16 @@ export default function HeroSection() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid lg:grid-cols-2 min-h-90 md:min-h-110 items-center">
+        <div className="grid lg:grid-cols-2 min-h-44 md:min-h-56 items-center">
 
           {/* ── Texte gauche ── */}
           <div
             key={`text-${current}`}
-            className="py-12 md:py-16 lg:pr-8 z-10 animate-fade-slide-in"
+            className="py-5 md:py-6 lg:pr-8 z-10 animate-fade-slide-in"
           >
             <div className="inline-flex items-center gap-2 bg-green/20 text-green-light text-xs font-semibold px-3 py-1.5 rounded-full mb-5 border border-green-light/30">
               <span className="w-1.5 h-1.5 bg-green-light rounded-full animate-pulse" />
-              Livraison rapide partout à Casablanca
+              Livraison partout au Maroc en 24–72h
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-5">
@@ -108,14 +127,14 @@ export default function HeroSection() {
               {slide.titleSuffix}
             </h1>
 
-            <p className="text-gray-400 text-base md:text-lg mb-8 leading-relaxed max-w-md">
+            <p className="text-gray-400 text-base md:text-lg mb-6 leading-relaxed max-w-md">
               {slide.subtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row sm:flex-nowrap gap-3">
               <Link
                 href={slide.cta1.href}
-                className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#9E7A45] text-[#020B27] font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
+                className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#9E7A45] text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
               >
                 <ShoppingBag size={16} />
                 {slide.cta1.label}
@@ -131,7 +150,7 @@ export default function HeroSection() {
             </div>
 
             {/* Stats */}
-            <div className="flex gap-8 mt-10 pt-8 border-t border-white/10">
+            <div className="flex gap-8 mt-5 pt-4 border-t border-white/10">
               {[
                 { value: "500+", label: "Produits" },
                 { value: "24h", label: "Livraison" },
@@ -152,7 +171,7 @@ export default function HeroSection() {
 
       {/* Dots */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-        {SLIDES.map((_, i) => (
+        {heroImages.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
@@ -167,5 +186,21 @@ export default function HeroSection() {
       </div>
 
     </section>
+
+    {/* Bande de réassurance collée à la bannière — défile en boucle infinie */}
+    <div className="bg-[#F5F1EA] border-b border-black/5 overflow-hidden">
+      <div className="flex w-max animate-marquee py-4">
+        {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) => {
+          const Icon = item.icon;
+          return (
+            <div key={i} className="flex items-center gap-3 px-10 shrink-0">
+              <Icon size={20} className="text-[#B8925A] shrink-0" strokeWidth={1.75} />
+              <span className="text-sm font-medium text-[#020B27] whitespace-nowrap">{item.text}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+    </>
   );
 }

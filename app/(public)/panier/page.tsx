@@ -53,7 +53,7 @@ export default function PanierPage() {
           <p className="text-[#64748B] mb-8">Découvrez nos produits et commencez vos achats</p>
           <Link
             href="/boutique"
-            className="inline-flex items-center gap-2 bg-[#B8925A] text-[#020B27] px-8 py-4 rounded-2xl font-semibold text-base active:scale-95 transition-all"
+            className="inline-flex items-center gap-2 bg-[#B8925A] text-white px-8 py-4 rounded-2xl font-semibold text-base active:scale-95 transition-all"
           >
             <ShoppingCart size={18} />
             Voir la boutique

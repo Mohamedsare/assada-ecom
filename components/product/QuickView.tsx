@@ -369,7 +369,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
           {/* Reassurance */}
           <div className="grid grid-cols-2 gap-2 pt-1">
             {[
-              { icon: Truck, text: "Livraison à Casablanca" },
+              { icon: Truck, text: "Livraison partout au Maroc" },
               { icon: Package, text: "Paiement à la livraison" },
               { icon: ShieldCheck, text: "Produit authentique" },
               { icon: MessageCircle, text: "Support WhatsApp 7j/7" },

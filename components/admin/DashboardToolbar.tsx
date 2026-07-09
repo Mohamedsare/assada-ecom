@@ -36,7 +36,7 @@ export default function DashboardToolbar({ report }: { report: ReportRow[] }) {
       {exported && <span className="text-green text-xs font-medium">✓ Rapport téléchargé</span>}
       <button
         onClick={handleExport}
-        className="flex items-center gap-1.5 bg-green hover:bg-[#9E7A45] text-[#020B27] text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+        className="flex items-center gap-1.5 bg-green hover:bg-[#9E7A45] text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
       >
         <Download size={14} /> Exporter rapport
       </button>

@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useRef, useState } from "react";
 import { Film, Loader2, X } from "lucide-react";
-import { uploadImage } from "@/lib/supabase/actions";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * Upload d'une seule vidéo. L'URL est soumise via un input caché `name`.
- * Réutilise l'action uploadImage (gère n'importe quel type de fichier).
+ * L'envoi se fait DIRECTEMENT du navigateur vers Supabase Storage (et non via
+ * une Server Action) pour contourner la limite de corps de 4 Mo des Server
+ * Actions — indispensable pour des vidéos de plusieurs dizaines de Mo.
  */
 export default function VideoUploadField({
   name,
@@ -21,24 +23,34 @@ export default function VideoUploadField({
 }) {
   const [url, setUrl] = useState(defaultValue ?? "");
   const [error, setError] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [pending, setPending] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const MAX_SIZE = 50 * 1024 * 1024; // 50 Mo (aligné sur file_size_limit du bucket)
 
-  const handleFile = (file: File) => {
+  const handleFile = async (file: File) => {
     setError(null);
     if (file.size > MAX_SIZE) {
       setError(`Vidéo trop lourde (${(file.size / 1024 / 1024).toFixed(0)} Mo). Maximum 50 Mo.`);
       return;
     }
-    const fd = new FormData();
-    fd.append("file", file);
-    startTransition(async () => {
-      const res = await uploadImage(bucket, fd);
-      if (res.error || !res.url) setError(res.error ?? "Échec de l'upload");
-      else setUrl(res.url);
-    });
+    setPending(true);
+    try {
+      const supabase = createClient();
+      const ext = file.name.split(".").pop();
+      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { data, error: upErr } = await supabase.storage
+        .from(bucket)
+        .upload(filename, file, { contentType: file.type, upsert: false });
+      if (upErr || !data) {
+        setError(upErr?.message ?? "Échec de l'upload");
+        return;
+      }
+      const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
+      setUrl(publicUrl);
+    } finally {
+      setPending(false);
+    }
   };
 
   return (

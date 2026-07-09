@@ -32,7 +32,7 @@ function CategoryCircle({ cat }: { cat: Cat }) {
   return (
     <Link
       href={`/boutique?categorie=${cat.slug}`}
-      className="shrink-0 flex flex-col items-center gap-3 group w-24 md:w-full"
+      className="shrink-0 flex flex-col items-center gap-3 group w-24 md:w-32"
     >
       <div
         className={`relative w-24 h-24 md:w-28 md:h-28 shrink-0 rounded-full ${cat.bg} overflow-hidden flex items-center justify-center group-hover:scale-105 group-hover:shadow-lg transition-all ring-1 ring-gray-200 group-hover:ring-green`}
@@ -77,18 +77,17 @@ export default function CategoriesSection({ items }: { items?: CategoryItem[] })
           </h2>
         </div>
 
-        {/* Mobile : défilement automatique infini (marquee) */}
-        <div className="md:hidden overflow-hidden">
-          <div className="flex gap-5 w-max animate-marquee">
-            {/* liste dupliquée pour une boucle infinie sans coupure */}
-            {[...cats, ...cats].map((cat, i) => (
-              <CategoryCircle key={`${cat.slug}-${i}`} cat={cat} />
+        {/* Mobile : défilement horizontal manuel (plus de marquee automatique) */}
+        <div className="md:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-5 w-max">
+            {cats.map((cat) => (
+              <CategoryCircle key={cat.slug} cat={cat} />
             ))}
           </div>
         </div>
 
-        {/* Desktop : grille statique */}
-        <div className="hidden md:grid md:grid-cols-9 md:gap-4">
+        {/* Desktop : rangée centrée (s'adapte au nombre de catégories) */}
+        <div className="hidden md:flex md:flex-wrap md:justify-center md:gap-x-10 md:gap-y-6">
           {cats.map((cat) => (
             <CategoryCircle key={cat.slug} cat={cat} />
           ))}

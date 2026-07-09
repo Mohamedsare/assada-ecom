@@ -5,8 +5,8 @@ import { MapPin, Phone, User, MessageSquare, Send, CheckCircle, AlertCircle, Ext
 import { createContactMessage } from "@/lib/supabase/actions";
 import { SITE_PHONE } from "@/lib/constants";
 
-const SHOP_ADDRESS = "Galerie Derb Ghalef, Bd Abdelmoumen, Kissariat Zemmouri, Casablanca";
-const MAP_QUERY = encodeURIComponent("Galerie Derb Ghalef, Boulevard Abdelmoumen, Casablanca");
+const SHOP_ADDRESS = "N 10 Galerie Zemouri, Boulevard Abdelmoumen, Casablanca, Maroc";
+const MAP_QUERY = encodeURIComponent("N 10 Galerie Zemouri, Boulevard Abdelmoumen, Casablanca, Maroc");
 const MAP_EMBED = `https://maps.google.com/maps?q=${MAP_QUERY}&z=16&output=embed`;
 const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`;
 

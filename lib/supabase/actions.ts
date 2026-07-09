@@ -428,6 +428,7 @@ export async function adminCreateProduct(formData: FormData) {
     is_featured: formData.get("is_featured") === "true",
     is_new: formData.get("is_new") === "true",
     is_promo: formData.get("is_promo") === "true",
+    is_story: formData.get("is_story") === "true",
     status: formData.get("status") ?? "active",
     seo_title: formData.get("seo_title") || null,
     seo_description: formData.get("seo_description") || null,
@@ -450,6 +451,7 @@ export async function adminCreateProduct(formData: FormData) {
 
   revalidatePath("/admin/produits");
   revalidatePath("/boutique");
+  revalidatePath("/");
   return { success: true, product: data };
 }
 
@@ -476,6 +478,7 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
     is_featured: formData.get("is_featured") === "true",
     is_new: formData.get("is_new") === "true",
     is_promo: formData.get("is_promo") === "true",
+    is_story: formData.get("is_story") === "true",
     status: formData.get("status") ?? "active",
     seo_title: formData.get("seo_title") || null,
     seo_description: formData.get("seo_description") || null,
@@ -503,6 +506,7 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
 
   revalidatePath("/admin/produits");
   revalidatePath("/boutique");
+  revalidatePath("/");
   revalidatePath(`/admin/produits/${id}/modifier`);
   return { success: true };
 }
@@ -1295,7 +1299,7 @@ Réponds STRICTEMENT en JSON (sans markdown) avec ces clés :
 - "short_description": accroche d'une seule phrase (max 120 caractères).
 - "description": description détaillée et vendeuse (3 à 5 phrases) mettant en avant caractéristiques et bénéfices.
 - "seo_title": titre SEO au format « {Produit} à Casablanca | RYTA » (max 60 caractères).
-- "seo_description": meta description SEO (max 155 caractères) incitant à l'achat, mentionnant livraison rapide partout à Casablanca et paiement à la livraison.
+- "seo_description": meta description SEO (max 155 caractères) incitant à l'achat, mentionnant livraison partout au Maroc et paiement à la livraison.
 
 N'invente jamais une marque dont tu n'es pas sûr.`;
 

@@ -15,7 +15,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "RYTA — Boutique en ligne n°1 à Casablanca | Livraison Casablanca",
+    default: "RYTA — Boutique en ligne n°1 au Maroc | Livraison partout au Maroc",
     template: "%s | RYTA",
   },
   description: SITE_DESCRIPTION,

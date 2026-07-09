@@ -24,7 +24,7 @@ const STEPS = [
   {
     icon: Truck,
     title: "Recevez chez vous",
-    desc: "Livraison rapide partout à Casablanca sous 24 à 48h.",
+    desc: "Livraison partout au Maroc en 24 à 72h. Gratuite à partir de 500 DH pour tout le Maroc.",
   },
 ];
 
@@ -70,7 +70,7 @@ export default function OrderStepsSection() {
                 >
                   {/* Tuile icône + numéro */}
                   <div className="relative shrink-0">
-                    <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-night to-night-2 flex items-center justify-center ring-4 ring-white shadow-lg transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-xl">
+                    <div className="w-16 h-16 rounded-full bg-linear-to-br from-night to-night-2 flex items-center justify-center ring-4 ring-white shadow-lg transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-xl">
                       <Icon size={26} className="text-green-light" />
                     </div>
                     <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-green text-[#020B27] text-xs font-bold flex items-center justify-center ring-2 ring-white shadow">

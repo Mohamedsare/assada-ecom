@@ -223,6 +223,8 @@ export default function ProductForm({
             <Checkbox name="is_featured" label="Produit vedette" defaultChecked={product?.is_featured} />
             <Checkbox name="is_new" label="Nouveauté" defaultChecked={product?.is_new} />
             <Checkbox name="is_promo" label="En promotion" defaultChecked={product?.is_promo} />
+            <Checkbox name="is_story" label="Histoires de la communauté" defaultChecked={product?.is_story} />
+            <p className="text-[11px] text-text-secondary -mt-1">{"Carte vidéo sur l'accueil — nécessite d'ajouter une vidéo ci-dessus."}</p>
           </Card>
 
           {error && <p className="text-sm text-red-600">{error}</p>}

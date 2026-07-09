@@ -146,7 +146,7 @@ function ConnexionForm() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3.5 rounded-xl font-bold text-sm hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
+              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
               {loading ? <><Loader2 size={17} className="animate-spin" /> Connexion…</> : "Se connecter"}
             </button>
           </form>

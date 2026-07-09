@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL, CATEGORIES } from "@/lib/constants";
+import { SITE_URL, AXES } from "@/lib/constants";
 import { getProductSitemapData } from "@/lib/supabase/queries";
 
 // Régénéré au plus toutes les heures.
@@ -18,12 +18,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/contact`,        lastModified: now, changeFrequency: "monthly", priority: 0.5 },
   ];
 
-  // 2 — Pages catégories (filtres boutique = vraies pages indexables)
-  const categoryRoutes: MetadataRoute.Sitemap = CATEGORIES.map((c) => ({
-    url: `${base}/boutique?categorie=${c.slug}`,
+  // 2 — Pages catégories (filtres boutique = vraies pages indexables).
+  //     On aplatit l'arbre : axes (priorité 0.8) → catégories → sous-catégories (0.6).
+  const categorySlugs: { slug: string; priority: number }[] = [];
+  for (const axis of AXES) {
+    categorySlugs.push({ slug: axis.slug, priority: 0.8 });
+    for (const cat of axis.children) {
+      categorySlugs.push({ slug: cat.slug, priority: 0.7 });
+      for (const leaf of cat.children ?? []) {
+        categorySlugs.push({ slug: leaf.slug, priority: 0.6 });
+      }
+    }
+  }
+  const categoryRoutes: MetadataRoute.Sitemap = categorySlugs.map(({ slug, priority }) => ({
+    url: `${base}/boutique?categorie=${slug}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: 0.7,
+    priority,
   }));
 
   // 3 — Fiches produits (résilient : [] si la base est indisponible)

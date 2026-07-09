@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = `${product.name} à Casablanca | RYTA`;
   const description = product.short_description
-    ?? `Achetez ${product.name} à Casablanca avec RYTA. Livraison rapide à Casablanca, paiement à la livraison.`;
+    ?? `Achetez ${product.name} avec RYTA. Livraison partout au Maroc en 24 à 72h, paiement à la livraison.`;
 
   return {
     title,

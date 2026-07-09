@@ -393,7 +393,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                         className={cn(
                           "w-12 h-10 rounded-lg border text-sm font-semibold transition-all",
                           selectedSize === size
-                            ? "border-[#B8925A] bg-[#B8925A] text-[#020B27]"
+                            ? "border-[#B8925A] bg-[#B8925A] text-white"
                             : available
                             ? "border-gray-200 text-[#020B27] hover:border-[#B8925A]"
                             : "border-gray-100 text-gray-300 cursor-not-allowed line-through bg-gray-50"
@@ -467,7 +467,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             {/* Delivery info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { icon: Truck,       text: "Livraison partout à Casablanca" },
+                { icon: Truck,       text: "Livraison partout au Maroc en 24–72h" },
                 { icon: Package,     text: "Paiement à la livraison" },
                 { icon: ShieldCheck, text: "Produit authentique garanti" },
                 { icon: Phone,       text: "Support WhatsApp 7j/7" },
@@ -547,7 +547,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                       ["Disponibilité", inStock ? "En stock" : "Rupture de stock"],
                       colors.length > 0 ? ["Couleurs disponibles", colors.join(", ")] : null,
                       sizes.length > 0 && sizes[0] !== "Unique" ? ["Tailles disponibles", sizes.join(", ")] : null,
-                      ["Livraison", "Partout à Casablanca"],
+                      ["Livraison", "Partout au Maroc en 24–72h"],
                       ["Paiement", "Espèces"],
                     ] as ([string, string] | null)[]
                   )
@@ -625,7 +625,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             <Truck size={22} className="text-[#C9A063] mt-0.5 shrink-0" />
             <div>
               <p className="font-bold text-sm">Livraison rapide</p>
-              <p className="text-xs text-white/60 mt-0.5">Partout à Casablanca. Livraison sous 24–72h à Casablanca.</p>
+              <p className="text-xs text-white/60 mt-0.5">Partout au Maroc en 24 à 72h. Gratuite à partir de 500 DH pour tout le Maroc.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">

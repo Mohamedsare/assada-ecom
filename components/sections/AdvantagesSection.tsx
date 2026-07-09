@@ -10,7 +10,7 @@ const advantages = [
   {
     icon: Truck,
     title: "Livraison rapide",
-    description: "Partout à Casablanca en 24 à 48h",
+    description: "Partout au Maroc en 24 à 72h, gratuite dès 500 DH",
     color: "text-green bg-green/10",
   },
   {

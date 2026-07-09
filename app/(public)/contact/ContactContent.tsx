@@ -11,7 +11,7 @@ import AdvantagesSection from "@/components/sections/AdvantagesSection";
 const FAQ = [
   {
     q: "Quels sont vos délais de livraison ?",
-    a: "Nous livrons partout à Casablanca en 24 à 48h ouvrables. Pour Casablanca, la livraison peut être effectuée le jour même selon disponibilité.",
+    a: "Nous livrons partout au Maroc en 24 à 72h ouvrables, gratuitement à partir de 500 DH d'achat. À Casablanca, la livraison peut être effectuée le jour même selon disponibilité.",
   },
   {
     q: "Puis-je retourner un article ?",
@@ -245,7 +245,7 @@ export default function ContactContent() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-[#020B27] py-3 rounded-xl font-semibold hover:bg-[#9E7A45] disabled:opacity-60 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3 rounded-xl font-semibold hover:bg-[#9E7A45] disabled:opacity-60 transition-colors"
                 >
                   <Send size={16} />
                   {sending ? "Envoi en cours…" : "Envoyer le message"}

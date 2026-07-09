@@ -74,6 +74,8 @@ export interface Product {
   is_featured: boolean;
   is_new: boolean;
   is_promo: boolean;
+  /** Afficher comme carte vidéo dans « Histoires de la communauté » (nécessite video_url). */
+  is_story?: boolean;
   status: ProductStatus;
   seo_title?: string;
   seo_description?: string;

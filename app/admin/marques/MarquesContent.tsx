@@ -37,7 +37,7 @@ export default function MarquesContent({
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           <Plus size={16} /> Ajouter une marque
         </button>

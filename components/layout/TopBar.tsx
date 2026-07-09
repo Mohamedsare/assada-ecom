@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Phone, Mail, Truck } from "lucide-react";
-import { SITE_EMAIL, SITE_PHONE, WHATSAPP_NUMBER } from "@/lib/constants";
+import { Phone, Truck } from "lucide-react";
+import { SITE_PHONE, WHATSAPP_NUMBER } from "@/lib/constants";
 
 export default function TopBar() {
   return (
@@ -13,15 +13,11 @@ export default function TopBar() {
             <Phone size={12} />
             <span>{SITE_PHONE}</span>
           </Link>
-          <Link href={`mailto:${SITE_EMAIL}`} className="flex items-center gap-1.5 hover:text-[#C9A063] transition-colors">
-            <Mail size={12} />
-            <span>{SITE_EMAIL}</span>
-          </Link>
         </div>
 
         <div className="flex items-center gap-1.5 text-[#C9A063] font-medium">
           <Truck size={13} />
-          <span>Livraison rapide partout à Casablanca</span>
+          <span>Livraison partout au Maroc en 24–72h — gratuite dès 500 DH</span>
         </div>
 
         <div className="flex items-center gap-3">

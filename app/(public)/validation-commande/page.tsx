@@ -202,7 +202,7 @@ function ValidationContent() {
             <ChevronRight size={18} />
           </Link>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-[#020B27] py-4 rounded-2xl font-bold text-base active:scale-95 transition-all hover:bg-[#9E7A45]">
+            className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-white py-4 rounded-2xl font-bold text-base active:scale-95 transition-all hover:bg-[#9E7A45]">
             <MessageCircle size={20} />
             Contacter via WhatsApp
           </a>

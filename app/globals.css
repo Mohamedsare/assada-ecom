@@ -59,6 +59,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Empêche l'apparition d'une barre de défilement horizontale en bas de page
+   (léger débordement) — `clip` ne casse pas les positions sticky. */
+html,
+body {
+  overflow-x: clip;
+}
+
 /* Scrollbar custom */
 ::-webkit-scrollbar {
   width: 6px;

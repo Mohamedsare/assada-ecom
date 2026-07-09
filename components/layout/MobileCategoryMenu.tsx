@@ -4,11 +4,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { CATEGORY_TREE } from "@/lib/constants";
+import { AXES, AXIS_FEATURED } from "@/lib/constants";
 import CategoryIcon from "@/components/ui/CategoryIcon";
+import MenuFeaturedCard from "@/components/layout/MenuFeaturedCard";
 
 /**
- * Accordéon catégories pour le tiroir mobile (2 niveaux).
+ * Accordéon catégories pour le tiroir mobile (2 niveaux : axe → catégories).
  * `onNavigate` ferme le tiroir après un clic sur un lien.
  */
 export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => void }) {
@@ -16,27 +17,20 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
 
   return (
     <div className="border-b border-gray-100">
-      <Link
-        href="/boutique"
-        onClick={onNavigate}
-        className="flex items-center justify-between px-5 py-4 text-sm font-bold uppercase tracking-wide text-[#020B27] hover:bg-gray-50 transition-colors"
-      >
-        Boutique — Tout voir
-      </Link>
-
-      {CATEGORY_TREE.map((branch) => {
-        const expanded = openSlug === branch.slug;
+      {AXES.map((axis) => {
+        const expanded = openSlug === axis.slug;
+        const featured = AXIS_FEATURED[axis.slug];
         return (
-          <div key={branch.slug} className="border-t border-gray-100">
+          <div key={axis.slug} className="border-t border-gray-100">
             <button
               type="button"
-              onClick={() => setOpenSlug(expanded ? null : branch.slug)}
+              onClick={() => setOpenSlug(expanded ? null : axis.slug)}
               aria-expanded={expanded}
               className="w-full flex items-center justify-between px-5 py-3.5 text-sm font-semibold text-[#020B27] hover:bg-gray-50 transition-colors"
             >
               <span className="flex items-center gap-2.5">
-                <CategoryIcon slug={branch.slug} size={18} className="text-[#B8925A] shrink-0" />
-                {branch.name}
+                <CategoryIcon slug={axis.slug} size={18} className="text-[#B8925A] shrink-0" />
+                {axis.name}
               </span>
               <ChevronDown
                 size={18}
@@ -46,27 +40,37 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
 
             <div
               className={cn(
-                "overflow-hidden transition-all duration-300 bg-gray-50/60",
-                expanded ? "max-h-[520px]" : "max-h-0"
+                "overflow-y-auto transition-all duration-300 bg-gray-50/60",
+                expanded ? "max-h-[60vh]" : "max-h-0"
               )}
             >
               <Link
-                href={`/boutique?categorie=${branch.slug}`}
+                href={`/boutique?categorie=${axis.slug}`}
                 onClick={onNavigate}
                 className="block pl-12 pr-5 py-2.5 text-[13px] font-medium text-green hover:underline"
               >
-                Tout {branch.name}
+                Tout {axis.name}
               </Link>
-              {branch.children.map((child) => (
+              {axis.children.map((cat) => (
                 <Link
-                  key={child.slug}
-                  href={`/boutique?categorie=${child.slug}`}
+                  key={cat.slug}
+                  href={`/boutique?categorie=${cat.slug}`}
                   onClick={onNavigate}
-                  className="block pl-12 pr-5 py-2.5 text-[13px] text-text-secondary hover:text-green hover:bg-white transition-colors"
+                  className="flex items-center gap-2.5 pl-12 pr-5 py-2.5 text-[13px] text-text-secondary hover:text-green hover:bg-white transition-colors"
                 >
-                  {child.name}
+                  <CategoryIcon slug={cat.slug} size={15} className="text-[#B8925A]/70 shrink-0" />
+                  {cat.name}
                 </Link>
               ))}
+
+              {/* Visuels de l'axe (éditables — « Images liens ») */}
+              {featured && (
+                <div className="grid grid-cols-2 gap-3 px-5 pt-3 pb-5">
+                  {featured.map((item) => (
+                    <MenuFeaturedCard key={item.href} item={item} onClick={onNavigate} className="aspect-3/4 w-full" />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         );

@@ -19,7 +19,7 @@ const SORT_OPTIONS = [
 const TRUST_BADGES = [
   { icon: ShieldCheck, label: "Produits 100% authentiques" },
   { icon: Tag,         label: "Meilleurs prix garantis" },
-  { icon: Truck,       label: "Livraison rapide à Casablanca" },
+  { icon: Truck,       label: "Livraison partout au Maroc en 24–72h" },
 ];
 
 interface Props {
