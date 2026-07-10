@@ -2,9 +2,43 @@
 
 import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
-import { ImagePlus, Video, Loader2, X, ArrowLeft, ArrowRight, Save } from "lucide-react";
-import { uploadImage, adminUpdateHeroSlides } from "@/lib/supabase/actions";
+import { ImagePlus, Video, Loader2, X, ArrowLeft, ArrowRight, Save, Sparkles } from "lucide-react";
+import { uploadImage, adminUpdateHeroSlides, generateBannerTitle } from "@/lib/supabase/actions";
 import type { HeroSlide } from "@/lib/constants";
+
+/**
+ * Extrait une image (data URL JPEG) d'une vidéo, côté client, pour l'analyse IA.
+ * Nécessite que le stockage renvoie les en-têtes CORS (sinon le canvas est « taint » → null).
+ */
+async function captureVideoFrame(url: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    const video = document.createElement("video");
+    video.crossOrigin = "anonymous";
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.src = url;
+    let done = false;
+    const finish = (val: string | null) => { if (!done) { done = true; resolve(val); } };
+    const grab = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth || 1280;
+        canvas.height = video.videoHeight || 720;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return finish(null);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        finish(canvas.toDataURL("image/jpeg", 0.82));
+      } catch { finish(null); }
+    };
+    video.onloadeddata = () => {
+      try { video.currentTime = Math.min(1, (video.duration || 2) / 2); } catch { grab(); }
+    };
+    video.onseeked = grab;
+    video.onerror = () => finish(null);
+    setTimeout(() => finish(null), 8000);
+  });
+}
 
 /**
  * Éditeur du slider d'accueil : liste ordonnée de slides (image ou vidéo).
@@ -14,6 +48,7 @@ import type { HeroSlide } from "@/lib/constants";
 export default function HeroSlidesEditor({ initialSlides }: { initialSlides: HeroSlide[] }) {
   const [slides, setSlides] = useState<HeroSlide[]>(initialSlides);
   const [uploading, setUploading] = useState<"image" | "video" | null>(null);
+  const [aiIndex, setAiIndex] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [saving, startSaving] = useTransition();
@@ -47,6 +82,32 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
 
   const updateSlide = (i: number, patch: Partial<HeroSlide>) =>
     setSlides((s) => s.map((sl, idx) => (idx === i ? { ...sl, ...patch } : sl)));
+
+  // Propose un titre via l'IA d'après le visuel (image directe, frame pour une vidéo).
+  const suggestTitle = async (i: number) => {
+    const slide = slides[i];
+    if (!slide) return;
+    setError(null);
+    setAiIndex(i);
+    try {
+      let src = slide.url;
+      if (slide.type === "video") {
+        const frame = await captureVideoFrame(slide.url);
+        if (!frame) {
+          setError("Impossible d'extraire une image de cette vidéo (CORS du stockage). Saisissez le titre manuellement.");
+          return;
+        }
+        src = frame;
+      }
+      const res = await generateBannerTitle(src);
+      if (res.title) updateSlide(i, { title: res.title });
+      else setError(res.error ?? "Échec de la suggestion IA.");
+    } catch {
+      setError("Une erreur est survenue pendant la suggestion IA.");
+    } finally {
+      setAiIndex(null);
+    }
+  };
 
   const move = (i: number, dir: -1 | 1) => {
     setSlides((s) => {
@@ -105,13 +166,25 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
                 </button>
               </div>
               <div className="space-y-2 px-2 py-2 bg-white">
-                <input
-                  type="text"
-                  value={slide.title ?? ""}
-                  onChange={(e) => updateSlide(i, { title: e.target.value })}
-                  placeholder="Grand titre (optionnel)"
-                  className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15"
-                />
+                <div className="flex gap-1.5">
+                  <input
+                    type="text"
+                    value={slide.title ?? ""}
+                    onChange={(e) => updateSlide(i, { title: e.target.value })}
+                    placeholder="Grand titre (optionnel)"
+                    className="flex-1 min-w-0 border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => suggestTitle(i)}
+                    disabled={aiIndex !== null}
+                    title="Proposer un titre avec l'IA (analyse le visuel)"
+                    className="shrink-0 inline-flex items-center gap-1 rounded-md border border-[#B8925A]/50 text-[#8A6D3F] px-2 text-xs font-medium hover:bg-[#B8925A]/10 disabled:opacity-50"
+                  >
+                    {aiIndex === i ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
+                    IA
+                  </button>
+                </div>
                 <input
                   type="text"
                   value={slide.link ?? ""}

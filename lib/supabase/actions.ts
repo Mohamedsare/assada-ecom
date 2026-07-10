@@ -1388,3 +1388,72 @@ N'invente jamais une marque dont tu n'es pas sûr.`;
     return { error: "Impossible d'analyser l'image pour le moment." };
   }
 }
+
+/**
+ * Analyse le visuel d'une bannière (image, ou frame extraite d'une vidéo passée en data URL)
+ * et propose un grand titre court et accrocheur pour le slider d'accueil, en français.
+ */
+export async function generateBannerTitle(
+  imageUrl: string,
+): Promise<{ title?: string; error?: string }> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return { error: "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local." };
+  if (!imageUrl) return { error: "Aucun visuel à analyser." };
+
+  const prompt = `Regarde ce visuel de bannière pour la boutique en ligne RYTA (Casablanca) : beauté & bien-être, compléments alimentaires et produits du terroir marocain.
+À partir de ce que tu vois (produits, ambiance, couleurs, thème), propose UN grand titre marketing court et accrocheur en français, adapté à une bannière d'accueil.
+
+Contraintes :
+- 2 à 6 mots, percutant (max ~40 caractères).
+- Pas de point final, pas de guillemets, pas d'emoji.
+- Ton premium et commercial, adapté au marché marocain.
+
+Réponds STRICTEMENT en JSON (sans markdown) : { "title": "..." }`;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        max_tokens: 60,
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content:
+              "Tu es un directeur artistique e-commerce qui écrit des titres de bannières courts, percutants et premium en français pour RYTA (Casablanca).",
+          },
+          {
+            role: "user",
+            content: [
+              { type: "text", text: prompt },
+              { type: "image_url", image_url: { url: imageUrl } },
+            ],
+          },
+        ],
+      }),
+    });
+
+    if (!res.ok) {
+      const body = await res.text();
+      console.error("generateBannerTitle OpenAI:", res.status, body);
+      return { error: `OpenAI a renvoyé une erreur (${res.status}). Vérifiez votre clé et votre crédit.` };
+    }
+
+    const json = await res.json();
+    const content: string | undefined = json?.choices?.[0]?.message?.content;
+    if (!content) return { error: "Réponse vide de l'IA." };
+
+    const parsed = JSON.parse(content) as { title?: string };
+    const title = (parsed.title ?? "").trim();
+    if (!title) return { error: "L'IA n'a pas pu proposer de titre." };
+    return { title };
+  } catch (e) {
+    console.error("generateBannerTitle:", e);
+    return { error: "Impossible d'analyser le visuel pour le moment." };
+  }
+}

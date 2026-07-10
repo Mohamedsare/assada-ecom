@@ -84,6 +84,14 @@ export default function HeroSection() {
   const slide = SLIDES[index % SLIDES.length];
   const media = heroSlides[index] ?? heroSlides[0];
 
+  // Titre : dernier mot mis en accent doré, le reste en blanc (préserve les retours à la ligne).
+  const titleParts = media?.title
+    ? (() => {
+        const m = media.title.match(/^([\s\S]*?)(\S+)\s*$/);
+        return m ? { head: m[1], accent: m[2] } : { head: "", accent: media.title };
+      })()
+    : null;
+
   return (
     <>
     <section className="relative bg-night text-white overflow-hidden select-none h-64 sm:h-80 md:h-96 lg:h-100">
@@ -125,7 +133,8 @@ export default function HeroSection() {
               key={`title-${index}`}
               className="max-w-xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-lg animate-fade-slide-in whitespace-pre-line"
             >
-              {media.title}
+              {titleParts?.head}
+              <span className="text-green-light">{titleParts?.accent}</span>
             </h1>
           </div>
         </div>
