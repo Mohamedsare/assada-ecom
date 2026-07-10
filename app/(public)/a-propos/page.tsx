@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const VALUES = [
   { icon: Sparkles, title: "Produits authentiques", desc: "Des cosmétiques, parfums et soins 100 % originaux, sélectionnés avec soin." },
-  { icon: Truck, title: "Livraison rapide", desc: "Partout au Maroc en 24 à 72h, gratuite à partir de 500 DH." },
+  { icon: Truck, title: "Livraison rapide", desc: "Partout au Maroc en 24 à 72h, gratuite à partir de 300 DH." },
   { icon: ShieldCheck, title: "Paiement à la livraison", desc: "Payez en espèces à la réception, en toute confiance." },
   { icon: MessageCircle, title: "Support WhatsApp", desc: "Une équipe à votre écoute 7j/7 pour vous conseiller." },
 ];

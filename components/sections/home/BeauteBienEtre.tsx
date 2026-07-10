@@ -86,19 +86,19 @@ export default function BeauteBienEtre({ cats }: { cats: BeautyCat[] }) {
           {cats.map((c, i) => {
             const img = circleImage(i);
             return (
-            <button key={c.slug} onClick={() => setActive(i)} className="shrink-0 flex flex-col items-center gap-2 group">
+            <button key={c.slug} onClick={() => setActive(i)} className="shrink-0 flex flex-col items-center gap-3 group">
               <span
-                className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden flex items-center justify-center bg-white transition-all ${
+                className={`relative w-28 h-28 sm:w-40 sm:h-40 lg:w-44 lg:h-44 rounded-full overflow-hidden flex items-center justify-center bg-white transition-all ${
                   i === active ? "ring-2 ring-[#B8925A] ring-offset-2 scale-105" : "ring-1 ring-gray-200 group-hover:ring-gray-300"
                 }`}
               >
                 {img ? (
-                  <Image src={img} alt={c.name} fill sizes="80px" className="object-cover" />
+                  <Image src={img} alt={c.name} fill sizes="(min-width: 1024px) 176px, (min-width: 640px) 160px, 112px" className="object-cover" />
                 ) : (
-                  <span className="text-2xl">{c.emoji ?? "🧴"}</span>
+                  <span className="text-4xl sm:text-5xl">{c.emoji ?? "🧴"}</span>
                 )}
               </span>
-              <span className={`text-xs sm:text-sm ${i === active ? "text-[#B8925A] font-semibold" : "text-text-secondary group-hover:text-[#020B27]"}`}>
+              <span className={`text-base sm:text-xl lg:text-2xl ${i === active ? "text-[#B8925A] font-semibold" : "text-text-secondary group-hover:text-[#020B27]"}`}>
                 {c.name}
               </span>
             </button>

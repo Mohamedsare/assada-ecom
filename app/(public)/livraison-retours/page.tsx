@@ -38,7 +38,7 @@ export default function LivraisonRetoursPage() {
       <h2>3. Frais de livraison</h2>
       <p>
         Les frais de livraison sont affichés clairement dans votre panier avant paiement. La{" "}
-        <strong>livraison est gratuite à partir de 500 DH d’achat</strong>, partout au Maroc.
+        <strong>livraison est gratuite à partir de 300 DH d’achat</strong>, partout au Maroc.
       </p>
 
       <h2>4. Paiement à la livraison</h2>

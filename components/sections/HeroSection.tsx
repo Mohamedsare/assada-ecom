@@ -9,7 +9,7 @@ import { DEFAULT_HERO_SLIDES } from "@/lib/constants";
 
 /** Bande de réassurance qui défile en boucle sous la bannière (façon apia). */
 const MARQUEE_ITEMS = [
-  { icon: Truck, text: "Livraison gratuite à partir de 500 DH" },
+  { icon: Truck, text: "Livraison gratuite à partir de 300 DH" },
   { icon: RotateCcw, text: "Retours gratuits sous 30 jours" },
   { icon: ShieldCheck, text: "Paiement sécurisé" },
   { icon: MessageCircle, text: "Support WhatsApp 7j/7" },

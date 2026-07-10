@@ -625,7 +625,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             <Truck size={22} className="text-[#C9A063] mt-0.5 shrink-0" />
             <div>
               <p className="font-bold text-sm">Livraison rapide</p>
-              <p className="text-xs text-white/60 mt-0.5">Partout au Maroc en 24 à 72h. Gratuite à partir de 500 DH pour tout le Maroc.</p>
+              <p className="text-xs text-white/60 mt-0.5">Partout au Maroc en 24 à 72h. Gratuite à partir de 300 DH pour tout le Maroc.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">

@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 
 import HeroSection from "@/components/sections/HeroSection";
 import CategoriesSection from "@/components/sections/CategoriesSection";
-import OrderStepsSection from "@/components/sections/OrderStepsSection";
 import FindUsSection from "@/components/sections/FindUsSection";
 import HomeShowcase from "@/components/sections/home/HomeShowcase";
 import NosUnivers from "@/components/sections/home/NosUnivers";
-import ReassuranceBar from "@/components/sections/home/ReassuranceBar";
 import BeauteBienEtre from "@/components/sections/home/BeauteBienEtre";
 import FeatureProduct from "@/components/sections/home/FeatureProduct";
 import CommunityStories from "@/components/sections/home/CommunityStories";
@@ -20,7 +18,7 @@ import { CATEGORIES } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "RYTA — Boutique en ligne n°1 à Casablanca",
   description:
-    "Commandez facilement vos produits de beauté, compléments alimentaires et produits du terroir marocain avec livraison partout au Maroc en 24 à 72h, gratuite dès 500 DH. Paiement à la livraison disponible.",
+    "Commandez facilement vos produits de beauté, compléments alimentaires et produits du terroir marocain avec livraison partout au Maroc en 24 à 72h, gratuite dès 300 DH. Paiement à la livraison disponible.",
   keywords: ["boutique en ligne Casablanca", "produits de beauté Casablanca", "compléments alimentaires Casablanca", "produits du terroir marocain", "RYTA"],
 };
 
@@ -53,9 +51,6 @@ export default async function HomePage() {
       {/* 2 — Nos Univers (les 3 axes) — juste après la bannière */}
       {univers.length > 0 && <NosUnivers univers={univers} />}
 
-      {/* Réassurance — juste après Nos Univers */}
-      <ReassuranceBar />
-
       {/* Beauté & bien-être — juste avant les catégories */}
       {beautyCats.length >= 2 && <BeauteBienEtre cats={beautyCats} />}
 
@@ -86,9 +81,6 @@ export default async function HomePage() {
 
       {/* Histoires de la communauté */}
       <CommunityStories products={allProducts} />
-
-      {/* 7 — Commander en quelques clics — juste après Histoires de la communauté */}
-      <OrderStepsSection />
 
       {/* 9 — Trouvez notre boutique (carte + contact) */}
       <FindUsSection />

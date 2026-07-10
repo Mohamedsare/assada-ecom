@@ -6,8 +6,8 @@ import FooterSection from "@/components/layout/FooterSection";
 
 const PAGES_LINKS = [
   { label: "Recherche", href: "/recherche" },
-  { label: "Produits locaux", href: "/boutique?categorie=produits-locaux" },
-  { label: "Beauté", href: "/boutique?categorie=beaute" },
+  { label: "Produits du terroir", href: "/boutique?categorie=produits-locaux" },
+  { label: "Beauté et bien-être", href: "/boutique?categorie=beaute" },
   { label: "Compléments alimentaires", href: "/boutique?categorie=complements-alimentaires" },
   { label: "Conditions d'utilisation", href: "/conditions" },
   { label: "Confidentialité", href: "/confidentialite" },

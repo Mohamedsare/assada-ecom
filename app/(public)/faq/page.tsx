@@ -31,7 +31,7 @@ const FAQ: FaqItem[] = [
   },
   {
     q: "Quels sont les frais de livraison ?",
-    a: "Les frais sont affichés dans votre panier avant paiement. La livraison est gratuite à partir de 500 DH d'achat, partout au Maroc.",
+    a: "Les frais sont affichés dans votre panier avant paiement. La livraison est gratuite à partir de 300 DH d'achat, partout au Maroc.",
   },
   {
     q: "Vos produits sont-ils authentiques ?",

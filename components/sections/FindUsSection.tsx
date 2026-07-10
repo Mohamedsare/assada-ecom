@@ -43,7 +43,7 @@ export default function FindUsSection() {
         {/* En-tête */}
         <div className="text-center mb-10">
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8A6D3F] bg-green/15 px-3 py-1 rounded-full">
-            <MapPin size={13} /> Boutique physique à Derb Ghalef
+            <MapPin size={13} /> Boutique physique au Boulevard Abdelmoumen
           </span>
           <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-[#020B27]">Trouvez notre boutique</h2>
           <p className="mt-2 text-sm sm:text-base text-text-secondary max-w-xl mx-auto">
@@ -141,7 +141,7 @@ export default function FindUsSection() {
               <div className="flex items-start gap-3">
                 <MapPin size={17} className="text-green-light shrink-0 mt-0.5" />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold">RYTA — Cosmétiques &amp; Parfums</p>
+                  <p className="text-sm font-semibold">RYTA — Cosmétiques &amp; Produits du Terroir et Compléments alimentaires</p>
                   <p className="text-xs text-gray-400 mt-0.5">{SHOP_ADDRESS}</p>
                 </div>
               </div>

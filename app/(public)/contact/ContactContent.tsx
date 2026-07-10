@@ -15,7 +15,7 @@ const MAP_EMBED = `https://maps.google.com/maps?q=${MAP_QUERY}&z=16&output=embed
 const FAQ = [
   {
     q: "Quels sont vos délais de livraison ?",
-    a: "Nous livrons partout au Maroc en 24 à 72h ouvrables, gratuitement à partir de 500 DH d'achat. À Casablanca, la livraison peut être effectuée le jour même selon disponibilité.",
+    a: "Nous livrons partout au Maroc en 24 à 72h ouvrables, gratuitement à partir de 300 DH d'achat. À Casablanca, la livraison peut être effectuée le jour même selon disponibilité.",
   },
   {
     q: "Puis-je retourner un article ?",

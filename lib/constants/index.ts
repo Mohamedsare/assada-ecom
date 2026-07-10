@@ -2,7 +2,7 @@ export const SITE_NAME = "RYTA";
 
 /** Valeurs de livraison par défaut (surchargées par les Paramètres boutique en base). */
 export const DEFAULT_DELIVERY_FEE = 30;
-export const DEFAULT_FREE_DELIVERY_THRESHOLD = 500;
+export const DEFAULT_FREE_DELIVERY_THRESHOLD = 300;
 
 export const SITE_EMAIL = "contact@ryta.ma";
 // ⚠️ Numéro placeholder — à remplacer par le vrai numéro RYTA.
@@ -11,7 +11,7 @@ export const WHATSAPP_NUMBER = "21200000000";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ryta.ma";
 
 export const SITE_DESCRIPTION =
-  "RYTA, votre boutique en ligne à Casablanca : produits de beauté (parfums, maquillage, soins du visage, du corps et des cheveux), compléments alimentaires et produits du terroir marocain (miel, huiles, amlou, épices, dattes). Livraison partout au Maroc en 24 à 72h, gratuite à partir de 500 DH. Paiement à la livraison. Boutique physique à Derb Ghalef, Casablanca. Support WhatsApp.";
+  "RYTA, votre boutique en ligne à Casablanca : produits de beauté (parfums, maquillage, soins du visage, du corps et des cheveux), compléments alimentaires et produits du terroir marocain (miel, huiles, amlou, épices, dattes). Livraison partout au Maroc en 24 à 72h, gratuite à partir de 300 DH. Paiement à la livraison. Boutique physique à Derb Ghalef, Casablanca. Support WhatsApp.";
 
 /** Quartiers de Casablanca desservis — utilisés pour le SEO local (areaServed) et le checkout. */
 export const CASABLANCA_DISTRICTS = [
@@ -53,9 +53,9 @@ export const SEO_KEYWORDS = [
  * Miroir de supabase-categories-axes.sql.
  */
 export const CATEGORIES = [
-  { name: "Beauté", slug: "beaute", emoji: "💄" },
+  { name: "Beauté et bien-être", slug: "beaute", emoji: "💄" },
   { name: "Compléments alimentaires", slug: "complements-alimentaires", emoji: "💊" },
-  { name: "Produits locaux", slug: "produits-locaux", emoji: "🫒" },
+  { name: "Produits du terroir", slug: "produits-locaux", emoji: "🫒" },
 ] as const;
 
 /**
@@ -71,7 +71,7 @@ export type Axis = { name: string; slug: string; emoji: string; children: Catego
 
 export const AXES: Axis[] = [
   {
-    name: "Beauté", slug: "beaute", emoji: "💄",
+    name: "Beauté et bien-être", slug: "beaute", emoji: "💄",
     children: [
       {
         name: "Parfums", slug: "parfums",
@@ -183,7 +183,7 @@ export const AXES: Axis[] = [
     ],
   },
   {
-    name: "Produits locaux", slug: "produits-locaux", emoji: "🫒",
+    name: "Produits du terroir", slug: "produits-locaux", emoji: "🫒",
     children: [
       { name: "Miels", slug: "miels" },
       { name: "Huiles alimentaires", slug: "huiles-alimentaires" },

@@ -17,7 +17,7 @@ export default function TopBar() {
 
         <div className="flex items-center gap-1.5 text-[#C9A063] font-medium">
           <Truck size={13} />
-          <span>Livraison partout au Maroc en 24–72h — gratuite dès 500 DH</span>
+          <span>Livraison partout au Maroc en 24–72h — gratuite dès 300 DH</span>
         </div>
 
         <div className="flex items-center gap-3">

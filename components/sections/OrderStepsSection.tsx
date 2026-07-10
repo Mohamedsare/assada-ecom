@@ -24,7 +24,7 @@ const STEPS = [
   {
     icon: Truck,
     title: "Recevez chez vous",
-    desc: "Livraison partout au Maroc en 24 à 72h. Gratuite à partir de 500 DH pour tout le Maroc.",
+    desc: "Livraison partout au Maroc en 24 à 72h. Gratuite à partir de 300 DH pour tout le Maroc.",
   },
 ];
 

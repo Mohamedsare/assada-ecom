@@ -17,7 +17,7 @@ import { useCartStore } from "@/stores/cart";
 import { formatPrice, cn } from "@/lib/utils";
 
 const DELIVERY_FEE = 2000;
-const FREE_DELIVERY_THRESHOLD = 500;
+const FREE_DELIVERY_THRESHOLD = 300;
 
 export default function CartDrawer() {
   const cartDrawerOpen  = useUIStore((s) => s.cartDrawerOpen);

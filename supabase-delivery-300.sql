@@ -1,17 +1,17 @@
 -- =============================================================
--- RYTA — Livraison gratuite à partir de 500 DH
+-- RYTA — Livraison gratuite à partir de 300 DH
 -- À exécuter dans Supabase → SQL Editor (met à jour la base LIVE).
 -- Le seed de supabase-schema.sql ne s'applique qu'aux nouvelles bases ;
--- ici on corrige la ligne `settings` existante (ancienne valeur FCFA 100000).
+-- ici on corrige la ligne `settings` existante.
+-- (Équivalent : Admin → Paramètres → « Livraison gratuite à partir de ».)
 -- =============================================================
 
--- Seuil de livraison gratuite = 500 DH
+-- Seuil de livraison gratuite = 300 DH
 update public.settings
-set value = '500'::jsonb, updated_at = now()
+set value = '300'::jsonb, updated_at = now()
 where key = 'free_delivery_threshold';
 
 -- Frais de livraison (sous le seuil) — ajustez selon vos vrais frais.
--- Ancienne valeur 2000 = reliquat FCFA, absurde en DH.
 update public.settings
 set value = '30'::jsonb, updated_at = now()
 where key = 'delivery_fee';

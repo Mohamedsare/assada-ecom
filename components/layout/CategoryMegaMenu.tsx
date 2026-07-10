@@ -152,7 +152,7 @@ export default function CategoryMegaMenu({ active }: { active: boolean }) {
 
           <div className="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between">
             <p className="text-xs text-text-secondary">
-              Paiement à la livraison • Livraison partout au Maroc en 24–72h, gratuite dès 500 DH
+              Paiement à la livraison • Livraison partout au Maroc en 24–72h, gratuite dès 300 DH
             </p>
             <Link
               href="/boutique"

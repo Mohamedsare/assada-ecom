@@ -39,9 +39,9 @@ export function buildUnivers(products: Product[], categories: Category[]): Unive
   // Les 3 grands axes RYTA. Matching souple par nom (accents/casse ignorés).
   const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   const AXES: { label: string; match: (n: string) => boolean }[] = [
-    { label: "Beauté", match: (n) => n.includes("beaut") },
+    { label: "Beauté et bien-être", match: (n) => n.includes("beaut") },
     { label: "Compléments alimentaires", match: (n) => n.includes("complement") },
-    { label: "Produits locaux", match: (n) => n.includes("loca") || n.includes("terroir") },
+    { label: "Produits du terroir", match: (n) => n.includes("loca") || n.includes("terroir") },
   ];
   const findAxisCat = (axis: (typeof AXES)[number]) => topCats.find((c) => axis.match(norm(c.name)));
 
