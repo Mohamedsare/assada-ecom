@@ -6,7 +6,8 @@ import { getCurrentProfile } from "./queries";
 import { ensurePermission, ensureSensitive } from "./guards";
 import { isFullAccessRole, defaultEmployeePermissions } from "@/lib/permissions";
 import { PAGE_IMAGE_DEFAULTS, type HeroSlide } from "@/lib/constants";
-import type { PermissionMatrix } from "@/types";
+import { formatPrice } from "@/lib/utils";
+import type { PermissionMatrix, Order } from "@/types";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
@@ -832,6 +833,24 @@ export async function adminUpdateOrderNote(id: string, note: string) {
   return { success: true };
 }
 
+/**
+ * Suppression complète d'une commande (permission sensible `delete`).
+ * Passe par le client service_role : le cascade en base supprime aussi
+ * order_items, payments et order_tracking liés.
+ */
+export async function adminDeleteOrder(id: string) {
+  const gate = await ensurePermission("orders", "delete");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = createAdminClient();
+  const { error } = await supabase.from("orders").delete().eq("id", id);
+  if (error) return { error: friendlyDbError(error) };
+
+  revalidatePath("/admin/commandes");
+  revalidatePath("/admin/livraisons");
+  revalidatePath("/admin/paiements");
+  return { success: true };
+}
+
 // ─── ADMIN — SETTINGS ────────────────────────────────────────────────────────
 
 export async function adminUpdateSettings(formData: FormData) {
@@ -1507,5 +1526,140 @@ Réponds STRICTEMENT en JSON (sans markdown) : { "title": "..." }`;
   } catch (e) {
     console.error("generateBannerTitle:", e);
     return { error: "Impossible d'analyser le visuel pour le moment." };
+  }
+}
+
+// ─── ADMIN — IA (message WhatsApp de confirmation de commande) ────────────────
+
+const ORDER_PAYMENT_LABELS: Record<string, string> = {
+  cash_on_delivery: "Paiement à la livraison",
+  airtel_money: "Airtel Money",
+  moov_money: "Moov Money",
+};
+
+/** Message de secours, toujours propre, utilisé si l'IA échoue ou est indisponible. */
+function buildBackupConfirmationMessage(order: Order): string {
+  const items = (order.items ?? [])
+    .map((it) => `• ${it.quantity}× ${it.product_name}`)
+    .join("\n");
+  const payment = ORDER_PAYMENT_LABELS[order.payment_method] ?? "Paiement à la livraison";
+  const lieu = [order.delivery_district, order.delivery_city].filter(Boolean).join(", ");
+
+  return [
+    `Bonjour ${order.customer_name},`,
+    ``,
+    `Merci pour votre commande chez RYTA ! Nous vous confirmons sa bonne réception.`,
+    ``,
+    `🧾 Commande ${order.order_number}`,
+    items,
+    `💰 Total : ${formatPrice(order.total_amount)} (${payment})`,
+    lieu ? `📍 Livraison : ${lieu}` : ``,
+    ``,
+    `Nous préparons votre colis et revenons vers vous pour organiser la livraison.`,
+    `Pour toute question, répondez simplement à ce message.`,
+    ``,
+    `À très vite,`,
+    `L'équipe RYTA — Casablanca`,
+  ]
+    .filter((l) => l !== "")
+    .join("\n");
+}
+
+/**
+ * Génère via l'IA un message WhatsApp de confirmation de commande, propre et
+ * personnalisé. Ne lève jamais : si l'IA échoue (clé manquante, erreur réseau,
+ * réponse vide), renvoie un message de secours tout aussi soigné.
+ * `ai: true` indique que le texte provient de l'IA.
+ */
+export async function generateOrderConfirmationMessage(
+  orderId: string,
+): Promise<{ message: string; ai: boolean }> {
+  const gate = await ensurePermission("orders", "view");
+  // Sans droit de lecture, on renvoie un message générique minimal.
+  if (!gate.ok) {
+    return { message: "Bonjour, nous vous contactons au sujet de votre commande RYTA.", ai: false };
+  }
+
+  const supabase = await createClient();
+  const { data: order } = await supabase
+    .from("orders")
+    .select("*, items:order_items(*)")
+    .eq("id", orderId)
+    .single();
+
+  if (!order) {
+    return { message: "Bonjour, nous vous contactons au sujet de votre commande RYTA.", ai: false };
+  }
+
+  const backup = buildBackupConfirmationMessage(order as Order);
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return { message: backup, ai: false };
+
+  const itemsText = ((order as Order).items ?? [])
+    .map((it) => `- ${it.quantity}x ${it.product_name} (${formatPrice(it.total_price)})`)
+    .join("\n");
+  const payment = ORDER_PAYMENT_LABELS[order.payment_method] ?? "Paiement à la livraison";
+  const lieu = [order.delivery_district, order.delivery_city].filter(Boolean).join(", ");
+
+  const prompt = `Tu écris un message WhatsApp de CONFIRMATION de commande, envoyé par la boutique RYTA (cosmétiques & beauté, Casablanca) à sa cliente/son client.
+
+Données de la commande :
+- Client : ${order.customer_name}
+- N° commande : ${order.order_number}
+- Articles :
+${itemsText || "- (non détaillé)"}
+- Total : ${formatPrice(order.total_amount)}
+- Paiement : ${payment}
+- Livraison : ${lieu || "Casablanca"}
+
+Rédige le message en français, prêt à être envoyé tel quel. Exigences :
+- Ton chaleureux, poli, premium et rassurant, adapté au marché marocain.
+- Confirme la réception de la commande et annonce le contact pour la livraison.
+- Rappelle le n° de commande, la liste des articles (courte), le total et le mode de paiement.
+- Utilise quelques emojis pertinents avec parcimonie et des retours à la ligne pour l'aérer.
+- Termine par une signature "L'équipe RYTA — Casablanca".
+- N'invente aucune information absente des données. Pas de markdown, pas de guillemets autour du message.
+
+Réponds STRICTEMENT en JSON (sans markdown) : { "message": "..." }`;
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        max_tokens: 400,
+        temperature: 0.7,
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content:
+              "Tu es le/la responsable relation client de RYTA (Casablanca). Tu écris des messages WhatsApp de confirmation de commande impeccables, chaleureux et professionnels en français.",
+          },
+          { role: "user", content: prompt },
+        ],
+      }),
+    });
+
+    if (!res.ok) {
+      console.error("generateOrderConfirmationMessage OpenAI:", res.status, await res.text());
+      return { message: backup, ai: false };
+    }
+
+    const json = await res.json();
+    const content: string | undefined = json?.choices?.[0]?.message?.content;
+    if (!content) return { message: backup, ai: false };
+
+    const parsed = JSON.parse(content) as { message?: string };
+    const message = (parsed.message ?? "").trim();
+    if (!message) return { message: backup, ai: false };
+    return { message, ai: true };
+  } catch (e) {
+    console.error("generateOrderConfirmationMessage:", e);
+    return { message: backup, ai: false };
   }
 }
