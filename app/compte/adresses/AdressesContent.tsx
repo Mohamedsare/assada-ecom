@@ -106,7 +106,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
         <h1 className="text-xl font-bold text-[#020B27]">Mes adresses</h1>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 bg-[#B8925A] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#9E7A45] transition-colors"
+          className="flex items-center gap-2 bg-[#B8925A] text-white px-4 py-2 rounded-xl text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
         >
           <Plus size={15} />
           Ajouter une adresse
@@ -172,7 +172,7 @@ export default function AdressesContent({ initialAddresses }: { initialAddresses
               <button
                 type="submit"
                 disabled={saving}
-                className="flex items-center gap-2 bg-[#B8925A] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#9E7A45] transition-colors disabled:opacity-60"
+                className="flex items-center gap-2 bg-[#B8925A] text-white px-5 py-2.5 rounded-xl text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors disabled:opacity-60"
               >
                 {saving ? (
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

@@ -138,7 +138,7 @@ function StockRow({ product }: { product: Product }) {
             <button onClick={() => setStock((s) => s + 1)} className="w-7 h-7 flex items-center justify-center hover:bg-gray-50" aria-label="Augmenter"><Plus size={12} /></button>
           </div>
           {dirty && (
-            <button onClick={save} disabled={pending} className="text-xs font-semibold bg-green text-[#020B27] px-2.5 py-1.5 rounded-lg hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
+            <button onClick={save} disabled={pending} className="text-xs font-semibold bg-green text-[#020B27] px-2.5 py-1.5 rounded-lg btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
               {pending ? "…" : "OK"}
             </button>
           )}

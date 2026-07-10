@@ -170,33 +170,16 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           </h3>
         </Link>
 
-        {/* Price + cart */}
-        <div className="mt-1 flex items-center justify-between gap-2">
-          <div className="flex min-w-0 items-baseline gap-1.5">
-            <p className="whitespace-nowrap text-[17px] font-extrabold leading-none text-green">
-              {formatPrice(product.current_price)}
+        {/* Price */}
+        <div className="mt-1 flex min-w-0 items-baseline gap-1.5">
+          <p className="whitespace-nowrap text-[17px] font-extrabold leading-none text-green">
+            {formatPrice(product.current_price)}
+          </p>
+          {product.old_price && (
+            <p className="text-[11px] text-gray-400 line-through">
+              {formatPrice(product.old_price)}
             </p>
-            {product.old_price && (
-              <p className="text-[11px] text-gray-400 line-through">
-                {formatPrice(product.old_price)}
-              </p>
-            )}
-          </div>
-
-          <button
-            onClick={handleAddToCart}
-            disabled={product.stock_quantity === 0}
-            aria-label={hasVariants ? "Choisir les options" : "Ajouter au panier"}
-            title={hasVariants ? "Choisir couleur / taille" : "Ajouter au panier"}
-            className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-150",
-              product.stock_quantity > 0
-                ? "bg-[#B8925A] text-white shadow-md shadow-[#B8925A]/30 hover:bg-[#9E7A45] hover:shadow-lg hover:scale-105 active:scale-95"
-                : "cursor-not-allowed bg-gray-100 text-gray-300"
-            )}
-          >
-            <ShoppingCart size={17} strokeWidth={2.4} />
-          </button>
+          )}
         </div>
 
         {/* Discount */}
@@ -226,12 +209,31 @@ export default function ProductCard({ product, className }: ProductCardProps) {
           </div>
         )}
 
-        {/* Seller badge */}
-        {product.is_featured && (
-          <span className="mt-1.5 inline-flex w-fit items-center rounded-sm bg-[#8B5CF6]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[#8B5CF6]">
-            Vendeur vedette
+        {/* Bouton Acheter */}
+        <button
+          onClick={handleAddToCart}
+          disabled={product.stock_quantity === 0}
+          aria-label={
+            product.stock_quantity === 0
+              ? "Rupture de stock"
+              : hasVariants
+              ? "Choisir les options"
+              : "Ajouter au panier"
+          }
+          title={hasVariants ? "Choisir couleur / taille" : "Ajouter au panier"}
+          className={cn(
+            "mt-2 flex w-full items-center justify-center rounded-lg py-2 text-[13px] font-semibold",
+            // Balayage bas → haut (classe .btn-sweep dans globals.css).
+            product.stock_quantity > 0
+              ? "btn-sweep bg-[#B8925A] text-white shadow-md shadow-[#B8925A]/30"
+              : "cursor-not-allowed bg-gray-100 text-gray-400"
+          )}
+        >
+          <span className="relative z-10 flex items-center gap-1.5">
+            <ShoppingCart size={15} strokeWidth={2.4} />
+            {product.stock_quantity === 0 ? "Rupture" : "Acheter"}
           </span>
-        )}
+        </button>
       </div>
     </div>
   );

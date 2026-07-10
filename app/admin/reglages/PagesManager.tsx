@@ -71,7 +71,7 @@ export default function PagesManager({ images, heroSlides }: { images: Record<st
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer les modifications"}
           </button>

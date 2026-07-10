@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
-import { ChevronRight, ShoppingBag, Tag, Truck, RotateCcw, ShieldCheck, MessageCircle } from "lucide-react";
+import { ChevronRight, Truck, RotateCcw, ShieldCheck, MessageCircle } from "lucide-react";
 import { useConfigStore } from "@/stores/config";
 import { DEFAULT_HERO_SLIDES } from "@/lib/constants";
 
@@ -86,8 +86,8 @@ export default function HeroSection() {
 
   return (
     <>
-    <section className="relative bg-night text-white overflow-hidden select-none">
-      {/* ── Média en arrière-plan (slider : image ou vidéo) ── */}
+    <section className="relative bg-night text-white overflow-hidden select-none h-64 sm:h-80 md:h-96 lg:h-100">
+      {/* ── Média en arrière-plan (slider : image ou vidéo) — sans texte ── */}
       <div className="absolute inset-0 z-0">
         {media?.type === "video" ? (
           <video
@@ -97,69 +97,51 @@ export default function HeroSection() {
             muted
             loop
             playsInline
-            className="absolute inset-0 w-full h-full object-cover object-right animate-fade-bg"
+            className="absolute inset-0 w-full h-full object-cover object-center animate-fade-bg"
           />
         ) : (
           <Image
             key={`bg-${index}`}
             src={media?.url ?? slide.image}
-            alt={`RYTA — ${slide.titleAccent}`}
+            alt="Bannière RYTA"
             fill
             priority
-            className="object-cover object-right animate-fade-bg"
+            className="object-cover object-center animate-fade-bg"
             sizes="100vw"
           />
         )}
-        {/* Dégradé pour lisibilité — plus léger sur mobile pour mieux voir l'image */}
-        <div className="absolute inset-0 bg-night/25 lg:hidden" />
-        <div className="absolute inset-0 bg-linear-to-r from-night/60 via-night/25 to-transparent lg:from-night/80 lg:via-night/50" />
+        {/* Dégradé de lisibilité : plus marqué à gauche quand un titre est affiché */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black/45 to-transparent" />
+        {media?.title && (
+          <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/25 to-transparent" />
+        )}
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
-        <div className="grid lg:grid-cols-2 min-h-44 md:min-h-56 items-center">
-
-          {/* ── Texte gauche ── */}
-          <div
-            key={`text-${index}`}
-            className="py-5 md:py-6 lg:pr-8 z-10 animate-fade-slide-in"
-          >
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-3 md:mb-5">
-              {slide.title}{" "}
-              <span className="text-green-light">{slide.titleAccent}</span>
-              <br />
-              {slide.titleSuffix}
+      {/* Grand titre (géré par bannière dans « Gestion des pages ») */}
+      {media?.title && (
+        <div className="absolute inset-0 z-10 flex items-center">
+          <div className="max-w-7xl w-full mx-auto px-6 md:px-10">
+            <h1
+              key={`title-${index}`}
+              className="max-w-xl text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white drop-shadow-lg animate-fade-slide-in whitespace-pre-line"
+            >
+              {media.title}
             </h1>
-
-            <p className="text-gray-400 text-sm md:text-lg mb-4 md:mb-6 leading-relaxed max-w-md">
-              {slide.subtitle}
-            </p>
-
-            <div className="flex flex-col items-start sm:flex-row sm:items-center sm:flex-nowrap gap-3">
-              <Link
-                href={slide.cta1.href}
-                className="inline-flex items-center justify-center gap-2 bg-green hover:bg-[#9E7A45] text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
-              >
-                <ShoppingBag size={16} />
-                {slide.cta1.label}
-                <ChevronRight size={15} />
-              </Link>
-              <Link
-                href={slide.cta2.href}
-                className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white/60 hover:bg-white/5 text-white font-semibold px-6 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
-              >
-                <Tag size={16} />
-                {slide.cta2.label}
-              </Link>
-            </div>
           </div>
-
-          {/* Colonne droite vide : l'image est en arrière-plan */}
-          <div className="hidden lg:block" />
         </div>
-      </div>
+      )}
 
-      {/* Dots */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+      {/* Un seul bouton court, centré en bas */}
+      <Link
+        href={media?.link || slide.cta1.href}
+        className="absolute bottom-11 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 bg-green btn-sweep hover:bg-[#9E7A45] text-white font-bold px-6 py-2.5 rounded-full transition-colors text-sm shadow-lg"
+      >
+        Découvrir
+        <ChevronRight size={16} />
+      </Link>
+
+      {/* Points de position (slider) */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2.5 z-20">
         {heroSlides.map((_, i) => (
           <button
             key={i}
@@ -167,8 +149,8 @@ export default function HeroSection() {
             aria-label={`Slide ${i + 1}`}
             className={`transition-all rounded-full ${
               i === index
-                ? "w-6 h-2 bg-green-light"
-                : "w-2 h-2 bg-white/30 hover:bg-white/60"
+                ? "w-8 h-2.5 bg-green-light"
+                : "w-2.5 h-2.5 bg-white/40 hover:bg-white/70"
             }`}
           />
         ))}

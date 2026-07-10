@@ -254,7 +254,7 @@ export default function CheckoutPage() {
             {/* Validation — desktop */}
             <div className="hidden lg:block space-y-3">
               <button onClick={handleSubmit} disabled={submitting}
-                className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-white py-4 rounded-2xl font-bold text-base hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-white py-4 rounded-2xl font-bold text-base btn-sweep hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
                 {submitting
                   ? <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Traitement…</>
                   : <><Lock size={17} /> Confirmer ma commande</>}

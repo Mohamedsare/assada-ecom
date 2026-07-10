@@ -845,7 +845,12 @@ export async function adminUpdateHeroSlides(slides: HeroSlide[]) {
   // Nettoyage / validation : on ne garde que des entrées bien formées.
   const clean = (Array.isArray(slides) ? slides : [])
     .filter((s) => s && typeof s.url === "string" && s.url.trim() !== "" && (s.type === "image" || s.type === "video"))
-    .map((s) => ({ type: s.type, url: s.url.trim() }));
+    .map((s) => {
+      const out: HeroSlide = { type: s.type, url: s.url.trim() };
+      if (typeof s.title === "string" && s.title.trim()) out.title = s.title.trim();
+      if (typeof s.link === "string" && s.link.trim()) out.link = s.link.trim();
+      return out;
+    });
 
   const supabase = await createClient();
   const { error } = await supabase

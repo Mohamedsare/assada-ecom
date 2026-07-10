@@ -53,14 +53,14 @@ export default function NotFound() {
               aria-label="Rechercher un produit"
               className="flex-1 bg-white/10 border border-white/20 rounded-l-xl px-4 py-3 text-sm text-white placeholder-gray-400 outline-none focus:border-[#C9A063] transition-colors"
             />
-            <button type="submit" className="bg-[#B8925A] hover:bg-[#9E7A45] px-5 py-3 rounded-r-xl transition-colors" aria-label="Lancer la recherche">
+            <button type="submit" className="bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] px-5 py-3 rounded-r-xl transition-colors" aria-label="Lancer la recherche">
               <Search size={18} />
             </button>
           </form>
 
           {/* CTAs principaux */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-white font-semibold px-6 py-3 rounded-xl transition-colors">
+            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white font-semibold px-6 py-3 rounded-xl transition-colors">
               <Home size={18} /> Retour à l&apos;accueil
             </Link>
             <Link href="/boutique" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:bg-white/10 text-white font-semibold px-6 py-3 rounded-xl transition-colors">

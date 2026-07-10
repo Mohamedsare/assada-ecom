@@ -122,7 +122,7 @@ export default function ProductForm({
               type="button"
               onClick={() => runAi(imageUrl)}
               disabled={aiPending || !imageUrl}
-              className="shrink-0 flex items-center gap-1.5 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg hover:bg-[#9E7A45] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="shrink-0 flex items-center gap-1.5 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title={!imageUrl ? "Ajoutez d'abord une photo" : "Analyser la photo"}
             >
               <Sparkles size={14} /> {aiPending ? "…" : aiDone ? "Régénérer" : "Analyser"}
@@ -230,7 +230,7 @@ export default function ProductForm({
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <div className="flex flex-col gap-2">
-            <button type="submit" disabled={pending} className="bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-3 rounded-lg transition-colors">
+            <button type="submit" disabled={pending} className="bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-3 rounded-lg transition-colors">
               {pending ? "Enregistrement…" : isEdit ? "Enregistrer les modifications" : "Créer le produit"}
             </button>
             <button type="button" onClick={() => router.push("/admin/produits")} className="text-text-secondary text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">

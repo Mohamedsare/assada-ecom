@@ -51,6 +51,45 @@ body {
   font-family: var(--font-sans), 'Inter', sans-serif;
 }
 
+@layer components {
+  /* Boutons d'action : au survol / clic, le bleu nuit du site remonte du bas
+     vers le haut par-dessus la couleur initiale. Texte forcé en blanc pendant
+     le balayage pour rester lisible (certains boutons ont un texte sombre). */
+  .btn-sweep {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn-sweep::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-night-2); /* #0F172A — bleu nuit du site */
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+  }
+  .btn-sweep:hover::before,
+  .btn-sweep:focus-visible::before,
+  .btn-sweep:active::before {
+    transform: translateY(0);
+  }
+  /* Le contenu (icône, texte enveloppé) reste au-dessus du balayage. */
+  .btn-sweep > * {
+    position: relative;
+    z-index: 1;
+  }
+  .btn-sweep:hover,
+  .btn-sweep:focus-visible,
+  .btn-sweep:active {
+    color: #fff;
+  }
+  /* Les boutons désactivés ne réagissent pas. */
+  .btn-sweep:disabled::before {
+    transform: translateY(100%);
+  }
+}
+
 * {
   box-sizing: border-box;
 }

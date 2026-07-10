@@ -185,7 +185,7 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
               <button
                 onClick={saveNote}
                 disabled={pending}
-                className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
               >
                 {pending ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Enregistrer la note
               </button>

@@ -262,6 +262,10 @@ export type HeroSlideType = "image" | "video";
 export interface HeroSlide {
   type: HeroSlideType;
   url: string;
+  /** Grand titre affiché par-dessus la bannière (optionnel — vide = bannière épurée). */
+  title?: string;
+  /** Destination du bouton « Découvrir » (optionnel — défaut : /boutique). */
+  link?: string;
 }
 
 /** Slides par défaut du slider d'accueil (repli si aucun slide n'est configuré en admin). */

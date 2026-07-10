@@ -120,7 +120,7 @@ export default function CartDrawer() {
             </div>
             <button
               onClick={closeCartDrawer}
-              className="mt-2 bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-[#9E7A45] transition-colors"
+              className="mt-2 bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-semibold text-sm btn-sweep hover:bg-[#9E7A45] transition-colors"
             >
               Voir la boutique
             </button>
@@ -267,7 +267,7 @@ export default function CartDrawer() {
               <Link
                 href="/checkout"
                 onClick={closeCartDrawer}
-                className="w-full flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-white py-3.5 rounded-xl font-bold text-sm transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white py-3.5 rounded-xl font-bold text-sm transition-colors"
               >
                 Passer la commande
                 <ArrowRight size={16} />

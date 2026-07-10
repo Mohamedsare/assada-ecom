@@ -240,7 +240,7 @@ export default function ContactContent() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3 rounded-xl font-semibold hover:bg-[#9E7A45] disabled:opacity-60 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 transition-colors"
                 >
                   <Send size={16} />
                   {sending ? "Envoi en cours…" : "Envoyer le message"}

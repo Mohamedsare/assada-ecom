@@ -101,7 +101,7 @@ function ReviewCard({ review }: { review: Review }) {
 
         <div className="flex items-center gap-2 mt-3">
           {!approved ? (
-            <button onClick={() => toggle(true)} disabled={pending} className="flex items-center gap-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-1.5 rounded-lg hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
+            <button onClick={() => toggle(true)} disabled={pending} className="flex items-center gap-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-1.5 rounded-lg btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
               <Check size={13} /> Approuver
             </button>
           ) : (

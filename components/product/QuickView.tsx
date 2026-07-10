@@ -346,7 +346,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
             <button onClick={handleAddToCart} disabled={!inStock}
               className={cn(
                 "flex-1 min-w-[150px] h-11 rounded-xl flex items-center justify-center gap-2 font-semibold text-sm transition-all",
-                inStock ? "bg-[#B8925A] text-white hover:bg-[#9E7A45]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                inStock ? "bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
               )}>
               <ShoppingCart size={16} /> Ajouter au panier
             </button>

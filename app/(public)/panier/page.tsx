@@ -239,7 +239,7 @@ export default function PanierPage() {
               {/* CTA desktop */}
               <Link
                 href="/checkout"
-                className="w-full flex items-center justify-center gap-2 bg-green text-[#020B27] py-4 rounded-2xl font-bold text-base hover:bg-[#9E7A45] active:scale-95 transition-all"
+                className="w-full flex items-center justify-center gap-2 bg-green text-[#020B27] py-4 rounded-2xl font-bold text-base btn-sweep hover:bg-[#9E7A45] active:scale-95 transition-all"
               >
                 Passer la commande
                 <ChevronRight size={18} />

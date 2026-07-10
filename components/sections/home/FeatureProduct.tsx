@@ -64,7 +64,7 @@ export default function FeatureProduct({ product }: { product: Product }) {
 
         <Link
           href={`/produit/${product.slug}`}
-          className="inline-flex items-center justify-center mt-10 bg-green hover:bg-[#9E7A45] text-white font-semibold px-8 py-3.5 rounded-full transition-colors active:scale-95"
+          className="inline-flex items-center justify-center mt-10 bg-green btn-sweep hover:bg-[#9E7A45] text-white font-semibold px-8 py-3.5 rounded-full transition-colors active:scale-95"
         >
           Voir le produit
         </Link>

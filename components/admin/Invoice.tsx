@@ -88,7 +88,7 @@ export default function Invoice({
           </div>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
           >
             <Printer size={16} /> Imprimer
           </button>

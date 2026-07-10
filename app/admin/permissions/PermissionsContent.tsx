@@ -34,7 +34,7 @@ export default function PermissionsContent({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setCreating(true)}
-            className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
           >
             <UserPlus size={16} /> Créer un employé
           </button>
@@ -234,7 +234,7 @@ function PermissionModal({ profile, onClose }: { profile: Profile; onClose: () =
           <button
             onClick={save}
             disabled={pending}
-            className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             {pending ? <Loader2 size={15} className="animate-spin" /> : <ShieldCheck size={15} />} Enregistrer les permissions
           </button>
@@ -317,7 +317,7 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
                 <button
                   onClick={promote}
                   disabled={!selected || pending}
-                  className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                  className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                   {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />}
                   {selected ? `Nommer ${nameOf(selected)} employé` : "Sélectionnez un client"}
@@ -384,7 +384,7 @@ function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
             <p className="text-xs text-text-secondary">
               Vous pouvez maintenant configurer ses permissions depuis la carte de l&apos;employé.
             </p>
-            <button onClick={onClose} className="w-full bg-green hover:bg-[#9E7A45] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors">
+            <button onClick={onClose} className="w-full bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors">
               Terminé
             </button>
           </div>
@@ -425,7 +425,7 @@ function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
               <button
                 type="submit"
                 disabled={pending}
-                className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
               >
                 {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />} Créer le compte
               </button>

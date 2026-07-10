@@ -331,7 +331,7 @@ export default function BoutiqueContent({
                 <p className="text-[#64748B] mb-6">Essayez de modifier vos filtres</p>
                 <button
                   onClick={resetFilters}
-                  className="bg-green text-white px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
+                  className="bg-green text-white px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
                 >
                   Réinitialiser les filtres
                 </button>
@@ -438,7 +438,7 @@ export default function BoutiqueContent({
           <div className="px-4 py-3 border-t border-gray-100 shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
             <button
               onClick={() => setFiltersOpen(false)}
-              className="w-full bg-green text-white py-3 rounded-xl font-semibold hover:bg-[#9E7A45] active:scale-[0.98] transition-all"
+              className="w-full bg-green text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#9E7A45] active:scale-[0.98] transition-all"
             >
               Afficher {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
             </button>

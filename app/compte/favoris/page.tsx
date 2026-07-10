@@ -28,7 +28,7 @@ export default async function FavorisPage() {
           </p>
           <Link
             href="/boutique"
-            className="bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
+            className="bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
           >
             Découvrir la boutique
           </Link>

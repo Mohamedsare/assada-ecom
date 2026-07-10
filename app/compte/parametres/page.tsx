@@ -126,7 +126,7 @@ export default function ParametresPage() {
           <button
             type="submit"
             disabled={savingProfile}
-            className="mt-4 flex items-center gap-2 bg-[#B8925A] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#9E7A45] transition-colors disabled:opacity-60"
+            className="mt-4 flex items-center gap-2 bg-[#B8925A] text-white px-5 py-2.5 rounded-xl text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors disabled:opacity-60"
           >
             {savingProfile ? (
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

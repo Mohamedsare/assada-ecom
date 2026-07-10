@@ -263,7 +263,7 @@ export default function RechercheContent() {
               </button>
             </h2>
             <Link href="/boutique"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-green px-8 py-4 text-base font-bold text-white hover:bg-[#9E7A45] transition-colors">
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-green px-8 py-4 text-base font-bold text-white btn-sweep hover:bg-[#9E7A45] transition-colors">
               Continuer vos achats
             </Link>
           </div>
@@ -285,7 +285,7 @@ export default function RechercheContent() {
           <div className="flex-1 overflow-y-auto p-5">{filterPanel}</div>
           <div className="shrink-0 p-4 border-t border-gray-100">
             <button onClick={() => setFiltersOpen(false)}
-              className="w-full bg-green text-white font-semibold py-3 rounded-xl hover:bg-[#9E7A45] transition-colors">
+              className="w-full bg-green text-white font-semibold py-3 rounded-xl btn-sweep hover:bg-[#9E7A45] transition-colors">
               Voir {filtered.length} résultat{filtered.length !== 1 ? "s" : ""}
             </button>
           </div>

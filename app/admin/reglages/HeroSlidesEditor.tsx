@@ -45,6 +45,9 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
 
   const removeAt = (i: number) => setSlides((s) => s.filter((_, idx) => idx !== i));
 
+  const updateSlide = (i: number, patch: Partial<HeroSlide>) =>
+    setSlides((s) => s.map((sl, idx) => (idx === i ? { ...sl, ...patch } : sl)));
+
   const move = (i: number, dir: -1 | 1) => {
     setSlides((s) => {
       const j = i + dir;
@@ -69,7 +72,9 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
       <h2 className="font-semibold text-[#020B27] mb-1">Accueil — bannières du slider</h2>
       <p className="text-text-secondary text-xs mb-4">
         Ajoutez autant de bannières que vous voulez (images ou vidéos), réordonnez-les et supprimez-les.
-        Les vidéos défilent en fond, sans son. Formats conseillés : image ~1600×600 px, vidéo MP4 légère (&lt; 10 Mo).
+        Pour chaque bannière : un <strong>grand titre</strong> (laissez vide pour une bannière épurée) et le
+        <strong> lien du bouton « Découvrir »</strong>. Les vidéos défilent en fond, sans son.
+        Formats conseillés : image ~1600×600 px, vidéo MP4 légère (&lt; 20 Mo).
       </p>
 
       {slides.length === 0 ? (
@@ -99,25 +104,41 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
                   <X size={14} />
                 </button>
               </div>
-              <div className="flex items-center justify-between px-2 py-1.5 bg-white">
-                <button
-                  type="button"
-                  onClick={() => move(i, -1)}
-                  disabled={i === 0}
-                  className="p-1 rounded text-gray-500 hover:text-[#020B27] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
-                  title="Déplacer à gauche"
-                >
-                  <ArrowLeft size={15} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => move(i, 1)}
-                  disabled={i === slides.length - 1}
-                  className="p-1 rounded text-gray-500 hover:text-[#020B27] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
-                  title="Déplacer à droite"
-                >
-                  <ArrowRight size={15} />
-                </button>
+              <div className="space-y-2 px-2 py-2 bg-white">
+                <input
+                  type="text"
+                  value={slide.title ?? ""}
+                  onChange={(e) => updateSlide(i, { title: e.target.value })}
+                  placeholder="Grand titre (optionnel)"
+                  className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15"
+                />
+                <input
+                  type="text"
+                  value={slide.link ?? ""}
+                  onChange={(e) => updateSlide(i, { link: e.target.value })}
+                  placeholder="Lien du bouton (ex : /promotions)"
+                  className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15"
+                />
+                <div className="flex items-center justify-between pt-0.5">
+                  <button
+                    type="button"
+                    onClick={() => move(i, -1)}
+                    disabled={i === 0}
+                    className="p-1 rounded text-gray-500 hover:text-[#020B27] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
+                    title="Déplacer à gauche"
+                  >
+                    <ArrowLeft size={15} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(i, 1)}
+                    disabled={i === slides.length - 1}
+                    className="p-1 rounded text-gray-500 hover:text-[#020B27] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
+                    title="Déplacer à droite"
+                  >
+                    <ArrowRight size={15} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -148,7 +169,7 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
           type="button"
           onClick={save}
           disabled={saving || uploading !== null}
-          className="inline-flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors ml-auto"
+          className="inline-flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors ml-auto"
         >
           <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer le slider"}
         </button>

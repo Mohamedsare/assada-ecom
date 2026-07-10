@@ -112,7 +112,7 @@ export default function ProductsTable({
         </div>
         <Link
           href="/admin/produits/nouveau"
-          className="flex items-center gap-2 bg-[#B8925A] text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-[#9E7A45] transition-colors"
+          className="flex items-center gap-2 bg-[#B8925A] text-white px-4 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
         >
           <Plus size={16} />
           Ajouter un produit
@@ -171,12 +171,12 @@ export default function ProductsTable({
           {hasFilters ? (
             <button
               onClick={() => { setSearch(""); setStatus("all"); setCategoryId("all"); setBrandId("all"); resetPage(); }}
-              className="bg-[#B8925A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#9E7A45] transition-colors"
+              className="bg-[#B8925A] text-white px-5 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
             >
               Réinitialiser les filtres
             </button>
           ) : (
-            <Link href="/admin/produits/nouveau" className="bg-[#B8925A] text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-[#9E7A45] transition-colors">
+            <Link href="/admin/produits/nouveau" className="bg-[#B8925A] text-white px-5 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors">
               Ajouter un produit
             </Link>
           )}
@@ -420,7 +420,7 @@ function QuickEditModal({ product, onClose }: { product: Product; onClose: () =>
           <button type="button" onClick={onClose} disabled={pending} className="px-3 py-2 rounded-lg text-sm text-[#020B27] border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-60">
             Annuler
           </button>
-          <button type="button" onClick={save} disabled={pending} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#B8925A] text-white hover:bg-[#9E7A45] transition-colors disabled:opacity-60">
+          <button type="button" onClick={save} disabled={pending} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45] transition-colors disabled:opacity-60">
             {pending ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />} Enregistrer
           </button>
         </div>
@@ -567,7 +567,7 @@ function ProductPreviewModal({ product, onClose }: { product: Product; onClose: 
           <Link href={`/produit/${product.slug}`} target="_blank" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[#020B27] border border-gray-200 hover:bg-gray-50 transition-colors">
             <ExternalLink size={15} /> Voir sur le site
           </Link>
-          <Link href={`/admin/produits/${product.id}/modifier`} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-[#B8925A] text-white hover:bg-[#9E7A45] transition-colors">
+          <Link href={`/admin/produits/${product.id}/modifier`} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45] transition-colors">
             <Pencil size={15} /> Modifier
           </Link>
         </div>

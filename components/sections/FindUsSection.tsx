@@ -118,7 +118,7 @@ export default function FindUsSection() {
 
                 <button
                   type="submit" disabled={sending}
-                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-white py-3 rounded-xl font-bold text-sm transition-colors active:scale-95 disabled:opacity-60"
+                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white py-3 rounded-xl font-bold text-sm transition-colors active:scale-95 disabled:opacity-60"
                 >
                   {sending
                     ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Envoi…</>

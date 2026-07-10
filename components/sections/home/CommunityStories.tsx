@@ -267,7 +267,7 @@ function StoryModal({ product, onClose }: { product: Product; onClose: () => voi
                 disabled={!inStock}
                 className={cn(
                   "flex-1 h-12 rounded-full flex items-center justify-center gap-2 font-bold text-sm transition-colors",
-                  inStock ? "bg-[#B8925A] text-white hover:bg-[#9E7A45]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                  inStock ? "bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
                 )}
               >
                 <ShoppingCart size={17} />

@@ -42,7 +42,7 @@ export default function LivreursContent({ agents, stats }: { agents: DeliveryAge
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           <UserPlus size={16} /> Ajouter un livreur
         </button>
@@ -63,7 +63,7 @@ export default function LivreursContent({ agents, stats }: { agents: DeliveryAge
           <Truck size={48} className="mx-auto text-gray-200 mb-4" />
           <p className="font-semibold text-[#020B27] mb-1">Aucun livreur</p>
           <p className="text-text-secondary text-sm mb-5">Ajoutez vos livreurs pour assigner les commandes et suivre les encaissements.</p>
-          <button onClick={() => setCreating(true)} className="bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+          <button onClick={() => setCreating(true)} className="bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
             Ajouter un livreur
           </button>
         </div>
@@ -200,7 +200,7 @@ function AgentModal({ agent, onClose }: { agent: DeliveryAgent | null; onClose: 
             <button
               type="submit"
               disabled={pending}
-              className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
             >
               {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />}
               {agent ? "Enregistrer" : "Ajouter"}

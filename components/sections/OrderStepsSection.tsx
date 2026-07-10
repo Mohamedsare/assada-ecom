@@ -93,7 +93,7 @@ export default function OrderStepsSection() {
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/boutique"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-white px-6 py-3 rounded-2xl font-bold text-sm transition-colors active:scale-95"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white px-6 py-3 rounded-2xl font-bold text-sm transition-colors active:scale-95"
           >
             Découvrir la boutique <ArrowRight size={17} />
           </Link>

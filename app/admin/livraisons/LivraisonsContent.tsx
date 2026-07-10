@@ -126,7 +126,7 @@ function DeliveryCard({ order }: { order: Order }) {
 
       <div className="flex items-center gap-2 mt-3">
         {nextStatus ? (
-          <button onClick={advance} disabled={pending} className="flex-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
+          <button onClick={advance} disabled={pending} className="flex-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
             {pending ? "…" : `Passer à : ${ORDER_STATUS_LABELS[nextStatus]}`}
           </button>
         ) : (

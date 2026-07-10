@@ -115,7 +115,7 @@ export default function MultiImageUpload({
                 type="button"
                 onClick={() => runStudio(url)}
                 disabled={studioPending}
-                className="absolute bottom-1 right-1 bg-[#B8925A] hover:bg-[#9E7A45] text-white rounded-full p-1 shadow-md transition-colors disabled:opacity-50"
+                className="absolute bottom-1 right-1 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white rounded-full p-1 shadow-md transition-colors disabled:opacity-50"
                 title="Shooting studio IA (détourage + fond blanc)"
               >
                 <Sparkles size={13} />

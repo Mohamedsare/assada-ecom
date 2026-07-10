@@ -443,7 +443,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                 className={cn(
                   "flex-1 min-w-[160px] h-11 rounded-xl flex items-center justify-center gap-2 font-semibold text-sm transition-all",
                   inStock
-                    ? "bg-[#B8925A] text-white hover:bg-[#9E7A45]"
+                    ? "bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45]"
                     : "bg-gray-100 text-gray-300 cursor-not-allowed"
                 )}
               >

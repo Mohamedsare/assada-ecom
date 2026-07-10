@@ -60,7 +60,7 @@ export default function EditorPick({
 
         <button
           onClick={addAll}
-          className="w-full flex items-center justify-center gap-2 bg-green hover:bg-[#9E7A45] text-white font-semibold px-6 py-3.5 rounded-full transition-colors active:scale-[0.98]"
+          className="w-full flex items-center justify-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white font-semibold px-6 py-3.5 rounded-full transition-colors active:scale-[0.98]"
         >
           <ShoppingBag size={18} /> Tout ajouter au panier · {formatPrice(total)}
         </button>

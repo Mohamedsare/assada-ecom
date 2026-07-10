@@ -212,7 +212,7 @@ export default function NouveautesContent({ products, categories }: Props) {
                 <p className="text-text-secondary mb-6">Essayez de modifier vos filtres</p>
                 <button
                   onClick={resetFilters}
-                  className="bg-green text-[#020B27] px-6 py-2.5 rounded-xl font-medium hover:bg-[#9E7A45] transition-colors"
+                  className="bg-green text-[#020B27] px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
                 >
                   Réinitialiser les filtres
                 </button>

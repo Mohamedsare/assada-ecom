@@ -90,7 +90,7 @@ function MessageCard({ message }: { message: ContactMessage }) {
         )}
         {message.email && (
           <a href={`mailto:${message.email}?subject=${encodeURIComponent("Re: " + (message.subject ?? "Votre message"))}`}
-            className="flex items-center gap-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-1.5 rounded-lg hover:bg-[#9E7A45] transition-colors">
+            className="flex items-center gap-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-1.5 rounded-lg btn-sweep hover:bg-[#9E7A45] transition-colors">
             <Mail size={13} /> Répondre
           </a>
         )}

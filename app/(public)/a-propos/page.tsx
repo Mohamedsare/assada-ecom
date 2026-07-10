@@ -79,7 +79,7 @@ export default function AProposPage() {
       </p>
 
       <div className="flex flex-wrap gap-3 not-prose mt-6">
-        <Link href="/boutique" className="inline-flex items-center gap-2 bg-[#B8925A] hover:bg-[#9E7A45] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+        <Link href="/boutique" className="inline-flex items-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
           <Store size={16} /> Découvrir la boutique
         </Link>
         <Link href="/contact" className="inline-flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-[#B8925A] hover:text-[#B8925A] transition-colors">

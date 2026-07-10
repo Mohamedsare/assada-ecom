@@ -106,7 +106,7 @@ export default function SettingsForm({ initial }: { initial: SettingsValues }) {
         <button
           type="submit"
           disabled={saving}
-          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
         >
           <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer les modifications"}
         </button>

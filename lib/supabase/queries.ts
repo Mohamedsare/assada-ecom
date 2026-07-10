@@ -553,6 +553,11 @@ export async function getHeroSlides(): Promise<HeroSlide[]> {
       typeof (v as HeroSlide).url === "string" && (v as HeroSlide).url.trim() !== "" &&
       ((v as HeroSlide).type === "image" || (v as HeroSlide).type === "video"),
     )
-    .map((v) => ({ type: v.type, url: v.url.trim() }));
+    .map((v) => {
+      const slide: HeroSlide = { type: v.type, url: v.url.trim() };
+      if (typeof v.title === "string" && v.title.trim()) slide.title = v.title.trim();
+      if (typeof v.link === "string" && v.link.trim()) slide.link = v.link.trim();
+      return slide;
+    });
   return slides.length > 0 ? slides : DEFAULT_HERO_SLIDES;
 }

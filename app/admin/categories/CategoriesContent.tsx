@@ -42,7 +42,7 @@ export default function CategoriesContent({
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="flex items-center gap-2 bg-green hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           <Plus size={16} /> Ajouter une catégorie
         </button>
@@ -229,7 +229,7 @@ function CategoryModal({ category, categories, onClose }: { category: Category |
           {error && <p className="text-xs text-red-600">{error}</p>}
 
           <div className="flex gap-2 pt-1">
-            <button type="submit" disabled={pending} className="bg-green hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+            <button type="submit" disabled={pending} className="bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
               {pending ? "Enregistrement…" : isEdit ? "Enregistrer" : "Créer la catégorie"}
             </button>
             <button type="button" onClick={onClose} className="text-text-secondary text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">Annuler</button>
