@@ -19,7 +19,7 @@ export async function signIn(formData: FormData) {
   const password = formData.get("password") as string;
 
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyAuthError(error) };
 
   revalidatePath("/", "layout");
   return { success: true };
@@ -41,7 +41,7 @@ export async function signUp(formData: FormData) {
     },
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyAuthError(error) };
   return { success: true };
 }
 
@@ -77,7 +77,7 @@ export async function signInWithGoogle(formData?: FormData) {
       },
     },
   });
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(friendlyAuthError(error));
   if (data.url) redirect(data.url);
 }
 
@@ -100,7 +100,7 @@ export async function updateProfile(formData: FormData) {
   }
 
   const { error } = await supabase.from("profiles").update(updates).eq("id", user.id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
 
   revalidatePath("/compte");
   revalidatePath("/admin", "layout");
@@ -112,7 +112,7 @@ export async function updatePassword(formData: FormData) {
   const password = formData.get("password") as string;
 
   const { error } = await supabase.auth.updateUser({ password });
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyAuthError(error) };
   return { success: true };
 }
 
@@ -140,7 +140,7 @@ export async function createAddress(formData: FormData) {
     is_default,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/compte/adresses");
   return { success: true };
 }
@@ -166,7 +166,7 @@ export async function updateAddress(id: string, formData: FormData) {
     updated_at: new Date().toISOString(),
   }).eq("id", id).eq("user_id", user.id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/compte/adresses");
   return { success: true };
 }
@@ -177,7 +177,7 @@ export async function deleteAddress(id: string) {
   if (!user) return { error: "Non connecté" };
 
   const { error } = await supabase.from("addresses").delete().eq("id", id).eq("user_id", user.id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/compte/adresses");
   return { success: true };
 }
@@ -290,7 +290,7 @@ export async function createOrder(data: {
     .select()
     .single();
 
-  if (orderError) return { error: orderError.message };
+  if (orderError) { console.error("createGuestOrder:", orderError); return { error: friendlyDbError(orderError) }; }
 
   const orderItems = data.items.map((item) => ({
     order_id: order.id,
@@ -306,7 +306,7 @@ export async function createOrder(data: {
   }));
 
   const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
-  if (itemsError) return { error: itemsError.message };
+  if (itemsError) { console.error("createGuestOrder items:", itemsError); return { error: friendlyDbError(itemsError) }; }
 
   // Enregistrer le paiement
   await supabase.from("payments").insert({
@@ -400,14 +400,61 @@ function readProductVariants(formData: FormData): VariantInput[] {
   }
 }
 
+/** Traduit une erreur Postgres/Supabase en message clair pour l'utilisateur. */
+function friendlyDbError(error: { code?: string; message?: string }, context?: string): string {
+  switch (error.code) {
+    case "23505": // unique_violation
+      return context ?? "Cette valeur existe déjà. Modifiez-la puis réessayez.";
+    case "23503": // foreign_key_violation
+      return "Un élément lié est introuvable ou encore utilisé ailleurs.";
+    case "23502": // not_null_violation
+      return "Un champ obligatoire est manquant.";
+    case "23514": // check_violation
+      return "Une valeur saisie n'est pas valide.";
+    case "42501": // insufficient_privilege (RLS)
+      return "Vous n'avez pas les droits pour effectuer cette action.";
+    default:
+      return "Une erreur est survenue. Vérifiez les informations puis réessayez.";
+  }
+}
+
+/** Traduit une erreur d'authentification Supabase en message clair (français). */
+function friendlyAuthError(error: { message?: string }): string {
+  const m = (error.message ?? "").toLowerCase();
+  if (m.includes("invalid login") || m.includes("invalid credentials")) return "E-mail ou mot de passe incorrect.";
+  if (m.includes("already registered") || m.includes("already been registered") || m.includes("already exists"))
+    return "Un compte existe déjà avec cet e-mail.";
+  if (m.includes("password should be") || m.includes("at least 6")) return "Le mot de passe doit contenir au moins 6 caractères.";
+  if (m.includes("email not confirmed")) return "Veuillez confirmer votre e-mail avant de vous connecter.";
+  if (m.includes("rate limit") || m.includes("too many")) return "Trop de tentatives. Réessayez dans quelques minutes.";
+  if (m.includes("invalid email") || m.includes("unable to validate email")) return "Adresse e-mail invalide.";
+  return "Une erreur est survenue. Veuillez réessayer.";
+}
+
+/** Génère un slug unique pour un produit (ajoute -2, -3… si le nom existe déjà). */
+async function uniqueProductSlug(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  base: string,
+  excludeId?: string,
+): Promise<string> {
+  const root = base || "produit";
+  for (let attempt = 0; attempt < 25; attempt++) {
+    const candidate = attempt === 0 ? root : `${root}-${attempt + 1}`;
+    const { data } = await supabase.from("products").select("id").eq("slug", candidate).maybeSingle();
+    if (!data || (excludeId && data.id === excludeId)) return candidate;
+  }
+  return `${root}-${Date.now().toString(36)}`;
+}
+
 export async function adminCreateProduct(formData: FormData) {
   const gate = await ensurePermission("products", "create");
   if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
 
   const name = formData.get("name") as string;
-  const slug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+  const baseSlug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = await uniqueProductSlug(supabase, baseSlug);
 
   const images = readProductImages(formData);
   const mainImage = images[0] || (formData.get("main_image_url") as string) || null;
@@ -434,7 +481,10 @@ export async function adminCreateProduct(formData: FormData) {
     seo_description: formData.get("seo_description") || null,
   }).select().single();
 
-  if (error) return { error: error.message };
+  if (error) {
+    console.error("adminCreateProduct:", error);
+    return { error: friendlyDbError(error, "Un produit portant ce nom existe déjà. Choisissez un autre nom.") };
+  }
 
   if (images.length) {
     await supabase.from("product_images").insert(
@@ -485,7 +535,10 @@ export async function adminUpdateProduct(id: string, formData: FormData) {
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) {
+    console.error("adminUpdateProduct:", error);
+    return { error: friendlyDbError(error, "Un produit portant ce nom existe déjà. Choisissez un autre nom.") };
+  }
 
   // Resynchronise la galerie : on remplace l'ensemble des photos
   await supabase.from("product_images").delete().eq("product_id", id);
@@ -516,7 +569,7 @@ export async function adminDeleteProduct(id: string) {
   if (!gate.ok) throw new Error(gate.error);
   const supabase = await createClient();
   const { error } = await supabase.from("products").delete().eq("id", id);
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(friendlyDbError(error));
   revalidatePath("/admin/produits");
   revalidatePath("/boutique");
 }
@@ -528,7 +581,7 @@ export async function adminToggleProductStatus(id: string, status: string) {
   const { error } = await supabase.from("products")
     .update({ status, updated_at: new Date().toISOString() })
     .eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/produits");
   return { success: true };
 }
@@ -565,7 +618,7 @@ export async function adminQuickUpdateProduct(
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/produits");
   return { success: true };
 }
@@ -590,7 +643,7 @@ export async function adminCreateCategory(formData: FormData) {
     sort_order: Number(formData.get("sort_order") ?? 0),
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/categories");
   return { success: true };
 }
@@ -609,7 +662,7 @@ export async function adminUpdateCategory(id: string, formData: FormData) {
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/categories");
   return { success: true };
 }
@@ -621,7 +674,7 @@ export async function adminToggleCategoryActive(id: string, is_active: boolean) 
   const { error } = await supabase.from("categories")
     .update({ is_active, updated_at: new Date().toISOString() })
     .eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/categories");
   revalidatePath("/boutique");
   return { success: true };
@@ -644,7 +697,7 @@ export async function adminDeleteCategory(id: string) {
     throw new Error(`Impossible de supprimer : ${childCount} sous-catégorie(s) rattachée(s).`);
 
   const { error } = await supabase.from("categories").delete().eq("id", id);
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(friendlyDbError(error));
   revalidatePath("/admin/categories");
   revalidatePath("/boutique");
 }
@@ -667,7 +720,7 @@ export async function adminCreateBrand(formData: FormData) {
     is_active: formData.get("is_active") !== "false",
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/marques");
   return { success: true };
 }
@@ -684,7 +737,7 @@ export async function adminUpdateBrand(id: string, formData: FormData) {
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/marques");
   return { success: true };
 }
@@ -696,7 +749,7 @@ export async function adminToggleBrandActive(id: string, is_active: boolean) {
   const { error } = await supabase.from("brands")
     .update({ is_active, updated_at: new Date().toISOString() })
     .eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/marques");
   revalidatePath("/boutique");
   return { success: true };
@@ -714,7 +767,7 @@ export async function adminDeleteBrand(id: string) {
     throw new Error(`Impossible de supprimer : ${count} produit(s) rattaché(s) à cette marque.`);
 
   const { error } = await supabase.from("brands").delete().eq("id", id);
-  if (error) throw new Error(error.message);
+  if (error) throw new Error(friendlyDbError(error));
   revalidatePath("/admin/marques");
   revalidatePath("/boutique");
 }
@@ -735,7 +788,7 @@ export async function adminUpdateOrderStatus(id: string, status: string) {
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
 
   revalidatePath("/admin/commandes");
   revalidatePath(`/admin/commandes/${id}`);
@@ -752,7 +805,7 @@ export async function adminUpdatePaymentStatus(id: string, status: string) {
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
 
   // Synchronise la ligne de paiement liée si elle existe
   await supabase.from("payments")
@@ -774,7 +827,7 @@ export async function adminUpdateOrderNote(id: string, note: string) {
     updated_at: new Date().toISOString(),
   }).eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath(`/admin/commandes/${id}`);
   return { success: true };
 }
@@ -801,7 +854,7 @@ export async function adminUpdateSettings(formData: FormData) {
   const { error } = await supabase.from("settings").upsert(upserts, { onConflict: "key" });
   if (error) {
     console.error("adminUpdateSettings:", error);
-    return { error: "Enregistrement impossible (droits base de données ?). " + error.message };
+    return { error: friendlyDbError(error) };
   }
 
   revalidatePath("/admin/parametres");
@@ -826,7 +879,7 @@ export async function adminUpdatePageImages(formData: FormData) {
   const { error } = await supabase.from("settings").upsert(rows, { onConflict: "key" });
   if (error) {
     console.error("adminUpdatePageImages:", error);
-    return { error: "Enregistrement impossible (droits base de données ?). " + error.message };
+    return { error: friendlyDbError(error) };
   }
 
   revalidatePath("/", "layout");   // rafraîchit les bannières publiques
@@ -858,7 +911,7 @@ export async function adminUpdateHeroSlides(slides: HeroSlide[]) {
     .upsert({ key: "hero_slides", value: JSON.stringify(clean) }, { onConflict: "key" });
   if (error) {
     console.error("adminUpdateHeroSlides:", error);
-    return { error: "Enregistrement impossible (droits base de données ?). " + error.message };
+    return { error: friendlyDbError(error) };
   }
 
   revalidatePath("/", "layout");
@@ -873,7 +926,7 @@ export async function adminUpdateReviewApproval(id: string, is_approved: boolean
   if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("reviews").update({ is_approved }).eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/avis");
   return { success: true };
 }
@@ -883,7 +936,7 @@ export async function adminDeleteReview(id: string) {
   if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("reviews").delete().eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/avis");
   return { success: true };
 }
@@ -901,7 +954,7 @@ export async function adminUpdatePayment(id: string, status: string) {
     .select("order_id")
     .single();
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
 
   // Synchronise le statut de paiement de la commande liée
   if (payment?.order_id) {
@@ -940,7 +993,7 @@ export async function adminUpdateStock(id: string, stock_quantity: number) {
     })
     .eq("id", id);
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/stocks");
   revalidatePath("/admin/produits");
   revalidatePath("/boutique");
@@ -956,7 +1009,7 @@ export async function adminUpdateUserRole(id: string, role: string) {
   const { error } = await supabase.from("profiles")
     .update({ role, updated_at: new Date().toISOString() })
     .eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/utilisateurs");
   revalidatePath("/admin/clients");
   return { success: true };
@@ -969,7 +1022,7 @@ export async function adminToggleUserActive(id: string, is_active: boolean) {
   const { error } = await supabase.from("profiles")
     .update({ is_active, updated_at: new Date().toISOString() })
     .eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/utilisateurs");
   revalidatePath("/admin/clients");
   return { success: true };
@@ -982,7 +1035,7 @@ export async function adminMarkMessageRead(id: string, is_read: boolean) {
   if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("contact_messages").update({ is_read }).eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/messages");
   return { success: true };
 }
@@ -992,7 +1045,7 @@ export async function adminDeleteMessage(id: string) {
   if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("contact_messages").delete().eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/messages");
   return { success: true };
 }
@@ -1010,7 +1063,7 @@ export async function adminCreateDeliveryAgent(formData: FormData) {
     note: ((formData.get("note") as string) ?? "").trim() || null,
     is_active: formData.get("is_active") === "on" || formData.get("is_active") === "true",
   });
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/livreurs");
   return { success: true };
 }
@@ -1026,7 +1079,7 @@ export async function adminUpdateDeliveryAgent(id: string, formData: FormData) {
     note: ((formData.get("note") as string) ?? "").trim() || null,
     updated_at: new Date().toISOString(),
   }).eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/livreurs");
   return { success: true };
 }
@@ -1037,7 +1090,7 @@ export async function adminToggleDeliveryAgentActive(id: string, is_active: bool
   const supabase = await createClient();
   const { error } = await supabase.from("delivery_agents")
     .update({ is_active, updated_at: new Date().toISOString() }).eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/livreurs");
   return { success: true };
 }
@@ -1047,7 +1100,7 @@ export async function adminDeleteDeliveryAgent(id: string) {
   if (!gate.ok) return { error: gate.error };
   const supabase = await createClient();
   const { error } = await supabase.from("delivery_agents").delete().eq("id", id);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/livreurs");
   return { success: true };
 }
@@ -1059,7 +1112,7 @@ export async function adminAssignOrderAgent(orderId: string, agentId: string) {
   const { error } = await supabase.from("orders")
     .update({ delivery_agent_id: agentId || null, updated_at: new Date().toISOString() })
     .eq("id", orderId);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath(`/admin/commandes/${orderId}`);
   revalidatePath("/admin/livreurs");
   return { success: true };
@@ -1071,7 +1124,7 @@ export async function adminUpdateOrderChannel(orderId: string, channel: string) 
   const supabase = await createClient();
   const { error } = await supabase.from("orders")
     .update({ channel, updated_at: new Date().toISOString() }).eq("id", orderId);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath(`/admin/commandes/${orderId}`);
   return { success: true };
 }
@@ -1105,9 +1158,8 @@ export async function adminCreateEmployee(formData: FormData) {
     user_metadata: { first_name, last_name },
   });
   if (error) {
-    return { error: error.message.includes("already been registered")
-      ? "Un compte existe déjà avec cet email."
-      : error.message };
+    console.error("adminCreateUser:", error);
+    return { error: friendlyAuthError(error) };
   }
 
   const userId = data.user?.id;
@@ -1121,7 +1173,7 @@ export async function adminCreateEmployee(formData: FormData) {
     permissions: defaultEmployeePermissions(),
     updated_at: new Date().toISOString(),
   }).eq("id", userId);
-  if (upErr) return { error: upErr.message };
+  if (upErr) { console.error("adminCreateUser profile:", upErr); return { error: friendlyDbError(upErr) }; }
 
   revalidatePath("/admin/permissions");
   return { success: true };
@@ -1136,7 +1188,7 @@ export async function adminUpdateEmployeePermissions(userId: string, permissions
   const { error } = await supabase.from("profiles")
     .update({ permissions, updated_at: new Date().toISOString() })
     .eq("id", userId);
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   revalidatePath("/admin/permissions");
   return { success: true };
 }
@@ -1214,7 +1266,7 @@ export async function createContactMessage(formData: FormData) {
     message,
   });
 
-  if (error) return { error: error.message };
+  if (error) return { error: friendlyDbError(error) };
   return { success: true };
 }
 
@@ -1235,7 +1287,7 @@ export async function uploadImage(bucket: string, formData: FormData): Promise<{
 
   if (error) {
     console.error("uploadImage:", error);
-    return { error: error.message };
+    return { error: friendlyDbError(error) };
   }
 
   const { data: { publicUrl } } = supabase.storage.from(bucket).getPublicUrl(data.path);
@@ -1291,7 +1343,7 @@ export async function studioProductImage(
 
     if (error) {
       console.error("studioProductImage upload:", error);
-      return { error: error.message };
+      return { error: friendlyDbError(error) };
     }
 
     const { data: { publicUrl } } = supabase.storage.from("products").getPublicUrl(data.path);
