@@ -262,7 +262,7 @@ export async function createOrder(data: {
 
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
-  const order_number = `RYTA-${year}-${random}`;
+  const order_number = `${year}-${random}`;
 
   const estimatedDate = new Date();
   estimatedDate.setDate(estimatedDate.getDate() + 2);

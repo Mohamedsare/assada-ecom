@@ -27,7 +27,7 @@ export function calculateDiscount(oldPrice: number, currentPrice: number): numbe
 export function generateOrderNumber(): string {
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
-  return `RYTA-${year}-${random}`;
+  return `${year}-${random}`;
 }
 
 export function getWhatsAppUrl(message: string): string {
