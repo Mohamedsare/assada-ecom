@@ -2,9 +2,9 @@ import type { Product, Category } from "@/types";
 import type { Univers } from "./NosUnivers";
 
 /**
- * Construit les données « Nos Univers » (les 3 grands axes RYTA) côté serveur,
- * en regroupant les produits par axe (sous-catégories incluses).
- * Repli sur les catégories de tête si aucun axe n'existe encore en base.
+ * Construit les données « Nos Univers » côté serveur : les 3 grands axes RYTA,
+ * chacun avec ses sous-catégories (cercles) et leurs produits, plus un repli
+ * produits au niveau de l'axe (pour les axes sans sous-catégories).
  */
 export function buildUnivers(products: Product[], categories: Category[]): Univers[] {
   const withImage = products.filter((p) => p.main_image_url);
@@ -43,20 +43,32 @@ export function buildUnivers(products: Product[], categories: Category[]): Unive
     { label: "Compléments alimentaires", match: (n) => n.includes("complement") },
     { label: "Produits du terroir", match: (n) => n.includes("loca") || n.includes("terroir") },
   ];
-  const findAxisCat = (axis: (typeof AXES)[number]) => topCats.find((c) => axis.match(norm(c.name)));
 
-  let univers: Univers[] = AXES
-    .map((axis) => ({ axis, cat: findAxisCat(axis) }))
-    .filter((x): x is { axis: (typeof AXES)[number]; cat: Category } => Boolean(x.cat))
-    .map(({ axis, cat }) => ({ name: axis.label, slug: cat.slug, products: productsOf(cat).slice(0, 8) }));
+  const univers: Univers[] = [];
+  for (const axis of AXES) {
+    const cat = topCats.find((c) => axis.match(norm(c.name)));
+    if (!cat) continue;
 
-  // Repli uniquement si AUCUN axe n'existe encore en base.
-  if (univers.length === 0) {
-    univers = topCats
-      .map((c) => ({ name: c.name, slug: c.slug, products: productsOf(c).slice(0, 8) }))
-      .filter((u) => u.products.length >= 2)
-      .slice(0, 5);
+    // Toutes les sous-catégories de l'axe (même sans produit — l'utilisateur veut
+    // pouvoir parcourir la structure ; l'état vide est géré à l'affichage).
+    const subcats = (childrenByParent.get(cat.id) ?? [])
+      .map((c) => ({ name: c.name, slug: c.slug, image: c.image_url, products: productsOf(c).slice(0, 8) }));
+
+    const axisProducts = productsOf(cat).slice(0, 8);
+
+    // On affiche toujours l'axe s'il a des sous-catégories ; sinon seulement s'il a des produits.
+    if (subcats.length > 0 || axisProducts.length > 0) {
+      univers.push({ name: axis.label, slug: cat.slug, subcats, products: axisProducts });
+    }
   }
 
-  return univers;
+  // Repli : si aucun axe reconnu, on prend les catégories de tête avec produits.
+  if (univers.length === 0) {
+    for (const c of topCats) {
+      const p = productsOf(c).slice(0, 8);
+      if (p.length >= 2) univers.push({ name: c.name, slug: c.slug, subcats: [], products: p });
+    }
+  }
+
+  return univers.slice(0, 5);
 }

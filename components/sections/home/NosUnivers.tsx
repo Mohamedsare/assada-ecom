@@ -5,14 +5,22 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
+import SubcatShowcase, { type SubcatItem } from "./SubcatShowcase";
 
 export interface Univers {
   name: string;
   slug: string;
+  /** Sous-catégories de l'axe (cercles) — vide si l'axe n'a pas de sous-catégories. */
+  subcats: SubcatItem[];
+  /** Produits de l'axe (repli quand il n'y a pas de sous-catégories). */
   products: Product[];
 }
 
-/** « Nos Univers » façon apia : onglets de catégories + grille de 4 produits. */
+/**
+ * « Nos Univers » : onglets des 3 grands axes. Cliquer un axe affiche ses
+ * sous-catégories en cercles (façon « Beauté & bien-être ») ; cliquer une
+ * sous-catégorie affiche ses produits.
+ */
 export default function NosUnivers({ univers }: { univers: Univers[] }) {
   const [active, setActive] = useState(0);
   if (univers.length === 0) return null;
@@ -23,13 +31,13 @@ export default function NosUnivers({ univers }: { univers: Univers[] }) {
       <div className="max-w-7xl mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-[#020B27] text-center mb-5">Nos Univers</h2>
 
-        {/* Onglets — sur une seule ligne, scroll horizontal si débordement (mobile) */}
+        {/* Onglets des axes — une seule ligne, scroll horizontal si débordement (mobile) */}
         <div className="flex sm:justify-center gap-x-6 mb-8 border-b border-gray-100 overflow-x-auto scrollbar-hide">
           {univers.map((u, i) => (
             <button
               key={u.slug}
               onClick={() => setActive(i)}
-              className={`relative shrink-0 whitespace-nowrap pb-3 text-sm transition-colors ${
+              className={`relative shrink-0 whitespace-nowrap pb-3 text-base transition-colors ${
                 i === active ? "text-[#020B27] font-semibold" : "text-text-secondary hover:text-[#020B27]"
               }`}
             >
@@ -39,8 +47,10 @@ export default function NosUnivers({ univers }: { univers: Univers[] }) {
           ))}
         </div>
 
-        {/* Grille produits ou état vide */}
-        {current.products.length > 0 ? (
+        {/* Drill-down : sous-catégories en cercles → produits ; sinon grille de l'axe. */}
+        {current.subcats.length > 0 ? (
+          <SubcatShowcase key={current.slug} cats={current.subcats} />
+        ) : current.products.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {current.products.map((p) => (

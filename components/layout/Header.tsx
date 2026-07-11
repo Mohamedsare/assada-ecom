@@ -96,18 +96,22 @@ export default function Header() {
             />
           </Link>
 
-          {/* Desktop Navigation — axes + Coffrets + L'univers, répartis sur deux lignes */}
-          <nav className="hidden lg:flex lg:flex-wrap content-center items-center gap-x-1 gap-y-1 max-w-[560px]">
-            {AXES.map((axis) => (
-              <AxisMegaMenu key={axis.slug} axis={axis} active={false} />
-            ))}
-            <Link
-              href="/coffrets-cadeaux"
-              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-[#B8925A] hover:bg-gray-50 transition-colors whitespace-nowrap"
-            >
-              Coffrets cadeaux
-            </Link>
-            <UniversMenu />
+          {/* Desktop Navigation — 3 axes alignés sur la 1re ligne, Coffrets + L'univers sur la 2e */}
+          <nav className="hidden lg:flex lg:flex-col content-center items-start gap-y-1">
+            <div className="flex items-center gap-x-1">
+              {AXES.map((axis) => (
+                <AxisMegaMenu key={axis.slug} axis={axis} active={false} />
+              ))}
+            </div>
+            <div className="flex items-center gap-x-1">
+              <Link
+                href="/coffrets-cadeaux"
+                className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-[#B8925A] hover:bg-gray-50 transition-colors whitespace-nowrap"
+              >
+                Coffrets cadeaux
+              </Link>
+              <UniversMenu />
+            </div>
           </nav>
 
           {/* Right Actions */}

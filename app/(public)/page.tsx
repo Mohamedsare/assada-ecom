@@ -5,11 +5,9 @@ import CategoriesSection from "@/components/sections/CategoriesSection";
 import FindUsSection from "@/components/sections/FindUsSection";
 import HomeShowcase from "@/components/sections/home/HomeShowcase";
 import NosUnivers from "@/components/sections/home/NosUnivers";
-import BeauteBienEtre from "@/components/sections/home/BeauteBienEtre";
 import FeatureProduct from "@/components/sections/home/FeatureProduct";
 import CommunityStories from "@/components/sections/home/CommunityStories";
 import { buildUnivers } from "@/components/sections/home/buildUnivers";
-import { buildBeautyCats } from "@/components/sections/home/buildBeautyCats";
 import ProductCarousel from "@/components/product/ProductCarousel";
 
 import { getProducts, getCategories } from "@/lib/supabase/queries";
@@ -36,7 +34,6 @@ export default async function HomePage() {
     .map((c) => ({ name: c.name, slug: c.slug, image: c.image_url, emoji: emojiBySlug[c.slug] ?? "🛍️" }));
 
   const univers = buildUnivers(allProducts, allCategories);
-  const beautyCats = buildBeautyCats(allProducts, allCategories);
 
   // Produit signature : un produit vedette (sinon 1er avec image).
   const withImage = allProducts.filter((p) => p.main_image_url);
@@ -48,13 +45,10 @@ export default async function HomePage() {
       {/* 1 — Slider hero */}
       <HeroSection />
 
-      {/* 2 — Nos Univers (les 3 axes) — juste après la bannière */}
+      {/* 2 — Nos Univers (axes → sous-catégories → produits) — juste après la bannière */}
       {univers.length > 0 && <NosUnivers univers={univers} />}
 
-      {/* Beauté & bien-être — juste avant les catégories */}
-      {beautyCats.length >= 2 && <BeauteBienEtre cats={beautyCats} />}
-
-      {/* Produit signature — juste après Beauté & bien-être */}
+      {/* Produit signature */}
       {featureProduct && <FeatureProduct product={featureProduct} />}
 
       {/* 3 — Catégories */}

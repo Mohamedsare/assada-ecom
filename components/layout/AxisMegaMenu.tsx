@@ -58,7 +58,7 @@ export default function AxisMegaMenu({
         onFocus={openMenu}
         onClick={() => setOpen(false)}
         className={cn(
-          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-[#B8925A] hover:bg-gray-50",
+          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors hover:text-[#B8925A] hover:bg-gray-50",
           active || open ? "text-[#B8925A] bg-[#B8925A]/10" : "text-gray-600"
         )}
       >
