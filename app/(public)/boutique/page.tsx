@@ -17,15 +17,14 @@ export default async function BoutiquePage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#F8FAFC]">
-        <div className="bg-gradient-to-r from-[#020B27] to-[#0F172A] text-white py-10 px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="h-8 w-48 bg-white/20 rounded-lg animate-pulse" />
+        <div className="max-w-7xl mx-auto px-4 pt-6 pb-8">
+          <div className="h-4 w-40 bg-gray-200 rounded animate-pulse mb-6" />
+          <div className="h-9 w-56 bg-gray-200 rounded-lg animate-pulse mx-auto mb-8" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl h-72 animate-pulse" />
+            ))}
           </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl h-72 animate-pulse" />
-          ))}
         </div>
       </div>
     }>

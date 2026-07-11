@@ -9,6 +9,7 @@ import {
   User,
   X,
   ChevronRight,
+  Gift,
 } from "lucide-react";
 import { cn, getWhatsAppUrl, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/utils";
 import { AXES, WHATSAPP_NUMBER } from "@/lib/constants";
@@ -62,7 +63,7 @@ export default function Header() {
       )}
     >
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between min-h-16 lg:py-2">
           {/* Menu burger — mobile uniquement, à gauche */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -95,11 +96,17 @@ export default function Header() {
             />
           </Link>
 
-          {/* Desktop Navigation — les 3 grands axes + L'univers RYTA (à droite) */}
-          <nav className="hidden lg:flex items-center gap-1">
+          {/* Desktop Navigation — axes + Coffrets + L'univers, répartis sur deux lignes */}
+          <nav className="hidden lg:flex lg:flex-wrap content-center items-center gap-x-1 gap-y-1 max-w-[560px]">
             {AXES.map((axis) => (
               <AxisMegaMenu key={axis.slug} axis={axis} active={false} />
             ))}
+            <Link
+              href="/coffrets-cadeaux"
+              className="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-[#B8925A] hover:bg-gray-50 transition-colors whitespace-nowrap"
+            >
+              Coffrets cadeaux
+            </Link>
             <UniversMenu />
           </nav>
 
@@ -164,7 +171,7 @@ export default function Header() {
           aria-modal="true"
           aria-label="Menu"
           className={cn(
-            "absolute left-0 top-0 h-full w-[86%] max-w-sm bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-out",
+            "absolute left-0 top-0 h-full w-[92%] max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-out",
             mobileOpen ? "translate-x-0" : "-translate-x-full"
           )}
         >
@@ -190,11 +197,19 @@ export default function Header() {
             <MobileCategoryMenu onNavigate={() => setMobileOpen(false)} />
             <MobileUniversMenu onNavigate={() => setMobileOpen(false)} />
             <Link
+              href="/coffrets-cadeaux"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-between px-5 py-4 border-b border-gray-100 text-base font-bold uppercase tracking-wide text-[#020B27] hover:bg-gray-50 transition-colors"
+            >
+              <span className="flex items-center gap-2.5"><Gift size={18} /> Coffrets cadeaux</span>
+              <ChevronRight size={16} className="text-gray-300" />
+            </Link>
+            <Link
               href="/compte"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-between px-5 py-4 border-b border-gray-100 text-sm font-bold uppercase tracking-wide text-[#020B27] hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-between px-5 py-4 border-b border-gray-100 text-base font-bold uppercase tracking-wide text-[#020B27] hover:bg-gray-50 transition-colors"
             >
-              <span className="flex items-center gap-2.5"><User size={16} /> Mon compte</span>
+              <span className="flex items-center gap-2.5"><User size={18} /> Mon compte</span>
               <ChevronRight size={16} className="text-gray-300" />
             </Link>
 

@@ -48,6 +48,7 @@ const NAV: NavItem[] = [
   {
     label: "Produits", icon: Package, perm: "products", children: [
       { href: "/admin/produits", label: "Tous les produits" },
+      { href: "/admin/coffrets", label: "Coffrets cadeaux" },
       { href: "/admin/stocks", label: "Stocks" },
     ],
   },

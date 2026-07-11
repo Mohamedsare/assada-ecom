@@ -46,7 +46,8 @@ export async function getProducts(options?: {
 
   const { data, error } = await query;
   if (error) { logError("getProducts", error); return []; }
-  return (data ?? []) as Product[];
+  // Les coffrets (packs) ne s'affichent que sur leur page dédiée, jamais dans le catalogue.
+  return (data ?? []).filter((p: Product) => !p.is_pack) as Product[];
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -101,13 +102,13 @@ export async function getRelatedProducts(productId: string, categoryId: string, 
     .eq("status", "active")
     .eq("category_id", categoryId)
     .neq("id", productId)
-    .limit(limit);
+    .limit(limit + 4);
 
   if (error) return [];
-  return (data ?? []) as Product[];
+  return (data ?? []).filter((p: Product) => !p.is_pack).slice(0, limit) as Product[];
 }
 
-// Admin queries — tous les statuts
+// Admin queries — tous les statuts (hors coffrets, gérés séparément)
 export async function getAdminProducts(): Promise<Product[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -122,7 +123,59 @@ export async function getAdminProducts(): Promise<Product[]> {
     .order("created_at", { ascending: false });
 
   if (error) { logError("getAdminProducts", error); return []; }
+  return (data ?? []).filter((p: Product) => !p.is_pack) as Product[];
+}
+
+// ─── PACKS (coffrets cadeaux) ─────────────────────────────────────────────────
+
+const PACK_ITEMS_SELECT = `
+  pack_items:pack_items!pack_items_pack_id_fkey(
+    id, pack_id, product_id, quantity, sort_order,
+    product:products!pack_items_product_id_fkey(
+      id, name, slug, main_image_url, current_price, status
+    )
+  )
+`;
+
+/** Packs publics (actifs) avec leurs produits composants, pour la page Coffrets cadeaux. */
+export async function getPacks(): Promise<Product[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select(`*, category:categories(*), brand:brands(*), images:product_images(*), ${PACK_ITEMS_SELECT}`)
+    .eq("is_pack", true)
+    .eq("status", "active")
+    .order("created_at", { ascending: false });
+
+  if (error) { logError("getPacks", error); return []; }
   return (data ?? []) as Product[];
+}
+
+/** Tous les packs (tous statuts) pour l'admin. */
+export async function getAdminPacks(): Promise<Product[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select(`*, category:categories(*), images:product_images(*), ${PACK_ITEMS_SELECT}`)
+    .eq("is_pack", true)
+    .order("created_at", { ascending: false });
+
+  if (error) { logError("getAdminPacks", error); return []; }
+  return (data ?? []) as Product[];
+}
+
+/** Un pack (tous statuts) par id — pour l'édition admin. */
+export async function getAdminPackById(id: string): Promise<Product | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select(`*, category:categories(*), images:product_images(*), ${PACK_ITEMS_SELECT}`)
+    .eq("id", id)
+    .eq("is_pack", true)
+    .single();
+
+  if (error) { logError("getAdminPackById", error); return null; }
+  return data as Product;
 }
 
 /** Un produit (tous statuts) par id — pour l'édition admin. */

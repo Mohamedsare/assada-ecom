@@ -6,7 +6,7 @@ import { SITE_PHONE, WHATSAPP_NUMBER } from "@/lib/constants";
 
 export default function TopBar() {
   return (
-    <div className="bg-[#F8FAFC] text-[#020B27] text-xs py-2 px-4 hidden md:block border-b border-gray-100">
+    <div className="bg-[#020B27] text-white/80 text-xs py-2 px-4 hidden md:block border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href={`tel:${SITE_PHONE}`} className="flex items-center gap-1.5 hover:text-[#C9A063] transition-colors">

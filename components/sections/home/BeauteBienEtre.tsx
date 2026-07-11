@@ -82,7 +82,7 @@ export default function BeauteBienEtre({ cats }: { cats: BeautyCat[] }) {
         <h2 className="text-2xl md:text-3xl font-bold text-[#020B27] text-center mb-8">Beauté &amp; bien-être</h2>
 
         {/* Boutons ronds — mobile : rangée unique scrollable ; desktop : centrés */}
-        <div className="flex items-start justify-start sm:justify-center sm:flex-wrap gap-6 sm:gap-10 mb-6 overflow-x-auto sm:overflow-visible scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex items-start flex-nowrap gap-6 sm:gap-10 mb-6 overflow-x-auto scrollbar-hide -mx-4 px-4">
           {cats.map((c, i) => {
             const img = circleImage(i);
             return (

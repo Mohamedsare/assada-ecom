@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { SlidersHorizontal, Grid3X3, List, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/product/ProductCard";
 import type { Product, Category, Brand } from "@/types";
 import { formatPrice, cn } from "@/lib/utils";
-import { usePageImage } from "@/stores/config";
 
 const SORT_OPTIONS = [
   { value: "newest", label: "Plus récents" },
@@ -23,7 +23,8 @@ interface Props {
   categories: Category[];
   brands: Brand[];
   bannerTitle?: string;
-  bannerSubtitle?: string;
+  /** Nom de l'élément listé, pour les compteurs (« 12 packs »). */
+  noun?: { one: string; many: string };
 }
 
 export default function BoutiqueContent({
@@ -31,11 +32,11 @@ export default function BoutiqueContent({
   categories,
   brands,
   bannerTitle = "Boutique",
-  bannerSubtitle = "Découvrez toute notre sélection de produits au meilleur prix",
+  noun = { one: "produit", many: "produits" },
 }: Props) {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("categorie") || "";
-  const bannerImg = usePageImage("banner_boutique");
+  const nounFor = (n: number) => (n === 1 ? noun.one : noun.many);
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     initialCategory ? [initialCategory] : []
@@ -51,7 +52,6 @@ export default function BoutiqueContent({
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000000]);
   const [onlyPromo, setOnlyPromo] = useState(false);
   const [sort, setSort] = useState("newest");
-  const [view, setView] = useState<"grid" | "list">("grid");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [page, setPage] = useState(1);
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -256,22 +256,19 @@ export default function BoutiqueContent({
 
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
-      <div
-        className="relative text-white py-16 px-4 overflow-hidden"
-        style={{
-          backgroundImage: `url('${bannerImg}')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-night/35" />
-        <div className="relative max-w-7xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">{bannerTitle}</h1>
-          <p className="text-gray-300">{bannerSubtitle}</p>
-        </div>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 pt-6 pb-8">
+        {/* Fil d'Ariane */}
+        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-6" aria-label="Fil d'Ariane">
+          <Link href="/" className="hover:text-[#020B27] transition-colors">Accueil</Link>
+          <ChevronRight size={13} className="text-gray-300" />
+          <span className="text-[#020B27] font-medium uppercase tracking-wide">{bannerTitle}</span>
+        </nav>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Titre */}
+        <h1 className="text-center text-3xl md:text-4xl font-bold text-[#020B27] tracking-tight mb-8">
+          {bannerTitle}
+        </h1>
+
         <div className="flex gap-8">
           <aside className="hidden lg:block w-44 shrink-0">
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
@@ -281,53 +278,36 @@ export default function BoutiqueContent({
           </aside>
 
           <div className="flex-1 min-w-0">
-            <div className="mb-5 bg-white rounded-2xl px-4 py-3 shadow-sm border border-gray-100 space-y-3">
-              <div className="flex items-center justify-between">
-                <button
-                  onClick={() => setFiltersOpen(true)}
-                  className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#020B27] border border-gray-200 px-4 py-2.5 rounded-xl active:scale-95 transition-all hover:border-green"
-                >
-                  <SlidersHorizontal size={16} />
-                  Filtres
-                </button>
-                <span className="text-sm text-[#64748B] lg:block">
-                  <span className="font-bold text-[#020B27]">{filtered.length}</span>{" "}
-                  produit{filtered.length !== 1 ? "s" : ""}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between gap-3 mb-5">
+              <button
+                onClick={() => setFiltersOpen(true)}
+                className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#020B27] border border-gray-200 px-4 py-2 rounded-xl active:scale-95 transition-all hover:border-green"
+              >
+                <SlidersHorizontal size={16} />
+                Filtres
+              </button>
+              <span className="text-sm text-[#64748B] hidden lg:block">
+                <span className="font-bold text-[#020B27]">{filtered.length}</span>{" "}
+                {nounFor(filtered.length)}
+              </span>
+              <label className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="hidden sm:inline text-gray-500">Trier par :</span>
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
-                  className="flex-1 text-sm border border-gray-200 rounded-xl px-3 py-2.5 outline-none focus:border-green text-[#020B27] bg-white"
+                  className="border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-green bg-white text-[#020B27]"
                 >
                   {SORT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                   ))}
                 </select>
-
-                <div className="flex border border-gray-200 rounded-xl overflow-hidden shrink-0">
-                  <button
-                    onClick={() => setView("grid")}
-                    className={`p-2.5 transition-colors ${view === "grid" ? "bg-green text-white" : "text-gray-400 hover:bg-gray-50 active:bg-gray-100"}`}
-                  >
-                    <Grid3X3 size={18} />
-                  </button>
-                  <button
-                    onClick={() => setView("list")}
-                    className={`p-2.5 transition-colors ${view === "list" ? "bg-green text-white" : "text-gray-400 hover:bg-gray-50 active:bg-gray-100"}`}
-                  >
-                    <List size={18} />
-                  </button>
-                </div>
-              </div>
+              </label>
             </div>
 
             {filtered.length === 0 ? (
               <div className="text-center py-20">
                 <div className="text-5xl mb-4">🔍</div>
-                <h3 className="text-lg font-semibold text-[#020B27] mb-2">Aucun produit trouvé</h3>
+                <h3 className="text-lg font-semibold text-[#020B27] mb-2">Aucun {noun.one} trouvé</h3>
                 <p className="text-[#64748B] mb-6">Essayez de modifier vos filtres</p>
                 <button
                   onClick={resetFilters}
@@ -338,7 +318,7 @@ export default function BoutiqueContent({
               </div>
             ) : (
               <>
-                <div ref={resultsRef} className={`grid gap-4 scroll-mt-24 ${view === "grid" ? "grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"}`}>
+                <div ref={resultsRef} className="grid gap-4 scroll-mt-24 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {paged.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -440,7 +420,7 @@ export default function BoutiqueContent({
               onClick={() => setFiltersOpen(false)}
               className="w-full bg-green text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#9E7A45] active:scale-[0.98] transition-all"
             >
-              Afficher {filtered.length} produit{filtered.length !== 1 ? "s" : ""}
+              Afficher {filtered.length} {nounFor(filtered.length)}
             </button>
           </div>
         </div>

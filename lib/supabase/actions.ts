@@ -575,6 +575,147 @@ export async function adminDeleteProduct(id: string) {
   revalidatePath("/boutique");
 }
 
+// ─── ADMIN — PACKS (coffrets cadeaux) ─────────────────────────────────────────
+
+interface PackItemInput { product_id: string; quantity: number }
+
+/** Lit la composition d'un pack depuis le champ JSON "pack_items" du formulaire. */
+function readPackItems(formData: FormData): PackItemInput[] {
+  const raw = formData.get("pack_items");
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(String(raw)) as Array<{ product_id?: string; quantity?: number | string }>;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .map((v) => ({ product_id: String(v.product_id ?? ""), quantity: Math.max(1, Math.floor(Number(v.quantity) || 1)) }))
+      .filter((v) => v.product_id);
+  } catch {
+    return [];
+  }
+}
+
+export async function adminCreatePack(formData: FormData) {
+  const gate = await ensurePermission("products", "create");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+
+  const name = formData.get("name") as string;
+  const baseSlug = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = await uniqueProductSlug(supabase, baseSlug);
+
+  const images = readProductImages(formData);
+  const mainImage = images[0] || null;
+
+  const { data, error } = await supabase.from("products").insert({
+    name,
+    slug,
+    is_pack: true,
+    category_id: formData.get("category_id") || null,
+    short_description: formData.get("short_description"),
+    description: formData.get("description"),
+    current_price: Number(formData.get("current_price")),
+    old_price: formData.get("old_price") ? Number(formData.get("old_price")) : null,
+    stock_quantity: Number(formData.get("stock_quantity") ?? 0),
+    sku: formData.get("sku") || null,
+    main_image_url: mainImage,
+    is_featured: formData.get("is_featured") === "true",
+    is_new: formData.get("is_new") === "true",
+    is_promo: formData.get("is_promo") === "true",
+    status: formData.get("status") ?? "active",
+    seo_title: formData.get("seo_title") || null,
+    seo_description: formData.get("seo_description") || null,
+  }).select().single();
+
+  if (error) {
+    console.error("adminCreatePack:", error);
+    return { error: friendlyDbError(error, "Un coffret portant ce nom existe déjà. Choisissez un autre nom.") };
+  }
+
+  if (images.length) {
+    await supabase.from("product_images").insert(
+      images.map((url, i) => ({ product_id: data.id, image_url: url, sort_order: i, alt_text: name })),
+    );
+  }
+
+  const packItems = readPackItems(formData);
+  if (packItems.length) {
+    await supabase.from("pack_items").insert(
+      packItems.map((it, i) => ({ pack_id: data.id, product_id: it.product_id, quantity: it.quantity, sort_order: i })),
+    );
+  }
+
+  revalidatePath("/admin/coffrets");
+  revalidatePath("/coffrets-cadeaux");
+  return { success: true, pack: data };
+}
+
+export async function adminUpdatePack(id: string, formData: FormData) {
+  const gate = await ensurePermission("products", "edit");
+  if (!gate.ok) return { error: gate.error };
+  const supabase = await createClient();
+
+  const images = readProductImages(formData);
+  const mainImage = images[0] || null;
+
+  const { error } = await supabase.from("products").update({
+    name: formData.get("name"),
+    category_id: formData.get("category_id") || null,
+    short_description: formData.get("short_description"),
+    description: formData.get("description"),
+    current_price: Number(formData.get("current_price")),
+    old_price: formData.get("old_price") ? Number(formData.get("old_price")) : null,
+    stock_quantity: Number(formData.get("stock_quantity") ?? 0),
+    sku: formData.get("sku") || null,
+    main_image_url: mainImage,
+    is_featured: formData.get("is_featured") === "true",
+    is_new: formData.get("is_new") === "true",
+    is_promo: formData.get("is_promo") === "true",
+    status: formData.get("status") ?? "active",
+    seo_title: formData.get("seo_title") || null,
+    seo_description: formData.get("seo_description") || null,
+    updated_at: new Date().toISOString(),
+  }).eq("id", id).eq("is_pack", true);
+
+  if (error) {
+    console.error("adminUpdatePack:", error);
+    return { error: friendlyDbError(error, "Un coffret portant ce nom existe déjà. Choisissez un autre nom.") };
+  }
+
+  // Resynchronise la galerie
+  await supabase.from("product_images").delete().eq("product_id", id);
+  if (images.length) {
+    await supabase.from("product_images").insert(
+      images.map((url, i) => ({ product_id: id, image_url: url, sort_order: i, alt_text: formData.get("name") })),
+    );
+  }
+
+  // Resynchronise la composition du pack
+  await supabase.from("pack_items").delete().eq("pack_id", id);
+  const packItems = readPackItems(formData);
+  if (packItems.length) {
+    await supabase.from("pack_items").insert(
+      packItems.map((it, i) => ({ pack_id: id, product_id: it.product_id, quantity: it.quantity, sort_order: i })),
+    );
+  }
+
+  revalidatePath("/admin/coffrets");
+  revalidatePath("/coffrets-cadeaux");
+  revalidatePath(`/admin/coffrets/${id}/modifier`);
+  return { success: true };
+}
+
+export async function adminDeletePack(id: string) {
+  const gate = await ensurePermission("products", "delete");
+  if (!gate.ok) throw new Error(gate.error);
+  const supabase = await createClient();
+  // pack_items est supprimé en cascade (FK on delete cascade).
+  const { error } = await supabase.from("products").delete().eq("id", id).eq("is_pack", true);
+  if (error) throw new Error(friendlyDbError(error));
+  revalidatePath("/admin/coffrets");
+  revalidatePath("/coffrets-cadeaux");
+}
+
 export async function adminToggleProductStatus(id: string, status: string) {
   const gate = await ensurePermission("products", "edit");
   if (!gate.ok) return { error: gate.error };

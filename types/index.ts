@@ -76,6 +76,8 @@ export interface Product {
   is_promo: boolean;
   /** Afficher comme carte vidéo dans « Histoires de la communauté » (nécessite video_url). */
   is_story?: boolean;
+  /** Coffret cadeau : ce « produit » est en réalité un pack de plusieurs produits. */
+  is_pack?: boolean;
   status: ProductStatus;
   seo_title?: string;
   seo_description?: string;
@@ -83,8 +85,20 @@ export interface Product {
   brand?: Brand;
   images?: ProductImage[];
   variants?: ProductVariant[];
+  /** Produits composant le pack (uniquement quand is_pack = true). */
+  pack_items?: PackItem[];
   rating?: number;
   review_count?: number;
+}
+
+/** Un produit composant un pack (coffret cadeau). */
+export interface PackItem {
+  id: string;
+  pack_id: string;
+  product_id: string;
+  quantity: number;
+  sort_order: number;
+  product?: Product;
 }
 
 export interface ProductImage {

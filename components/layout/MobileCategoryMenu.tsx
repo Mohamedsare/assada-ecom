@@ -26,9 +26,9 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
               type="button"
               onClick={() => setOpenSlug(expanded ? null : axis.slug)}
               aria-expanded={expanded}
-              className="w-full flex items-center justify-between px-5 py-3.5 text-sm font-semibold text-[#020B27] hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-5 py-3.5 text-base font-semibold text-[#020B27] hover:bg-gray-50 transition-colors"
             >
-              <span className="flex items-center gap-2.5">
+              <span className="flex items-center gap-2.5 whitespace-nowrap">
                 <CategoryIcon slug={axis.slug} size={18} className="text-[#B8925A] shrink-0" />
                 {axis.name}
               </span>
@@ -47,7 +47,7 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
               <Link
                 href={`/boutique?categorie=${axis.slug}`}
                 onClick={onNavigate}
-                className="block pl-12 pr-5 py-2.5 text-[13px] font-medium text-green hover:underline"
+                className="block pl-12 pr-5 py-2.5 text-[15px] font-medium text-green hover:underline"
               >
                 Tout {axis.name}
               </Link>
@@ -56,7 +56,7 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
                   key={cat.slug}
                   href={`/boutique?categorie=${cat.slug}`}
                   onClick={onNavigate}
-                  className="flex items-center gap-2.5 pl-12 pr-5 py-2.5 text-[13px] text-text-secondary hover:text-green hover:bg-white transition-colors"
+                  className="flex items-center gap-2.5 pl-12 pr-5 py-2.5 text-[15px] text-text-secondary hover:text-green hover:bg-white transition-colors"
                 >
                   <CategoryIcon slug={cat.slug} size={15} className="text-[#B8925A]/70 shrink-0" />
                   {cat.name}
