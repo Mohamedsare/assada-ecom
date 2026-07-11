@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { Sparkles } from "lucide-react";
 import type { Product } from "@/types";
 import MiniProductCard from "./MiniProductCard";
 
@@ -89,7 +90,7 @@ export default function SubcatShowcase({ cats }: { cats: SubcatItem[] }) {
               {c.image ? (
                 <Image src={c.image} alt={c.name} fill sizes="(min-width: 1024px) 176px, (min-width: 640px) 160px, 112px" className="object-cover" />
               ) : (
-                <span className="text-4xl sm:text-5xl">{c.emoji ?? "🧴"}</span>
+                <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-[#B8925A]/55" strokeWidth={1.4} />
               )}
             </span>
             <span className={`text-base sm:text-xl lg:text-2xl ${i === active ? "text-[#B8925A] font-semibold" : "text-text-secondary group-hover:text-[#020B27]"}`}>
