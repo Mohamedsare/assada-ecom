@@ -19,9 +19,20 @@
   --color-gray-light: #F8FAFC;
   --color-gray-border: #E5E7EB;
   --color-text-dark: #0F172A;
-  --color-text-secondary: #64748B;
+  --color-text-secondary: #475569;   /* texte secondaire un peu plus intense (était #64748B) */
   --color-red: #EF4444;
   --color-orange: #F97316;
+
+  /* Grises de texte muté légèrement assombries pour une meilleure lisibilité
+     (icônes/labels discrets) — les bordures utilisent gray-100/200, non touchées. */
+  --color-gray-400: #7C8494;         /* était #9CA3AF */
+  --color-gray-500: #556070;         /* était #6B7280 */
+
+  /* Échelle typographique un peu augmentée (~+6 %), sans toucher aux espacements. */
+  --text-xs: 0.8rem;                 /* 12 → 12.8px */
+  --text-sm: 0.925rem;               /* 14 → 14.8px */
+  --text-base: 1.0625rem;            /* 16 → 17px   */
+  --text-lg: 1.1875rem;              /* 18 → 19px   */
 
   /* Tokens sémantiques remappés sur la palette bleu nuit / vert */
   --color-cream: #F8FAFC;
