@@ -237,13 +237,6 @@ export const PAGE_IMAGE_DEFAULTS: Record<string, string> = {
   gallery_3: "/categories/maquillage.jpeg",
   gallery_4: "/categories/soins-cheveux.jpeg",
   gallery_5: "/categories/cadeaux.jpeg",
-  // Cercles « Beauté & bien-être » (accueil) — vide par défaut : repli sur l'emoji de la sous-catégorie
-  bien_etre_1: "",
-  bien_etre_2: "",
-  bien_etre_3: "",
-  bien_etre_4: "",
-  bien_etre_5: "",
-  bien_etre_6: "",
   // Images des méga-menus de navigation (« Images liens »)
   menu_univers_1: "/banners/banner2-accueil.png",
   menu_univers_2: "/banners/banner4-accueil.png",
@@ -304,17 +297,6 @@ export const PAGE_IMAGE_GROUPS: { group: string; items: { key: string; label: st
       { key: "gallery_3", label: "Photo 3" },
       { key: "gallery_4", label: "Photo 4" },
       { key: "gallery_5", label: "Photo 5" },
-    ],
-  },
-  {
-    group: "Bien-être — cercles des sous-catégories (accueil)",
-    items: [
-      { key: "bien_etre_1", label: "Cercle 1 (1ʳᵉ sous-catégorie)" },
-      { key: "bien_etre_2", label: "Cercle 2 (2ᵉ sous-catégorie)" },
-      { key: "bien_etre_3", label: "Cercle 3 (3ᵉ sous-catégorie)" },
-      { key: "bien_etre_4", label: "Cercle 4 (4ᵉ sous-catégorie)" },
-      { key: "bien_etre_5", label: "Cercle 5 (5ᵉ sous-catégorie)" },
-      { key: "bien_etre_6", label: "Cercle 6 (6ᵉ sous-catégorie)" },
     ],
   },
   {

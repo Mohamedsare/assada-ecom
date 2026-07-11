@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import HeroSection from "@/components/sections/HeroSection";
-import CategoriesSection from "@/components/sections/CategoriesSection";
 import FindUsSection from "@/components/sections/FindUsSection";
 import HomeShowcase from "@/components/sections/home/HomeShowcase";
 import NosUnivers from "@/components/sections/home/NosUnivers";
@@ -11,7 +10,6 @@ import { buildUnivers } from "@/components/sections/home/buildUnivers";
 import ProductCarousel from "@/components/product/ProductCarousel";
 
 import { getProducts, getCategories } from "@/lib/supabase/queries";
-import { CATEGORIES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "RYTA — Boutique en ligne n°1 à Casablanca",
@@ -26,12 +24,6 @@ export default async function HomePage() {
     getProducts({ limit: 8 }),
     getCategories(),
   ]);
-
-  // Catégories de tête (parent_id vide) avec leur image gérée en admin ; emoji de repli.
-  const emojiBySlug = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.emoji]));
-  const categoryItems = allCategories
-    .filter((c) => !c.parent_id)
-    .map((c) => ({ name: c.name, slug: c.slug, image: c.image_url, emoji: emojiBySlug[c.slug] ?? "🛍️" }));
 
   const univers = buildUnivers(allProducts, allCategories);
 
@@ -50,9 +42,6 @@ export default async function HomePage() {
 
       {/* Produit signature */}
       {featureProduct && <FeatureProduct product={featureProduct} />}
-
-      {/* 3 — Catégories */}
-      <CategoriesSection items={categoryItems} />
 
       {/* 5 — Derniers produits ajoutés */}
       {latestProducts.length > 0 && (

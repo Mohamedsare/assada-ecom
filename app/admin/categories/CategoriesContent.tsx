@@ -3,13 +3,15 @@
 import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Plus, Pencil, Tag, X, Search, Loader2, Trash2, CornerDownRight } from "lucide-react";
+import { Plus, Pencil, Tag, X, Search, Loader2, Trash2, CornerDownRight, Layers } from "lucide-react";
 import {
   adminCreateCategory, adminUpdateCategory, adminDeleteCategory, adminToggleCategoryActive,
 } from "@/lib/supabase/actions";
 import DeleteForm from "@/components/admin/DeleteForm";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import type { Category } from "@/types";
+
+type Row = { cat: Category; depth: number };
 
 export default function CategoriesContent({
   categories,
@@ -20,31 +22,57 @@ export default function CategoriesContent({
 }) {
   const [editing, setEditing] = useState<Category | null>(null);
   const [creating, setCreating] = useState(false);
+  const [presetParentId, setPresetParentId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
-  const nameById = useMemo(
-    () => Object.fromEntries(categories.map((c) => [c.id, c.name])),
-    [categories],
-  );
+  // Regroupe par parent + tri (ordre d'affichage puis nom).
+  const childrenByParent = useMemo(() => {
+    const map = new Map<string | null, Category[]>();
+    for (const c of categories) {
+      const key = c.parent_id ?? null;
+      const arr = map.get(key) ?? [];
+      arr.push(c);
+      map.set(key, arr);
+    }
+    for (const arr of map.values()) {
+      arr.sort((a, b) => (a.sort_order - b.sort_order) || a.name.localeCompare(b.name));
+    }
+    return map;
+  }, [categories]);
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return categories;
-    return categories.filter((c) => c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q));
-  }, [categories, search]);
+  const roots = childrenByParent.get(null) ?? [];
+
+  // Aplatis récursivement les descendants d'un axe (profondeur pour l'indentation).
+  const descendants = (parentId: string, depth = 1): Row[] =>
+    (childrenByParent.get(parentId) ?? []).flatMap((c) => [{ cat: c, depth }, ...descendants(c.id, depth + 1)]);
+
+  const q = search.trim().toLowerCase();
+  const matches = (c: Category) => !q || c.name.toLowerCase().includes(q) || c.slug.toLowerCase().includes(q);
+
+  // Sections = un axe + ses descendants ; affichée si l'axe ou un descendant correspond à la recherche.
+  const sections = roots
+    .map((root) => ({ root, rows: descendants(root.id) }))
+    .filter(({ root, rows }) => matches(root) || rows.some((r) => matches(r.cat)));
+
+  const openCreateRoot = () => { setPresetParentId(null); setCreating(true); };
+  const openCreateChild = (parentId: string) => { setPresetParentId(parentId); setCreating(true); };
+
+  const subCount = categories.filter((c) => c.parent_id).length;
 
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-xl font-bold text-[#020B27]">Catégories</h1>
-          <p className="text-text-secondary text-sm mt-0.5">{categories.length} catégories</p>
+          <p className="text-text-secondary text-sm mt-0.5">
+            {roots.length} axe{roots.length > 1 ? "s" : ""} · {subCount} sous-catégorie{subCount > 1 ? "s" : ""}
+          </p>
         </div>
         <button
-          onClick={() => setCreating(true)}
+          onClick={openCreateRoot}
           className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
-          <Plus size={16} /> Ajouter une catégorie
+          <Plus size={16} /> Ajouter un axe
         </button>
       </div>
 
@@ -58,84 +86,113 @@ export default function CategoriesContent({
         />
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                {["Catégorie", "Slug", "Produits", "Ordre", "Statut", "Actions"].map((h) => (
-                  <th key={h} className="text-left text-xs text-text-secondary font-medium py-3 px-4 whitespace-nowrap">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {filtered.length === 0 ? (
-                <tr><td colSpan={6} className="py-12 text-center text-text-secondary text-sm">Aucune catégorie trouvée.</td></tr>
-              ) : filtered.map((cat) => {
-                const count = counts[cat.id] ?? 0;
-                const parentName = cat.parent_id ? nameById[cat.parent_id] : null;
-                return (
-                  <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4 whitespace-nowrap">
-                      <div className="flex items-center gap-3">
+      {sections.length === 0 ? (
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm py-12 text-center text-text-secondary text-sm">
+          Aucune catégorie trouvée.
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {sections.map(({ root, rows }) => (
+            <div key={root.id} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+              {/* En-tête de l'axe */}
+              <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 border-b border-gray-100">
+                <div className="w-11 h-11 bg-green/10 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
+                  {root.image_url ? (
+                    <Image src={root.image_url} alt={root.name} width={44} height={44} className="object-cover w-full h-full" />
+                  ) : (
+                    <Layers size={18} className="text-green" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-bold text-[#020B27] truncate">{root.name}</p>
+                  <p className="text-xs text-text-secondary">
+                    {rows.length} sous-catégorie{rows.length > 1 ? "s" : ""}
+                  </p>
+                </div>
+                <ActiveToggle category={root} />
+                <button
+                  onClick={() => openCreateChild(root.id)}
+                  className="flex items-center gap-1.5 text-xs font-medium text-green border border-green/40 hover:bg-green/10 px-3 py-1.5 rounded-lg transition-colors"
+                  title="Ajouter une sous-catégorie à cet axe"
+                >
+                  <Plus size={14} /> Sous-catégorie
+                </button>
+                <button
+                  onClick={() => setEditing(root)}
+                  className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors"
+                  title="Modifier l'axe"
+                >
+                  <Pencil size={15} />
+                </button>
+              </div>
+
+              {/* Sous-catégories de l'axe */}
+              {rows.length === 0 ? (
+                <p className="px-4 py-6 text-center text-sm text-text-secondary">
+                  Aucune sous-catégorie. Cliquez sur « Sous-catégorie » pour en ajouter une.
+                </p>
+              ) : (
+                <ul className="divide-y divide-gray-50">
+                  {rows.map(({ cat, depth }) => {
+                    const count = counts[cat.id] ?? 0;
+                    return (
+                      <li key={cat.id} className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                        <span style={{ width: (depth - 1) * 20 }} className="shrink-0" aria-hidden="true" />
+                        {depth > 1 && <CornerDownRight size={13} className="text-gray-300 shrink-0" />}
                         <div className="w-9 h-9 bg-green/10 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
                           {cat.image_url ? (
                             <Image src={cat.image_url} alt={cat.name} width={36} height={36} className="object-cover w-full h-full" />
                           ) : (
-                            <Tag size={15} className="text-green" />
+                            <Tag size={14} className="text-green" />
                           )}
                         </div>
-                        <div>
-                          <span className="text-sm font-medium text-[#020B27]">{cat.name}</span>
-                          {parentName && (
-                            <p className="text-xs text-text-secondary flex items-center gap-1">
-                              <CornerDownRight size={11} /> {parentName}
-                            </p>
-                          )}
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-[#020B27] truncate">{cat.name}</p>
+                          <p className="text-xs text-text-secondary truncate">{cat.slug}</p>
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm text-text-secondary">{cat.slug}</span></td>
-                    <td className="py-3 px-4 whitespace-nowrap">
-                      <span className={`text-sm font-medium ${count > 0 ? "text-[#020B27]" : "text-gray-400"}`}>{count}</span>
-                    </td>
-                    <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm text-text-secondary">{cat.sort_order}</span></td>
-                    <td className="py-3 px-4 whitespace-nowrap"><ActiveToggle category={cat} /></td>
-                    <td className="py-3 px-4 whitespace-nowrap">
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => setEditing(cat)}
-                          className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors"
-                          title="Modifier"
-                        >
-                          <Pencil size={15} />
-                        </button>
-                        {count > 0 ? (
+                        <span className={`text-xs font-medium shrink-0 ${count > 0 ? "text-[#020B27]" : "text-gray-400"}`}>
+                          {count} produit{count > 1 ? "s" : ""}
+                        </span>
+                        <div className="shrink-0"><ActiveToggle category={cat} /></div>
+                        <div className="flex items-center gap-1 shrink-0">
                           <button
-                            disabled
-                            className="p-1.5 rounded-lg text-gray-300 cursor-not-allowed"
-                            title={`Impossible de supprimer : ${count} produit(s) rattaché(s)`}
+                            onClick={() => openCreateChild(cat.id)}
+                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-green transition-colors"
+                            title="Ajouter une sous-catégorie"
                           >
-                            <Trash2 size={15} />
+                            <Plus size={14} />
                           </button>
-                        ) : (
-                          <DeleteForm action={adminDeleteCategory.bind(null, cat.id)} name={cat.name} iconSize={15} />
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                          <button
+                            onClick={() => setEditing(cat)}
+                            className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors"
+                            title="Modifier"
+                          >
+                            <Pencil size={15} />
+                          </button>
+                          {count > 0 ? (
+                            <button disabled className="p-1.5 rounded-lg text-gray-300 cursor-not-allowed" title={`Impossible de supprimer : ${count} produit(s) rattaché(s)`}>
+                              <Trash2 size={15} />
+                            </button>
+                          ) : (
+                            <DeleteForm action={adminDeleteCategory.bind(null, cat.id)} name={cat.name} iconSize={15} />
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          ))}
         </div>
-      </div>
+      )}
 
       {(creating || editing) && (
         <CategoryModal
           category={editing}
           categories={categories}
-          onClose={() => { setCreating(false); setEditing(null); }}
+          presetParentId={presetParentId}
+          onClose={() => { setCreating(false); setEditing(null); setPresetParentId(null); }}
         />
       )}
     </div>
@@ -160,7 +217,7 @@ function ActiveToggle({ category }: { category: Category }) {
     <button
       onClick={toggle}
       disabled={pending}
-      className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 transition-colors disabled:opacity-60 ${
+      className={`text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1 transition-colors disabled:opacity-60 shrink-0 ${
         active ? "bg-green-50 text-green hover:bg-green-100" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
       }`}
       title="Cliquer pour changer le statut"
@@ -171,7 +228,7 @@ function ActiveToggle({ category }: { category: Category }) {
   );
 }
 
-function CategoryModal({ category, categories, onClose }: { category: Category | null; categories: Category[]; onClose: () => void }) {
+function CategoryModal({ category, categories, presetParentId, onClose }: { category: Category | null; categories: Category[]; presetParentId?: string | null; onClose: () => void }) {
   const isEdit = !!category;
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -186,6 +243,8 @@ function CategoryModal({ category, categories, onClose }: { category: Category |
       else onClose();
     });
   };
+
+  const defaultParent = category?.parent_id ?? presetParentId ?? "";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -203,13 +262,13 @@ function CategoryModal({ category, categories, onClose }: { category: Category |
             <textarea name="description" defaultValue={category?.description ?? ""} rows={2} placeholder="Description courte…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
           </div>
 
-          <ImageUploadField name="image_url" bucket="categories" label="Image" defaultValue={category?.image_url} />
+          <ImageUploadField name="image_url" bucket="categories" label="Image (affichée dans les cercles « Nos Univers »)" defaultValue={category?.image_url} />
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Catégorie parente</label>
-              <select name="parent_id" defaultValue={category?.parent_id ?? ""} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
-                <option value="">Aucune</option>
+              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Axe / catégorie parente</label>
+              <select name="parent_id" defaultValue={defaultParent} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
+                <option value="">Aucune (axe principal)</option>
                 {categories.filter((c) => c.id !== category?.id).map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
