@@ -13,7 +13,7 @@ export default async function CompteLayout({ children }: { children: React.React
     <>
       <ConfigHydrator deliveryFee={config.deliveryFee} freeDeliveryThreshold={config.freeDeliveryThreshold} />
       <TopBar />
-      <Header logoUrl={config.logoUrl} />
+      <Header />
       <main className="flex-1 bg-[#F8FAFC]">
         <div className="max-w-6xl mx-auto px-4 py-6 md:py-8">
           <div className="grid lg:grid-cols-4 gap-6">

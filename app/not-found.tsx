@@ -5,6 +5,7 @@ import { Home, Search, Store, Sparkles, Tag, ArrowRight } from "lucide-react";
 import CategoryIcon from "@/components/ui/CategoryIcon";
 import { CATEGORIES } from "@/lib/constants";
 import { getWhatsAppUrl, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/utils";
+import { getShopLogo } from "@/lib/supabase/queries";
 
 export const metadata: Metadata = {
   title: "Page introuvable (404)",
@@ -18,13 +19,14 @@ const QUICK_LINKS = [
   { href: "/promotions", label: "Promotions", icon: Tag },
 ];
 
-export default function NotFound() {
+export default async function NotFound() {
+  const logoUrl = await getShopLogo();
   return (
     <main className="min-h-screen flex flex-col bg-gradient-to-b from-[#0A2A52] via-[#0E2440] to-[#0A2A52] text-white">
       {/* Logo */}
       <div className="px-4 py-6">
         <Link href="/" className="inline-flex items-center" aria-label="RYTA — Accueil">
-          <Image src="/ryta.png" alt="RYTA" width={200} height={130} priority className="h-12 w-auto object-contain" />
+          <Image src={logoUrl} alt="RYTA" width={200} height={130} priority className="h-12 w-auto object-contain" />
         </Link>
       </div>
 

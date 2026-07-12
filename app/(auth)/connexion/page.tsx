@@ -8,8 +8,10 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { signInWithGoogle } from "@/lib/supabase/actions";
 import BackButton from "@/components/ui/BackButton";
+import { useShopLogo } from "@/components/layout/LogoProvider";
 
 function ConnexionForm() {
+  const logoUrl = useShopLogo();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") ?? "/compte";
@@ -74,7 +76,7 @@ function ConnexionForm() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/">
-            <Image src="/ryta.png" alt="RYTA" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
+            <Image src={logoUrl} alt="RYTA" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
           </Link>
           <h1 className="text-2xl font-bold text-[#0A2A52] mt-4">Connexion</h1>
           <p className="text-[#64748B] text-sm mt-1">Connectez-vous à votre compte</p>

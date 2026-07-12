@@ -22,6 +22,7 @@ import AxisMegaMenu from "@/components/layout/AxisMegaMenu";
 import MobileUniversMenu from "@/components/layout/MobileUniversMenu";
 import MobileCategoryMenu from "@/components/layout/MobileCategoryMenu";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { useShopLogo } from "@/components/layout/LogoProvider";
 
 const SOCIAL_LINKS = [
   { label: "TikTok", href: "https://www.tiktok.com/@ryta" },
@@ -29,7 +30,8 @@ const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/ryta" },
 ] as const;
 
-export default function Header({ logoUrl = "/ryta.png" }: { logoUrl?: string }) {
+export default function Header() {
+  const logoUrl = useShopLogo();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);

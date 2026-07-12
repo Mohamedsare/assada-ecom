@@ -17,7 +17,7 @@ export default async function PublicLayout({
     <>
       <ConfigHydrator deliveryFee={config.deliveryFee} freeDeliveryThreshold={config.freeDeliveryThreshold} images={images} heroSlides={heroSlides} />
       <TopBar />
-      <Header logoUrl={config.logoUrl} />
+      <Header />
       <main className="flex-1">{children}</main>
       <SiteFooter />
       {/* Espace bas pour ne pas passer sous la barre fixe (mobile uniquement) */}

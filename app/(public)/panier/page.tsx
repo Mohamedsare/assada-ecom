@@ -4,12 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   Trash2, Plus, Minus, ShoppingCart, ArrowLeft,
-  Truck, ShieldCheck, RotateCcw, Headphones, ChevronRight,
+  Truck, ShieldCheck, RotateCcw, Headphones, ChevronRight, MessageCircle,
 } from "lucide-react";
 import { useCartStore } from "@/stores/cart";
 import { useConfigStore } from "@/stores/config";
 import { addToast } from "@/lib/ui-actions";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getCartOrderWhatsAppUrl } from "@/lib/utils";
 
 export default function PanierPage() {
   const items       = useCartStore((s) => s.items);
@@ -39,6 +39,20 @@ export default function PanierPage() {
   const subtotal    = totalPrice();
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
   const total       = subtotal + deliveryFee;
+
+  // Message WhatsApp : tout le panier (images + livraison incluse dans le total)
+  const whatsappOrderUrl = getCartOrderWhatsAppUrl({
+    deliveryFee,
+    items: items.map((it) => ({
+      name: it.product.name,
+      brand: it.product.brand?.name,
+      color: it.variant?.color,
+      size: it.variant?.size,
+      quantity: it.quantity,
+      unitPrice: it.product.current_price + (it.variant?.price_adjustment ?? 0),
+      imageUrl: it.product.main_image_url,
+    })),
+  });
 
   /* ── Panier vide ── */
   if (items.length === 0) {
@@ -244,6 +258,15 @@ export default function PanierPage() {
                 Passer la commande
                 <ChevronRight size={18} />
               </Link>
+              <a
+                href={whatsappOrderUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 border border-green text-green py-3.5 rounded-2xl font-bold text-sm mt-3 hover:bg-green/5 active:scale-95 transition-all"
+              >
+                <MessageCircle size={16} />
+                Commander sur WhatsApp
+              </a>
               <Link
                 href="/boutique"
                 className="w-full flex items-center justify-center gap-2 border border-gray-200 text-[#0A2A52] py-3.5 rounded-2xl font-medium text-sm mt-3 hover:bg-gray-50 active:scale-95 transition-all"

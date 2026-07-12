@@ -6,6 +6,8 @@ import {
 } from "@/lib/constants";
 import { storeJsonLd, websiteJsonLd } from "@/lib/seo";
 import JsonLd from "@/components/seo/JsonLd";
+import { LogoProvider } from "@/components/layout/LogoProvider";
+import { getShopLogo } from "@/lib/supabase/queries";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,16 +68,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const logoUrl = await getShopLogo();
   return (
     <html lang="fr" className={geistSans.variable}>
       <body className="min-h-screen flex flex-col antialiased">
         <JsonLd data={[storeJsonLd, websiteJsonLd]} />
-        {children}
+        <LogoProvider logoUrl={logoUrl}>{children}</LogoProvider>
       </body>
     </html>
   );

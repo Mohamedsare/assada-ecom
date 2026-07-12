@@ -25,6 +25,7 @@ import { formatPrice, calculateDiscount, getWhatsAppUrl, getProductOrderWhatsApp
 import { colorToHex, isLightColor } from "@/lib/colors";
 import type { Product, ProductVariant } from "@/types";
 import { useCartStore } from "@/stores/cart";
+import { useConfigStore } from "@/stores/config";
 import { openCartDrawer, addToast } from "@/lib/ui-actions";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -54,6 +55,8 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
 export default function ProductPageContent({ product, relatedProducts }: Props) {
   const cartItems  = useCartStore((s) => s.items);
   const _addItem   = useCartStore((s) => s.addItem);
+  const deliveryFeeSetting    = useConfigStore((s) => s.deliveryFee);
+  const freeDeliveryThreshold = useConfigStore((s) => s.freeDeliveryThreshold);
 
   const images = product.images?.length ? product.images : product.main_image_url
     ? [{ id: "main", product_id: product.id, image_url: product.main_image_url, alt_text: product.name, sort_order: 0 }]
@@ -136,6 +139,10 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
     `Bonjour RYTA, je suis intéressé par ce produit : ${product.name}\nLien : ${pageUrl}`
   );
 
+  // Frais de livraison : gratuite au-dessus du seuil, sinon frais fixes (réglages boutique)
+  const orderDeliveryFee =
+    effectivePrice * quantity >= freeDeliveryThreshold ? 0 : deliveryFeeSetting;
+
   // Commande complète : reprend toutes les options choisies par le client
   const whatsappOrderMsg = getProductOrderWhatsAppUrl({
     name: product.name,
@@ -144,7 +151,8 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
     size: selectedSize,
     quantity,
     unitPrice: effectivePrice,
-    url: pageUrl,
+    imageUrl: product.main_image_url,
+    deliveryFee: orderDeliveryFee,
   });
 
   const tabs = [

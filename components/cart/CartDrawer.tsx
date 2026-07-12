@@ -11,13 +11,12 @@ import {
   Trash2,
   Truck,
   ArrowRight,
+  MessageCircle,
 } from "lucide-react";
 import { useUIStore } from "@/stores/ui";
 import { useCartStore } from "@/stores/cart";
-import { formatPrice, cn } from "@/lib/utils";
-
-const DELIVERY_FEE = 2000;
-const FREE_DELIVERY_THRESHOLD = 300;
+import { useConfigStore } from "@/stores/config";
+import { formatPrice, cn, getCartOrderWhatsAppUrl } from "@/lib/utils";
 
 export default function CartDrawer() {
   const cartDrawerOpen  = useUIStore((s) => s.cartDrawerOpen);
@@ -30,6 +29,8 @@ export default function CartDrawer() {
   const _removeItem    = useCartStore((s) => s.removeItem);
   const _updateQty     = useCartStore((s) => s.updateQuantity);
   const _clearCart     = useCartStore((s) => s.clearCart);
+  const DELIVERY_FEE            = useConfigStore((s) => s.deliveryFee);
+  const FREE_DELIVERY_THRESHOLD = useConfigStore((s) => s.freeDeliveryThreshold);
 
   const removeItem = (itemId: string, productName?: string) => {
     _removeItem(itemId);
@@ -52,6 +53,20 @@ export default function CartDrawer() {
   const deliveryFee = subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
   const total       = subtotal + deliveryFee;
   const progress    = Math.min((subtotal / FREE_DELIVERY_THRESHOLD) * 100, 100);
+
+  // Message WhatsApp : tout le panier (images + livraison incluse dans le total)
+  const whatsappOrderUrl = getCartOrderWhatsAppUrl({
+    deliveryFee,
+    items: items.map((it) => ({
+      name: it.product.name,
+      brand: it.product.brand?.name,
+      color: it.variant?.color,
+      size: it.variant?.size,
+      quantity: it.quantity,
+      unitPrice: it.product.current_price + (it.variant?.price_adjustment ?? 0),
+      imageUrl: it.product.main_image_url,
+    })),
+  });
 
   // Lock body scroll when open
   useEffect(() => {
@@ -272,6 +287,17 @@ export default function CartDrawer() {
                 Passer la commande
                 <ArrowRight size={16} />
               </Link>
+
+              <a
+                href={whatsappOrderUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeCartDrawer}
+                className="w-full flex items-center justify-center gap-2 border border-[#2F9E44] text-[#2F9E44] hover:bg-[#2F9E44]/5 py-3 rounded-xl font-bold text-sm transition-colors"
+              >
+                <MessageCircle size={16} />
+                Commander sur WhatsApp
+              </a>
 
               <Link
                 href="/panier"

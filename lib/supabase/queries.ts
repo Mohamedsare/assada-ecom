@@ -561,12 +561,11 @@ function readSettingNumber(raw: unknown, fallback: number): number {
  * Configuration boutique consommée par le panier / checkout (frais de livraison,
  * seuil de gratuité). Lit les Paramètres en base avec repli sur les constantes.
  */
-export async function getStoreConfig(): Promise<{ deliveryFee: number; freeDeliveryThreshold: number; logoUrl: string }> {
+export async function getStoreConfig(): Promise<{ deliveryFee: number; freeDeliveryThreshold: number }> {
   const s = await getSettings();
   return {
     deliveryFee: readSettingNumber(s.delivery_fee, DEFAULT_DELIVERY_FEE),
     freeDeliveryThreshold: readSettingNumber(s.free_delivery_threshold, DEFAULT_FREE_DELIVERY_THRESHOLD),
-    logoUrl: readSettingString(s.shop_logo) || "/ryta.png",
   };
 }
 

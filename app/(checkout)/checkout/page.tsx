@@ -9,6 +9,7 @@ import { useCartStore } from "@/stores/cart";
 import { useConfigStore } from "@/stores/config";
 import { formatPrice } from "@/lib/utils";
 import { createOrder } from "@/lib/supabase/actions";
+import { useShopLogo } from "@/components/layout/LogoProvider";
 
 const DELIVERY_CITIES = ["Casablanca"];
 
@@ -44,6 +45,7 @@ function Field({ label, required, error, children }: {
 const inputCls = "w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/10 transition-all placeholder:text-gray-400 bg-white";
 
 export default function CheckoutPage() {
+  const logoUrl    = useShopLogo();
   const router     = useRouter();
   const items      = useCartStore(s => s.items);
   const totalPrice = useCartStore(s => s.totalPrice);
@@ -167,7 +169,7 @@ export default function CheckoutPage() {
             <ChevronLeft size={16} /> <span className="hidden sm:inline">Panier</span>
           </Link>
           <Link href="/" className="justify-self-center flex items-center shrink-0">
-            <Image src="/ryta.png" alt="RYTA" width={220} height={150} priority className="h-10 w-auto object-contain" />
+            <Image src={logoUrl} alt="RYTA" width={220} height={150} priority className="h-10 w-auto object-contain" />
           </Link>
           <span className="justify-self-end flex items-center gap-1 text-gray-400 text-xs">
             <Lock size={11} /> <span className="hidden sm:inline">Sécurisé</span>

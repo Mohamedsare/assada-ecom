@@ -34,6 +34,7 @@ import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 import { signOut } from "@/lib/supabase/actions";
 import { hasPermission, isFullAccessRole, type PermissionModuleKey } from "@/lib/permissions";
 import AdminSearch from "@/components/admin/AdminSearch";
+import { useShopLogo } from "@/components/layout/LogoProvider";
 import type { PermissionMatrix, UserRole } from "@/types";
 
 type NavIcon = typeof LayoutDashboard;
@@ -120,18 +121,18 @@ export interface AdminNotification {
 }
 
 export default function AdminLayoutClient({
-  children, adminName, adminRole, adminAvatar = null, logoUrl = "/ryta.png", role = "admin", permissions = {}, notifications, pendingOrders = 0,
+  children, adminName, adminRole, adminAvatar = null, role = "admin", permissions = {}, notifications, pendingOrders = 0,
 }: {
   children: React.ReactNode;
   adminName: string;
   adminRole: string;
   adminAvatar?: string | null;
-  logoUrl?: string;
   role?: UserRole;
   permissions?: PermissionMatrix;
   notifications: AdminNotification[];
   pendingOrders?: number;
 }) {
+  const logoUrl = useShopLogo();
   const nav = visibleNav(role, permissions);
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);

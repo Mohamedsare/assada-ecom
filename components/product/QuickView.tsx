@@ -13,6 +13,7 @@ import { colorToHex, isLightColor } from "@/lib/colors";
 import type { Product, ProductVariant } from "@/types";
 import { useUIStore } from "@/stores/ui";
 import { useCartStore } from "@/stores/cart";
+import { useConfigStore } from "@/stores/config";
 
 export default function QuickView() {
   const [mounted, setMounted] = useState(false);
@@ -65,6 +66,8 @@ function QuickViewOverlay({ product }: { product: Product | null }) {
 function QuickViewCard({ product, onClose }: { product: Product; onClose: () => void }) {
   const cartItems = useCartStore((s) => s.items);
   const _addItem = useCartStore((s) => s.addItem);
+  const deliveryFeeSetting    = useConfigStore((s) => s.deliveryFee);
+  const freeDeliveryThreshold = useConfigStore((s) => s.freeDeliveryThreshold);
   const addToast = useUIStore((s) => s.addToast);
   const openCartDrawer = useUIStore((s) => s.openCartDrawer);
 
@@ -131,7 +134,9 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
     size: selectedSize,
     quantity,
     unitPrice: effectivePrice,
-    url: typeof window !== "undefined" ? `${window.location.origin}/produit/${product.slug}` : undefined,
+    imageUrl: product.main_image_url,
+    deliveryFee:
+      effectivePrice * quantity >= freeDeliveryThreshold ? 0 : deliveryFeeSetting,
   });
 
   return (
