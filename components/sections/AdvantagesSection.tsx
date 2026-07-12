@@ -42,7 +42,7 @@ export default function AdvantagesSection() {
                 <Icon size={18} />
               </div>
               <div className="min-w-0">
-                <p className="font-semibold text-[#020B27] text-xs leading-tight">{adv.title}</p>
+                <p className="font-semibold text-[#0A2A52] text-xs leading-tight">{adv.title}</p>
                 <p className="text-text-secondary text-[11px] mt-0.5 leading-tight">{adv.description}</p>
               </div>
             </div>

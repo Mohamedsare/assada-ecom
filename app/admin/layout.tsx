@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentProfile, getAdminOrders, getAdminProducts } from "@/lib/supabase/queries";
+import { getCurrentProfile, getAdminOrders, getAdminProducts, getShopLogo } from "@/lib/supabase/queries";
 import AdminLayoutClient, { type AdminNotification } from "./AdminLayoutClient";
 import RealtimeRefresh from "@/components/admin/RealtimeRefresh";
 
@@ -38,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const adminRole = ROLE_LABELS[profile.role] ?? "Admin";
 
   // Notifications réelles : commandes récentes + alertes de stock faible
-  const [orders, products] = await Promise.all([getAdminOrders(), getAdminProducts()]);
+  const [orders, products, logoUrl] = await Promise.all([getAdminOrders(), getAdminProducts(), getShopLogo()]);
 
   const notifications: AdminNotification[] = orders.slice(0, 4).map((o) => {
     const delivered = o.order_status === "delivered";
@@ -67,6 +67,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       adminName={adminName}
       adminRole={adminRole}
       adminAvatar={profile.avatar_url ?? null}
+      logoUrl={logoUrl}
       role={profile.role}
       permissions={profile.permissions ?? {}}
       notifications={notifications}

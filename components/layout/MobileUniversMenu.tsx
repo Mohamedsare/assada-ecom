@@ -20,10 +20,10 @@ export default function MobileUniversMenu({ onNavigate }: { onNavigate: () => vo
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="w-full flex items-center justify-between px-5 py-3.5 text-base font-semibold text-[#020B27] hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between px-5 py-3.5 text-base font-semibold text-[#0A2A52] hover:bg-gray-50 transition-colors"
       >
         <span className="flex items-center gap-2.5">
-          <Sparkles size={18} className="text-[#B8925A] shrink-0" />
+          <Sparkles size={18} className="text-[#2F9E44] shrink-0" />
           L&apos;univers RYTA
         </span>
         <ChevronDown

@@ -56,12 +56,12 @@ export default function Invoice({
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push(`/admin/commandes/${order.id}`)}
-            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors"
+            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors"
           >
             <ArrowLeft size={18} />
           </button>
           <div>
-            <h1 className="text-xl font-bold text-[#020B27]">Facture {invoiceNumber}</h1>
+            <h1 className="text-xl font-bold text-[#0A2A52]">Facture {invoiceNumber}</h1>
             <p className="text-sm text-[#64748B]">Commande {order.order_number}</p>
           </div>
         </div>
@@ -69,26 +69,26 @@ export default function Invoice({
           <div className="flex rounded-lg border border-gray-200 overflow-hidden text-sm">
             <button
               onClick={() => setFormat("a4")}
-              className={`flex items-center gap-1.5 px-3 py-2 transition-colors ${format === "a4" ? "bg-[#0F172A] text-white" : "text-[#020B27] hover:bg-gray-50"}`}
+              className={`flex items-center gap-1.5 px-3 py-2 transition-colors ${format === "a4" ? "bg-[#0E2440] text-white" : "text-[#0A2A52] hover:bg-gray-50"}`}
             >
               <FileText size={15} /> A4
             </button>
             <button
               onClick={() => setFormat("thermique_80")}
-              className={`flex items-center gap-1.5 px-3 py-2 border-l border-gray-200 transition-colors ${format === "thermique_80" ? "bg-[#0F172A] text-white" : "text-[#020B27] hover:bg-gray-50"}`}
+              className={`flex items-center gap-1.5 px-3 py-2 border-l border-gray-200 transition-colors ${format === "thermique_80" ? "bg-[#0E2440] text-white" : "text-[#0A2A52] hover:bg-gray-50"}`}
             >
               <Receipt size={15} /> 80 mm
             </button>
             <button
               onClick={() => setFormat("thermique_58")}
-              className={`flex items-center gap-1.5 px-3 py-2 border-l border-gray-200 transition-colors ${format === "thermique_58" ? "bg-[#0F172A] text-white" : "text-[#020B27] hover:bg-gray-50"}`}
+              className={`flex items-center gap-1.5 px-3 py-2 border-l border-gray-200 transition-colors ${format === "thermique_58" ? "bg-[#0E2440] text-white" : "text-[#0A2A52] hover:bg-gray-50"}`}
             >
               <Receipt size={15} /> 58 mm
             </button>
           </div>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
           >
             <Printer size={16} /> Imprimer
           </button>
@@ -112,9 +112,9 @@ function InvoiceA4({
   order: Order; items: NonNullable<Order["items"]>; invoiceNumber: string; shop: InvoiceShop; paymentLabel: string;
 }) {
   return (
-    <div className="bg-white text-[#0F172A] mx-auto max-w-[210mm] w-full p-8 print:p-0 rounded-lg border border-gray-100 shadow-sm print:border-0 print:shadow-none">
+    <div className="bg-white text-[#0E2440] mx-auto max-w-[210mm] w-full p-8 print:p-0 rounded-lg border border-gray-100 shadow-sm print:border-0 print:shadow-none">
       {/* En-tête */}
-      <div className="flex items-start justify-between gap-6 border-b-2 border-[#0F172A] pb-5">
+      <div className="flex items-start justify-between gap-6 border-b-2 border-[#0E2440] pb-5">
         <div>
           <p className="text-2xl font-extrabold tracking-tight">{shop.name}</p>
           <p className="text-sm text-[#64748B] mt-1 max-w-xs">{shop.address}</p>
@@ -178,7 +178,7 @@ function InvoiceA4({
           <Line label="Sous-total" value={formatPrice(order.subtotal)} />
           <Line label="Frais de livraison" value={order.delivery_fee ? formatPrice(order.delivery_fee) : "Gratuite"} />
           {order.discount_amount > 0 && <Line label="Réduction" value={`− ${formatPrice(order.discount_amount)}`} />}
-          <div className="flex items-center justify-between border-t-2 border-[#0F172A] pt-2 mt-2">
+          <div className="flex items-center justify-between border-t-2 border-[#0E2440] pt-2 mt-2">
             <span className="font-bold">Total à payer</span>
             <span className="font-extrabold text-lg">{formatPrice(order.total_amount)}</span>
           </div>
@@ -208,7 +208,7 @@ function InvoiceThermal({
   return (
     <div
       style={{ width: `${widthMm}mm` }}
-      className="bg-white text-[#0F172A] mx-auto p-3 rounded-lg border border-gray-100 shadow-sm print:border-0 print:shadow-none print:rounded-none font-mono text-[11px] leading-tight"
+      className="bg-white text-[#0E2440] mx-auto p-3 rounded-lg border border-gray-100 shadow-sm print:border-0 print:shadow-none print:rounded-none font-mono text-[11px] leading-tight"
     >
       <div className="text-center">
         <p className="text-base font-extrabold tracking-tight">{shop.name}</p>

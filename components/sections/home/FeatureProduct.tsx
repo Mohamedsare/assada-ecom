@@ -22,7 +22,7 @@ const ARC_RIGHT = ["md:translate-x-2", "md:translate-x-10", "md:translate-x-2"];
 
 // Animation au survol : la pastille se soulève, grossit et son ombre s'accentue.
 const PILL_BASE =
-  "inline-flex items-center gap-2.5 bg-gray-light text-[#020B27] text-sm px-6 py-3.5 rounded-full shadow-sm cursor-default " +
+  "inline-flex items-center gap-2.5 bg-gray-light text-[#0A2A52] text-sm px-6 py-3.5 rounded-full shadow-sm cursor-default " +
   "transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 hover:bg-white hover:shadow-lg";
 
 export default function FeatureProduct({ product }: { product: Product }) {
@@ -31,8 +31,8 @@ export default function FeatureProduct({ product }: { product: Product }) {
   return (
     <section className="py-14 px-4 bg-white">
       <div className="max-w-5xl mx-auto text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-[#B8925A] mb-2">Le soin signature</p>
-        <h2 className="text-2xl md:text-3xl font-bold text-[#020B27] mb-2">{product.name}</h2>
+        <p className="text-xs font-bold uppercase tracking-widest text-[#2F9E44] mb-2">Le soin signature</p>
+        <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52] mb-2">{product.name}</h2>
         {product.short_description && (
           <p className="text-text-secondary max-w-xl mx-auto mb-10">{product.short_description}</p>
         )}
@@ -42,7 +42,7 @@ export default function FeatureProduct({ product }: { product: Product }) {
           <div className="flex flex-col items-center md:items-end gap-4 order-2 md:order-1">
             {PILLS_LEFT.map(({ icon: Icon, label }, i) => (
               <span key={label} className={`${PILL_BASE} ${ARC_LEFT[i]}`}>
-                <Icon size={15} className="text-[#B8925A]" /> {label}
+                <Icon size={15} className="text-[#2F9E44]" /> {label}
               </span>
             ))}
           </div>
@@ -56,7 +56,7 @@ export default function FeatureProduct({ product }: { product: Product }) {
           <div className="flex flex-col items-center md:items-start gap-4 order-3">
             {PILLS_RIGHT.map(({ icon: Icon, label }, i) => (
               <span key={label} className={`${PILL_BASE} ${ARC_RIGHT[i]}`}>
-                <Icon size={15} className="text-[#B8925A]" /> {label}
+                <Icon size={15} className="text-[#2F9E44]" /> {label}
               </span>
             ))}
           </div>
@@ -64,7 +64,7 @@ export default function FeatureProduct({ product }: { product: Product }) {
 
         <Link
           href={`/produit/${product.slug}`}
-          className="inline-flex items-center justify-center mt-10 bg-green btn-sweep hover:bg-[#9E7A45] text-white font-semibold px-8 py-3.5 rounded-full transition-colors active:scale-95"
+          className="inline-flex items-center justify-center mt-10 bg-green btn-sweep hover:bg-[#237A34] text-white font-semibold px-8 py-3.5 rounded-full transition-colors active:scale-95"
         >
           Voir le produit
         </Link>

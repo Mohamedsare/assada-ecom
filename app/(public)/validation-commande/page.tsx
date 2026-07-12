@@ -48,7 +48,7 @@ function ValidationContent() {
   if (loading || !order) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#020B27] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#0A2A52] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -65,7 +65,7 @@ function ValidationContent() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] pb-12">
       <SuccessConfetti />
-      <div className="relative overflow-hidden bg-gradient-to-b from-[#020B27] to-[#0F172A] text-white px-4 pt-12 pb-16 text-center">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#0A2A52] to-[#0E2440] text-white px-4 pt-12 pb-16 text-center">
         {/* Halo lumineux décoratif */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_at_top,rgba(34,197,94,0.25),transparent_70%)]" />
 
@@ -76,7 +76,7 @@ function ValidationContent() {
             <div className="relative w-24 h-24 rounded-full bg-linear-to-br from-[#22C55E] to-[#16A34A] flex items-center justify-center shadow-2xl shadow-green-500/40 animate-victory-pop">
               <CheckCircle size={52} className="text-white" strokeWidth={2} />
             </div>
-            <Sparkles size={18} className="absolute -top-1 -right-1 text-[#B8925A] animate-twinkle" />
+            <Sparkles size={18} className="absolute -top-1 -right-1 text-[#2F9E44] animate-twinkle" />
             <Sparkles size={14} className="absolute -bottom-1 -left-2 text-white animate-twinkle [animation-delay:0.5s]" />
           </div>
 
@@ -97,16 +97,16 @@ function ValidationContent() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center shrink-0">
-              <MessageCircle size={18} className="text-[#020B27]" />
+              <MessageCircle size={18} className="text-[#0A2A52]" />
             </div>
             <div>
-              <p className="font-bold text-[#020B27] text-sm">Prochaine étape</p>
+              <p className="font-bold text-[#0A2A52] text-sm">Prochaine étape</p>
               <p className="text-xs text-gray-500">Notre équipe va vous contacter</p>
             </div>
           </div>
           <p className="text-sm text-gray-600 leading-relaxed">
             Notre équipe va vous contacter sur{" "}
-            <strong className="text-[#020B27]">WhatsApp au {order.customer_phone}</strong>{" "}
+            <strong className="text-[#0A2A52]">WhatsApp au {order.customer_phone}</strong>{" "}
             pour confirmer votre commande et organiser la livraison.
           </p>
           {estimatedDate && (
@@ -123,7 +123,7 @@ function ValidationContent() {
 
         {/* Détails */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <h3 className="font-bold text-[#020B27] mb-5">Détails de la commande</h3>
+          <h3 className="font-bold text-[#0A2A52] mb-5">Détails de la commande</h3>
 
           <div className="grid sm:grid-cols-3 gap-4 pb-5 border-b border-gray-50">
             <div>
@@ -131,7 +131,7 @@ function ValidationContent() {
                 <User size={13} className="text-gray-400" />
                 <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Client</p>
               </div>
-              <p className="font-semibold text-[#020B27] text-sm">{order.customer_name}</p>
+              <p className="font-semibold text-[#0A2A52] text-sm">{order.customer_name}</p>
               <p className="text-xs text-gray-500 mt-0.5">{order.customer_phone}</p>
               {order.customer_email && <p className="text-xs text-gray-500">{order.customer_email}</p>}
             </div>
@@ -140,7 +140,7 @@ function ValidationContent() {
                 <MapPin size={13} className="text-gray-400" />
                 <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Livraison</p>
               </div>
-              <p className="font-semibold text-[#020B27] text-sm">{order.delivery_city}, {order.delivery_district}</p>
+              <p className="font-semibold text-[#0A2A52] text-sm">{order.delivery_city}, {order.delivery_district}</p>
               {order.delivery_address_details && <p className="text-xs text-gray-500 mt-0.5 leading-snug">{order.delivery_address_details}</p>}
             </div>
             <div>
@@ -148,7 +148,7 @@ function ValidationContent() {
                 <CreditCard size={13} className="text-gray-400" />
                 <p className="text-xs text-gray-400 font-medium uppercase tracking-wide">Paiement</p>
               </div>
-              <p className="font-semibold text-[#020B27] text-sm">{PAYMENT_LABELS[order.payment_method]}</p>
+              <p className="font-semibold text-[#0A2A52] text-sm">{PAYMENT_LABELS[order.payment_method]}</p>
             </div>
           </div>
 
@@ -163,14 +163,14 @@ function ValidationContent() {
                       : <div className="w-full h-full flex items-center justify-center text-2xl">📦</div>}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-[#020B27] text-sm line-clamp-1">{item.product_name}</p>
+                    <p className="font-semibold text-[#0A2A52] text-sm line-clamp-1">{item.product_name}</p>
                     <div className="flex flex-wrap gap-2 mt-0.5">
                       {item.size  && <span className="text-xs text-gray-400">Taille : {item.size}</span>}
                       {item.color && <span className="text-xs text-gray-400">Couleur : {item.color}</span>}
                     </div>
                     <p className="text-xs text-gray-400 mt-0.5">Qté : {item.quantity} × {formatPrice(item.unit_price)}</p>
                   </div>
-                  <p className="font-bold text-[#020B27] text-sm shrink-0">{formatPrice(item.total_price)}</p>
+                  <p className="font-bold text-[#0A2A52] text-sm shrink-0">{formatPrice(item.total_price)}</p>
                 </div>
               ))}
             </div>
@@ -183,13 +183,13 @@ function ValidationContent() {
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Livraison</span>
-              <span className={`font-medium ${order.delivery_fee === 0 ? "text-[#020B27]" : ""}`}>
+              <span className={`font-medium ${order.delivery_fee === 0 ? "text-[#0A2A52]" : ""}`}>
                 {order.delivery_fee === 0 ? "Gratuite" : formatPrice(order.delivery_fee)}
               </span>
             </div>
             <div className="flex justify-between font-extrabold text-base pt-3 border-t border-gray-100">
-              <span className="text-[#020B27]">Total</span>
-              <span className="text-[#020B27]">{formatPrice(order.total_amount)}</span>
+              <span className="text-[#0A2A52]">Total</span>
+              <span className="text-[#0A2A52]">{formatPrice(order.total_amount)}</span>
             </div>
           </div>
         </div>
@@ -202,7 +202,7 @@ function ValidationContent() {
             <ChevronRight size={18} />
           </Link>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-white py-4 rounded-2xl font-bold text-base active:scale-95 transition-all btn-sweep hover:bg-[#9E7A45]">
+            className="w-full flex items-center justify-center gap-3 bg-[#2F9E44] text-white py-4 rounded-2xl font-bold text-base active:scale-95 transition-all btn-sweep hover:bg-[#237A34]">
             <MessageCircle size={20} />
             Contacter via WhatsApp
           </a>
@@ -216,7 +216,7 @@ export default function ValidationCommandePage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#020B27] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#0A2A52] border-t-transparent rounded-full animate-spin" />
       </div>
     }>
       <ValidationContent />

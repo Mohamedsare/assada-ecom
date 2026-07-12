@@ -172,7 +172,7 @@ export default function BoutiqueContent({
   const renderFilterPanel = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="font-semibold text-[#020B27] mb-3 text-sm">Catégories</h3>
+        <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Catégories</h3>
         <div className="space-y-2">
           {topCategories.map((cat) => (
             <label key={cat.slug} className="flex items-center gap-2 cursor-pointer group">
@@ -180,9 +180,9 @@ export default function BoutiqueContent({
                 type="checkbox"
                 checked={selectedCategories.includes(cat.slug)}
                 onChange={() => toggleCategory(cat.slug)}
-                className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]"
+                className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]"
               />
-              <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">
+              <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">
                 {cat.name}
               </span>
             </label>
@@ -192,7 +192,7 @@ export default function BoutiqueContent({
 
       {brands.length > 0 && (
         <div>
-          <h3 className="font-semibold text-[#020B27] mb-3 text-sm">Marques</h3>
+          <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Marques</h3>
           <div className="space-y-2">
             {brands.map((brand) => (
               <label key={brand.slug} className="flex items-center gap-2 cursor-pointer group">
@@ -200,9 +200,9 @@ export default function BoutiqueContent({
                   type="checkbox"
                   checked={selectedBrands.includes(brand.slug)}
                   onChange={() => toggleBrand(brand.slug)}
-                  className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]"
+                  className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]"
                 />
-                <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">
+                <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">
                   {brand.name}
                 </span>
               </label>
@@ -212,7 +212,7 @@ export default function BoutiqueContent({
       )}
 
       <div>
-        <h3 className="font-semibold text-[#020B27] mb-3 text-sm">Prix maximum</h3>
+        <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Prix maximum</h3>
         <div className="space-y-3">
           <input
             type="range"
@@ -221,7 +221,7 @@ export default function BoutiqueContent({
             step={5000}
             value={priceRange[1]}
             onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-            className="w-full accent-[#020B27]"
+            className="w-full accent-[#0A2A52]"
           />
           <div className="flex justify-between text-xs text-gray-500">
             <span>{formatPrice(priceRange[0])}</span>
@@ -236,7 +236,7 @@ export default function BoutiqueContent({
             type="checkbox"
             checked={onlyPromo}
             onChange={(e) => setOnlyPromo(e.target.checked)}
-            className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]"
+            className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]"
           />
           <span className="text-sm font-medium text-gray-700">Promo uniquement</span>
         </label>
@@ -259,20 +259,20 @@ export default function BoutiqueContent({
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-8">
         {/* Fil d'Ariane */}
         <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-6" aria-label="Fil d'Ariane">
-          <Link href="/" className="hover:text-[#020B27] transition-colors">Accueil</Link>
+          <Link href="/" className="hover:text-[#0A2A52] transition-colors">Accueil</Link>
           <ChevronRight size={13} className="text-gray-300" />
-          <span className="text-[#020B27] font-medium uppercase tracking-wide">{bannerTitle}</span>
+          <span className="text-[#0A2A52] font-medium uppercase tracking-wide">{bannerTitle}</span>
         </nav>
 
         {/* Titre */}
-        <h1 className="text-center text-3xl md:text-4xl font-bold text-[#020B27] tracking-tight mb-8">
+        <h1 className="text-center text-3xl md:text-4xl font-bold text-[#0A2A52] tracking-tight mb-8">
           {bannerTitle}
         </h1>
 
         <div className="flex gap-8">
           <aside className="hidden lg:block w-44 shrink-0">
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
-              <h2 className="font-bold text-[#020B27] mb-5 text-base">Filtres</h2>
+              <h2 className="font-bold text-[#0A2A52] mb-5 text-base">Filtres</h2>
               {renderFilterPanel()}
             </div>
           </aside>
@@ -281,13 +281,13 @@ export default function BoutiqueContent({
             <div className="flex items-center justify-between gap-3 mb-5">
               <button
                 onClick={() => setFiltersOpen(true)}
-                className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#020B27] border border-gray-200 px-4 py-2 rounded-xl active:scale-95 transition-all hover:border-green"
+                className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#0A2A52] border border-gray-200 px-4 py-2 rounded-xl active:scale-95 transition-all hover:border-green"
               >
                 <SlidersHorizontal size={16} />
                 Filtres
               </button>
               <span className="text-sm text-[#64748B] hidden lg:block">
-                <span className="font-bold text-[#020B27]">{filtered.length}</span>{" "}
+                <span className="font-bold text-[#0A2A52]">{filtered.length}</span>{" "}
                 {nounFor(filtered.length)}
               </span>
               <label className="flex items-center gap-2 text-sm text-gray-600">
@@ -295,7 +295,7 @@ export default function BoutiqueContent({
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
-                  className="border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-green bg-white text-[#020B27]"
+                  className="border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-green bg-white text-[#0A2A52]"
                 >
                   {SORT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -307,11 +307,11 @@ export default function BoutiqueContent({
             {filtered.length === 0 ? (
               <div className="text-center py-20">
                 <div className="text-5xl mb-4">🔍</div>
-                <h3 className="text-lg font-semibold text-[#020B27] mb-2">Aucun {noun.one} trouvé</h3>
+                <h3 className="text-lg font-semibold text-[#0A2A52] mb-2">Aucun {noun.one} trouvé</h3>
                 <p className="text-[#64748B] mb-6">Essayez de modifier vos filtres</p>
                 <button
                   onClick={resetFilters}
-                  className="bg-green text-white px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
+                  className="bg-green text-white px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#237A34] transition-colors"
                 >
                   Réinitialiser les filtres
                 </button>
@@ -330,7 +330,7 @@ export default function BoutiqueContent({
                       onClick={() => goToPage(currentPage - 1)}
                       disabled={currentPage === 1}
                       aria-label="Page précédente"
-                      className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-[#020B27] disabled:opacity-40 disabled:cursor-not-allowed hover:border-green active:scale-95 transition-all"
+                      className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-[#0A2A52] disabled:opacity-40 disabled:cursor-not-allowed hover:border-green active:scale-95 transition-all"
                     >
                       <ChevronLeft size={16} />
                     </button>
@@ -347,7 +347,7 @@ export default function BoutiqueContent({
                             "w-9 h-9 rounded-lg text-sm font-semibold transition-all active:scale-95",
                             n === currentPage
                               ? "bg-green text-white"
-                              : "border border-gray-200 text-[#020B27] hover:border-green"
+                              : "border border-gray-200 text-[#0A2A52] hover:border-green"
                           )}
                         >
                           {n}
@@ -359,7 +359,7 @@ export default function BoutiqueContent({
                       onClick={() => goToPage(currentPage + 1)}
                       disabled={currentPage === totalPages}
                       aria-label="Page suivante"
-                      className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-[#020B27] disabled:opacity-40 disabled:cursor-not-allowed hover:border-green active:scale-95 transition-all"
+                      className="flex items-center justify-center w-9 h-9 rounded-lg border border-gray-200 text-[#0A2A52] disabled:opacity-40 disabled:cursor-not-allowed hover:border-green active:scale-95 transition-all"
                     >
                       <ChevronRight size={16} />
                     </button>
@@ -399,13 +399,13 @@ export default function BoutiqueContent({
           )}
         >
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 shrink-0">
-            <h2 className="font-bold text-[#020B27] flex items-center gap-2">
+            <h2 className="font-bold text-[#0A2A52] flex items-center gap-2">
               <SlidersHorizontal size={17} className="text-green" /> Filtres
             </h2>
             <button
               onClick={() => setFiltersOpen(false)}
               aria-label="Fermer les filtres"
-              className="p-1.5 -mr-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#020B27] active:scale-95 transition-all"
+              className="p-1.5 -mr-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#0A2A52] active:scale-95 transition-all"
             >
               <X size={20} />
             </button>
@@ -418,7 +418,7 @@ export default function BoutiqueContent({
           <div className="px-4 py-3 border-t border-gray-100 shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
             <button
               onClick={() => setFiltersOpen(false)}
-              className="w-full bg-green text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#9E7A45] active:scale-[0.98] transition-all"
+              className="w-full bg-green text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#237A34] active:scale-[0.98] transition-all"
             >
               Afficher {filtered.length} {nounFor(filtered.length)}
             </button>

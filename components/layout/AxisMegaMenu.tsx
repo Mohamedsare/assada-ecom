@@ -58,8 +58,8 @@ export default function AxisMegaMenu({
         onFocus={openMenu}
         onClick={() => setOpen(false)}
         className={cn(
-          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors hover:text-[#B8925A] hover:bg-gray-50",
-          active || open ? "text-[#B8925A] bg-[#B8925A]/10" : "text-gray-600"
+          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors hover:text-[#2F9E44] hover:bg-gray-50",
+          active || open ? "text-[#2F9E44] bg-[#2F9E44]/10" : "text-gray-600"
         )}
       >
         {label ?? axis.name}
@@ -69,7 +69,7 @@ export default function AxisMegaMenu({
       {/* Panneau pleine largeur (le header sticky est le bloc conteneur) */}
       <div
         className={cn(
-          "absolute left-0 right-0 top-full bg-white text-[#020B27] shadow-2xl border-t border-gray-100",
+          "absolute left-0 right-0 top-full bg-white text-[#0A2A52] shadow-2xl border-t border-gray-100",
           "transition-all duration-200 origin-top",
           open ? "visible opacity-100 translate-y-0" : "invisible opacity-0 -translate-y-1 pointer-events-none"
         )}
@@ -82,11 +82,11 @@ export default function AxisMegaMenu({
           <Link
             href={`/boutique?categorie=${axis.slug}`}
             onClick={() => setOpen(false)}
-            className="inline-flex items-center gap-2 mb-4 text-lg font-bold text-[#020B27] hover:text-green transition-colors"
+            className="inline-flex items-center gap-2 mb-4 text-lg font-bold text-[#0A2A52] hover:text-green transition-colors"
           >
-            <CategoryIcon slug={axis.slug} size={20} className="text-[#B8925A]" />
+            <CategoryIcon slug={axis.slug} size={20} className="text-[#2F9E44]" />
             {axis.name}
-            <ArrowRight size={17} className="text-[#B8925A]" />
+            <ArrowRight size={17} className="text-[#2F9E44]" />
           </Link>
 
           <div className="flex items-start justify-between gap-10">
@@ -101,9 +101,9 @@ export default function AxisMegaMenu({
                   <Link
                     href={`/boutique?categorie=${cat.slug}`}
                     onClick={() => setOpen(false)}
-                    className="group flex items-center gap-2 mb-1.5 font-semibold text-[#020B27] hover:text-green transition-colors"
+                    className="group flex items-center gap-2 mb-1.5 font-semibold text-[#0A2A52] hover:text-green transition-colors"
                   >
-                    <CategoryIcon slug={cat.slug} size={15} className="text-[#B8925A] shrink-0 group-hover:text-green transition-colors" />
+                    <CategoryIcon slug={cat.slug} size={15} className="text-[#2F9E44] shrink-0 group-hover:text-green transition-colors" />
                     <span className="text-[13px]">{cat.name}</span>
                   </Link>
                   {cat.children && cat.children.length > 0 && (

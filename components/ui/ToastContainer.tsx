@@ -7,14 +7,14 @@ import { useUIStore, type Toast } from "@/stores/ui";
 import { cn } from "@/lib/utils";
 
 const ICONS = {
-  success: <CheckCircle size={17} className="text-[#020B27] shrink-0" />,
+  success: <CheckCircle size={17} className="text-[#0A2A52] shrink-0" />,
   error:   <XCircle    size={17} className="text-[#EF4444] shrink-0" />,
   info:    <ShoppingCart size={17} className="text-blue-500 shrink-0" />,
   warning: <AlertTriangle size={17} className="text-[#F97316] shrink-0" />,
 };
 
 const BARS = {
-  success: "bg-[#020B27]",
+  success: "bg-[#0A2A52]",
   error:   "bg-[#EF4444]",
   info:    "bg-blue-500",
   warning: "bg-[#F97316]",
@@ -51,7 +51,7 @@ function ToastItem({ toast }: { toast: Toast }) {
       <div className="flex items-start gap-3 p-4">
         {ICONS[toast.type]}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#020B27] leading-tight">{toast.title}</p>
+          <p className="text-sm font-semibold text-[#0A2A52] leading-tight">{toast.title}</p>
           {toast.message && (
             <p className="text-xs text-[#64748B] mt-0.5 line-clamp-1">{toast.message}</p>
           )}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { ChevronRight, Truck, RotateCcw, ShieldCheck, MessageCircle } from "lucide-react";
 import { useConfigStore } from "@/stores/config";
 import { DEFAULT_HERO_SLIDES } from "@/lib/constants";
@@ -73,10 +73,28 @@ export default function HeroSection() {
     setCurrent((c) => (c + 1) % heroCount);
   }, [heroCount]);
 
+  const prev = useCallback(() => {
+    setCurrent((c) => (c - 1 + heroCount) % heroCount);
+  }, [heroCount]);
+
   useEffect(() => {
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
   }, [next]);
+
+  // Glisser/swipe manuel (tactile + souris) pour changer de slide.
+  const dragStartX = useRef<number | null>(null);
+  const onPointerDown = (e: React.PointerEvent) => {
+    dragStartX.current = e.clientX;
+  };
+  const onPointerEnd = (e: React.PointerEvent) => {
+    if (dragStartX.current === null) return;
+    const dx = e.clientX - dragStartX.current;
+    dragStartX.current = null;
+    if (Math.abs(dx) < 45) return; // simple clic → on ignore
+    if (dx < 0) next();
+    else prev();
+  };
 
   // Index borné au rendu : si le nombre de slides change (édition admin), on reste valide.
   const index = heroCount > 0 ? current % heroCount : 0;
@@ -94,7 +112,12 @@ export default function HeroSection() {
 
   return (
     <>
-    <section className="relative bg-night text-white overflow-hidden select-none h-64 sm:h-80 md:h-96 lg:h-100">
+    <section
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerEnd}
+      onPointerCancel={() => { dragStartX.current = null; }}
+      className="relative bg-night text-white overflow-hidden select-none touch-pan-y cursor-grab active:cursor-grabbing h-64 sm:h-80 md:h-96 lg:h-100"
+    >
       {/* ── Média en arrière-plan (slider : image ou vidéo) — sans texte ── */}
       <div className="absolute inset-0 z-0">
         {media?.type === "video" ? (
@@ -143,7 +166,7 @@ export default function HeroSection() {
       {/* Un seul bouton court, centré en bas */}
       <Link
         href={media?.link || slide.cta1.href}
-        className="absolute bottom-11 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 bg-green btn-sweep hover:bg-[#9E7A45] text-white font-bold px-6 py-2.5 rounded-full transition-colors text-sm shadow-lg"
+        className="absolute bottom-11 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 bg-green btn-sweep hover:bg-[#237A34] text-white font-bold px-6 py-2.5 rounded-full transition-colors text-sm shadow-lg"
       >
         Découvrir
         <ChevronRight size={16} />
@@ -174,8 +197,8 @@ export default function HeroSection() {
           const Icon = item.icon;
           return (
             <div key={i} className="flex items-center gap-3 px-10 shrink-0">
-              <Icon size={20} className="text-[#B8925A] shrink-0" strokeWidth={1.75} />
-              <span className="text-sm font-medium text-[#020B27] whitespace-nowrap">{item.text}</span>
+              <Icon size={20} className="text-[#2F9E44] shrink-0" strokeWidth={1.75} />
+              <span className="text-sm font-medium text-[#0A2A52] whitespace-nowrap">{item.text}</span>
             </div>
           );
         })}

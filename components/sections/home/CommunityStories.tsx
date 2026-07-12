@@ -72,7 +72,7 @@ function StoryVideoCard({ product, i, onOpen }: { product: Product; i: number; o
           <Maximize2 size={15} />
         </span>
         <span className="absolute inset-0 flex items-center justify-center">
-          <span className="w-12 h-12 rounded-full bg-white/85 flex items-center justify-center text-[#020B27] shadow-lg opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all">
+          <span className="w-12 h-12 rounded-full bg-white/85 flex items-center justify-center text-[#0A2A52] shadow-lg opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all">
             <Play size={20} className="fill-current translate-x-0.5" />
           </span>
         </span>
@@ -99,7 +99,7 @@ function StoryVideoCard({ product, i, onOpen }: { product: Product; i: number; o
           {avatar && <Image src={avatar} alt="" fill sizes="36px" className="object-cover" />}
         </span>
         <span className="min-w-0">
-          <span className="block text-[11px] font-semibold text-[#020B27] leading-tight line-clamp-2 underline decoration-transparent group-hover:decoration-inherit">{product.name}</span>
+          <span className="block text-[11px] font-semibold text-[#0A2A52] leading-tight line-clamp-2 underline decoration-transparent group-hover:decoration-inherit">{product.name}</span>
           <span className="block text-[10px] text-text-secondary mt-0.5">À partir de {formatPrice(product.current_price)}</span>
         </span>
       </button>
@@ -173,7 +173,7 @@ function StoryModal({ product, onClose }: { product: Product; onClose: () => voi
           <button
             onClick={onClose}
             aria-label="Fermer"
-            className="absolute top-3 right-3 z-30 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#020B27] hover:bg-white transition-colors"
+            className="absolute top-3 right-3 z-30 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#0A2A52] hover:bg-white transition-colors"
           >
             <X size={18} />
           </button>
@@ -223,10 +223,10 @@ function StoryModal({ product, onClose }: { product: Product; onClose: () => voi
           <div className="md:w-1/2 flex flex-col p-5 sm:p-6 gap-4 overflow-y-auto">
             <div className="pr-10">
               {product.brand && (
-                <p className="text-xs font-bold text-[#B8925A] uppercase tracking-widest mb-1">{product.brand.name}</p>
+                <p className="text-xs font-bold text-[#2F9E44] uppercase tracking-widest mb-1">{product.brand.name}</p>
               )}
               <Link href={`/produit/${product.slug}`} onClick={onClose}>
-                <h3 className="text-lg sm:text-xl font-extrabold text-[#020B27] leading-tight hover:text-[#B8925A] transition-colors">
+                <h3 className="text-lg sm:text-xl font-extrabold text-[#0A2A52] leading-tight hover:text-[#2F9E44] transition-colors">
                   {product.name}
                 </h3>
               </Link>
@@ -251,12 +251,12 @@ function StoryModal({ product, onClose }: { product: Product; onClose: () => voi
               {/* Quantité */}
               <div className="flex items-center border border-gray-200 rounded-full overflow-hidden shrink-0">
                 <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Diminuer"
-                  className="w-10 h-12 flex items-center justify-center text-[#020B27] hover:bg-gray-50 transition-colors">
+                  className="w-10 h-12 flex items-center justify-center text-[#0A2A52] hover:bg-gray-50 transition-colors">
                   <Minus size={15} />
                 </button>
-                <span className="w-9 text-center text-sm font-bold text-[#020B27]">{quantity}</span>
+                <span className="w-9 text-center text-sm font-bold text-[#0A2A52]">{quantity}</span>
                 <button onClick={() => setQuantity((q) => q + 1)} aria-label="Augmenter"
-                  className="w-10 h-12 flex items-center justify-center text-[#020B27] hover:bg-gray-50 transition-colors">
+                  className="w-10 h-12 flex items-center justify-center text-[#0A2A52] hover:bg-gray-50 transition-colors">
                   <Plus size={15} />
                 </button>
               </div>
@@ -267,7 +267,7 @@ function StoryModal({ product, onClose }: { product: Product; onClose: () => voi
                 disabled={!inStock}
                 className={cn(
                   "flex-1 h-12 rounded-full flex items-center justify-center gap-2 font-bold text-sm transition-colors",
-                  inStock ? "bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                  inStock ? "bg-[#2F9E44] text-white btn-sweep hover:bg-[#237A34]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
                 )}
               >
                 <ShoppingCart size={17} />
@@ -276,7 +276,7 @@ function StoryModal({ product, onClose }: { product: Product; onClose: () => voi
             </div>
 
             <Link href={`/produit/${product.slug}`} onClick={onClose}
-              className="flex items-center justify-center gap-1 text-sm font-medium text-[#B8925A] hover:underline">
+              className="flex items-center justify-center gap-1 text-sm font-medium text-[#2F9E44] hover:underline">
               Voir la fiche complète <ArrowRight size={14} />
             </Link>
           </div>
@@ -303,8 +303,8 @@ export default function CommunityStories({ products }: { products: Product[] }) 
       <div className="max-w-6xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-10">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#B8925A] mb-2">Comme on le voit dans</p>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#020B27]">Histoires de la communauté</h2>
+          <p className="text-xs font-bold uppercase tracking-widest text-[#2F9E44] mb-2">Comme on le voit dans</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52]">Histoires de la communauté</h2>
         </div>
 
         {/* Galerie — scroll horizontal sur mobile, masonry 5 colonnes sur desktop */}

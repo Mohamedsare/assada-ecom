@@ -93,11 +93,11 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
       >
         {/* En-tête */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 shrink-0">
-          <h2 className="text-2xl font-bold text-[#020B27]">Recherche</h2>
+          <h2 className="text-2xl font-bold text-[#0A2A52]">Recherche</h2>
           <button
             onClick={onClose}
             aria-label="Fermer la recherche"
-            className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-[#020B27] flex items-center justify-center transition-colors"
+            className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-[#0A2A52] flex items-center justify-center transition-colors"
           >
             <X size={20} />
           </button>
@@ -105,8 +105,8 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
 
         {/* Champ de recherche */}
         <div className="px-6 shrink-0">
-          <div className="flex items-center gap-3 rounded-full bg-[#F5F1EA] border border-transparent focus-within:border-[#B8925A]/40 px-5 h-14 transition-colors">
-            <Search size={20} className="text-[#020B27] shrink-0" />
+          <div className="flex items-center gap-3 rounded-full bg-[#F5F1EA] border border-transparent focus-within:border-[#2F9E44]/40 px-5 h-14 transition-colors">
+            <Search size={20} className="text-[#0A2A52] shrink-0" />
             <input
               ref={inputRef}
               type="text"
@@ -115,14 +115,14 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
               onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
               placeholder="crème, soins, cheveux…"
               aria-label="Rechercher"
-              className="w-full bg-transparent text-base text-[#020B27] placeholder-[#64748B] outline-none"
+              className="w-full bg-transparent text-base text-[#0A2A52] placeholder-[#64748B] outline-none"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => { setQuery(""); inputRef.current?.focus(); }}
                 aria-label="Effacer"
-                className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 text-[#020B27] flex items-center justify-center shrink-0 transition-colors"
+                className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 text-[#0A2A52] flex items-center justify-center shrink-0 transition-colors"
               >
                 <X size={15} />
               </button>
@@ -143,7 +143,7 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
                   <button
                     key={term}
                     onClick={() => setQuery(term)}
-                    className="text-lg font-bold uppercase tracking-wide text-[#020B27] hover:text-green transition-colors"
+                    className="text-lg font-bold uppercase tracking-wide text-[#0A2A52] hover:text-green transition-colors"
                   >
                     {term}
                   </button>
@@ -163,12 +163,12 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
                     onClick={() => setTab(t.id)}
                     className={cn(
                       "relative pb-3 text-sm font-semibold transition-colors",
-                      tab === t.id ? "text-[#020B27]" : "text-text-secondary hover:text-[#020B27]"
+                      tab === t.id ? "text-[#0A2A52]" : "text-text-secondary hover:text-[#0A2A52]"
                     )}
                   >
                     {t.label}
                     {t.count > 0 && <span className="ml-1.5 text-xs text-text-secondary">({t.count})</span>}
-                    {tab === t.id && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#B8925A] rounded-full" />}
+                    {tab === t.id && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#2F9E44] rounded-full" />}
                   </button>
                 ))}
               </div>
@@ -181,7 +181,7 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
                   </div>
                 ) : products.length === 0 ? (
                   <div className="py-8 text-center">
-                    <p className="text-sm font-medium text-[#020B27]">Aucun produit pour « {query} »</p>
+                    <p className="text-sm font-medium text-[#0A2A52]">Aucun produit pour « {query} »</p>
                     <Link href="/boutique" onClick={onClose} className="mt-2 inline-block text-xs font-semibold text-green hover:underline">
                       Voir toute la boutique
                     </Link>
@@ -204,7 +204,7 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
                               )}
                             </span>
                             <span className="min-w-0 flex-1">
-                              <span className="block text-[15px] font-semibold text-[#020B27] leading-snug line-clamp-2">{p.name}</span>
+                              <span className="block text-[15px] font-semibold text-[#0A2A52] leading-snug line-clamp-2">{p.name}</span>
                               <span className="mt-1 block text-sm font-bold text-green">{formatPrice(p.current_price)}</span>
                             </span>
                           </Link>
@@ -213,7 +213,7 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
                     </ul>
                     <button
                       onClick={submit}
-                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#020B27] py-3 text-sm font-semibold text-white hover:bg-[#0F172A] transition-colors"
+                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-[#0A2A52] py-3 text-sm font-semibold text-white hover:bg-[#0E2440] transition-colors"
                     >
                       Voir tous les résultats pour « {query} » <ArrowRight size={15} />
                     </button>
@@ -224,7 +224,7 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
               {/* Onglet Collections */}
               {tab === "collections" && (
                 collections.length === 0 ? (
-                  <div className="py-8 text-center text-sm font-medium text-[#020B27]">
+                  <div className="py-8 text-center text-sm font-medium text-[#0A2A52]">
                     Aucune collection pour « {query} »
                   </div>
                 ) : (
@@ -234,12 +234,12 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
                         key={c.slug}
                         href={`/boutique?categorie=${c.slug}`}
                         onClick={onClose}
-                        className="group flex flex-col items-center gap-3 rounded-2xl border border-gray-100 bg-white p-5 text-center hover:border-[#B8925A]/40 hover:shadow-md transition-all"
+                        className="group flex flex-col items-center gap-3 rounded-2xl border border-gray-100 bg-white p-5 text-center hover:border-[#2F9E44]/40 hover:shadow-md transition-all"
                       >
                         <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#F5F1EA]">
-                          <CategoryIcon slug={c.slug} size={24} className="text-[#B8925A]" />
+                          <CategoryIcon slug={c.slug} size={24} className="text-[#2F9E44]" />
                         </span>
-                        <span className="text-sm font-semibold text-[#020B27] group-hover:text-green transition-colors">{c.name}</span>
+                        <span className="text-sm font-semibold text-[#0A2A52] group-hover:text-green transition-colors">{c.name}</span>
                       </Link>
                     ))}
                   </div>

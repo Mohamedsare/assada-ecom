@@ -87,7 +87,7 @@ export default function MultiImageUpload({
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <label className="block text-sm font-medium text-[#020B27]">{label}</label>
+        <label className="block text-sm font-medium text-[#0A2A52]">{label}</label>
         <span className="text-[11px] text-text-secondary">{urls.length}/{max}</span>
       </div>
 
@@ -99,7 +99,7 @@ export default function MultiImageUpload({
           <div key={url} className="relative aspect-square rounded-lg border border-gray-200 overflow-hidden group">
             <Image src={url} alt={`Photo ${i + 1}`} fill sizes="120px" className="object-cover" />
             {i === 0 && (
-              <span className="absolute bottom-1 left-1 bg-green text-[#020B27] text-[9px] font-semibold px-1.5 py-0.5 rounded">Principale</span>
+              <span className="absolute bottom-1 left-1 bg-green text-[#0A2A52] text-[9px] font-semibold px-1.5 py-0.5 rounded">Principale</span>
             )}
             <button
               type="button"
@@ -115,7 +115,7 @@ export default function MultiImageUpload({
                 type="button"
                 onClick={() => runStudio(url)}
                 disabled={studioPending}
-                className="absolute bottom-1 right-1 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white rounded-full p-1 shadow-md transition-colors disabled:opacity-50"
+                className="absolute bottom-1 right-1 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white rounded-full p-1 shadow-md transition-colors disabled:opacity-50"
                 title="Shooting studio IA (détourage + fond blanc)"
               >
                 <Sparkles size={13} />

@@ -1000,7 +1000,7 @@ export async function adminUpdateSettings(formData: FormData) {
   const supabase = await createClient();
 
   const keys = [
-    "shop_name", "shop_email", "shop_phone", "shop_whatsapp",
+    "shop_name", "shop_logo", "shop_email", "shop_phone", "shop_whatsapp",
     "shop_address", "shop_city", "delivery_fee", "free_delivery_threshold",
     "facebook_url", "tiktok_url", "instagram_url",
     "invoice_format", "invoice_footer",

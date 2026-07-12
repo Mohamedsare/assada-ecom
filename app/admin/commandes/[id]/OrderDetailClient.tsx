@@ -22,7 +22,7 @@ const STATUS_COLOR: Record<string, string> = {
   preparing:        "bg-purple-100 text-purple-700",
   shipped:          "bg-indigo-100 text-indigo-700",
   out_for_delivery: "bg-orange-100 text-orange-700",
-  delivered:        "bg-green-100 text-[#020B27]",
+  delivered:        "bg-green-100 text-[#0A2A52]",
   cancelled:        "bg-red-100 text-red-700",
   returned:         "bg-gray-100 text-gray-700",
 };
@@ -43,7 +43,7 @@ const PAYMENT_STATUS_LABELS: Record<string, string> = {
 
 const PAYMENT_STATUS_COLOR: Record<string, string> = {
   pending:          "bg-yellow-100 text-yellow-700",
-  paid:             "bg-green-100 text-[#020B27]",
+  paid:             "bg-green-100 text-[#0A2A52]",
   failed:           "bg-red-100 text-red-700",
   refunded:         "bg-gray-100 text-gray-700",
   cash_on_delivery: "bg-blue-100 text-blue-700",
@@ -98,11 +98,11 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
       {/* En-tête */}
       <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
         <div className="flex items-center gap-3">
-          <button onClick={() => router.push("/admin/commandes")} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors">
+          <button onClick={() => router.push("/admin/commandes")} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors">
             <ArrowLeft size={18} />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-[#020B27]">{order.order_number}</h1>
+            <h1 className="text-2xl font-bold text-[#0A2A52]">{order.order_number}</h1>
             <p className="text-sm text-[#64748B] mt-0.5">Passée le {formatDate(order.created_at)}</p>
           </div>
           <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_COLOR[status]}`}>
@@ -114,19 +114,19 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
             href={getClientWhatsAppUrl(order.customer_phone, `Bonjour ${order.customer_name}, concernant votre commande ${order.order_number} chez RYTA.`)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#B8925A] hover:text-[#B8925A] transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#0A2A52] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#2F9E44] hover:text-[#2F9E44] transition-colors"
           >
             <MessageCircle size={16} /> WhatsApp client
           </Link>
           <Link
             href={`/admin/commandes/${order.id}/facture`}
-            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#B8925A] hover:text-[#B8925A] transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#0A2A52] text-sm font-medium px-4 py-2.5 rounded-lg hover:border-[#2F9E44] hover:text-[#2F9E44] transition-colors"
           >
             <FileText size={16} /> Générer la facture
           </Link>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-2 bg-[#0F172A] text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-[#1e293b] transition-colors"
+            className="flex items-center gap-2 bg-[#0E2440] text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-[#1e293b] transition-colors"
           >
             <Printer size={16} /> Imprimer le reçu
           </button>
@@ -149,14 +149,14 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#020B27] truncate">{item.product_name}</p>
+                    <p className="text-sm font-medium text-[#0A2A52] truncate">{item.product_name}</p>
                     <p className="text-xs text-[#64748B]">
                       {[item.color, item.size].filter(Boolean).join(" • ")}
                       {(item.color || item.size) && " — "}
                       {item.quantity} × {formatPrice(item.unit_price)}
                     </p>
                   </div>
-                  <p className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(item.total_price)}</p>
+                  <p className="text-sm font-bold text-[#0A2A52] whitespace-nowrap">{formatPrice(item.total_price)}</p>
                 </div>
               ))}
             </div>
@@ -166,8 +166,8 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
               <Row label="Livraison" value={order.delivery_fee ? formatPrice(order.delivery_fee) : "Gratuite"} />
               {order.discount_amount > 0 && <Row label="Réduction" value={`− ${formatPrice(order.discount_amount)}`} />}
               <div className="flex items-center justify-between pt-1.5 border-t border-gray-50">
-                <span className="font-semibold text-[#020B27]">Total</span>
-                <span className="font-bold text-lg text-[#020B27]">{formatPrice(order.total_amount)}</span>
+                <span className="font-semibold text-[#0A2A52]">Total</span>
+                <span className="font-bold text-lg text-[#0A2A52]">{formatPrice(order.total_amount)}</span>
               </div>
             </div>
           </Card>
@@ -185,7 +185,7 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
               <button
                 onClick={saveNote}
                 disabled={pending}
-                className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-60 text-[#0A2A52] text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
               >
                 {pending ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Enregistrer la note
               </button>
@@ -264,19 +264,19 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
 
           {/* Livraison */}
           <Card title="Adresse de livraison" icon={<MapPin size={16} />}>
-            <p className="text-sm text-[#020B27] font-medium">{order.delivery_city}</p>
+            <p className="text-sm text-[#0A2A52] font-medium">{order.delivery_city}</p>
             <p className="text-sm text-[#64748B]">{order.delivery_district}</p>
             {order.delivery_address_details && <p className="text-sm text-[#64748B]">{order.delivery_address_details}</p>}
             {order.delivery_landmark && <p className="text-xs text-[#64748B] italic">Repère : {order.delivery_landmark}</p>}
             {order.estimated_delivery_date && (
               <p className="text-xs text-[#64748B] pt-1 border-t border-gray-50 mt-1">
-                Livraison estimée : <span className="font-medium text-[#020B27]">{order.estimated_delivery_date}</span>
+                Livraison estimée : <span className="font-medium text-[#0A2A52]">{order.estimated_delivery_date}</span>
               </p>
             )}
             {order.customer_note && (
               <div className="pt-2 border-t border-gray-50 mt-1">
                 <p className="text-xs text-[#64748B] mb-0.5">Note du client :</p>
-                <p className="text-sm text-[#020B27]">{order.customer_note}</p>
+                <p className="text-sm text-[#0A2A52]">{order.customer_note}</p>
               </div>
             )}
           </Card>
@@ -289,7 +289,7 @@ export default function OrderDetailClient({ order, agents = [] }: { order: Order
 function Card({ title, icon, children, className = "" }: { title: string; icon?: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
     <div className={`bg-white rounded-lg border border-gray-100 shadow-sm p-5 ${className}`}>
-      <h2 className="font-semibold text-[#020B27] mb-4 flex items-center gap-2">
+      <h2 className="font-semibold text-[#0A2A52] mb-4 flex items-center gap-2">
         {icon && <span className="text-green">{icon}</span>}{title}
       </h2>
       <div className="space-y-3">{children}</div>
@@ -301,14 +301,14 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-[#64748B]">{label}</span>
-      <span className="text-[#020B27] font-medium">{value}</span>
+      <span className="text-[#0A2A52] font-medium">{value}</span>
     </div>
   );
 }
 
 function InfoLine({ icon, value }: { icon: React.ReactNode; value: string }) {
   return (
-    <div className="flex items-center gap-2 text-sm text-[#020B27]">
+    <div className="flex items-center gap-2 text-sm text-[#0A2A52]">
       <span className="text-gray-400">{icon}</span>{value}
     </div>
   );

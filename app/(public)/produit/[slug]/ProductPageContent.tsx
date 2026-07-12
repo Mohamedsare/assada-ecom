@@ -45,7 +45,7 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
           />
         ))}
       </div>
-      <span className="text-sm font-semibold text-[#020B27]">{rating.toFixed(1)}</span>
+      <span className="text-sm font-semibold text-[#0A2A52]">{rating.toFixed(1)}</span>
       <span className="text-xs text-[#64748B]">({count} avis)</span>
     </div>
   );
@@ -159,19 +159,19 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
       <div className="bg-[#F8FAFC] border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <nav aria-label="Fil d'Ariane" className="flex items-center gap-1.5 text-xs text-[#64748B] flex-wrap">
-            <Link href="/" className="hover:text-[#020B27] transition-colors">Accueil</Link>
+            <Link href="/" className="hover:text-[#0A2A52] transition-colors">Accueil</Link>
             <ChevronRight size={12} />
-            <Link href="/boutique" className="hover:text-[#020B27] transition-colors">Boutique</Link>
+            <Link href="/boutique" className="hover:text-[#0A2A52] transition-colors">Boutique</Link>
             {product.category && (
               <>
                 <ChevronRight size={12} />
-                <Link href={`/boutique?categorie=${product.category.slug}`} className="hover:text-[#020B27] transition-colors">
+                <Link href={`/boutique?categorie=${product.category.slug}`} className="hover:text-[#0A2A52] transition-colors">
                   {product.category.name}
                 </Link>
               </>
             )}
             <ChevronRight size={12} />
-            <span className="text-[#020B27] font-medium line-clamp-1">{product.name}</span>
+            <span className="text-[#0A2A52] font-medium line-clamp-1">{product.name}</span>
           </nav>
         </div>
       </div>
@@ -212,7 +212,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
               {/* Badges */}
               <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                 {product.is_new && (
-                  <span className="bg-[#020B27] text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">
+                  <span className="bg-[#0A2A52] text-white text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">
                     Nouveau
                   </span>
                 )}
@@ -237,14 +237,14 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                   <button
                     onClick={goPrevMedia}
                     aria-label="Média précédent"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md text-[#020B27] hover:bg-white transition-colors"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md text-[#0A2A52] hover:bg-white transition-colors"
                   >
                     <ChevronLeft size={20} />
                   </button>
                   <button
                     onClick={goNextMedia}
                     aria-label="Média suivant"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md text-[#020B27] hover:bg-white transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-md text-[#0A2A52] hover:bg-white transition-colors"
                   >
                     <ChevronRight size={20} />
                   </button>
@@ -266,11 +266,11 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                     aria-label={m.kind === "video" ? "Voir la vidéo" : `Photo ${i + 1}`}
                     className={cn(
                       "relative shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition-all",
-                      i === activeImage ? "border-[#020B27]" : "border-gray-200 hover:border-gray-300"
+                      i === activeImage ? "border-[#0A2A52]" : "border-gray-200 hover:border-gray-300"
                     )}
                   >
                     {m.kind === "video" ? (
-                      <div className="w-full h-full bg-[#020B27] flex items-center justify-center">
+                      <div className="w-full h-full bg-[#0A2A52] flex items-center justify-center">
                         <Play size={18} className="text-white fill-white" />
                       </div>
                     ) : (
@@ -293,7 +293,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             {/* Brand + badges */}
             <div className="flex items-center gap-2 flex-wrap">
               {product.brand && (
-                <span className="text-xs font-bold text-[#020B27] uppercase tracking-widest">
+                <span className="text-xs font-bold text-[#0A2A52] uppercase tracking-widest">
                   {product.brand.name}
                 </span>
               )}
@@ -305,7 +305,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             </div>
 
             {/* Title */}
-            <h1 className="text-2xl md:text-3xl font-extrabold text-[#020B27] leading-tight">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-[#0A2A52] leading-tight">
               {product.name}
             </h1>
 
@@ -316,7 +316,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
 
             {/* Price */}
             <div className="flex items-end gap-3 flex-wrap">
-              <span className="text-3xl md:text-4xl font-extrabold text-[#020B27]">
+              <span className="text-3xl md:text-4xl font-extrabold text-[#0A2A52]">
                 {formatPrice(effectivePrice)}
               </span>
               {product.old_price && (
@@ -341,7 +341,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             {/* Color selector */}
             {colors.length > 0 && (
               <div>
-                <p className="text-sm font-semibold text-[#020B27] mb-2">
+                <p className="text-sm font-semibold text-[#0A2A52] mb-2">
                   Couleur : <span className="font-normal text-[#64748B]">{selectedColor ?? "—"}</span>
                 </p>
                 <div className="flex gap-2.5 flex-wrap">
@@ -359,7 +359,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                         aria-pressed={isSelected}
                         className={cn(
                           "relative w-9 h-9 rounded-full transition-transform hover:scale-110",
-                          isSelected ? "ring-2 ring-offset-2 ring-[#020B27]" : "ring-1 ring-gray-300",
+                          isSelected ? "ring-2 ring-offset-2 ring-[#0A2A52]" : "ring-1 ring-gray-300",
                           !available && "opacity-40 cursor-not-allowed hover:scale-100"
                         )}
                         style={{ background: hex ?? "conic-gradient(#DC6B5C,#facc15,#4ade80,#60a5fa,#c084fc,#DC6B5C)" }}
@@ -379,7 +379,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
             {/* Size selector */}
             {sizes.length > 0 && sizes[0] !== "Unique" && (
               <div>
-                <p className="text-sm font-semibold text-[#020B27] mb-2">
+                <p className="text-sm font-semibold text-[#0A2A52] mb-2">
                   Taille : <span className="font-normal text-[#64748B]">{selectedSize ?? "—"}</span>
                 </p>
                 <div className="flex gap-2 flex-wrap">
@@ -393,9 +393,9 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                         className={cn(
                           "w-12 h-10 rounded-lg border text-sm font-semibold transition-all",
                           selectedSize === size
-                            ? "border-[#B8925A] bg-[#B8925A] text-white"
+                            ? "border-[#2F9E44] bg-[#2F9E44] text-white"
                             : available
-                            ? "border-gray-200 text-[#020B27] hover:border-[#B8925A]"
+                            ? "border-gray-200 text-[#0A2A52] hover:border-[#2F9E44]"
                             : "border-gray-100 text-gray-300 cursor-not-allowed line-through bg-gray-50"
                         )}
                       >
@@ -409,8 +409,8 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
 
             {/* Stock indicator */}
             <div className="flex items-center gap-2">
-              <div className={cn("w-2 h-2 rounded-full", inStock ? "bg-[#020B27]" : "bg-[#EF4444]")} />
-              <span className={cn("text-sm font-medium", inStock ? "text-[#020B27]" : "text-[#EF4444]")}>
+              <div className={cn("w-2 h-2 rounded-full", inStock ? "bg-[#0A2A52]" : "bg-[#EF4444]")} />
+              <span className={cn("text-sm font-medium", inStock ? "text-[#0A2A52]" : "text-[#EF4444]")}>
                 {inStock
                   ? `En stock (${matchingVariant?.stock_quantity ?? product.stock_quantity} disponibles)`
                   : "Rupture de stock"}
@@ -422,15 +422,15 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
               <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="w-10 h-11 flex items-center justify-center text-[#020B27] hover:bg-gray-50 transition-colors"
+                  className="w-10 h-11 flex items-center justify-center text-[#0A2A52] hover:bg-gray-50 transition-colors"
                   aria-label="Diminuer la quantité"
                 >
                   <Minus size={14} />
                 </button>
-                <span className="w-10 text-center text-sm font-bold text-[#020B27]">{quantity}</span>
+                <span className="w-10 text-center text-sm font-bold text-[#0A2A52]">{quantity}</span>
                 <button
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="w-10 h-11 flex items-center justify-center text-[#020B27] hover:bg-gray-50 transition-colors"
+                  className="w-10 h-11 flex items-center justify-center text-[#0A2A52] hover:bg-gray-50 transition-colors"
                   aria-label="Augmenter la quantité"
                 >
                   <Plus size={14} />
@@ -443,7 +443,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                 className={cn(
                   "flex-1 min-w-[160px] h-11 rounded-xl flex items-center justify-center gap-2 font-semibold text-sm transition-all",
                   inStock
-                    ? "bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45]"
+                    ? "bg-[#2F9E44] text-white btn-sweep hover:bg-[#237A34]"
                     : "bg-gray-100 text-gray-300 cursor-not-allowed"
                 )}
               >
@@ -473,7 +473,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                 { icon: Phone,       text: "Support WhatsApp 7j/7" },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-2 text-xs text-[#64748B]">
-                  <Icon size={14} className="text-[#020B27] shrink-0" />
+                  <Icon size={14} className="text-[#0A2A52] shrink-0" />
                   {text}
                 </div>
               ))}
@@ -485,13 +485,13 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                 onClick={() => {
                   if (navigator.share) navigator.share({ title: product.name, url: window.location.href });
                 }}
-                className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#020B27] transition-colors"
+                className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#0A2A52] transition-colors"
               >
                 <Share2 size={13} /> Partager
               </button>
               <span className="text-gray-200">|</span>
               <a href={whatsappMsg} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#B8925A] transition-colors">
+                className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#2F9E44] transition-colors">
                 <MessageCircle size={13} /> Poser une question
               </a>
             </div>
@@ -508,8 +508,8 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                 className={cn(
                   "px-5 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-all",
                   activeTab === tab.key
-                    ? "border-[#020B27] text-[#020B27]"
-                    : "border-transparent text-[#64748B] hover:text-[#020B27]"
+                    ? "border-[#0A2A52] text-[#0A2A52]"
+                    : "border-transparent text-[#64748B] hover:text-[#0A2A52]"
                 )}
               >
                 {tab.label}
@@ -522,7 +522,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
           {activeTab === "description" && (
             <div className="max-w-3xl">
               {product.description ? (
-                <div className="text-[#020B27] text-sm leading-relaxed space-y-3 whitespace-pre-line">
+                <div className="text-[#0A2A52] text-sm leading-relaxed space-y-3 whitespace-pre-line">
                   {product.description.split("\n\n").map((para, i) => (
                     <p key={i} className={para.startsWith("**") ? "font-semibold" : ""}>
                       {para.replace(/\*\*/g, "")}
@@ -554,7 +554,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
                     .filter((row): row is [string, string] => row !== null)
                     .map(([label, value], i) => (
                       <tr key={i} className={i % 2 === 0 ? "bg-[#F8FAFC]" : ""}>
-                        <td className="py-2.5 px-4 font-medium text-[#020B27] w-44 rounded-l-lg">{label}</td>
+                        <td className="py-2.5 px-4 font-medium text-[#0A2A52] w-44 rounded-l-lg">{label}</td>
                         <td className="py-2.5 px-4 text-[#64748B] rounded-r-lg">{value}</td>
                       </tr>
                     ))}
@@ -568,7 +568,7 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
               {product.rating && (
                 <div className="bg-[#F8FAFC] rounded-2xl p-6 mb-6 flex items-center gap-6">
                   <div className="text-center">
-                    <p className="text-5xl font-extrabold text-[#020B27]">{product.rating.toFixed(1)}</p>
+                    <p className="text-5xl font-extrabold text-[#0A2A52]">{product.rating.toFixed(1)}</p>
                     <div className="flex gap-0.5 justify-center mt-1">
                       {[1,2,3,4,5].map((s) => (
                         <Star key={s} size={14} className={s <= Math.round(product.rating!) ? "fill-amber-400 text-amber-400" : "text-gray-200 fill-gray-200"} />
@@ -603,10 +603,10 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
         {relatedProducts.length > 0 && (
           <section className="border-t border-gray-100 pt-10">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-[#020B27]">Produits similaires</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">Produits similaires</h2>
               <Link
                 href={product.category ? `/boutique?categorie=${product.category.slug}` : "/boutique"}
-                className="text-sm text-[#020B27] font-medium hover:underline flex items-center gap-1"
+                className="text-sm text-[#0A2A52] font-medium hover:underline flex items-center gap-1"
               >
                 Voir plus <ChevronRight size={14} />
               </Link>
@@ -620,23 +620,23 @@ export default function ProductPageContent({ product, relatedProducts }: Props) 
         )}
 
         {/* ── Bloc réassurance ── */}
-        <section className="mt-12 bg-[#020B27] rounded-2xl p-6 md:p-8 grid grid-cols-1 sm:grid-cols-3 gap-6 text-white">
+        <section className="mt-12 bg-[#0A2A52] rounded-2xl p-6 md:p-8 grid grid-cols-1 sm:grid-cols-3 gap-6 text-white">
           <div className="flex items-start gap-3">
-            <Truck size={22} className="text-[#C9A063] mt-0.5 shrink-0" />
+            <Truck size={22} className="text-[#54B85E] mt-0.5 shrink-0" />
             <div>
               <p className="font-bold text-sm">Livraison rapide</p>
               <p className="text-xs text-white/60 mt-0.5">Partout au Maroc en 24 à 72h. Gratuite à partir de 300 DH pour tout le Maroc.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <ShieldCheck size={22} className="text-[#C9A063] mt-0.5 shrink-0" />
+            <ShieldCheck size={22} className="text-[#54B85E] mt-0.5 shrink-0" />
             <div>
               <p className="font-bold text-sm">Produits authentiques</p>
               <p className="text-xs text-white/60 mt-0.5">Tous nos produits sont originaux et garantis.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <RefreshCw size={22} className="text-[#C9A063] mt-0.5 shrink-0" />
+            <RefreshCw size={22} className="text-[#54B85E] mt-0.5 shrink-0" />
             <div>
               <p className="font-bold text-sm">Retour facile</p>
               <p className="text-xs text-white/60 mt-0.5">Satisfait ou remboursé. Support WhatsApp disponible.</p>

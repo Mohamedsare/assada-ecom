@@ -1,24 +1,23 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* ── Palette « RYTA » (bleu nuit / vert e-commerce) ────────
-     Reprise exacte de la palette du projet odmshop.
-     Fond gris clair #F8FAFC · Chrome bleu nuit #020B27 (header/footer)
-     Vert de marque #16A34A (boutons, CTA, accents) · vert lumineux #22C55E
-     Texte #0F172A · texte secondaire #64748B · erreur #EF4444
+  /* ── Palette « RYTA » (vert feuille / bleu eau — couleurs du logo) ────────
+     Fond gris clair #F8FAFC · Chrome bleu profond #0A2A52 (header/footer)
+     Vert de marque #2F9E44 (boutons, CTA, accents) · vert clair #54B85E
+     Texte #0E2440 · texte secondaire #64748B · erreur #EF4444
      Les tokens sémantiques (rose/gold/success/whatsapp) sont remappés
-     vers le vert/bleu nuit pour rester cohérents avec cette palette. */
+     vers le vert/bleu du logo pour rester cohérents avec cette palette. */
   --color-background: #F8FAFC;
-  --color-foreground: #0F172A;
+  --color-foreground: #0E2440;
   --font-sans: var(--font-geist-sans);
 
-  --color-night: #020617;       /* chrome sombre (header, footer, bandeaux) */
-  --color-night-2: #0F172A;
-  --color-green: #B8925A;        /* action principale = or champagne */
-  --color-green-light: #C9A063;  /* or clair */
+  --color-night: #061C38;       /* chrome sombre (header, footer, bandeaux) */
+  --color-night-2: #0E2440;
+  --color-green: #2F9E44;        /* action principale = vert feuille (logo) */
+  --color-green-light: #54B85E;  /* vert clair */
   --color-gray-light: #F8FAFC;
   --color-gray-border: #E5E7EB;
-  --color-text-dark: #0F172A;
+  --color-text-dark: #0E2440;
   --color-text-secondary: #475569;   /* texte secondaire un peu plus intense (était #64748B) */
   --color-red: #EF4444;
   --color-orange: #F97316;
@@ -36,11 +35,11 @@
 
   /* Tokens sémantiques remappés sur la palette bleu nuit / vert */
   --color-cream: #F8FAFC;
-  --color-principal: #B8925A;
-  --color-rose: #B8925A;
-  --color-rose-dark: #9E7A45;
-  --color-gold: #B8925A;
-  --color-gold-dark: #9E7A45;
+  --color-principal: #2F9E44;
+  --color-rose: #2F9E44;
+  --color-rose-dark: #237A34;
+  --color-gold: #2F9E44;
+  --color-gold-dark: #237A34;
   --color-success: #16A34A;       /* succès reste vert */
   --color-whatsapp: #16A34A;      /* WhatsApp reste vert */
   --color-whatsapp-dark: #326B4D; /* survol WhatsApp */
@@ -76,7 +75,7 @@ body {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: var(--color-night-2); /* #0F172A — bleu nuit du site */
+    background: var(--color-night-2); /* #0E2440 — bleu nuit du site */
     transform: translateY(100%);
     transition: transform 0.3s ease-out;
   }
@@ -124,11 +123,11 @@ body {
   background: #f1f1f1;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B8925A;
+  background: #2F9E44;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #9E7A45;
+  background: #237A34;
 }
 
 /* Masquer la scrollbar (carrousels mobiles) */

@@ -11,12 +11,12 @@ export async function HomeLatestProducts() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#020B27]">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52]">
               Derniers produits ajoutés
             </h2>
             <p className="text-[#64748B] mt-1">Les nouveautés de la semaine</p>
           </div>
-          <Link href="/boutique" className="flex items-center gap-1 text-[#020B27] font-medium text-sm hover:underline">
+          <Link href="/boutique" className="flex items-center gap-1 text-[#0A2A52] font-medium text-sm hover:underline">
             Voir tout <ChevronRight size={16} />
           </Link>
         </div>
@@ -47,7 +47,7 @@ export async function HomePromoProducts() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-[#020B27]">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52]">
               Meilleures offres du moment
             </h2>
             <p className="text-[#64748B] mt-1">Ne ratez pas ces promotions</p>

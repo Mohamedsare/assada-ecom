@@ -27,11 +27,11 @@ export default function NewsletterForm() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Entrez votre email *"
         aria-label="Votre adresse email"
-        className="min-w-0 flex-1 h-14 rounded-full bg-white px-6 text-[15px] text-[#020B27] placeholder-[#64748B] outline-none focus:ring-2 focus:ring-[#B8925A]"
+        className="min-w-0 flex-1 h-14 rounded-full bg-white px-6 text-[15px] text-[#0A2A52] placeholder-[#64748B] outline-none focus:ring-2 focus:ring-[#2F9E44]"
       />
       <button
         type="submit"
-        className="shrink-0 text-base font-bold text-white hover:text-[#B8925A] transition-colors"
+        className="shrink-0 text-base font-bold text-white hover:text-[#2F9E44] transition-colors"
       >
         S&apos;abonner
       </button>

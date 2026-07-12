@@ -90,7 +90,7 @@ function LogoutButton() {
 function Avatar({ url, name, size }: { url?: string | null; name: string; size: number }) {
   return (
     <span
-      className="rounded-full overflow-hidden flex items-center justify-center bg-green text-[#020B27] font-bold shrink-0"
+      className="rounded-full overflow-hidden flex items-center justify-center bg-green text-[#0A2A52] font-bold shrink-0"
       style={{ width: size, height: size, fontSize: Math.round(size * 0.36) }}
     >
       {url ? (
@@ -120,12 +120,13 @@ export interface AdminNotification {
 }
 
 export default function AdminLayoutClient({
-  children, adminName, adminRole, adminAvatar = null, role = "admin", permissions = {}, notifications, pendingOrders = 0,
+  children, adminName, adminRole, adminAvatar = null, logoUrl = "/ryta.png", role = "admin", permissions = {}, notifications, pendingOrders = 0,
 }: {
   children: React.ReactNode;
   adminName: string;
   adminRole: string;
   adminAvatar?: string | null;
+  logoUrl?: string;
   role?: UserRole;
   permissions?: PermissionMatrix;
   notifications: AdminNotification[];
@@ -162,7 +163,7 @@ export default function AdminLayoutClient({
         {!collapsed && (
           <Link href="/admin/dashboard" className="flex items-center">
             <span className="bg-white rounded-lg px-2.5 py-1.5 inline-flex">
-              <Image src="/ryta.png" alt="RYTA" width={180} height={120} className="h-11 w-auto object-contain" />
+              <Image src={logoUrl} alt="RYTA" width={180} height={120} className="h-11 w-auto object-contain" />
             </span>
           </Link>
         )}
@@ -315,7 +316,7 @@ export default function AdminLayoutClient({
       {/* Main */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Topbar */}
-        <header className="bg-white text-[#020B27] border-b border-gray-200 px-4 py-2.5 flex items-center gap-3 shrink-0 z-10">
+        <header className="bg-white text-[#0A2A52] border-b border-gray-200 px-4 py-2.5 flex items-center gap-3 shrink-0 z-10">
           <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors shrink-0">
             <Menu size={20} />
           </button>
@@ -327,16 +328,16 @@ export default function AdminLayoutClient({
           <div className="relative shrink-0" ref={notifRef}>
             <button
               onClick={() => { setNotifOpen((v) => !v); setUserOpen(false); }}
-              className="relative p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#020B27] transition-colors"
+              className="relative p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#0A2A52] transition-colors"
               aria-label="Notifications"
             >
               <Bell size={20} />
               {notifications.length > 0 && (
-                <span className="absolute top-1 right-1 bg-green text-[#020B27] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center ring-2 ring-white">{notifications.length}</span>
+                <span className="absolute top-1 right-1 bg-green text-[#0A2A52] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center ring-2 ring-white">{notifications.length}</span>
               )}
             </button>
             {notifOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#020B27]">
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#0A2A52]">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
                   <p className="font-bold text-sm">Notifications</p>
                   <span className="text-xs text-green font-medium">{notifications.length} récentes</span>
@@ -374,11 +375,11 @@ export default function AdminLayoutClient({
               <ChevronDown size={15} className="text-gray-400" />
             </button>
             {userOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#020B27] py-1.5">
+              <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden z-50 text-[#0A2A52] py-1.5">
                 <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-50 mb-1">
                   <Avatar url={adminAvatar} name={adminName} size={40} />
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-[#020B27] truncate">{adminName}</p>
+                    <p className="text-sm font-semibold text-[#0A2A52] truncate">{adminName}</p>
                     <p className="text-xs text-text-secondary">{adminRole}</p>
                   </div>
                 </div>

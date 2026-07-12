@@ -100,14 +100,14 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             <button
               onClick={step(-1)}
               aria-label="Image précédente"
-              className="absolute left-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#020B27] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
+              className="absolute left-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#0A2A52] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={step(1)}
               aria-label="Image suivante"
-              className="absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#020B27] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
+              className="absolute right-1.5 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#0A2A52] opacity-0 shadow transition-opacity duration-200 hover:bg-white group-hover:opacity-100"
             >
               <ChevronRight size={16} />
             </button>
@@ -119,7 +119,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
                   key={i}
                   className={cn(
                     "h-1.5 rounded-full transition-all",
-                    i === imgIndex ? "w-3 bg-[#0F172A]" : "w-1.5 bg-white/80 shadow"
+                    i === imgIndex ? "w-3 bg-[#0E2440]" : "w-1.5 bg-white/80 shadow"
                   )}
                 />
               ))}
@@ -138,7 +138,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
         <button
           onClick={handleQuickView}
           aria-label="Aperçu rapide"
-          className="absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-medium text-[#020B27] opacity-0 shadow-sm transition-all duration-200 hover:bg-white group-hover:opacity-100"
+          className="absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-medium text-[#0A2A52] opacity-0 shadow-sm transition-all duration-200 hover:bg-white group-hover:opacity-100"
         >
           <Eye size={13} />
           Aperçu
@@ -165,7 +165,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
 
         {/* Name */}
         <Link href={`/produit/${product.slug}`}>
-          <h3 className="line-clamp-1 text-[13px] leading-tight text-[#475569] hover:text-[#020B27]">
+          <h3 className="line-clamp-1 text-[13px] leading-tight text-[#475569] hover:text-[#0A2A52]">
             {product.name}
           </h3>
         </Link>
@@ -197,7 +197,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
                   size={11}
                   className={cn(
                     i < Math.round(rating)
-                      ? "fill-[#0F172A] text-[#020B27]"
+                      ? "fill-[#0E2440] text-[#0A2A52]"
                       : "fill-gray-200 text-gray-200"
                   )}
                 />
@@ -225,7 +225,7 @@ export default function ProductCard({ product, className }: ProductCardProps) {
             "mt-2 flex w-full items-center justify-center rounded-lg py-2 text-[13px] font-semibold",
             // Balayage bas → haut (classe .btn-sweep dans globals.css).
             product.stock_quantity > 0
-              ? "btn-sweep bg-[#B8925A] text-white shadow-md shadow-[#B8925A]/30"
+              ? "btn-sweep bg-[#2F9E44] text-white shadow-md shadow-[#2F9E44]/30"
               : "cursor-not-allowed bg-gray-100 text-gray-400"
           )}
         >

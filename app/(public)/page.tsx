@@ -54,6 +54,7 @@ export default async function HomePage() {
               products={latestProducts}
               viewAllHref="/boutique"
               viewAllColor="text-green"
+              autoScroll
             />
           </div>
         </section>

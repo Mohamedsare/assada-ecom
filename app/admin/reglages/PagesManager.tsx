@@ -30,7 +30,7 @@ export default function PagesManager({ images, heroSlides }: { images: Record<st
     <div>
       <div className="flex items-center gap-2 mb-1">
         <LayoutTemplate size={20} className="text-green" />
-        <h1 className="text-xl font-bold text-[#020B27]">Gestion des pages</h1>
+        <h1 className="text-xl font-bold text-[#0A2A52]">Gestion des pages</h1>
       </div>
       <p className="text-text-secondary text-sm mb-5">
         Personnalisez les images du site sans toucher au code. Vos changements sont visibles immédiatement.
@@ -52,7 +52,7 @@ export default function PagesManager({ images, heroSlides }: { images: Record<st
       <form action={handleAction} className="space-y-5 max-w-3xl">
         {PAGE_IMAGE_GROUPS.map((group) => (
           <div key={group.group} className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
-            <h2 className="font-semibold text-[#020B27] mb-4">{group.group}</h2>
+            <h2 className="font-semibold text-[#0A2A52] mb-4">{group.group}</h2>
             <div className="grid sm:grid-cols-2 gap-5">
               {group.items.map((item) => (
                 <ImageUploadField
@@ -71,7 +71,7 @@ export default function PagesManager({ images, heroSlides }: { images: Record<st
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer les modifications"}
           </button>

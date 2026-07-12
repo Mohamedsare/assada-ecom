@@ -26,6 +26,7 @@ export default async function AdminParametresPage() {
 
   const initial: SettingsValues = {
     shop_name:               read(s.shop_name, SITE_NAME),
+    shop_logo:               read(s.shop_logo, "/ryta.png"),
     shop_email:              read(s.shop_email, SITE_EMAIL),
     shop_phone:              read(s.shop_phone, SITE_PHONE),
     shop_whatsapp:           read(s.shop_whatsapp, SITE_PHONE),
@@ -42,7 +43,7 @@ export default async function AdminParametresPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-[#020B27] mb-1">Paramètres de la boutique</h1>
+      <h1 className="text-xl font-bold text-[#0A2A52] mb-1">Paramètres de la boutique</h1>
       <p className="text-text-secondary text-sm mb-6">Gérez les informations et la configuration de votre boutique</p>
       <SettingsForm initial={initial} />
     </div>

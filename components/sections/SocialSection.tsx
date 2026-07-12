@@ -84,7 +84,7 @@ export default function SocialSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6">
           <p className="text-xs font-bold text-green uppercase tracking-widest mb-1">Réseaux sociaux</p>
-          <h2 className="text-xl md:text-2xl font-bold text-[#020B27]">
+          <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">
             Suivez <span className="text-green">RYTA</span>
           </h2>
           <p className="text-text-secondary text-sm mt-1">

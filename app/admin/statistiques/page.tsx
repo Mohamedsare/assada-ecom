@@ -73,7 +73,7 @@ export default async function AdminStatsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-bold text-[#020B27]">Rapports & Statistiques</h1>
+        <h1 className="text-xl font-bold text-[#0A2A52]">Rapports & Statistiques</h1>
         <p className="text-text-secondary text-sm mt-0.5">Analyse des performances de la boutique</p>
       </div>
 
@@ -154,7 +154,7 @@ function Kpi({ icon: Icon, label, value, color }: { icon: typeof DollarSign; lab
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex items-center gap-3">
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${color}`}><Icon size={18} /></div>
       <div className="min-w-0">
-        <p className="text-lg font-extrabold text-[#020B27] leading-none truncate">{value}</p>
+        <p className="text-lg font-extrabold text-[#0A2A52] leading-none truncate">{value}</p>
         <p className="text-xs text-text-secondary mt-1">{label}</p>
       </div>
     </div>
@@ -167,7 +167,7 @@ function Card({ title, subtitle, icon: Icon, children }: { title: string; subtit
       <div className="flex items-center gap-2 mb-4">
         {Icon && <Icon size={16} className="text-green" />}
         <div>
-          <h3 className="font-bold text-[#020B27] text-sm">{title}</h3>
+          <h3 className="font-bold text-[#0A2A52] text-sm">{title}</h3>
           {subtitle && <p className="text-xs text-text-secondary">{subtitle}</p>}
         </div>
       </div>
@@ -184,7 +184,7 @@ function RankList({ rows, empty }: { rows: { label: string; sub?: string; value:
         <div key={r.label} className="flex items-center gap-3">
           <span className="w-6 h-6 rounded-lg bg-gray-100 text-gray-500 text-xs font-bold flex items-center justify-center shrink-0">{i + 1}</span>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-[#020B27] truncate">{r.label}</p>
+            <p className="text-sm font-medium text-[#0A2A52] truncate">{r.label}</p>
             {r.sub && <p className="text-[11px] text-text-secondary">{r.sub}</p>}
           </div>
           <span className="text-sm font-bold text-green shrink-0">{r.value}</span>
@@ -200,7 +200,7 @@ function Bar({ label, value, total }: { label: string; value: number; total: num
     <div>
       <div className="flex justify-between text-xs mb-0.5">
         <span className="text-text-secondary">{label}</span>
-        <span className="font-medium text-[#020B27]">{value} · {pct}%</span>
+        <span className="font-medium text-[#0A2A52]">{value} · {pct}%</span>
       </div>
       <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
         <div className="h-full bg-green rounded-full" style={{ width: `${pct}%` }} />

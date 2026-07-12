@@ -47,10 +47,10 @@ function CategoryCircle({ cat }: { cat: Cat }) {
             onError={() => setImgError(true)}
           />
         ) : (
-          <CategoryIcon slug={cat.slug} size={38} strokeWidth={1.5} className="text-[#B8925A]" />
+          <CategoryIcon slug={cat.slug} size={38} strokeWidth={1.5} className="text-[#2F9E44]" />
         )}
       </div>
-      <span className="text-xs md:text-sm font-medium text-[#020B27] text-center leading-tight whitespace-pre-line group-hover:text-green transition-colors">
+      <span className="text-xs md:text-sm font-medium text-[#0A2A52] text-center leading-tight whitespace-pre-line group-hover:text-green transition-colors">
         {cat.name}
       </span>
     </Link>
@@ -72,7 +72,7 @@ export default function CategoriesSection({ items }: { items?: CategoryItem[] })
           <p className="text-xs font-bold text-green uppercase tracking-widest mb-2">
             Catégories
           </p>
-          <h2 className="text-2xl md:text-3xl font-bold text-[#020B27]">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52]">
             Parcourez nos catégories
           </h2>
         </div>

@@ -23,7 +23,7 @@ export default function AvisContent({ reviews }: { reviews: Review[] }) {
   return (
     <div>
       <div className="mb-5">
-        <h1 className="text-xl font-bold text-[#020B27]">Avis clients</h1>
+        <h1 className="text-xl font-bold text-[#0A2A52]">Avis clients</h1>
         <p className="text-text-secondary text-sm mt-0.5">Modérez les avis laissés sur vos produits</p>
       </div>
 
@@ -45,7 +45,7 @@ export default function AvisContent({ reviews }: { reviews: Review[] }) {
       {filtered.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <MessageSquare size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#020B27]">Aucun avis</p>
+          <p className="font-semibold text-[#0A2A52]">Aucun avis</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -84,7 +84,7 @@ function ReviewCard({ review }: { review: Review }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-semibold text-[#020B27] truncate">{review.product?.name ?? "Produit supprimé"}</p>
+          <p className="text-sm font-semibold text-[#0A2A52] truncate">{review.product?.name ?? "Produit supprimé"}</p>
           <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0 ${approved ? "bg-green-50 text-green" : "bg-orange-50 text-orange-600"}`}>
             {approved ? "Approuvé" : "En attente"}
           </span>
@@ -97,11 +97,11 @@ function ReviewCard({ review }: { review: Review }) {
           </div>
           <span className="text-xs text-text-secondary">par {name} · {formatDate(review.created_at)}</span>
         </div>
-        {review.comment && <p className="text-sm text-[#020B27] mt-2">{review.comment}</p>}
+        {review.comment && <p className="text-sm text-[#0A2A52] mt-2">{review.comment}</p>}
 
         <div className="flex items-center gap-2 mt-3">
           {!approved ? (
-            <button onClick={() => toggle(true)} disabled={pending} className="flex items-center gap-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-1.5 rounded-lg btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
+            <button onClick={() => toggle(true)} disabled={pending} className="flex items-center gap-1 text-xs font-semibold bg-green text-[#0A2A52] px-3 py-1.5 rounded-lg btn-sweep hover:bg-[#237A34] disabled:opacity-60 transition-colors">
               <Check size={13} /> Approuver
             </button>
           ) : (
@@ -118,7 +118,7 @@ function ReviewCard({ review }: { review: Review }) {
   );
 }
 
-function Kpi({ label, value, accent = "text-[#020B27]" }: { label: string; value: string; accent?: string }) {
+function Kpi({ label, value, accent = "text-[#0A2A52]" }: { label: string; value: string; accent?: string }) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
       <p className={`text-2xl font-extrabold ${accent}`}>{value}</p>

@@ -186,7 +186,7 @@ export default function VariantsField({
         </div>
         {colors.length > 0 && (
           <p className="mt-2 text-[11px] text-text-secondary">
-            Sélectionnées : <b className="text-[#020B27]">{colors.join(", ")}</b>
+            Sélectionnées : <b className="text-[#0A2A52]">{colors.join(", ")}</b>
           </p>
         )}
       </div>
@@ -200,7 +200,7 @@ export default function VariantsField({
               key={p.label}
               type="button"
               onClick={() => addSizes(p.sizes.join(","))}
-              className="rounded-full bg-[#F8FAFC] border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-[#020B27] hover:border-green hover:text-green transition-colors"
+              className="rounded-full bg-[#F8FAFC] border border-gray-200 px-2.5 py-1 text-[11px] font-medium text-[#0A2A52] hover:border-green hover:text-green transition-colors"
             >
               + {p.label}
             </button>
@@ -232,7 +232,7 @@ export default function VariantsField({
           type="button"
           onClick={generate}
           disabled={!combos.length}
-          className="inline-flex items-center gap-1.5 bg-[#B8925A] text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="inline-flex items-center gap-1.5 bg-[#2F9E44] text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-green disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           <Wand2 size={14} /> Générer les variantes{combos.length ? ` (${combos.length})` : ""}
         </button>
@@ -252,7 +252,7 @@ export default function VariantsField({
         <div className="space-y-2">
           <div className="flex items-center justify-between px-1">
             <span className="text-[11px] font-medium text-text-secondary">{rows.length} variante{rows.length > 1 ? "s" : ""}</span>
-            <span className="text-[11px] text-text-secondary">Stock total : <b className="text-[#020B27]">{totalStock}</b></span>
+            <span className="text-[11px] text-text-secondary">Stock total : <b className="text-[#0A2A52]">{totalStock}</b></span>
           </div>
           <div className="hidden sm:grid grid-cols-[1fr_1fr_72px_92px_32px] gap-2 px-1 text-[11px] font-medium text-text-secondary">
             <span>Couleur</span><span>Taille</span><span>Stock</span><span>Prix +/−</span><span />
@@ -289,7 +289,7 @@ export default function VariantsField({
         </div>
       )}
 
-      <button type="button" onClick={addManual} className="flex items-center gap-1.5 text-sm font-medium text-green hover:text-[#0F172A] transition-colors">
+      <button type="button" onClick={addManual} className="flex items-center gap-1.5 text-sm font-medium text-green hover:text-[#0E2440] transition-colors">
         <Plus size={15} /> Ajouter une variante manuellement
       </button>
     </div>

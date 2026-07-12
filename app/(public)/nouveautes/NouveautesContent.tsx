@@ -71,7 +71,7 @@ export default function NouveautesContent({ products, categories }: Props) {
   const renderFilterPanel = () => (
     <div className="space-y-5">
       <div>
-        <h3 className="font-bold text-[#020B27] mb-3 text-sm">Catégories</h3>
+        <h3 className="font-bold text-[#0A2A52] mb-3 text-sm">Catégories</h3>
         <div className="space-y-2">
           {categories.map((cat) => (
             <label key={cat.slug} className="flex items-center justify-between cursor-pointer group">
@@ -82,7 +82,7 @@ export default function NouveautesContent({ products, categories }: Props) {
                   onChange={() => toggleCategory(cat.slug)}
                   className="rounded border-gray-300 text-green focus:ring-green"
                 />
-                <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">
+                <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">
                   {cat.name}
                 </span>
               </div>
@@ -145,10 +145,10 @@ export default function NouveautesContent({ products, categories }: Props) {
                   {cat.image ? (
                     <Image src={cat.image} alt={cat.name} width={80} height={80} className="object-cover w-full h-full" />
                   ) : (
-                    <CategoryIcon slug={cat.slug} size={30} strokeWidth={1.5} className="text-[#B8925A]" />
+                    <CategoryIcon slug={cat.slug} size={30} strokeWidth={1.5} className="text-[#2F9E44]" />
                   )}
                 </div>
-                <span className="text-xs font-medium text-[#020B27] text-center w-20 leading-tight">
+                <span className="text-xs font-medium text-[#0A2A52] text-center w-20 leading-tight">
                   {cat.name}
                 </span>
               </button>
@@ -162,7 +162,7 @@ export default function NouveautesContent({ products, categories }: Props) {
           <aside className="hidden lg:block w-44 shrink-0">
             <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="font-bold text-[#020B27] text-base">Filtres</h2>
+                <h2 className="font-bold text-[#0A2A52] text-base">Filtres</h2>
                 {selectedCategories.length > 0 && (
                   <button onClick={resetFilters} className="text-xs text-green font-semibold hover:underline">
                     Réinitialiser
@@ -178,13 +178,13 @@ export default function NouveautesContent({ products, categories }: Props) {
               <div className="flex items-center justify-between">
                 <button
                   onClick={() => setFiltersOpen(true)}
-                  className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#020B27] border border-gray-200 px-4 py-2.5 rounded-xl active:scale-95 transition-all hover:border-green"
+                  className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#0A2A52] border border-gray-200 px-4 py-2.5 rounded-xl active:scale-95 transition-all hover:border-green"
                 >
                   <SlidersHorizontal size={16} />
                   Filtres
                 </button>
                 <span className="text-sm text-text-secondary">
-                  <span className="font-bold text-[#020B27]">{filtered.length}</span>{" "}
+                  <span className="font-bold text-[#0A2A52]">{filtered.length}</span>{" "}
                   nouveau{filtered.length !== 1 ? "x" : ""} produit{filtered.length !== 1 ? "s" : ""}
                 </span>
               </div>
@@ -195,7 +195,7 @@ export default function NouveautesContent({ products, categories }: Props) {
                   <select
                     value={sort}
                     onChange={(e) => setSort(e.target.value)}
-                    className="w-full appearance-none font-semibold text-[#020B27] pr-8 pl-3 py-2.5 border border-gray-200 rounded-xl outline-none focus:border-green bg-white text-sm"
+                    className="w-full appearance-none font-semibold text-[#0A2A52] pr-8 pl-3 py-2.5 border border-gray-200 rounded-xl outline-none focus:border-green bg-white text-sm"
                   >
                     {SORT_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -208,11 +208,11 @@ export default function NouveautesContent({ products, categories }: Props) {
 
             {filtered.length === 0 ? (
               <div className="text-center py-20">
-                <h3 className="text-lg font-semibold text-[#020B27] mb-2">Aucun produit trouvé</h3>
+                <h3 className="text-lg font-semibold text-[#0A2A52] mb-2">Aucun produit trouvé</h3>
                 <p className="text-text-secondary mb-6">Essayez de modifier vos filtres</p>
                 <button
                   onClick={resetFilters}
-                  className="bg-green text-[#020B27] px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
+                  className="bg-green text-[#0A2A52] px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#237A34] transition-colors"
                 >
                   Réinitialiser les filtres
                 </button>
@@ -233,7 +233,7 @@ export default function NouveautesContent({ products, categories }: Props) {
           <div className="absolute inset-0 bg-black/50" onClick={() => setFiltersOpen(false)} />
           <div className="absolute right-0 top-0 bottom-0 w-72 bg-white p-5 overflow-y-auto">
             <div className="flex items-center justify-between mb-5">
-              <h2 className="font-bold text-[#020B27]">Filtres</h2>
+              <h2 className="font-bold text-[#0A2A52]">Filtres</h2>
               <button onClick={() => setFiltersOpen(false)}>
                 <X size={20} className="text-gray-500" />
               </button>
@@ -241,7 +241,7 @@ export default function NouveautesContent({ products, categories }: Props) {
             {renderFilterPanel()}
             <button
               onClick={() => setFiltersOpen(false)}
-              className="w-full mt-6 bg-green text-[#020B27] py-3 rounded-xl font-semibold"
+              className="w-full mt-6 bg-green text-[#0A2A52] py-3 rounded-xl font-semibold"
             >
               Voir les résultats ({filtered.length})
             </button>

@@ -37,12 +37,12 @@ export default function LivreursContent({ agents, stats }: { agents: DeliveryAge
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-[#020B27]">Livreurs</h1>
+          <h1 className="text-xl font-bold text-[#0A2A52]">Livreurs</h1>
           <p className="text-text-secondary text-sm mt-0.5">{agents.length} livreur(s) · {totalDelivered} livraisons · {formatPrice(totalCollected)} encaissés</p>
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
         >
           <UserPlus size={16} /> Ajouter un livreur
         </button>
@@ -61,9 +61,9 @@ export default function LivreursContent({ agents, stats }: { agents: DeliveryAge
       {agents.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Truck size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#020B27] mb-1">Aucun livreur</p>
+          <p className="font-semibold text-[#0A2A52] mb-1">Aucun livreur</p>
           <p className="text-text-secondary text-sm mb-5">Ajoutez vos livreurs pour assigner les commandes et suivre les encaissements.</p>
-          <button onClick={() => setCreating(true)} className="bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
+          <button onClick={() => setCreating(true)} className="bg-green btn-sweep hover:bg-[#237A34] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors">
             Ajouter un livreur
           </button>
         </div>
@@ -111,7 +111,7 @@ function AgentCard({
             <Truck size={18} />
           </div>
           <div className="min-w-0">
-            <p className="font-semibold text-[#020B27] truncate">{agent.name}</p>
+            <p className="font-semibold text-[#0A2A52] truncate">{agent.name}</p>
             <p className="text-xs text-text-secondary flex items-center gap-1"><Phone size={11} /> {agent.phone}</p>
           </div>
         </div>
@@ -140,11 +140,11 @@ function AgentCard({
         <a
           href={`https://wa.me/${agent.phone.replace(/[^0-9]/g, "") || WHATSAPP_NUMBER}`}
           target="_blank" rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium border border-gray-200 text-[#020B27] px-2 py-1.5 rounded-lg hover:border-green hover:text-green transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium border border-gray-200 text-[#0A2A52] px-2 py-1.5 rounded-lg hover:border-green hover:text-green transition-colors"
         >
           <MessageCircle size={13} /> WhatsApp
         </a>
-        <button onClick={onEdit} className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:text-[#020B27] hover:border-gray-300 transition-colors"><Pencil size={14} /></button>
+        <button onClick={onEdit} className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:text-[#0A2A52] hover:border-gray-300 transition-colors"><Pencil size={14} /></button>
         <button onClick={remove} disabled={pending} className="p-1.5 rounded-lg border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors disabled:opacity-50"><Trash2 size={14} /></button>
       </div>
     </div>
@@ -155,7 +155,7 @@ function Stat({ icon, value, label }: { icon: React.ReactNode; value: string; la
   return (
     <div className="bg-gray-50 rounded-lg py-2">
       <div className="flex items-center justify-center gap-1 text-gray-400 mb-0.5">{icon}</div>
-      <p className="text-sm font-bold text-[#020B27] leading-none">{value}</p>
+      <p className="text-sm font-bold text-[#0A2A52] leading-none">{value}</p>
       <p className="text-[10px] text-text-secondary mt-0.5">{label}</p>
     </div>
   );
@@ -182,8 +182,8 @@ function AgentModal({ agent, onClose }: { agent: DeliveryAgent | null; onClose: 
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-[#020B27]">{agent ? "Modifier le livreur" : "Nouveau livreur"}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-[#020B27] transition-colors"><X size={20} /></button>
+          <h2 className="font-bold text-[#0A2A52]">{agent ? "Modifier le livreur" : "Nouveau livreur"}</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-[#0A2A52] transition-colors"><X size={20} /></button>
         </div>
         <form action={submit} className="p-5 space-y-4">
           <Field label="Nom complet" name="name" defaultValue={agent?.name ?? ""} required />
@@ -191,7 +191,7 @@ function AgentModal({ agent, onClose }: { agent: DeliveryAgent | null; onClose: 
           <Field label="Zones couvertes" name="zones" defaultValue={agent?.zones ?? ""} placeholder="Derb Ghalef, Maârif, Anfa…" />
           <Field label="Note interne" name="note" defaultValue={agent?.note ?? ""} />
           {!agent && (
-            <label className="flex items-center gap-2 text-sm text-[#020B27]">
+            <label className="flex items-center gap-2 text-sm text-[#0A2A52]">
               <input type="checkbox" name="is_active" defaultChecked className="accent-green w-4 h-4" /> Livreur actif
             </label>
           )}
@@ -200,7 +200,7 @@ function AgentModal({ agent, onClose }: { agent: DeliveryAgent | null; onClose: 
             <button
               type="submit"
               disabled={pending}
-              className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
             >
               {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />}
               {agent ? "Enregistrer" : "Ajouter"}
@@ -220,7 +220,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="block text-sm font-medium text-[#020B27] mb-1.5">{label}</label>
+      <label htmlFor={name} className="block text-sm font-medium text-[#0A2A52] mb-1.5">{label}</label>
       <input
         id={name} name={name} type={type} defaultValue={defaultValue} required={required} placeholder={placeholder}
         className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors"

@@ -76,7 +76,7 @@ function ConnexionForm() {
           <Link href="/">
             <Image src="/ryta.png" alt="RYTA" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
           </Link>
-          <h1 className="text-2xl font-bold text-[#020B27] mt-4">Connexion</h1>
+          <h1 className="text-2xl font-bold text-[#0A2A52] mt-4">Connexion</h1>
           <p className="text-[#64748B] text-sm mt-1">Connectez-vous à votre compte</p>
         </div>
 
@@ -85,7 +85,7 @@ function ConnexionForm() {
           <form action={signInWithGoogle}>
             <input type="hidden" name="redirect" value={redirect} />
             <button type="submit"
-              className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium text-[#020B27] hover:bg-gray-50 active:bg-gray-100 transition-all">
+              className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium text-[#0A2A52] hover:bg-gray-50 active:bg-gray-100 transition-all">
               <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -111,21 +111,21 @@ function ConnexionForm() {
             )}
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-[#020B27]">Email</label>
+              <label className="block text-sm font-semibold text-[#0A2A52]">Email</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="votre@email.com"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/10 transition-all"
               />
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="block text-sm font-semibold text-[#020B27]">Mot de passe</label>
-                <Link href="/mot-de-passe-oublie" className="text-xs text-[#020B27] hover:underline">
+                <label className="block text-sm font-semibold text-[#0A2A52]">Mot de passe</label>
+                <Link href="/mot-de-passe-oublie" className="text-xs text-[#0A2A52] hover:underline">
                   Mot de passe oublié ?
                 </Link>
               </div>
@@ -136,7 +136,7 @@ function ConnexionForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all pr-12"
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/10 transition-all pr-12"
                 />
                 <button type="button" onClick={() => setShowPwd((v) => !v)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -146,7 +146,7 @@ function ConnexionForm() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3.5 rounded-xl font-bold text-sm btn-sweep hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
+              className="w-full flex items-center justify-center gap-2 bg-[#2F9E44] text-white py-3.5 rounded-xl font-bold text-sm btn-sweep hover:bg-[#237A34] active:scale-95 transition-all disabled:opacity-60">
               {loading ? <><Loader2 size={17} className="animate-spin" /> Connexion…</> : "Se connecter"}
             </button>
           </form>
@@ -154,7 +154,7 @@ function ConnexionForm() {
 
         <p className="text-center text-sm text-[#64748B] mt-5">
           Pas encore de compte ?{" "}
-          <Link href="/inscription" className="text-[#020B27] font-semibold hover:underline">
+          <Link href="/inscription" className="text-[#0A2A52] font-semibold hover:underline">
             Créer un compte
           </Link>
         </p>

@@ -47,8 +47,8 @@ export default function UniversMenu() {
         onFocus={openMenu}
         onClick={() => setOpen((o) => !o)}
         className={cn(
-          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-[#B8925A] hover:bg-gray-50",
-          open ? "text-[#B8925A] bg-[#B8925A]/10" : "text-gray-600"
+          "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:text-[#2F9E44] hover:bg-gray-50",
+          open ? "text-[#2F9E44] bg-[#2F9E44]/10" : "text-gray-600"
         )}
       >
         L&apos;univers RYTA
@@ -58,7 +58,7 @@ export default function UniversMenu() {
       {/* Panneau pleine largeur */}
       <div
         className={cn(
-          "absolute left-0 right-0 top-full bg-white text-[#020B27] shadow-2xl border-t border-gray-100",
+          "absolute left-0 right-0 top-full bg-white text-[#0A2A52] shadow-2xl border-t border-gray-100",
           "transition-all duration-200 origin-top",
           open ? "visible opacity-100 translate-y-0" : "invisible opacity-0 -translate-y-1 pointer-events-none"
         )}
@@ -70,7 +70,7 @@ export default function UniversMenu() {
         <div className="max-w-7xl mx-auto px-6 py-8 flex items-start justify-between gap-10">
           {/* Liens */}
           <div className="min-w-0">
-            <p className="mb-6 text-xs font-bold uppercase tracking-widest text-[#B8925A]">L&apos;univers RYTA</p>
+            <p className="mb-6 text-xs font-bold uppercase tracking-widest text-[#2F9E44]">L&apos;univers RYTA</p>
             <div className="grid grid-cols-2 gap-x-12 gap-y-5 max-w-md">
               {UNIVERS_LINKS.map((link) => (
                 <Link
@@ -78,7 +78,7 @@ export default function UniversMenu() {
                   href={link.href}
                   role="menuitem"
                   onClick={() => setOpen(false)}
-                  className="text-lg font-bold text-[#020B27] hover:text-green transition-colors"
+                  className="text-lg font-bold text-[#0A2A52] hover:text-green transition-colors"
                 >
                   {link.label}
                 </Link>

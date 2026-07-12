@@ -57,9 +57,9 @@ export default function AccountSidebar() {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
       {/* Profile header */}
-      <div className="bg-linear-to-r from-[#020B27] to-[#0F172A] p-5">
+      <div className="bg-linear-to-r from-[#0A2A52] to-[#0E2440] p-5">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-[#B8925A] rounded-full overflow-hidden flex items-center justify-center text-[#020B27] font-bold text-lg shrink-0 ring-2 ring-white/20">
+          <div className="w-12 h-12 bg-[#2F9E44] rounded-full overflow-hidden flex items-center justify-center text-[#0A2A52] font-bold text-lg shrink-0 ring-2 ring-white/20">
             {avatarUrl ? (
               <Image src={avatarUrl} alt={displayName} width={48} height={48} className="object-cover w-full h-full" />
             ) : (
@@ -84,15 +84,15 @@ export default function AccountSidebar() {
               className={cn(
                 "flex items-center justify-between px-3 py-2.5 rounded-xl mb-0.5 transition-colors",
                 isActive
-                  ? "bg-[#020B27]/10 text-[#020B27]"
-                  : "text-[#64748B] hover:bg-gray-50 hover:text-[#020B27]"
+                  ? "bg-[#0A2A52]/10 text-[#0A2A52]"
+                  : "text-[#64748B] hover:bg-gray-50 hover:text-[#0A2A52]"
               )}
             >
               <div className="flex items-center gap-3">
                 <Icon size={17} />
                 <span className="text-sm font-medium">{label}</span>
               </div>
-              <ChevronRight size={14} className={isActive ? "text-[#020B27]" : "text-gray-300"} />
+              <ChevronRight size={14} className={isActive ? "text-[#0A2A52]" : "text-gray-300"} />
             </Link>
           );
         })}

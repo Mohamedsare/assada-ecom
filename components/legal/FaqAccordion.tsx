@@ -23,10 +23,10 @@ export default function FaqAccordion({ items }: { items: FaqItem[] }) {
               aria-expanded={isOpen}
               className="w-full flex items-center justify-between gap-3 text-left px-4 py-3.5 hover:bg-[#F8FAFC] transition-colors"
             >
-              <span className="font-semibold text-[#020B27] text-sm md:text-base">{item.q}</span>
+              <span className="font-semibold text-[#0A2A52] text-sm md:text-base">{item.q}</span>
               <ChevronDown
                 size={18}
-                className={`text-[#B8925A] shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                className={`text-[#2F9E44] shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
               />
             </button>
             <div className={`overflow-hidden transition-all ${isOpen ? "max-h-96" : "max-h-0"}`}>

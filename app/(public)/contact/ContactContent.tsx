@@ -57,8 +57,8 @@ export default function ContactContent() {
     <div>
       {/* En-tête */}
       <div className="max-w-4xl mx-auto text-center px-4 pt-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-[#020B27] mb-3">
-          Nous sommes là <span className="text-[#B8925A]">pour vous aider !</span>
+        <h1 className="text-3xl md:text-4xl font-bold text-[#0A2A52] mb-3">
+          Nous sommes là <span className="text-[#2F9E44]">pour vous aider !</span>
         </h1>
         <p className="text-text-secondary text-lg">
           Une question, un problème ? Contactez-nous, nous répondons vite.
@@ -69,7 +69,7 @@ export default function ContactContent() {
         <div className="grid lg:grid-cols-2 gap-10">
           {/* Contact info */}
           <div>
-            <h2 className="text-xl font-bold text-[#020B27] mb-6">Nos coordonnées</h2>
+            <h2 className="text-xl font-bold text-[#0A2A52] mb-6">Nos coordonnées</h2>
             <div className="space-y-4 mb-8">
               {[
                 {
@@ -84,7 +84,7 @@ export default function ContactContent() {
                   label: "Email",
                   value: SITE_EMAIL,
                   href: `mailto:${SITE_EMAIL}`,
-                  color: "bg-green-50 text-[#020B27]",
+                  color: "bg-green-50 text-[#0A2A52]",
                 },
                 {
                   icon: MapPin,
@@ -108,14 +108,14 @@ export default function ContactContent() {
                     href={item.href}
                     target={item.href.startsWith("http") ? "_blank" : undefined}
                     rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 hover:border-[#B8925A] hover:shadow-sm transition-all"
+                    className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 hover:border-[#2F9E44] hover:shadow-sm transition-all"
                   >
                     <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${item.color}`}>
                       <Icon size={20} />
                     </div>
                     <div>
                       <p className="text-xs text-[#64748B]">{item.label}</p>
-                      <p className="font-semibold text-[#020B27]">{item.value}</p>
+                      <p className="font-semibold text-[#0A2A52]">{item.value}</p>
                     </div>
                   </Link>
                 );
@@ -124,7 +124,7 @@ export default function ContactContent() {
 
             {/* Social */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5">
-              <h3 className="font-bold text-[#020B27] mb-4">Réseaux sociaux</h3>
+              <h3 className="font-bold text-[#0A2A52] mb-4">Réseaux sociaux</h3>
               <div className="flex gap-3">
                 {[
                   { label: "TikTok", href: "https://www.tiktok.com/@ryta", bg: "bg-gray-900" },
@@ -158,18 +158,18 @@ export default function ContactContent() {
 
           {/* Contact form */}
           <div>
-            <h2 className="text-xl font-bold text-[#020B27] mb-6">Envoyez-nous un message</h2>
+            <h2 className="text-xl font-bold text-[#0A2A52] mb-6">Envoyez-nous un message</h2>
 
             {sent ? (
               <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
-                <div className="w-16 h-16 bg-[#B8925A] rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#2F9E44] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Send size={28} className="text-white" />
                 </div>
-                <h3 className="text-lg font-bold text-[#020B27] mb-2">Message envoyé !</h3>
+                <h3 className="text-lg font-bold text-[#0A2A52] mb-2">Message envoyé !</h3>
                 <p className="text-[#64748B]">Nous vous répondrons dans les plus brefs délais.</p>
                 <button
                   onClick={() => { setSent(false); setForm({ name: "", email: "", subject: "", message: "" }); }}
-                  className="mt-4 text-sm text-[#020B27] hover:underline"
+                  className="mt-4 text-sm text-[#0A2A52] hover:underline"
                 >
                   Envoyer un autre message
                 </button>
@@ -178,7 +178,7 @@ export default function ContactContent() {
               <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-100 p-6 space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-[#020B27] mb-1.5">
+                    <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">
                       Nom complet <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -187,11 +187,11 @@ export default function ContactContent() {
                       value={form.name}
                       onChange={(e) => setForm({ ...form, name: e.target.value })}
                       placeholder="Jean Dupont"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2F9E44] transition-colors"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#020B27] mb-1.5">
+                    <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">
                       Email <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -200,17 +200,17 @@ export default function ContactContent() {
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
                       placeholder="jean@example.com"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2F9E44] transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#020B27] mb-1.5">Sujet</label>
+                  <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Sujet</label>
                   <select
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors text-[#020B27]"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2F9E44] transition-colors text-[#0A2A52]"
                   >
                     <option value="">Sélectionner un sujet</option>
                     <option>Question sur un produit</option>
@@ -222,7 +222,7 @@ export default function ContactContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#020B27] mb-1.5">
+                  <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">
                     Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -231,7 +231,7 @@ export default function ContactContent() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Décrivez votre demande..."
-                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#B8925A] transition-colors resize-none"
+                    className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#2F9E44] transition-colors resize-none"
                   />
                 </div>
 
@@ -240,7 +240,7 @@ export default function ContactContent() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[#2F9E44] text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#237A34] disabled:opacity-60 transition-colors"
                 >
                   <Send size={16} />
                   {sending ? "Envoi en cours…" : "Envoyer le message"}
@@ -250,7 +250,7 @@ export default function ContactContent() {
 
             {/* FAQ */}
             <div className="mt-8">
-              <h3 className="font-bold text-[#020B27] mb-4">Questions fréquentes</h3>
+              <h3 className="font-bold text-[#0A2A52] mb-4">Questions fréquentes</h3>
               <div className="space-y-3">
                 {FAQ.map((item, i) => (
                   <div key={i} className="bg-white rounded-xl border border-gray-100 overflow-hidden">
@@ -258,8 +258,8 @@ export default function ContactContent() {
                       onClick={() => setOpenFaq(openFaq === i ? null : i)}
                       className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors"
                     >
-                      <span className="font-medium text-[#020B27] text-sm">{item.q}</span>
-                      {openFaq === i ? <ChevronUp size={16} className="text-[#020B27]" /> : <ChevronDown size={16} className="text-gray-400" />}
+                      <span className="font-medium text-[#0A2A52] text-sm">{item.q}</span>
+                      {openFaq === i ? <ChevronUp size={16} className="text-[#0A2A52]" /> : <ChevronDown size={16} className="text-gray-400" />}
                     </button>
                     {openFaq === i && (
                       <div className="px-4 pb-3">

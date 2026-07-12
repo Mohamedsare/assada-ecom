@@ -55,7 +55,7 @@ export default function VideoUploadField({
 
   return (
     <div>
-      <label className="block text-sm font-medium text-[#020B27] mb-1.5">{label}</label>
+      <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">{label}</label>
       <input type="hidden" name={name} value={url} />
 
       {url ? (

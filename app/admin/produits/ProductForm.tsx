@@ -92,11 +92,11 @@ export default function ProductForm({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <button onClick={() => router.back()} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors">
+        <button onClick={() => router.back()} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors">
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-[#020B27]">{isEdit ? "Modifier le produit" : "Nouveau produit"}</h1>
+          <h1 className="text-2xl font-bold text-[#0A2A52]">{isEdit ? "Modifier le produit" : "Nouveau produit"}</h1>
           <p className="text-sm text-text-secondary mt-0.5">{isEdit ? product!.name : "Renseignez les informations du produit"}</p>
         </div>
       </div>
@@ -110,7 +110,7 @@ export default function ProductForm({
               {aiPending ? <Loader2 size={18} className="text-green animate-spin" /> : <Sparkles size={18} className="text-green" />}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[#020B27]">{"Remplissage automatique par l'IA"}</p>
+              <p className="text-sm font-semibold text-[#0A2A52]">{"Remplissage automatique par l'IA"}</p>
               <p className="text-xs text-text-secondary">
                 {aiPending ? "Analyse de la photo en cours…"
                   : aiError ? <span className="text-red-600">{aiError}</span>
@@ -122,7 +122,7 @@ export default function ProductForm({
               type="button"
               onClick={() => runAi(imageUrl)}
               disabled={aiPending || !imageUrl}
-              className="shrink-0 flex items-center gap-1.5 text-xs font-semibold bg-green text-[#020B27] px-3 py-2 rounded-lg btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="shrink-0 flex items-center gap-1.5 text-xs font-semibold bg-green text-[#0A2A52] px-3 py-2 rounded-lg btn-sweep hover:bg-[#237A34] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title={!imageUrl ? "Ajoutez d'abord une photo" : "Analyser la photo"}
             >
               <Sparkles size={14} /> {aiPending ? "…" : aiDone ? "Régénérer" : "Analyser"}
@@ -131,15 +131,15 @@ export default function ProductForm({
 
           <Card title="Informations générales">
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Nom du produit<span className="text-red-500 ml-0.5">*</span></label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Nom du produit<span className="text-red-500 ml-0.5">*</span></label>
               <input name="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Parfum Oud Intense 100 ml" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Description courte</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description courte</label>
               <input name="short_description" value={shortDesc} onChange={(e) => setShortDesc(e.target.value)} placeholder="Une ligne d'accroche" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Description complète</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description complète</label>
               <textarea name="description" value={desc} onChange={(e) => setDesc(e.target.value)} rows={5} placeholder="Description détaillée du produit…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
             </div>
           </Card>
@@ -162,11 +162,11 @@ export default function ProductForm({
 
           <Card title="Référencement (SEO)">
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Titre SEO</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Titre SEO</label>
               <input name="seo_title" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Parfum Oud Intense à Casablanca | RYTA" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Description SEO</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description SEO</label>
               <textarea name="seo_description" value={seoDesc} onChange={(e) => setSeoDesc(e.target.value)} rows={2} placeholder="Description pour les moteurs de recherche…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
             </div>
           </Card>
@@ -198,21 +198,21 @@ export default function ProductForm({
 
           <Card title="Organisation">
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Catégorie</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Catégorie</label>
               <select name="category_id" defaultValue={product?.category_id ?? ""} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
                 <option value="">— Aucune —</option>
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Marque</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Marque</label>
               <select name="brand_id" defaultValue={product?.brand_id ?? ""} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
                 <option value="">— Aucune —</option>
                 {brands.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Statut</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Statut</label>
               <select name="status" defaultValue={product?.status ?? "active"} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
                 {STATUS_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
@@ -230,7 +230,7 @@ export default function ProductForm({
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <div className="flex flex-col gap-2">
-            <button type="submit" disabled={pending} className="bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-3 rounded-lg transition-colors">
+            <button type="submit" disabled={pending} className="bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-60 text-[#0A2A52] text-sm font-semibold px-5 py-3 rounded-lg transition-colors">
               {pending ? "Enregistrement…" : isEdit ? "Enregistrer les modifications" : "Créer le produit"}
             </button>
             <button type="button" onClick={() => router.push("/admin/produits")} className="text-text-secondary text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">
@@ -246,7 +246,7 @@ export default function ProductForm({
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
-      <h2 className="font-semibold text-[#020B27] mb-4">{title}</h2>
+      <h2 className="font-semibold text-[#0A2A52] mb-4">{title}</h2>
       <div className="space-y-4">{children}</div>
     </div>
   );
@@ -255,7 +255,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 function Field({ label, name, type = "text", placeholder, required, defaultValue }: { label: string; name: string; type?: string; placeholder?: string; required?: boolean; defaultValue?: string }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-[#020B27] mb-1.5">{label}{required && <span className="text-red-500 ml-0.5">*</span>}</label>
+      <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">{label}{required && <span className="text-red-500 ml-0.5">*</span>}</label>
       <input name={name} type={type} placeholder={placeholder} required={required} defaultValue={defaultValue} min={type === "number" ? 0 : undefined} className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
     </div>
   );
@@ -265,7 +265,7 @@ function Checkbox({ name, label, defaultChecked }: { name: string; label: string
   return (
     <label className="flex items-center gap-2.5 cursor-pointer">
       <input type="checkbox" name={name} value="true" defaultChecked={defaultChecked} className="w-4 h-4 rounded border-gray-300 text-green focus:ring-green accent-green" />
-      <span className="text-sm text-[#020B27]">{label}</span>
+      <span className="text-sm text-[#0A2A52]">{label}</span>
     </label>
   );
 }

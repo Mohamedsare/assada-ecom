@@ -14,7 +14,7 @@ import DeleteForm from "@/components/admin/DeleteForm";
 import type { Product, Category, Brand } from "@/types";
 
 const STATUS_STYLES: Record<string, string> = {
-  active:       "bg-green-100 text-[#020B27]",
+  active:       "bg-green-100 text-[#0A2A52]",
   draft:        "bg-gray-100 text-gray-600",
   out_of_stock: "bg-red-100 text-red-700",
   hidden:       "bg-yellow-100 text-yellow-700",
@@ -107,12 +107,12 @@ export default function ProductsTable({
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#020B27]">Gestion des produits</h1>
+          <h1 className="text-2xl font-bold text-[#0A2A52]">Gestion des produits</h1>
           <p className="text-sm text-[#64748B] mt-0.5">{products.length} produits au total</p>
         </div>
         <Link
           href="/admin/produits/nouveau"
-          className="flex items-center gap-2 bg-[#B8925A] text-white px-4 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
+          className="flex items-center gap-2 bg-[#2F9E44] text-white px-4 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#237A34] transition-colors"
         >
           <Plus size={16} />
           Ajouter un produit
@@ -160,7 +160,7 @@ export default function ProductsTable({
       {filtered.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Package size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#020B27] mb-2">
+          <p className="font-semibold text-[#0A2A52] mb-2">
             {hasFilters ? "Aucun produit ne correspond" : "Aucun produit"}
           </p>
           <p className="text-[#64748B] text-sm mb-6">
@@ -171,12 +171,12 @@ export default function ProductsTable({
           {hasFilters ? (
             <button
               onClick={() => { setSearch(""); setStatus("all"); setCategoryId("all"); setBrandId("all"); resetPage(); }}
-              className="bg-[#B8925A] text-white px-5 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors"
+              className="bg-[#2F9E44] text-white px-5 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#237A34] transition-colors"
             >
               Réinitialiser les filtres
             </button>
           ) : (
-            <Link href="/admin/produits/nouveau" className="bg-[#B8925A] text-white px-5 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#9E7A45] transition-colors">
+            <Link href="/admin/produits/nouveau" className="bg-[#2F9E44] text-white px-5 py-2.5 rounded-lg text-sm font-medium btn-sweep hover:bg-[#237A34] transition-colors">
               Ajouter un produit
             </Link>
           )}
@@ -211,7 +211,7 @@ export default function ProductsTable({
                           )}
                         </div>
                         <div className="min-w-0">
-                          <span className="block text-sm font-medium text-[#020B27]">{product.name}</span>
+                          <span className="block text-sm font-medium text-[#0A2A52]">{product.name}</span>
                           <span className="flex items-center gap-1.5">
                             {product.brand && <span className="text-xs text-[#64748B]">{product.brand.name}</span>}
                             {product.variants && product.variants.length > 0 && (
@@ -225,7 +225,7 @@ export default function ProductsTable({
                       <span className="text-sm text-[#64748B]">{product.category?.name ?? "—"}</span>
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
-                      <p className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(product.current_price)}</p>
+                      <p className="text-sm font-bold text-[#0A2A52] whitespace-nowrap">{formatPrice(product.current_price)}</p>
                       {product.old_price && (
                         <p className="text-xs text-gray-400 line-through whitespace-nowrap">{formatPrice(product.old_price)}</p>
                       )}
@@ -234,7 +234,7 @@ export default function ProductsTable({
                       <span className={`text-sm font-medium ${
                         product.stock_quantity === 0 ? "text-red-600"
                           : product.stock_quantity <= LOW_STOCK ? "text-orange-600"
-                          : "text-[#020B27]"
+                          : "text-[#0A2A52]"
                       }`}>
                         {product.stock_quantity}
                       </span>
@@ -244,13 +244,13 @@ export default function ProductsTable({
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
-                        <button type="button" onClick={() => setPreviewProduct(product)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Aperçu rapide">
+                        <button type="button" onClick={() => setPreviewProduct(product)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors" title="Aperçu rapide">
                           <Eye size={15} />
                         </button>
-                        <button type="button" onClick={() => setQuickEditProduct(product)} className="p-1.5 rounded-lg hover:bg-amber-50 text-gray-500 hover:text-[#B8925A] transition-colors" title="Modification rapide">
+                        <button type="button" onClick={() => setQuickEditProduct(product)} className="p-1.5 rounded-lg hover:bg-amber-50 text-gray-500 hover:text-[#2F9E44] transition-colors" title="Modification rapide">
                           <Zap size={15} />
                         </button>
-                        <Link href={`/admin/produits/${product.id}/modifier`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Modifier (fiche complète)">
+                        <Link href={`/admin/produits/${product.id}/modifier`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors" title="Modifier (fiche complète)">
                           <Pencil size={15} />
                         </Link>
                         <DeleteForm action={adminDeleteProduct.bind(null, product.id)} name={product.name} iconSize={15} />
@@ -275,7 +275,7 @@ export default function ProductsTable({
               >
                 <ChevronLeft size={16} />
               </button>
-              <span className="px-2 text-[#020B27] font-medium">{currentPage} / {totalPages}</span>
+              <span className="px-2 text-[#0A2A52] font-medium">{currentPage} / {totalPages}</span>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
@@ -316,8 +316,8 @@ function ImageZoomModal({ url, name, onClose }: { url: string; name: string; onC
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden w-full max-w-sm" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between gap-3 px-4 py-2.5 border-b border-gray-100">
-          <p className="text-sm font-medium text-[#020B27] truncate">{name}</p>
-          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors shrink-0" title="Fermer (Échap)">
+          <p className="text-sm font-medium text-[#0A2A52] truncate">{name}</p>
+          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors shrink-0" title="Fermer (Échap)">
             <X size={18} />
           </button>
         </div>
@@ -374,10 +374,10 @@ function QuickEditModal({ product, onClose }: { product: Product; onClose: () =>
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-gray-100">
           <div className="min-w-0">
-            <h2 className="font-bold text-[#020B27] flex items-center gap-1.5"><Zap size={16} className="text-[#B8925A]" /> Modification rapide</h2>
+            <h2 className="font-bold text-[#0A2A52] flex items-center gap-1.5"><Zap size={16} className="text-[#2F9E44]" /> Modification rapide</h2>
             <p className="text-xs text-[#64748B] truncate">{product.name}</p>
           </div>
-          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Fermer (Échap)">
+          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors" title="Fermer (Échap)">
             <X size={18} />
           </button>
         </div>
@@ -417,10 +417,10 @@ function QuickEditModal({ product, onClose }: { product: Product; onClose: () =>
         </div>
 
         <div className="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-100">
-          <button type="button" onClick={onClose} disabled={pending} className="px-3 py-2 rounded-lg text-sm text-[#020B27] border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-60">
+          <button type="button" onClick={onClose} disabled={pending} className="px-3 py-2 rounded-lg text-sm text-[#0A2A52] border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-60">
             Annuler
           </button>
-          <button type="button" onClick={save} disabled={pending} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45] transition-colors disabled:opacity-60">
+          <button type="button" onClick={save} disabled={pending} className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-[#2F9E44] text-white btn-sweep hover:bg-[#237A34] transition-colors disabled:opacity-60">
             {pending ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />} Enregistrer
           </button>
         </div>
@@ -432,7 +432,7 @@ function QuickEditModal({ product, onClose }: { product: Product; onClose: () =>
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="block text-xs font-medium text-[#020B27] mb-1">{label}</span>
+      <span className="block text-xs font-medium text-[#0A2A52] mb-1">{label}</span>
       {children}
     </label>
   );
@@ -443,7 +443,7 @@ function Toggle({ label, active, onClick }: { label: string; active: boolean; on
     <button
       type="button"
       onClick={onClick}
-      className={`text-xs px-3 py-1.5 rounded-full font-medium border transition-colors ${active ? "bg-[#B8925A] text-white border-[#B8925A]" : "bg-white text-[#64748B] border-gray-200 hover:border-gray-300"}`}
+      className={`text-xs px-3 py-1.5 rounded-full font-medium border transition-colors ${active ? "bg-[#2F9E44] text-white border-[#2F9E44]" : "bg-white text-[#64748B] border-gray-200 hover:border-gray-300"}`}
     >
       {label}
     </button>
@@ -482,8 +482,8 @@ function ProductPreviewModal({ product, onClose }: { product: Product; onClose: 
       >
         {/* En-tête */}
         <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-gray-100 sticky top-0 bg-white z-10">
-          <h2 className="font-bold text-[#020B27] truncate">Aperçu du produit</h2>
-          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Fermer (Échap)">
+          <h2 className="font-bold text-[#0A2A52] truncate">Aperçu du produit</h2>
+          <button type="button" onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors" title="Fermer (Échap)">
             <X size={18} />
           </button>
         </div>
@@ -505,7 +505,7 @@ function ProductPreviewModal({ product, onClose }: { product: Product; onClose: 
                     key={url}
                     type="button"
                     onClick={() => setActive(i)}
-                    className={`relative w-12 h-12 rounded-lg overflow-hidden border-2 transition-colors ${i === active ? "border-[#B8925A]" : "border-transparent"}`}
+                    className={`relative w-12 h-12 rounded-lg overflow-hidden border-2 transition-colors ${i === active ? "border-[#2F9E44]" : "border-transparent"}`}
                   >
                     <Image src={url} alt={`${product.name} ${i + 1}`} fill sizes="48px" className="object-cover" />
                   </button>
@@ -524,11 +524,11 @@ function ProductPreviewModal({ product, onClose }: { product: Product; onClose: 
             </div>
 
             {product.brand && <p className="text-xs text-[#64748B]">{product.brand.name}</p>}
-            <h3 className="text-lg font-bold text-[#020B27] leading-snug">{product.name}</h3>
+            <h3 className="text-lg font-bold text-[#0A2A52] leading-snug">{product.name}</h3>
             <p className="text-sm text-[#64748B]">{product.category?.name ?? "—"}</p>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-xl font-bold text-[#020B27]">{formatPrice(product.current_price)}</span>
+              <span className="text-xl font-bold text-[#0A2A52]">{formatPrice(product.current_price)}</span>
               {product.old_price && product.old_price > product.current_price && (
                 <>
                   <span className="text-sm text-gray-400 line-through">{formatPrice(product.old_price)}</span>
@@ -538,21 +538,21 @@ function ProductPreviewModal({ product, onClose }: { product: Product; onClose: 
             </div>
 
             <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm">
-              <span className={`font-medium ${product.stock_quantity === 0 ? "text-red-600" : product.stock_quantity <= LOW_STOCK ? "text-orange-600" : "text-[#020B27]"}`}>
+              <span className={`font-medium ${product.stock_quantity === 0 ? "text-red-600" : product.stock_quantity <= LOW_STOCK ? "text-orange-600" : "text-[#0A2A52]"}`}>
                 Stock : {product.stock_quantity}
               </span>
               {product.sku && <span className="text-[#64748B]">SKU : {product.sku}</span>}
             </div>
 
-            {product.short_description && <p className="text-sm text-[#020B27]">{product.short_description}</p>}
+            {product.short_description && <p className="text-sm text-[#0A2A52]">{product.short_description}</p>}
             {product.description && <p className="text-sm text-[#64748B] whitespace-pre-line">{product.description}</p>}
 
             {product.variants && product.variants.length > 0 && (
               <div>
-                <p className="text-xs font-semibold text-[#020B27] mb-1">Variantes ({product.variants.length})</p>
+                <p className="text-xs font-semibold text-[#0A2A52] mb-1">Variantes ({product.variants.length})</p>
                 <div className="flex flex-wrap gap-1.5">
                   {product.variants.map((v) => (
-                    <span key={v.id} className="text-[11px] bg-gray-100 text-[#020B27] px-2 py-0.5 rounded">
+                    <span key={v.id} className="text-[11px] bg-gray-100 text-[#0A2A52] px-2 py-0.5 rounded">
                       {[v.color, v.size].filter(Boolean).join(" · ") || "Variante"} — {v.stock_quantity}
                     </span>
                   ))}
@@ -564,10 +564,10 @@ function ProductPreviewModal({ product, onClose }: { product: Product; onClose: 
 
         {/* Pied — actions */}
         <div className="flex flex-wrap items-center justify-end gap-2 px-5 py-3 border-t border-gray-100 sticky bottom-0 bg-white">
-          <Link href={`/produit/${product.slug}`} target="_blank" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[#020B27] border border-gray-200 hover:bg-gray-50 transition-colors">
+          <Link href={`/produit/${product.slug}`} target="_blank" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[#0A2A52] border border-gray-200 hover:bg-gray-50 transition-colors">
             <ExternalLink size={15} /> Voir sur le site
           </Link>
-          <Link href={`/admin/produits/${product.id}/modifier`} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45] transition-colors">
+          <Link href={`/admin/produits/${product.id}/modifier`} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium bg-[#2F9E44] text-white btn-sweep hover:bg-[#237A34] transition-colors">
             <Pencil size={15} /> Modifier
           </Link>
         </div>
@@ -578,8 +578,8 @@ function ProductPreviewModal({ product, onClose }: { product: Product; onClose: 
 
 function StatCard({ label, value, tone }: { label: string; value: number; tone: "default" | "green" | "orange" | "red" }) {
   const tones: Record<string, string> = {
-    default: "text-[#020B27]",
-    green: "text-[#020B27]",
+    default: "text-[#0A2A52]",
+    green: "text-[#0A2A52]",
     orange: "text-orange-600",
     red: "text-red-600",
   };
@@ -644,7 +644,7 @@ function StatusMenu({ product }: { product: Product }) {
                 key={s}
                 type="button"
                 onClick={() => change(s)}
-                className="w-full flex items-center justify-between px-3 py-1.5 text-xs text-[#020B27] hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between px-3 py-1.5 text-xs text-[#0A2A52] hover:bg-gray-50 transition-colors"
               >
                 {STATUS_LABELS[s]}
                 {s === product.status && <Check size={13} className="text-green" />}

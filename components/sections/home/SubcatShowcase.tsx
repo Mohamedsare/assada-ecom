@@ -84,16 +84,16 @@ export default function SubcatShowcase({ cats }: { cats: SubcatItem[] }) {
           <button key={c.slug} onClick={() => setActive(i)} className="shrink-0 flex flex-col items-center gap-3 group">
             <span
               className={`relative w-28 h-28 sm:w-40 sm:h-40 lg:w-44 lg:h-44 rounded-full overflow-hidden flex items-center justify-center bg-white transition-all ${
-                i === active ? "ring-2 ring-[#B8925A] ring-offset-2 scale-105" : "ring-1 ring-gray-200 group-hover:ring-gray-300"
+                i === active ? "ring-2 ring-[#2F9E44] ring-offset-2 scale-105" : "ring-1 ring-gray-200 group-hover:ring-gray-300"
               }`}
             >
               {c.image ? (
                 <Image src={c.image} alt={c.name} fill sizes="(min-width: 1024px) 176px, (min-width: 640px) 160px, 112px" className="object-cover" />
               ) : (
-                <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-[#B8925A]/55" strokeWidth={1.4} />
+                <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-[#2F9E44]/55" strokeWidth={1.4} />
               )}
             </span>
-            <span className={`text-base sm:text-xl lg:text-2xl ${i === active ? "text-[#B8925A] font-semibold" : "text-text-secondary group-hover:text-[#020B27]"}`}>
+            <span className={`text-base sm:text-xl lg:text-2xl ${i === active ? "text-[#2F9E44] font-semibold" : "text-text-secondary group-hover:text-[#0A2A52]"}`}>
               {c.name}
             </span>
           </button>
@@ -118,7 +118,7 @@ export default function SubcatShowcase({ cats }: { cats: SubcatItem[] }) {
         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-200 rounded-full" />
         {/* portion remplie (dégradé doré) à gauche du curseur — visible une fois une sous-catégorie choisie */}
         <div
-          className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 rounded-full bg-linear-to-r from-[#D8B778] to-[#9E7A45] ${
+          className={`absolute left-0 top-1/2 -translate-y-1/2 h-0.5 rounded-full bg-linear-to-r from-[#D8B778] to-[#237A34] ${
             drag === null ? "transition-[width] duration-300" : ""
           }`}
           style={{ width: `${(active !== null || drag !== null ? progress : 0) * 100}%` }}
@@ -126,7 +126,7 @@ export default function SubcatShowcase({ cats }: { cats: SubcatItem[] }) {
         {/* curseur (point) — n'apparaît qu'après sélection */}
         {(active !== null || drag !== null) && (
           <span
-            className={`absolute top-1/2 w-3.5 h-3.5 rounded-full bg-green ring-4 ring-[#B8925A]/25 shadow
+            className={`absolute top-1/2 w-3.5 h-3.5 rounded-full bg-green ring-4 ring-[#2F9E44]/25 shadow
                        -translate-y-1/2 -translate-x-1/2 group-hover:scale-110 group-active:scale-95
                        cursor-grab active:cursor-grabbing ${drag === null ? "transition-[left] duration-300" : ""}`}
             style={{ left: `${progress * 100}%` }}
@@ -150,7 +150,7 @@ export default function SubcatShowcase({ cats }: { cats: SubcatItem[] }) {
       ) : (
         <div className="text-center py-10 bg-gray-light rounded-2xl">
           <p className="text-3xl mb-2">✨</p>
-          <p className="font-semibold text-[#020B27]">Bientôt disponible</p>
+          <p className="font-semibold text-[#0A2A52]">Bientôt disponible</p>
           <p className="text-sm text-text-secondary mt-1">
             De nouveaux produits arrivent très vite dans « {current.name} ».
           </p>

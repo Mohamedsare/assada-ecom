@@ -107,7 +107,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
         className={cn(
           "flex items-center gap-2 rounded-xl transition-colors",
           variant === "header"
-            ? "bg-white/10 border border-white/20 px-3 h-9 focus-within:bg-white/15 focus-within:border-[#C9A063]/50"
+            ? "bg-white/10 border border-white/20 px-3 h-9 focus-within:bg-white/15 focus-within:border-[#54B85E]/50"
             : "bg-white border border-gray-200 px-3.5 h-11 focus-within:border-green shadow-sm"
         )}
       >
@@ -124,7 +124,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
           aria-label="Rechercher"
           className={cn(
             "w-full bg-transparent text-sm outline-none",
-            variant === "header" ? "text-white placeholder-gray-400" : "text-[#020B27] placeholder-gray-400"
+            variant === "header" ? "text-white placeholder-gray-400" : "text-[#0A2A52] placeholder-gray-400"
           )}
         />
         {query && (
@@ -157,7 +157,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                 </div>
               ) : suggestions.length === 0 ? (
                 <div className="px-4 py-6 text-center">
-                  <p className="text-sm font-medium text-[#020B27]">Aucun résultat pour « {query} »</p>
+                  <p className="text-sm font-medium text-[#0A2A52]">Aucun résultat pour « {query} »</p>
                   <button onClick={() => go(query)} className="mt-2 text-xs font-medium text-green hover:underline">
                     Voir toute la boutique
                   </button>
@@ -182,7 +182,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                           )}
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-medium text-[#020B27]">{p.name}</span>
+                          <span className="block truncate text-sm font-medium text-[#0A2A52]">{p.name}</span>
                           {p.category && (
                             <span className="block truncate text-[11px] text-[#64748B]">{p.category.name}</span>
                           )}
@@ -197,7 +197,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
               {/* Voir tous les résultats */}
               <button
                 onClick={() => go(query)}
-                className="flex w-full items-center justify-between border-t border-gray-100 bg-[#F8FAFC] px-4 py-2.5 text-sm font-semibold text-[#020B27] hover:bg-gray-100 transition-colors"
+                className="flex w-full items-center justify-between border-t border-gray-100 bg-[#F8FAFC] px-4 py-2.5 text-sm font-semibold text-[#0A2A52] hover:bg-gray-100 transition-colors"
               >
                 <span className="flex items-center gap-2">
                   <Search size={14} className="text-green" />
@@ -219,7 +219,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                       <button
                         key={t}
                         onClick={() => { setQuery(t); go(t); }}
-                        className="rounded-full border border-gray-200 px-3 py-1 text-xs text-[#020B27] hover:border-green hover:text-green transition-colors"
+                        className="rounded-full border border-gray-200 px-3 py-1 text-xs text-[#0A2A52] hover:border-green hover:text-green transition-colors"
                       >
                         {t}
                       </button>
@@ -236,7 +236,7 @@ export default function SearchAutocomplete({ variant = "header", autoFocus, onCl
                     <button
                       key={t}
                       onClick={() => { setQuery(t); go(t); }}
-                      className="rounded-full bg-[#F8FAFC] px-3 py-1 text-xs text-[#020B27] hover:bg-green/10 hover:text-green transition-colors"
+                      className="rounded-full bg-[#F8FAFC] px-3 py-1 text-xs text-[#0A2A52] hover:bg-green/10 hover:text-green transition-colors"
                     >
                       {t}
                     </button>

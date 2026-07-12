@@ -130,7 +130,7 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
 
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
-      <h2 className="font-semibold text-[#020B27] mb-1">Accueil — bannières du slider</h2>
+      <h2 className="font-semibold text-[#0A2A52] mb-1">Accueil — bannières du slider</h2>
       <p className="text-text-secondary text-xs mb-4">
         Ajoutez autant de bannières que vous voulez (images ou vidéos), réordonnez-les et supprimez-les.
         Pour chaque bannière : un <strong>grand titre</strong> (laissez vide pour une bannière épurée) et le
@@ -172,14 +172,14 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
                     value={slide.title ?? ""}
                     onChange={(e) => updateSlide(i, { title: e.target.value })}
                     placeholder="Grand titre (optionnel)"
-                    className="flex-1 min-w-0 border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15"
+                    className="flex-1 min-w-0 border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/15"
                   />
                   <button
                     type="button"
                     onClick={() => suggestTitle(i)}
                     disabled={aiIndex !== null}
                     title="Proposer un titre avec l'IA (analyse le visuel)"
-                    className="shrink-0 inline-flex items-center gap-1 rounded-md border border-[#B8925A]/50 text-[#8A6D3F] px-2 text-xs font-medium hover:bg-[#B8925A]/10 disabled:opacity-50"
+                    className="shrink-0 inline-flex items-center gap-1 rounded-md border border-[#2F9E44]/50 text-[#8A6D3F] px-2 text-xs font-medium hover:bg-[#2F9E44]/10 disabled:opacity-50"
                   >
                     {aiIndex === i ? <Loader2 size={13} className="animate-spin" /> : <Sparkles size={13} />}
                     IA
@@ -190,14 +190,14 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
                   value={slide.link ?? ""}
                   onChange={(e) => updateSlide(i, { link: e.target.value })}
                   placeholder="Lien du bouton (ex : /promotions)"
-                  className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15"
+                  className="w-full border border-gray-200 rounded-md px-2.5 py-1.5 text-xs outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/15"
                 />
                 <div className="flex items-center justify-between pt-0.5">
                   <button
                     type="button"
                     onClick={() => move(i, -1)}
                     disabled={i === 0}
-                    className="p-1 rounded text-gray-500 hover:text-[#020B27] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
+                    className="p-1 rounded text-gray-500 hover:text-[#0A2A52] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
                     title="Déplacer à gauche"
                   >
                     <ArrowLeft size={15} />
@@ -206,7 +206,7 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
                     type="button"
                     onClick={() => move(i, 1)}
                     disabled={i === slides.length - 1}
-                    className="p-1 rounded text-gray-500 hover:text-[#020B27] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
+                    className="p-1 rounded text-gray-500 hover:text-[#0A2A52] hover:bg-gray-100 disabled:opacity-30 disabled:hover:bg-transparent"
                     title="Déplacer à droite"
                   >
                     <ArrowRight size={15} />
@@ -223,7 +223,7 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
           type="button"
           onClick={() => imageInputRef.current?.click()}
           disabled={uploading !== null}
-          className="inline-flex items-center gap-2 border border-gray-200 hover:border-green text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-2 border border-gray-200 hover:border-green text-[#0A2A52] text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-60"
         >
           {uploading === "image" ? <Loader2 size={16} className="animate-spin" /> : <ImagePlus size={16} />}
           Ajouter une image
@@ -232,7 +232,7 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
           type="button"
           onClick={() => videoInputRef.current?.click()}
           disabled={uploading !== null}
-          className="inline-flex items-center gap-2 border border-gray-200 hover:border-green text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-2 border border-gray-200 hover:border-green text-[#0A2A52] text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-60"
         >
           {uploading === "video" ? <Loader2 size={16} className="animate-spin" /> : <Video size={16} />}
           Ajouter une vidéo
@@ -242,7 +242,7 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
           type="button"
           onClick={save}
           disabled={saving || uploading !== null}
-          className="inline-flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors ml-auto"
+          className="inline-flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-60 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors ml-auto"
         >
           <Save size={16} /> {saving ? "Enregistrement…" : "Enregistrer le slider"}
         </button>

@@ -81,7 +81,7 @@ export default function AdminSearch() {
 
   return (
     <div className="relative flex-1 max-w-sm mx-auto" ref={boxRef}>
-      <div className="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-lg px-3 py-2 focus-within:border-[#B8925A] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#B8925A]/15 transition-colors">
+      <div className="flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-lg px-3 py-2 focus-within:border-[#2F9E44] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#2F9E44]/15 transition-colors">
         <Search size={16} className="text-gray-400 shrink-0" />
         <input
           type="text"
@@ -90,19 +90,19 @@ export default function AdminSearch() {
           onFocus={() => setOpen(true)}
           onKeyDown={onKeyDown}
           placeholder="Rechercher un produit, une commande, un client…"
-          className="bg-transparent text-sm outline-none flex-1 text-[#020B27] placeholder-gray-500 min-w-0"
+          className="bg-transparent text-sm outline-none flex-1 text-[#0A2A52] placeholder-gray-500 min-w-0"
         />
         {loading ? (
           <Loader2 size={15} className="text-gray-400 animate-spin shrink-0" />
         ) : query ? (
-          <button onClick={() => { setQuery(""); setOpen(false); }} className="text-gray-400 hover:text-[#020B27] shrink-0" aria-label="Effacer">
+          <button onClick={() => { setQuery(""); setOpen(false); }} className="text-gray-400 hover:text-[#0A2A52] shrink-0" aria-label="Effacer">
             <X size={15} />
           </button>
         ) : null}
       </div>
 
       {showPanel && (
-        <div className="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-[#020B27] max-h-[70vh] overflow-y-auto">
+        <div className="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-[#0A2A52] max-h-[70vh] overflow-y-auto">
           {loading && total === 0 ? (
             <div className="flex items-center gap-2 px-4 py-6 text-sm text-text-secondary justify-center">
               <Loader2 size={16} className="animate-spin" /> Recherche…
@@ -213,7 +213,7 @@ function Row({
       href={href}
       onMouseEnter={onHover}
       onClick={(e) => { e.preventDefault(); onGo(href); }}
-      className={`flex items-center gap-3 px-4 py-2 transition-colors ${activeRow ? "bg-[#B8925A]/10" : "hover:bg-gray-50"}`}
+      className={`flex items-center gap-3 px-4 py-2 transition-colors ${activeRow ? "bg-[#2F9E44]/10" : "hover:bg-gray-50"}`}
     >
       {children}
     </Link>

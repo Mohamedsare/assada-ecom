@@ -9,8 +9,8 @@ export default function TestimonialQuote({ products }: { products: Product[] }) 
   return (
     <section className="py-16 px-4 bg-white">
       <div className="max-w-2xl mx-auto text-center">
-        <span className="text-6xl leading-none text-[#B8925A]/40 font-serif">”</span>
-        <p className="text-lg md:text-xl text-[#020B27] leading-relaxed mt-2 mb-3">
+        <span className="text-6xl leading-none text-[#2F9E44]/40 font-serif">”</span>
+        <p className="text-lg md:text-xl text-[#0A2A52] leading-relaxed mt-2 mb-3">
           Tellement bien ! Livraison rapide, produits authentiques et bien emballés.
           La texture est parfaite, un vrai coup de cœur — je recommande RYTA les yeux fermés !
         </p>

@@ -20,7 +20,7 @@ const QUICK_LINKS = [
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-b from-[#020B27] via-[#0F172A] to-[#020B27] text-white">
+    <main className="min-h-screen flex flex-col bg-gradient-to-b from-[#0A2A52] via-[#0E2440] to-[#0A2A52] text-white">
       {/* Logo */}
       <div className="px-4 py-6">
         <Link href="/" className="inline-flex items-center" aria-label="RYTA — Accueil">
@@ -33,10 +33,10 @@ export default function NotFound() {
         <div className="w-full max-w-xl text-center">
           {/* Visuel 404 */}
           <div className="relative inline-block mb-6">
-            <span className="text-[7rem] sm:text-[9rem] font-extrabold leading-none bg-gradient-to-br from-[#C9A063] to-[#020B27] bg-clip-text text-transparent select-none">
+            <span className="text-[7rem] sm:text-[9rem] font-extrabold leading-none bg-gradient-to-br from-[#54B85E] to-[#0A2A52] bg-clip-text text-transparent select-none">
               404
             </span>
-            <div className="absolute -inset-6 bg-[#B8925A]/20 blur-3xl rounded-full -z-10" aria-hidden="true" />
+            <div className="absolute -inset-6 bg-[#2F9E44]/20 blur-3xl rounded-full -z-10" aria-hidden="true" />
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-bold mb-3">Oups, cette page est introuvable</h1>
@@ -51,16 +51,16 @@ export default function NotFound() {
               name="q"
               placeholder="Rechercher un produit…"
               aria-label="Rechercher un produit"
-              className="flex-1 bg-white/10 border border-white/20 rounded-l-xl px-4 py-3 text-sm text-white placeholder-gray-400 outline-none focus:border-[#C9A063] transition-colors"
+              className="flex-1 bg-white/10 border border-white/20 rounded-l-xl px-4 py-3 text-sm text-white placeholder-gray-400 outline-none focus:border-[#54B85E] transition-colors"
             />
-            <button type="submit" className="bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] px-5 py-3 rounded-r-xl transition-colors" aria-label="Lancer la recherche">
+            <button type="submit" className="bg-[#2F9E44] btn-sweep hover:bg-[#237A34] px-5 py-3 rounded-r-xl transition-colors" aria-label="Lancer la recherche">
               <Search size={18} />
             </button>
           </form>
 
           {/* CTAs principaux */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white font-semibold px-6 py-3 rounded-xl transition-colors">
+            <Link href="/" className="inline-flex items-center justify-center gap-2 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white font-semibold px-6 py-3 rounded-xl transition-colors">
               <Home size={18} /> Retour à l&apos;accueil
             </Link>
             <Link href="/boutique" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:bg-white/10 text-white font-semibold px-6 py-3 rounded-xl transition-colors">
@@ -72,7 +72,7 @@ export default function NotFound() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
             {QUICK_LINKS.map(({ href, label, icon: Icon }) => (
               <Link key={href} href={href} className="flex flex-col items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl py-4 transition-colors">
-                <Icon size={20} className="text-[#C9A063]" />
+                <Icon size={20} className="text-[#54B85E]" />
                 <span className="text-xs font-medium text-gray-200">{label}</span>
               </Link>
             ))}
@@ -84,7 +84,7 @@ export default function NotFound() {
               <Link
                 key={cat.slug}
                 href={`/boutique?categorie=${cat.slug}`}
-                className="inline-flex items-center gap-1.5 text-xs text-gray-300 bg-white/5 hover:bg-[#B8925A] hover:text-white border border-white/10 px-3 py-1.5 rounded-full transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-gray-300 bg-white/5 hover:bg-[#2F9E44] hover:text-white border border-white/10 px-3 py-1.5 rounded-full transition-colors"
               >
                 <CategoryIcon slug={cat.slug} size={13} />
                 {cat.name}
@@ -97,7 +97,7 @@ export default function NotFound() {
             href={getWhatsAppUrl(WHATSAPP_DEFAULT_MESSAGE)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#C9A063] transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#54B85E] transition-colors"
           >
             Besoin d&apos;aide ? Contactez-nous sur WhatsApp <ArrowRight size={14} />
           </Link>

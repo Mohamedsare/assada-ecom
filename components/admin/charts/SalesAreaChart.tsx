@@ -69,14 +69,14 @@ export default function SalesAreaChart({ data }: { data?: SalesChartData }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-[#020B27] text-sm">Évolution des ventes</h3>
+        <h3 className="font-bold text-[#0A2A52] text-sm">Évolution des ventes</h3>
         <div className="flex bg-gray-100 rounded-lg p-0.5">
           {(["Jour", "Semaine", "Mois"] as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
               className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                period === p ? "bg-[#1d4ed8] text-white" : "text-gray-500 hover:text-[#020B27]"
+                period === p ? "bg-[#1d4ed8] text-white" : "text-gray-500 hover:text-[#0A2A52]"
               }`}
             >
               {p}

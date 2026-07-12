@@ -70,19 +70,19 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
     <div className="space-y-6">
       {/* Disponibilité */}
       <div>
-        <h3 className="font-semibold text-[#020B27] mb-3 text-sm">Disponibilité</h3>
+        <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Disponibilité</h3>
         <div className="space-y-2.5">
           <label className="flex items-center justify-between gap-2 cursor-pointer group">
             <span className="flex items-center gap-2">
               <input type="checkbox" checked={inStock} onChange={(e) => setInStock(e.target.checked)} className="rounded border-gray-300 text-green focus:ring-green accent-green" />
-              <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">En stock</span>
+              <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">En stock</span>
             </span>
             <span className="text-xs text-gray-400">{inStockCount}</span>
           </label>
           <label className="flex items-center justify-between gap-2 cursor-pointer group">
             <span className="flex items-center gap-2">
               <input type="checkbox" checked={outStock} onChange={(e) => setOutStock(e.target.checked)} className="rounded border-gray-300 text-green focus:ring-green accent-green" />
-              <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">En rupture de stock</span>
+              <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">En rupture de stock</span>
             </span>
             <span className="text-xs text-gray-400">{outStockCount}</span>
           </label>
@@ -93,7 +93,7 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
 
       {/* Prix */}
       <div>
-        <h3 className="font-semibold text-[#020B27] mb-2 text-sm">Prix</h3>
+        <h3 className="font-semibold text-[#0A2A52] mb-2 text-sm">Prix</h3>
         <p className="text-xs text-gray-500 mb-3">Le prix le plus élevé est {formatPrice(maxPrice)}</p>
         <div className="flex items-center gap-2 mb-3">
           <div className="flex items-center gap-1 border border-gray-200 rounded-lg px-2.5 py-1.5 flex-1 min-w-0">
@@ -117,7 +117,7 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
         <input
           type="range" min={0} max={maxPrice} step={5} value={price[1]}
           onChange={(e) => setPrice([price[0], Number(e.target.value)])}
-          className="w-full accent-[#020B27]"
+          className="w-full accent-[#0A2A52]"
         />
       </div>
 
@@ -134,13 +134,13 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-12">
         {/* Fil d'Ariane */}
         <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-6" aria-label="Fil d'Ariane">
-          <Link href="/" className="hover:text-[#020B27] transition-colors">Accueil</Link>
+          <Link href="/" className="hover:text-[#0A2A52] transition-colors">Accueil</Link>
           <ChevronRight size={13} className="text-gray-300" />
-          <span className="text-[#020B27] font-medium uppercase tracking-wide">Coffrets cadeaux</span>
+          <span className="text-[#0A2A52] font-medium uppercase tracking-wide">Coffrets cadeaux</span>
         </nav>
 
         {/* Titre */}
-        <h1 className="text-center text-3xl md:text-4xl font-bold text-[#020B27] tracking-tight mb-8">
+        <h1 className="text-center text-3xl md:text-4xl font-bold text-[#0A2A52] tracking-tight mb-8">
           Coffrets cadeaux
         </h1>
 
@@ -156,7 +156,7 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
             <div className="flex items-center justify-between gap-3 mb-5">
               <button
                 onClick={() => setFiltersOpen(true)}
-                className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#020B27] border border-gray-200 px-4 py-2 rounded-xl active:scale-95 transition-all hover:border-green"
+                className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#0A2A52] border border-gray-200 px-4 py-2 rounded-xl active:scale-95 transition-all hover:border-green"
               >
                 <SlidersHorizontal size={16} /> Filtres
               </button>
@@ -168,7 +168,7 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value)}
-                  className="border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-green bg-white text-[#020B27]"
+                  className="border border-gray-200 rounded-xl px-3 py-2 outline-none focus:border-green bg-white text-[#0A2A52]"
                 >
                   {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
@@ -178,9 +178,9 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
             {filtered.length === 0 ? (
               <div className="text-center py-20">
                 <div className="text-5xl mb-4">🎁</div>
-                <h3 className="text-lg font-semibold text-[#020B27] mb-2">Aucun coffret trouvé</h3>
+                <h3 className="text-lg font-semibold text-[#0A2A52] mb-2">Aucun coffret trouvé</h3>
                 <p className="text-gray-500 mb-6">Essayez de modifier vos filtres</p>
-                <button onClick={resetFilters} className="bg-green text-white px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#9E7A45] transition-colors">
+                <button onClick={resetFilters} className="bg-green text-white px-6 py-2.5 rounded-xl font-medium btn-sweep hover:bg-[#237A34] transition-colors">
                   Réinitialiser les filtres
                 </button>
               </div>
@@ -194,7 +194,7 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
 
                 <div className="mt-12 flex flex-col items-center">
                   <p className="text-sm text-gray-500">Vous avez vu {filtered.length} sur {packs.length} résultats</p>
-                  <span className="mt-2 h-0.5 w-40 bg-[#020B27] rounded-full" />
+                  <span className="mt-2 h-0.5 w-40 bg-[#0A2A52] rounded-full" />
                 </div>
               </>
             )}
@@ -213,14 +213,14 @@ export default function CoffretsContent({ packs }: { packs: Product[] }) {
           filtersOpen ? "translate-x-0" : "-translate-x-full",
         )}>
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 shrink-0">
-            <h2 className="font-bold text-[#020B27] flex items-center gap-2"><SlidersHorizontal size={17} className="text-green" /> Filtres</h2>
-            <button onClick={() => setFiltersOpen(false)} aria-label="Fermer" className="p-1.5 -mr-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#020B27] transition-colors">
+            <h2 className="font-bold text-[#0A2A52] flex items-center gap-2"><SlidersHorizontal size={17} className="text-green" /> Filtres</h2>
+            <button onClick={() => setFiltersOpen(false)} aria-label="Fermer" className="p-1.5 -mr-1.5 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-[#0A2A52] transition-colors">
               <X size={20} />
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-4 py-4">{filterPanel}</div>
           <div className="px-4 py-3 border-t border-gray-100 shrink-0">
-            <button onClick={() => setFiltersOpen(false)} className="w-full bg-green text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#9E7A45] transition-colors">
+            <button onClick={() => setFiltersOpen(false)} className="w-full bg-green text-white py-3 rounded-xl font-semibold btn-sweep hover:bg-[#237A34] transition-colors">
               Afficher {filtered.length} {filtered.length === 1 ? "coffret" : "coffrets"}
             </button>
           </div>

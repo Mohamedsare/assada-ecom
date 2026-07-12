@@ -34,7 +34,7 @@ export default async function PromotionsPage() {
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-3">
                 Des promotions<br />
-                <span className="text-[#C9A063]">qui font plaisir !</span>
+                <span className="text-[#54B85E]">qui font plaisir !</span>
               </h1>
               <p className="text-gray-300 text-lg">
                 Profitez de réductions exceptionnelles sur une large sélection de produits.
@@ -57,7 +57,7 @@ export default async function PromotionsPage() {
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-xl font-bold text-[#020B27]">
+            <h2 className="text-xl font-bold text-[#0A2A52]">
               {allProducts.length} produits en promotion
             </h2>
             <p className="text-[#64748B] text-sm mt-1">Offres valables jusqu&apos;à épuisement des stocks</p>
@@ -67,8 +67,8 @@ export default async function PromotionsPage() {
         {allProducts.length === 0 ? (
           <div className="text-center py-20">
             <div className="text-5xl mb-4">🏷️</div>
-            <h3 className="text-lg font-semibold text-[#020B27] mb-2">Aucune promotion en ce moment</h3>
-            <Link href="/boutique" className="text-[#020B27] hover:underline">
+            <h3 className="text-lg font-semibold text-[#0A2A52] mb-2">Aucune promotion en ce moment</h3>
+            <Link href="/boutique" className="text-[#0A2A52] hover:underline">
               Voir toute la boutique
             </Link>
           </div>

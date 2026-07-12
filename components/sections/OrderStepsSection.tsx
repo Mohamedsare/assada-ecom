@@ -41,7 +41,7 @@ export default function OrderStepsSection() {
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8A6D3F] bg-green/15 px-3 py-1 rounded-full">
             <Sparkles size={13} /> Simple &amp; rapide
           </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-[#020B27]">
+          <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-[#0A2A52]">
             Commander en quelques clics
           </h2>
           <p className="mt-2 text-sm sm:text-base text-text-secondary max-w-xl mx-auto">
@@ -73,14 +73,14 @@ export default function OrderStepsSection() {
                     <div className="w-16 h-16 rounded-full bg-linear-to-br from-night to-night-2 flex items-center justify-center ring-4 ring-white shadow-lg transition-transform duration-300 group-hover:-translate-y-1 group-hover:shadow-xl">
                       <Icon size={26} className="text-green-light" />
                     </div>
-                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-green text-[#020B27] text-xs font-bold flex items-center justify-center ring-2 ring-white shadow">
+                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-green text-[#0A2A52] text-xs font-bold flex items-center justify-center ring-2 ring-white shadow">
                       {i + 1}
                     </span>
                   </div>
 
                   {/* Texte */}
                   <div className="md:mt-5 md:px-2">
-                    <h3 className="font-bold text-[#020B27] text-base leading-tight">{step.title}</h3>
+                    <h3 className="font-bold text-[#0A2A52] text-base leading-tight">{step.title}</h3>
                     <p className="mt-1.5 text-sm text-text-secondary leading-snug">{step.desc}</p>
                   </div>
                 </motion.div>
@@ -93,7 +93,7 @@ export default function OrderStepsSection() {
         <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/boutique"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white px-6 py-3 rounded-2xl font-bold text-sm transition-colors active:scale-95"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white px-6 py-3 rounded-2xl font-bold text-sm transition-colors active:scale-95"
           >
             Découvrir la boutique <ArrowRight size={17} />
           </Link>

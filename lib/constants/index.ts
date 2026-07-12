@@ -5,9 +5,8 @@ export const DEFAULT_DELIVERY_FEE = 30;
 export const DEFAULT_FREE_DELIVERY_THRESHOLD = 300;
 
 export const SITE_EMAIL = "contact@ryta.ma";
-// ⚠️ Numéro placeholder — à remplacer par le vrai numéro RYTA.
-export const SITE_PHONE = "+212 00 00 00 00";
-export const WHATSAPP_NUMBER = "21200000000";
+export const SITE_PHONE = "+212 654 885 746";
+export const WHATSAPP_NUMBER = "212654885746";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ryta.ma";
 
 export const SITE_DESCRIPTION =

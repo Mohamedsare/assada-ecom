@@ -34,7 +34,7 @@ export default function SuccessConfetti() {
     window.addEventListener("resize", resize);
 
     // Palette RYTA : or, bleu nuit, vert, blanc.
-    const colors = ["#B8925A", "#020B27", "#16A34A", "#22C55E", "#FFFFFF", "#E8C88A"];
+    const colors = ["#2F9E44", "#0A2A52", "#16A34A", "#22C55E", "#FFFFFF", "#E8C88A"];
 
     type Piece = {
       x: number; y: number; vx: number; vy: number;

@@ -32,7 +32,7 @@ function Field({ label, required, error, children }: {
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="block text-sm font-semibold text-[#020B27]">
+      <label className="block text-sm font-semibold text-[#0A2A52]">
         {label}{required && <span className="text-red-500 ml-0.5">*</span>}
       </label>
       {children}
@@ -41,7 +41,7 @@ function Field({ label, required, error, children }: {
   );
 }
 
-const inputCls = "w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all placeholder:text-gray-400 bg-white";
+const inputCls = "w-full border border-gray-200 rounded-xl px-3.5 py-2.5 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/10 transition-all placeholder:text-gray-400 bg-white";
 
 export default function CheckoutPage() {
   const router     = useRouter();
@@ -122,7 +122,7 @@ export default function CheckoutPage() {
 
   const orderSummary = (
     <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm">
-      <h3 className="font-bold text-[#020B27] mb-4 text-base">Ma commande</h3>
+      <h3 className="font-bold text-[#0A2A52] mb-4 text-base">Ma commande</h3>
       <div className="space-y-3 mb-5">
         {items.map(item => {
           const unit = item.product.current_price + (item.variant?.price_adjustment ?? 0);
@@ -132,10 +132,10 @@ export default function CheckoutPage() {
                 {item.product.main_image_url
                   ? <Image src={item.product.main_image_url} alt={item.product.name} fill className="object-cover" />
                   : <div className="w-full h-full flex items-center justify-center text-lg">📦</div>}
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#B8925A] text-[#020B27] text-[9px] font-bold rounded-full flex items-center justify-center">{item.quantity}</span>
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#2F9E44] text-[#0A2A52] text-[9px] font-bold rounded-full flex items-center justify-center">{item.quantity}</span>
               </div>
-              <p className="flex-1 text-xs font-medium text-[#020B27] line-clamp-2 leading-snug">{item.product.name}</p>
-              <p className="text-xs font-bold text-[#020B27] shrink-0">{formatPrice(unit * item.quantity)}</p>
+              <p className="flex-1 text-xs font-medium text-[#0A2A52] line-clamp-2 leading-snug">{item.product.name}</p>
+              <p className="text-xs font-bold text-[#0A2A52] shrink-0">{formatPrice(unit * item.quantity)}</p>
             </div>
           );
         })}
@@ -147,13 +147,13 @@ export default function CheckoutPage() {
         </div>
         <div className="flex justify-between">
           <span className="text-gray-500">Livraison</span>
-          <span className={`font-medium ${deliveryFee === 0 ? "text-[#020B27]" : ""}`}>
+          <span className={`font-medium ${deliveryFee === 0 ? "text-[#0A2A52]" : ""}`}>
             {deliveryFee === 0 ? "Gratuite 🎉" : formatPrice(deliveryFee)}
           </span>
         </div>
         <div className="flex justify-between font-extrabold text-base pt-2 border-t border-gray-100">
-          <span className="text-[#020B27]">Total</span>
-          <span className="text-[#020B27]">{formatPrice(total)}</span>
+          <span className="text-[#0A2A52]">Total</span>
+          <span className="text-[#0A2A52]">{formatPrice(total)}</span>
         </div>
       </div>
     </div>
@@ -163,7 +163,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-[#F8FAFC] pb-32 lg:pb-12">
       <div className="bg-white border-b border-gray-100 px-4 py-3">
         <div className="max-w-5xl mx-auto grid grid-cols-3 items-center">
-          <Link href="/panier" className="justify-self-start flex items-center gap-1.5 text-gray-500 hover:text-[#020B27] text-sm transition-colors">
+          <Link href="/panier" className="justify-self-start flex items-center gap-1.5 text-gray-500 hover:text-[#0A2A52] text-sm transition-colors">
             <ChevronLeft size={16} /> <span className="hidden sm:inline">Panier</span>
           </Link>
           <Link href="/" className="justify-self-center flex items-center shrink-0">
@@ -183,11 +183,11 @@ export default function CheckoutPage() {
             <div className="bg-white rounded-2xl border border-gray-100 p-5 sm:p-6 shadow-sm space-y-5">
               {/* En-tête */}
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-[#B8925A] rounded-full flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 bg-[#2F9E44] rounded-full flex items-center justify-center shrink-0">
                   <User size={16} className="text-white" />
                 </div>
                 <div>
-                  <h2 className="font-bold text-[#020B27] leading-tight">Vos coordonnées</h2>
+                  <h2 className="font-bold text-[#0A2A52] leading-tight">Vos coordonnées</h2>
                   <p className="text-xs text-gray-500">Livraison &amp; confirmation sur WhatsApp</p>
                 </div>
               </div>
@@ -216,7 +216,7 @@ export default function CheckoutPage() {
 
               {/* Séparateur « Adresse de livraison » */}
               <div className="flex items-center gap-2 pt-1">
-                <MapPin size={14} className="text-[#B8925A] shrink-0" />
+                <MapPin size={14} className="text-[#2F9E44] shrink-0" />
                 <span className="text-xs font-bold uppercase tracking-wide text-gray-400">Adresse de livraison</span>
                 <span className="flex-1 h-px bg-gray-100" />
               </div>
@@ -240,7 +240,7 @@ export default function CheckoutPage() {
             <div className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex items-center gap-3">
               <div className="w-9 h-9 bg-green/10 rounded-full flex items-center justify-center shrink-0 text-lg">💵</div>
               <div>
-                <p className="font-semibold text-[#020B27] text-sm">Paiement à la livraison</p>
+                <p className="font-semibold text-[#0A2A52] text-sm">Paiement à la livraison</p>
                 <p className="text-xs text-gray-500">Espèces ou Mobile Money (sur place)</p>
               </div>
             </div>
@@ -254,7 +254,7 @@ export default function CheckoutPage() {
             {/* Validation — desktop */}
             <div className="hidden lg:block space-y-3">
               <button onClick={handleSubmit} disabled={submitting}
-                className="w-full flex items-center justify-center gap-3 bg-[#B8925A] text-white py-4 rounded-2xl font-bold text-base btn-sweep hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
+                className="w-full flex items-center justify-center gap-3 bg-[#2F9E44] text-white py-4 rounded-2xl font-bold text-base btn-sweep hover:bg-[#237A34] active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed">
                 {submitting
                   ? <><span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Traitement…</>
                   : <><Lock size={17} /> Confirmer ma commande</>}
@@ -277,7 +277,7 @@ export default function CheckoutPage() {
         style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
       >
         <button onClick={handleSubmit} disabled={submitting}
-          className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all disabled:opacity-60">
+          className="w-full flex items-center justify-center gap-2 bg-[#2F9E44] text-white py-3.5 rounded-2xl font-bold text-base active:scale-95 transition-all disabled:opacity-60">
           {submitting
             ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> En cours…</>
             : <><Lock size={16} /> Confirmer · {formatPrice(total)}</>}

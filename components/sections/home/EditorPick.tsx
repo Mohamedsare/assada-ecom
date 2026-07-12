@@ -44,7 +44,7 @@ export default function EditorPick({
 
       {/* Liste produits + total */}
       <div className="md:[direction:ltr]">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#020B27] mb-5">{title}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52] mb-5">{title}</h2>
 
         <div className="divide-y divide-gray-100 border-y border-gray-100 mb-5">
           {products.map((p) => (
@@ -52,15 +52,15 @@ export default function EditorPick({
               <span className="relative w-14 h-14 rounded-lg overflow-hidden bg-[#f5f5f5] shrink-0">
                 {p.main_image_url && <Image src={p.main_image_url} alt={p.name} fill sizes="56px" className="object-cover" />}
               </span>
-              <span className="flex-1 min-w-0 text-sm text-[#020B27] group-hover:text-[#B8925A] transition-colors line-clamp-2">{p.name}</span>
-              <span className="text-sm font-semibold text-[#020B27] shrink-0">{formatPrice(p.current_price)}</span>
+              <span className="flex-1 min-w-0 text-sm text-[#0A2A52] group-hover:text-[#2F9E44] transition-colors line-clamp-2">{p.name}</span>
+              <span className="text-sm font-semibold text-[#0A2A52] shrink-0">{formatPrice(p.current_price)}</span>
             </Link>
           ))}
         </div>
 
         <button
           onClick={addAll}
-          className="w-full flex items-center justify-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white font-semibold px-6 py-3.5 rounded-full transition-colors active:scale-[0.98]"
+          className="w-full flex items-center justify-center gap-2 bg-green btn-sweep hover:bg-[#237A34] text-white font-semibold px-6 py-3.5 rounded-full transition-colors active:scale-[0.98]"
         >
           <ShoppingBag size={18} /> Tout ajouter au panier · {formatPrice(total)}
         </button>

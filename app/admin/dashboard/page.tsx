@@ -28,7 +28,7 @@ const STATUS_COLOR: Record<string, string> = {
   preparing:        "bg-purple-50 text-purple-700",
   shipped:          "bg-indigo-50 text-indigo-700",
   out_for_delivery: "bg-orange-50 text-orange-700",
-  delivered:        "bg-green-50 text-[#020B27]",
+  delivered:        "bg-green-50 text-[#0A2A52]",
   cancelled:        "bg-red-50 text-red-700",
   returned:         "bg-gray-50 text-gray-700",
 };
@@ -278,14 +278,14 @@ export default async function AdminDashboardPage() {
           <SalesAreaChart data={salesChartData} />
         </div>
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex flex-col">
-          <h3 className="font-bold text-[#020B27] text-sm mb-3">Statut des commandes</h3>
+          <h3 className="font-bold text-[#0A2A52] text-sm mb-3">Statut des commandes</h3>
           <div className="flex-1 flex items-center">
             <OrderDonutChart statusCounts={statusCounts} />
           </div>
         </div>
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-            <h3 className="font-bold text-[#020B27] text-sm">Commandes récentes</h3>
+            <h3 className="font-bold text-[#0A2A52] text-sm">Commandes récentes</h3>
             <Link href="/admin/commandes" className="text-xs text-green hover:underline">Voir toutes</Link>
           </div>
           <div className="p-3 space-y-1">
@@ -302,7 +302,7 @@ export default async function AdminDashboardPage() {
                     <ShoppingBag size={15} className="text-gray-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-[#020B27] truncate">{o.order_number}</p>
+                    <p className="text-xs font-bold text-[#0A2A52] truncate">{o.order_number}</p>
                     <p className="text-[11px] text-text-secondary truncate">{o.customer_name} · {o.delivery_city}</p>
                   </div>
                   <div className="text-right shrink-0">
@@ -323,7 +323,7 @@ export default async function AdminDashboardPage() {
         {/* Produits récents */}
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm lg:col-span-2">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-            <h3 className="font-bold text-[#020B27] text-sm">Produits récents</h3>
+            <h3 className="font-bold text-[#0A2A52] text-sm">Produits récents</h3>
             <Link href="/admin/produits" className="text-xs text-green hover:underline">Voir tout</Link>
           </div>
           <div className="p-3 space-y-1">
@@ -341,7 +341,7 @@ export default async function AdminDashboardPage() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#020B27] truncate">{p.name}</p>
+                  <p className="text-sm font-medium text-[#0A2A52] truncate">{p.name}</p>
                   <p className="text-[11px] text-text-secondary">{p.category?.name ?? "—"}</p>
                 </div>
                 <span className="text-sm font-bold text-green shrink-0">{formatPrice(p.current_price)}</span>
@@ -356,7 +356,7 @@ export default async function AdminDashboardPage() {
         {/* Alertes stock faible */}
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
-            <h3 className="font-bold text-[#020B27] text-sm">Alertes stock faible</h3>
+            <h3 className="font-bold text-[#0A2A52] text-sm">Alertes stock faible</h3>
             <Link href="/admin/produits" className="text-xs text-green hover:underline">Voir tout</Link>
           </div>
           <div className="p-3 space-y-1">
@@ -377,7 +377,7 @@ export default async function AdminDashboardPage() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#020B27] truncate">{s.name}</p>
+                    <p className="text-sm font-medium text-[#0A2A52] truncate">{s.name}</p>
                     <p className="text-[11px] text-text-secondary">Stock : {s.stock_quantity} unités</p>
                   </div>
                   <span className="text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full shrink-0">Faible</span>
@@ -399,7 +399,7 @@ export default async function AdminDashboardPage() {
       {/* Canal + quartiers (spec RYTA) */}
       <div className="grid lg:grid-cols-2 gap-4">
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
-          <h3 className="font-bold text-[#020B27] text-sm mb-3">Commandes par canal</h3>
+          <h3 className="font-bold text-[#0A2A52] text-sm mb-3">Commandes par canal</h3>
           <div className="space-y-2">
             {Object.entries(ORDER_CHANNEL_LABELS).map(([key, label]) => {
               const count = channels[key] ?? 0;
@@ -408,7 +408,7 @@ export default async function AdminDashboardPage() {
                 <div key={key}>
                   <div className="flex items-center justify-between text-[11px] mb-1">
                     <span className="text-text-secondary">{label}</span>
-                    <span className="font-medium text-[#020B27]">{count} · {pct}%</span>
+                    <span className="font-medium text-[#0A2A52]">{count} · {pct}%</span>
                   </div>
                   <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                     <div className="h-full bg-green rounded-full" style={{ width: `${pct}%` }} />
@@ -420,7 +420,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4">
-          <h3 className="font-bold text-[#020B27] text-sm mb-3">Quartiers qui commandent le plus</h3>
+          <h3 className="font-bold text-[#0A2A52] text-sm mb-3">Quartiers qui commandent le plus</h3>
           {districts.length === 0 ? (
             <p className="text-xs text-text-secondary text-center py-6">Aucune commande</p>
           ) : (
@@ -428,7 +428,7 @@ export default async function AdminDashboardPage() {
               {districts.map((d) => (
                 <div key={d.district}>
                   <div className="flex items-center justify-between text-[11px] mb-1">
-                    <span className="text-[#020B27] flex items-center gap-1"><MapPin size={11} className="text-gray-400" /> {d.district}</span>
+                    <span className="text-[#0A2A52] flex items-center gap-1"><MapPin size={11} className="text-gray-400" /> {d.district}</span>
                     <span className="font-medium text-text-secondary">{d.count}</span>
                   </div>
                   <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -496,7 +496,7 @@ function StatCard({
           <Icon size={15} />
         </div>
       </div>
-      <p className="text-xl font-extrabold text-[#020B27] mt-auto">{value}</p>
+      <p className="text-xl font-extrabold text-[#0A2A52] mt-auto">{value}</p>
       {sub && <p className="text-[11px] text-text-secondary mt-1">{sub}</p>}
       {trend && <p className="text-[11px] text-green flex items-center gap-0.5 mt-1"><ArrowUp size={10} /> {trend}</p>}
     </div>

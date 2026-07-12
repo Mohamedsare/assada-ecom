@@ -73,14 +73,14 @@ export default function InscriptionPage() {
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 max-w-md w-full text-center">
           <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 size={32} className="text-[#020B27]" />
+            <CheckCircle2 size={32} className="text-[#0A2A52]" />
           </div>
-          <h2 className="text-xl font-bold text-[#020B27] mb-2">Compte créé !</h2>
+          <h2 className="text-xl font-bold text-[#0A2A52] mb-2">Compte créé !</h2>
           <p className="text-[#64748B] text-sm">
             Vérifiez votre email pour confirmer votre compte, puis connectez-vous.
           </p>
           <Link href="/connexion"
-            className="mt-5 inline-block bg-[#B8925A] text-white px-6 py-3 rounded-xl font-semibold text-sm btn-sweep hover:bg-[#9E7A45] transition-colors">
+            className="mt-5 inline-block bg-[#2F9E44] text-white px-6 py-3 rounded-xl font-semibold text-sm btn-sweep hover:bg-[#237A34] transition-colors">
             Se connecter
           </Link>
         </div>
@@ -88,7 +88,7 @@ export default function InscriptionPage() {
     );
   }
 
-  const inputCls = "w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/10 transition-all";
+  const inputCls = "w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/10 transition-all";
 
   return (
     <div className="relative min-h-screen bg-[#F8FAFC] flex items-center justify-center px-4 py-12">
@@ -102,7 +102,7 @@ export default function InscriptionPage() {
           <Link href="/">
             <Image src="/ryta.png" alt="RYTA" width={160} height={56} className="h-16 w-auto mx-auto object-contain" />
           </Link>
-          <h1 className="text-2xl font-bold text-[#020B27] mt-4">Créer un compte</h1>
+          <h1 className="text-2xl font-bold text-[#0A2A52] mt-4">Créer un compte</h1>
           <p className="text-[#64748B] text-sm mt-1">Rejoignez RYTA dès aujourd&apos;hui</p>
         </div>
 
@@ -110,7 +110,7 @@ export default function InscriptionPage() {
           {/* Google */}
           <form action={signInWithGoogle}>
             <button type="submit"
-              className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium text-[#020B27] hover:bg-gray-50 active:bg-gray-100 transition-all">
+              className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-xl py-3 text-sm font-medium text-[#0A2A52] hover:bg-gray-50 active:bg-gray-100 transition-all">
               <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -136,17 +136,17 @@ export default function InscriptionPage() {
 
             <div className="grid grid-cols-1 gap-3">
               <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-[#020B27]">Prénom <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-semibold text-[#0A2A52]">Prénom <span className="text-red-500">*</span></label>
                 <input className={inputCls} required placeholder="Jean" value={form.first_name} onChange={set("first_name")} />
               </div>
               <div className="space-y-1.5">
-                <label className="block text-sm font-semibold text-[#020B27]">Nom <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-semibold text-[#0A2A52]">Nom <span className="text-red-500">*</span></label>
                 <input className={inputCls} required placeholder="Ndong" value={form.last_name} onChange={set("last_name")} />
               </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-[#020B27]">Téléphone WhatsApp</label>
+              <label className="block text-sm font-semibold text-[#0A2A52]">Téléphone WhatsApp</label>
               <div className="relative">
                 <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none">
                   <span className="text-base">🇲🇦</span>
@@ -158,13 +158,13 @@ export default function InscriptionPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-[#020B27]">Email <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-semibold text-[#0A2A52]">Email <span className="text-red-500">*</span></label>
               <input className={inputCls} type="email" required placeholder="votre@email.com"
                 value={form.email} onChange={set("email")} />
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-[#020B27]">Mot de passe <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-semibold text-[#0A2A52]">Mot de passe <span className="text-red-500">*</span></label>
               <div className="relative">
                 <input className={`${inputCls} pr-12`} type={showPwd ? "text" : "password"}
                   required minLength={8} placeholder="Minimum 8 caractères"
@@ -177,14 +177,14 @@ export default function InscriptionPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-[#020B27]">Confirmer le mot de passe <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-semibold text-[#0A2A52]">Confirmer le mot de passe <span className="text-red-500">*</span></label>
               <input className={inputCls} type={showPwd ? "text" : "password"}
                 required placeholder="Répétez votre mot de passe"
                 value={form.password_confirm} onChange={set("password_confirm")} />
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 bg-[#B8925A] text-white py-3.5 rounded-xl font-bold text-sm btn-sweep hover:bg-[#9E7A45] active:scale-95 transition-all disabled:opacity-60">
+              className="w-full flex items-center justify-center gap-2 bg-[#2F9E44] text-white py-3.5 rounded-xl font-bold text-sm btn-sweep hover:bg-[#237A34] active:scale-95 transition-all disabled:opacity-60">
               {loading ? <><Loader2 size={17} className="animate-spin" /> Création…</> : "Créer mon compte"}
             </button>
           </form>
@@ -192,7 +192,7 @@ export default function InscriptionPage() {
 
         <p className="text-center text-sm text-[#64748B] mt-5">
           Déjà un compte ?{" "}
-          <Link href="/connexion" className="text-[#020B27] font-semibold hover:underline">
+          <Link href="/connexion" className="text-[#0A2A52] font-semibold hover:underline">
             Se connecter
           </Link>
         </p>

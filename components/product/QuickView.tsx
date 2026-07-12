@@ -149,7 +149,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
       <button
         onClick={onClose}
         aria-label="Fermer l'aperçu"
-        className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#020B27] hover:bg-white transition-colors"
+        className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-[#0A2A52] hover:bg-white transition-colors"
       >
         <X size={18} />
       </button>
@@ -169,7 +169,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
             {/* Badges */}
             <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
               {product.is_new && (
-                <span className="bg-green text-[#020B27] text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">Nouveau</span>
+                <span className="bg-green text-[#0A2A52] text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wide">Nouveau</span>
               )}
               {discount > 0 && (
                 <span className="bg-[#EF4444] text-white text-[10px] font-bold px-2.5 py-1 rounded-md">-{discount}%</span>
@@ -180,11 +180,11 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
             {media.length > 1 && (
               <>
                 <button onClick={goPrev} aria-label="Média précédent"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-[#020B27] hover:bg-white transition-colors z-10">
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-[#0A2A52] hover:bg-white transition-colors z-10">
                   <ChevronLeft size={18} />
                 </button>
                 <button onClick={goNext} aria-label="Média suivant"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-[#020B27] hover:bg-white transition-colors z-10">
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-[#0A2A52] hover:bg-white transition-colors z-10">
                   <ChevronRight size={18} />
                 </button>
               </>
@@ -205,7 +205,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
                   )}
                 >
                   {m.kind === "video" ? (
-                    <div className="w-full h-full bg-[#020B27] flex items-center justify-center">
+                    <div className="w-full h-full bg-[#0A2A52] flex items-center justify-center">
                       <Play size={16} className="text-white fill-white" />
                     </div>
                   ) : (
@@ -238,7 +238,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
 
           {/* Title */}
           <Link href={`/produit/${product.slug}`} onClick={onClose}>
-            <h2 className="text-xl md:text-2xl font-extrabold text-[#020B27] leading-tight hover:text-green transition-colors">
+            <h2 className="text-xl md:text-2xl font-extrabold text-[#0A2A52] leading-tight hover:text-green transition-colors">
               {product.name}
             </h2>
           </Link>
@@ -265,7 +265,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
           {/* Colors */}
           {colors.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-[#020B27] mb-2">
+              <p className="text-sm font-semibold text-[#0A2A52] mb-2">
                 Couleur : <span className="font-normal text-[#64748B]">{selectedColor ?? "—"}</span>
               </p>
               <div className="flex gap-2.5 flex-wrap">
@@ -297,7 +297,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
           {/* Sizes */}
           {sizes.length > 0 && sizes[0] !== "Unique" && (
             <div>
-              <p className="text-sm font-semibold text-[#020B27] mb-2">
+              <p className="text-sm font-semibold text-[#0A2A52] mb-2">
                 Taille : <span className="font-normal text-[#64748B]">{selectedSize ?? "—"}</span>
               </p>
               <div className="flex gap-2 flex-wrap">
@@ -310,7 +310,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
                         selectedSize === size
                           ? "border-green bg-green text-white"
                           : available
-                          ? "border-gray-200 text-[#020B27] hover:border-green"
+                          ? "border-gray-200 text-[#0A2A52] hover:border-green"
                           : "border-gray-100 text-gray-300 cursor-not-allowed line-through bg-gray-50"
                       )}>
                       {size}
@@ -333,12 +333,12 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden">
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} aria-label="Diminuer"
-                className="w-10 h-11 flex items-center justify-center text-[#020B27] hover:bg-gray-50 transition-colors">
+                className="w-10 h-11 flex items-center justify-center text-[#0A2A52] hover:bg-gray-50 transition-colors">
                 <Minus size={14} />
               </button>
-              <span className="w-10 text-center text-sm font-bold text-[#020B27]">{quantity}</span>
+              <span className="w-10 text-center text-sm font-bold text-[#0A2A52]">{quantity}</span>
               <button onClick={() => setQuantity((q) => q + 1)} aria-label="Augmenter"
-                className="w-10 h-11 flex items-center justify-center text-[#020B27] hover:bg-gray-50 transition-colors">
+                className="w-10 h-11 flex items-center justify-center text-[#0A2A52] hover:bg-gray-50 transition-colors">
                 <Plus size={14} />
               </button>
             </div>
@@ -346,7 +346,7 @@ function QuickViewCard({ product, onClose }: { product: Product; onClose: () => 
             <button onClick={handleAddToCart} disabled={!inStock}
               className={cn(
                 "flex-1 min-w-[150px] h-11 rounded-xl flex items-center justify-center gap-2 font-semibold text-sm transition-all",
-                inStock ? "bg-[#B8925A] text-white btn-sweep hover:bg-[#9E7A45]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
+                inStock ? "bg-[#2F9E44] text-white btn-sweep hover:bg-[#237A34]" : "bg-gray-100 text-gray-300 cursor-not-allowed"
               )}>
               <ShoppingCart size={16} /> Ajouter au panier
             </button>

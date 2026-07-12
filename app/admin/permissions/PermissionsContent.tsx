@@ -28,19 +28,19 @@ export default function PermissionsContent({
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-[#020B27]">Permissions</h1>
+          <h1 className="text-xl font-bold text-[#0A2A52]">Permissions</h1>
           <p className="text-text-secondary text-sm mt-0.5">Contrôlez précisément les droits de chaque employé</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setCreating(true)}
-            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
           >
             <UserPlus size={16} /> Créer un employé
           </button>
           <button
             onClick={() => setPromoting(true)}
-            className="flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-medium px-4 py-2 rounded-lg hover:border-green hover:text-green transition-colors"
+            className="flex items-center gap-2 border border-gray-200 text-[#0A2A52] text-sm font-medium px-4 py-2 rounded-lg hover:border-green hover:text-green transition-colors"
           >
             Promouvoir un client
           </button>
@@ -56,11 +56,11 @@ export default function PermissionsContent({
 
       {/* Employés */}
       <section>
-        <h2 className="text-sm font-semibold text-[#020B27] mb-2">Employés ({employees.length})</h2>
+        <h2 className="text-sm font-semibold text-[#0A2A52] mb-2">Employés ({employees.length})</h2>
         {employees.length === 0 ? (
           <div className="bg-white rounded-lg border border-gray-100 p-12 text-center">
             <Settings2 size={40} className="mx-auto text-gray-200 mb-3" />
-            <p className="font-semibold text-[#020B27] mb-1">Aucun employé</p>
+            <p className="font-semibold text-[#0A2A52] mb-1">Aucun employé</p>
             <p className="text-text-secondary text-sm">Ajoutez un employé pour lui attribuer des permissions ciblées.</p>
           </div>
         ) : (
@@ -73,13 +73,13 @@ export default function PermissionsContent({
       {/* Admins (lecture seule) */}
       {admins.length > 0 && (
         <section>
-          <h2 className="text-sm font-semibold text-[#020B27] mb-2">Administrateurs ({admins.length})</h2>
+          <h2 className="text-sm font-semibold text-[#0A2A52] mb-2">Administrateurs ({admins.length})</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {admins.map((a) => (
               <div key={a.id} className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-700 font-bold text-xs shrink-0">{initials(a)}</div>
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold text-[#020B27] truncate">{nameOf(a)}</p>
+                  <p className="font-semibold text-[#0A2A52] truncate">{nameOf(a)}</p>
                   <p className="text-xs text-text-secondary truncate">{a.email ?? "—"}</p>
                 </div>
                 <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 flex items-center gap-1"><ShieldCheck size={11} /> Tous droits</span>
@@ -120,7 +120,7 @@ function EmployeeCard({ profile, onConfigure }: { profile: Profile; onConfigure:
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-night rounded-full flex items-center justify-center text-white font-bold text-xs shrink-0">{initials(profile)}</div>
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-[#020B27] truncate">{nameOf(profile)}</p>
+          <p className="font-semibold text-[#0A2A52] truncate">{nameOf(profile)}</p>
           <p className="text-xs text-text-secondary truncate">{profile.email ?? "—"}</p>
         </div>
       </div>
@@ -169,10 +169,10 @@ function PermissionModal({ profile, onClose }: { profile: Profile; onClose: () =
       <div className="relative bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
           <div>
-            <h2 className="font-bold text-[#020B27]">Permissions — {nameOf(profile)}</h2>
+            <h2 className="font-bold text-[#0A2A52]">Permissions — {nameOf(profile)}</h2>
             <p className="text-xs text-text-secondary">Cochez les droits accordés à cet employé</p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-[#020B27] transition-colors"><X size={20} /></button>
+          <button onClick={onClose} className="text-gray-400 hover:text-[#0A2A52] transition-colors"><X size={20} /></button>
         </div>
 
         <div className="p-5 space-y-5">
@@ -190,7 +190,7 @@ function PermissionModal({ profile, onClose }: { profile: Profile; onClose: () =
               <tbody className="divide-y divide-gray-50">
                 {PERMISSION_MODULES.map((m) => (
                   <tr key={m.key} className="hover:bg-gray-50/50">
-                    <td className="py-2 px-3 font-medium text-[#020B27]">{m.label}</td>
+                    <td className="py-2 px-3 font-medium text-[#0A2A52]">{m.label}</td>
                     {PERMISSION_ACTIONS.map((a) => (
                       <td key={a} className="text-center py-2 px-2">
                         <input
@@ -209,12 +209,12 @@ function PermissionModal({ profile, onClose }: { profile: Profile; onClose: () =
 
           {/* Permissions sensibles */}
           <div>
-            <h3 className="text-sm font-semibold text-[#020B27] flex items-center gap-1.5 mb-2">
+            <h3 className="text-sm font-semibold text-[#0A2A52] flex items-center gap-1.5 mb-2">
               <ShieldAlert size={15} className="text-orange-500" /> Permissions sensibles
             </h3>
             <div className="grid sm:grid-cols-2 gap-2">
               {SENSITIVE_PERMISSIONS.map((s) => (
-                <label key={s.key} className="flex items-center gap-2 text-sm text-[#020B27] border border-gray-100 rounded-lg px-3 py-2 cursor-pointer hover:bg-gray-50">
+                <label key={s.key} className="flex items-center gap-2 text-sm text-[#0A2A52] border border-gray-100 rounded-lg px-3 py-2 cursor-pointer hover:bg-gray-50">
                   <input
                     type="checkbox"
                     checked={isOn("sensitive", s.key)}
@@ -234,7 +234,7 @@ function PermissionModal({ profile, onClose }: { profile: Profile; onClose: () =
           <button
             onClick={save}
             disabled={pending}
-            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             {pending ? <Loader2 size={15} className="animate-spin" /> : <ShieldCheck size={15} />} Enregistrer les permissions
           </button>
@@ -278,8 +278,8 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-[#020B27]">Ajouter un employé</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-[#020B27] transition-colors"><X size={20} /></button>
+          <h2 className="font-bold text-[#0A2A52]">Ajouter un employé</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-[#0A2A52] transition-colors"><X size={20} /></button>
         </div>
         <div className="p-5 space-y-4">
           {customers.length === 0 ? (
@@ -305,7 +305,7 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
                     className={`w-full flex items-center justify-between gap-2 px-3 py-2.5 text-left transition-colors ${selected?.id === c.id ? "bg-green-50" : "hover:bg-gray-50"}`}
                   >
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#020B27] truncate">{nameOf(c)}</p>
+                      <p className="text-sm font-medium text-[#0A2A52] truncate">{nameOf(c)}</p>
                       <p className="text-xs text-text-secondary truncate">{c.email ?? c.phone ?? "—"}</p>
                     </div>
                     {selected?.id === c.id && <ShieldCheck size={16} className="text-green shrink-0" />}
@@ -317,7 +317,7 @@ function PromoteModal({ customers, onClose }: { customers: Profile[]; onClose: (
                 <button
                   onClick={promote}
                   disabled={!selected || pending}
-                  className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                  className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
                 >
                   {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />}
                   {selected ? `Nommer ${nameOf(selected)} employé` : "Sélectionnez un client"}
@@ -357,14 +357,14 @@ function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div className="relative bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <h2 className="font-bold text-[#020B27]">Créer un employé</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-[#020B27] transition-colors"><X size={20} /></button>
+          <h2 className="font-bold text-[#0A2A52]">Créer un employé</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-[#0A2A52] transition-colors"><X size={20} /></button>
         </div>
 
         {done ? (
           <div className="p-5 space-y-4">
             <div className="bg-green-50 border border-green-100 rounded-lg p-4">
-              <p className="text-sm font-semibold text-[#020B27] flex items-center gap-2 mb-2">
+              <p className="text-sm font-semibold text-[#0A2A52] flex items-center gap-2 mb-2">
                 <ShieldCheck size={16} className="text-green" /> Compte créé avec succès
               </p>
               <p className="text-xs text-text-secondary mb-3">
@@ -373,18 +373,18 @@ function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between gap-2 bg-white rounded-lg border border-gray-100 px-3 py-2">
                   <span className="text-text-secondary">Email</span>
-                  <span className="font-medium text-[#020B27] break-all">{done.email}</span>
+                  <span className="font-medium text-[#0A2A52] break-all">{done.email}</span>
                 </div>
                 <div className="flex justify-between gap-2 bg-white rounded-lg border border-gray-100 px-3 py-2">
                   <span className="text-text-secondary">Mot de passe</span>
-                  <span className="font-medium text-[#020B27]">{done.password}</span>
+                  <span className="font-medium text-[#0A2A52]">{done.password}</span>
                 </div>
               </div>
             </div>
             <p className="text-xs text-text-secondary">
               Vous pouvez maintenant configurer ses permissions depuis la carte de l&apos;employé.
             </p>
-            <button onClick={onClose} className="w-full bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors">
+            <button onClick={onClose} className="w-full bg-green btn-sweep hover:bg-[#237A34] text-white text-sm font-semibold py-2.5 rounded-lg transition-colors">
               Terminé
             </button>
           </div>
@@ -392,24 +392,24 @@ function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
           <form action={submit} className="p-5 space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="first_name" className="block text-sm font-medium text-[#020B27] mb-1.5">Prénom</label>
+                <label htmlFor="first_name" className="block text-sm font-medium text-[#0A2A52] mb-1.5">Prénom</label>
                 <input id="first_name" name="first_name" className={inputCls} />
               </div>
               <div>
-                <label htmlFor="last_name" className="block text-sm font-medium text-[#020B27] mb-1.5">Nom</label>
+                <label htmlFor="last_name" className="block text-sm font-medium text-[#0A2A52] mb-1.5">Nom</label>
                 <input id="last_name" name="last_name" className={inputCls} />
               </div>
             </div>
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-[#020B27] mb-1.5">Téléphone</label>
+              <label htmlFor="phone" className="block text-sm font-medium text-[#0A2A52] mb-1.5">Téléphone</label>
               <input id="phone" name="phone" type="tel" placeholder="612 345 678" className={inputCls} />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-[#020B27] mb-1.5">Email <span className="text-red-500">*</span></label>
+              <label htmlFor="email" className="block text-sm font-medium text-[#0A2A52] mb-1.5">Email <span className="text-red-500">*</span></label>
               <input id="email" name="email" type="email" required placeholder="employe@ryta.ma" className={inputCls} />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-[#020B27] mb-1.5">Mot de passe <span className="text-red-500">*</span></label>
+              <label htmlFor="password" className="block text-sm font-medium text-[#0A2A52] mb-1.5">Mot de passe <span className="text-red-500">*</span></label>
               <div className="relative">
                 <input id="password" name="password" type={showPwd ? "text" : "password"} required minLength={6} placeholder="Min. 6 caractères" className={`${inputCls} pr-11`} />
                 <button type="button" onClick={() => setShowPwd((v) => !v)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-medium">
@@ -425,7 +425,7 @@ function CreateEmployeeModal({ onClose }: { onClose: () => void }) {
               <button
                 type="submit"
                 disabled={pending}
-                className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+                className="flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
               >
                 {pending ? <Loader2 size={15} className="animate-spin" /> : <UserPlus size={15} />} Créer le compte
               </button>

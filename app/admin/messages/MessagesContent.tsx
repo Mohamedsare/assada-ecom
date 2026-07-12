@@ -14,7 +14,7 @@ export default function MessagesContent({ messages }: { messages: ContactMessage
   return (
     <div>
       <div className="mb-5">
-        <h1 className="text-xl font-bold text-[#020B27]">Messages</h1>
+        <h1 className="text-xl font-bold text-[#0A2A52]">Messages</h1>
         <p className="text-text-secondary text-sm mt-0.5">{messages.length} message(s) · {unread} non lu(s)</p>
       </div>
 
@@ -29,7 +29,7 @@ export default function MessagesContent({ messages }: { messages: ContactMessage
       {list.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Inbox size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#020B27]">Aucun message</p>
+          <p className="font-semibold text-[#0A2A52]">Aucun message</p>
           <p className="text-text-secondary text-sm mt-1">Les messages du formulaire de contact apparaîtront ici.</p>
         </div>
       ) : (
@@ -64,16 +64,16 @@ function MessageCard({ message }: { message: ContactMessage }) {
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             {!read && <span className="w-2 h-2 rounded-full bg-green shrink-0" />}
-            <p className="text-sm font-semibold text-[#020B27]">{message.name}</p>
+            <p className="text-sm font-semibold text-[#0A2A52]">{message.name}</p>
             {message.email && <span className="text-xs text-text-secondary">· {message.email}</span>}
             {message.phone && <span className="text-xs text-text-secondary">· {message.phone}</span>}
           </div>
-          {message.subject && <p className="text-xs font-medium text-[#020B27] mt-1">Sujet : {message.subject}</p>}
+          {message.subject && <p className="text-xs font-medium text-[#0A2A52] mt-1">Sujet : {message.subject}</p>}
         </div>
         <span className="text-[11px] text-text-secondary shrink-0">{formatDate(message.created_at)}</span>
       </div>
 
-      <p className="text-sm text-[#020B27] mt-2 whitespace-pre-wrap">{message.message}</p>
+      <p className="text-sm text-[#0A2A52] mt-2 whitespace-pre-wrap">{message.message}</p>
 
       <div className="flex items-center gap-2 mt-3">
         {message.phone && (
@@ -90,7 +90,7 @@ function MessageCard({ message }: { message: ContactMessage }) {
         )}
         {message.email && (
           <a href={`mailto:${message.email}?subject=${encodeURIComponent("Re: " + (message.subject ?? "Votre message"))}`}
-            className="flex items-center gap-1 text-xs font-semibold bg-green text-[#020B27] px-3 py-1.5 rounded-lg btn-sweep hover:bg-[#9E7A45] transition-colors">
+            className="flex items-center gap-1 text-xs font-semibold bg-green text-[#0A2A52] px-3 py-1.5 rounded-lg btn-sweep hover:bg-[#237A34] transition-colors">
             <Mail size={13} /> Répondre
           </a>
         )}

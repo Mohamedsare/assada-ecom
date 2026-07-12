@@ -29,7 +29,7 @@ export default function NosUnivers({ univers }: { univers: Univers[] }) {
   return (
     <section className="py-12 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#020B27] text-center mb-5">Nos Univers</h2>
+        <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52] text-center mb-5">Nos Univers</h2>
 
         {/* Onglets des axes — une seule ligne, scroll horizontal si débordement (mobile) */}
         <div className="flex sm:justify-center gap-x-6 mb-8 border-b border-gray-100 overflow-x-auto scrollbar-hide">
@@ -38,11 +38,11 @@ export default function NosUnivers({ univers }: { univers: Univers[] }) {
               key={u.slug}
               onClick={() => setActive(i)}
               className={`relative shrink-0 whitespace-nowrap pb-3 text-base transition-colors ${
-                i === active ? "text-[#020B27] font-semibold" : "text-text-secondary hover:text-[#020B27]"
+                i === active ? "text-[#0A2A52] font-semibold" : "text-text-secondary hover:text-[#0A2A52]"
               }`}
             >
               {u.name}
-              {i === active && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#B8925A] rounded-full" />}
+              {i === active && <span className="absolute left-0 right-0 -bottom-px h-0.5 bg-[#2F9E44] rounded-full" />}
             </button>
           ))}
         </div>
@@ -60,7 +60,7 @@ export default function NosUnivers({ univers }: { univers: Univers[] }) {
             <div className="text-center mt-8">
               <Link
                 href={`/boutique?categorie=${current.slug}`}
-                className="inline-flex items-center gap-1.5 text-[#B8925A] font-semibold text-sm hover:underline"
+                className="inline-flex items-center gap-1.5 text-[#2F9E44] font-semibold text-sm hover:underline"
               >
                 Voir tout {current.name} <ChevronRight size={16} />
               </Link>
@@ -69,7 +69,7 @@ export default function NosUnivers({ univers }: { univers: Univers[] }) {
         ) : (
           <div className="text-center py-14 bg-gray-light rounded-2xl">
             <p className="text-3xl mb-2">✨</p>
-            <p className="font-semibold text-[#020B27]">Bientôt disponible</p>
+            <p className="font-semibold text-[#0A2A52]">Bientôt disponible</p>
             <p className="text-sm text-text-secondary mt-1">
               De nouveaux produits arrivent très vite dans l&apos;univers {current.name}.
             </p>

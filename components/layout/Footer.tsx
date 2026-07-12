@@ -29,16 +29,16 @@ const SOCIALS: { label: string; href: string; path: string }[] = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#020B27] text-white/70">
+    <footer className="bg-[#0A2A52] text-white/70">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-10 lg:gap-x-14 gap-y-0 border-t border-white/10 md:border-t-0">
           {/* Service Client */}
           <FooterSection title="Service Client">
             <div className="space-y-2 text-[15px]">
-              <a href={`tel:${SITE_PHONE}`} className="flex items-center gap-2 hover:text-[#B8925A] transition-colors">
+              <a href={`tel:${SITE_PHONE}`} className="flex items-center gap-2 hover:text-[#2F9E44] transition-colors">
                 <Phone size={15} /> {SITE_PHONE}
               </a>
-              <a href={`mailto:${SITE_EMAIL}`} className="flex items-center gap-2 hover:text-[#B8925A] transition-colors">
+              <a href={`mailto:${SITE_EMAIL}`} className="flex items-center gap-2 hover:text-[#2F9E44] transition-colors">
                 <Mail size={15} /> {SITE_EMAIL}
               </a>
             </div>
@@ -51,7 +51,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-11 h-11 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-[#B8925A] hover:border-[#B8925A] hover:text-[#020B27] transition-colors"
+                  className="w-11 h-11 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-[#2F9E44] hover:border-[#2F9E44] hover:text-[#0A2A52] transition-colors"
                 >
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d={s.path} /></svg>
                 </a>
@@ -60,7 +60,7 @@ export default function Footer() {
 
             <p className="mt-8 text-[15px] leading-relaxed">
               Consultez nos offres spéciales.{" "}
-              <Link href="/promotions" className="font-bold text-white underline underline-offset-4 hover:text-[#B8925A] transition-colors">
+              <Link href="/promotions" className="font-bold text-white underline underline-offset-4 hover:text-[#2F9E44] transition-colors">
                 Réclamez vos offres.
               </Link>
             </p>
@@ -71,7 +71,7 @@ export default function Footer() {
             <ul className="space-y-3.5 text-[15px]">
               {PAGES_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-[#B8925A] transition-colors">{l.label}</Link>
+                  <Link href={l.href} className="hover:text-[#2F9E44] transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
@@ -104,7 +104,7 @@ export default function Footer() {
           </p>
           <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/70">
             {LEGAL_LINKS.map((l) => (
-              <Link key={l.label} href={l.href} className="hover:text-[#B8925A] transition-colors">
+              <Link key={l.label} href={l.href} className="hover:text-[#2F9E44] transition-colors">
                 {l.label}
               </Link>
             ))}

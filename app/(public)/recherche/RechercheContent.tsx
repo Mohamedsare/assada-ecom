@@ -111,13 +111,13 @@ export default function RechercheContent() {
     <div className="space-y-6">
       {categoryOptions.length > 0 && (
         <div>
-          <h3 className="font-semibold text-[#020B27] mb-3 text-sm">Catégories</h3>
+          <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Catégories</h3>
           <div className="space-y-2">
             {categoryOptions.map((cat) => (
               <label key={cat.slug} className="flex items-center gap-2 cursor-pointer group">
                 <input type="checkbox" checked={selectedCategories.includes(cat.slug)} onChange={() => toggleCategory(cat.slug)}
-                  className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]" />
-                <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">{cat.name}</span>
+                  className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]" />
+                <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">{cat.name}</span>
               </label>
             ))}
           </div>
@@ -126,13 +126,13 @@ export default function RechercheContent() {
 
       {brandOptions.length > 0 && (
         <div>
-          <h3 className="font-semibold text-[#020B27] mb-3 text-sm">Marques</h3>
+          <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Marques</h3>
           <div className="space-y-2">
             {brandOptions.map((brand) => (
               <label key={brand.slug} className="flex items-center gap-2 cursor-pointer group">
                 <input type="checkbox" checked={selectedBrands.includes(brand.slug)} onChange={() => toggleBrand(brand.slug)}
-                  className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]" />
-                <span className="text-sm text-gray-600 group-hover:text-[#020B27] transition-colors">{brand.name}</span>
+                  className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]" />
+                <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">{brand.name}</span>
               </label>
             ))}
           </div>
@@ -140,10 +140,10 @@ export default function RechercheContent() {
       )}
 
       <div>
-        <h3 className="font-semibold text-[#020B27] mb-3 text-sm">Prix maximum</h3>
+        <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Prix maximum</h3>
         <div className="space-y-3">
           <input type="range" min={0} max={maxBound} step={1000} value={effectiveMax}
-            onChange={(e) => setPriceMax(parseInt(e.target.value))} className="w-full accent-[#020B27]" />
+            onChange={(e) => setPriceMax(parseInt(e.target.value))} className="w-full accent-[#0A2A52]" />
           <div className="flex justify-between text-xs text-gray-500">
             <span>{formatPrice(0)}</span>
             <span>{formatPrice(effectiveMax)}</span>
@@ -154,7 +154,7 @@ export default function RechercheContent() {
       <div>
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" checked={onlyPromo} onChange={(e) => setOnlyPromo(e.target.checked)}
-            className="rounded border-gray-300 text-[#020B27] focus:ring-[#B8925A]" />
+            className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]" />
           <span className="text-sm font-medium text-gray-700">Promo uniquement</span>
         </label>
       </div>
@@ -172,27 +172,27 @@ export default function RechercheContent() {
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-16">
         {/* Fil d'Ariane */}
         <nav aria-label="Fil d'Ariane" className="flex items-center gap-1.5 text-sm text-[#64748B]">
-          <Link href="/" className="hover:text-[#020B27] transition-colors">Accueil</Link>
+          <Link href="/" className="hover:text-[#0A2A52] transition-colors">Accueil</Link>
           <ChevronRight size={14} className="text-gray-300" />
-          <span className="text-[#020B27] font-medium">Recherche</span>
+          <span className="text-[#0A2A52] font-medium">Recherche</span>
         </nav>
 
         {/* Titre + sous-titre + barre */}
         <div className="mt-10 flex flex-col items-center text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-[#020B27]">Recherche</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-[#0A2A52]">Recherche</h1>
           <p className="mt-3 text-[#64748B]">{subtitle}</p>
 
           <div className="mt-8 w-full max-w-2xl">
-            <div className="flex items-center gap-3 rounded-full bg-[#F5F1EA] border border-transparent focus-within:border-[#B8925A]/40 px-6 h-16 transition-colors">
-              <Search size={22} className="text-[#020B27] shrink-0" />
+            <div className="flex items-center gap-3 rounded-full bg-[#F5F1EA] border border-transparent focus-within:border-[#2F9E44]/40 px-6 h-16 transition-colors">
+              <Search size={22} className="text-[#0A2A52] shrink-0" />
               <input type="text" value={input} onChange={(e) => setInput(e.target.value)} autoFocus
                 placeholder="Rechercher rouge à lèvres, sérum, parfum …" aria-label="Rechercher"
-                className="min-w-0 flex-1 bg-transparent text-base md:text-lg text-[#020B27] placeholder-[#64748B] outline-none" />
+                className="min-w-0 flex-1 bg-transparent text-base md:text-lg text-[#0A2A52] placeholder-[#64748B] outline-none" />
               {loading ? (
                 <Loader2 size={18} className="animate-spin text-green shrink-0" />
               ) : input ? (
                 <button type="button" onClick={() => setInput("")} aria-label="Effacer"
-                  className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 text-[#020B27] flex items-center justify-center shrink-0 transition-colors">
+                  className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 text-[#0A2A52] flex items-center justify-center shrink-0 transition-colors">
                   <X size={16} />
                 </button>
               ) : null}
@@ -212,7 +212,7 @@ export default function RechercheContent() {
             {/* Aside filtres — desktop */}
             <aside className="hidden lg:block w-56 shrink-0">
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 sticky top-24">
-                <h2 className="font-bold text-[#020B27] mb-5 text-base">Filtres</h2>
+                <h2 className="font-bold text-[#0A2A52] mb-5 text-base">Filtres</h2>
                 {filterPanel}
               </div>
             </aside>
@@ -221,13 +221,13 @@ export default function RechercheContent() {
               {/* Barre outils */}
               <div className="mb-5 flex items-center justify-between gap-3">
                 <button onClick={() => setFiltersOpen(true)}
-                  className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#020B27] border border-gray-200 px-4 py-2.5 rounded-xl hover:border-green transition-colors">
+                  className="lg:hidden flex items-center gap-2 text-sm font-semibold text-[#0A2A52] border border-gray-200 px-4 py-2.5 rounded-xl hover:border-green transition-colors">
                   <SlidersHorizontal size={16} /> Filtres
                 </button>
                 <label className="ml-auto flex items-center gap-2 text-sm">
                   <SlidersHorizontal size={15} className="text-[#64748B]" />
                   <select value={sort} onChange={(e) => setSort(e.target.value as Sort)}
-                    className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm text-[#020B27] outline-none focus:border-green">
+                    className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm text-[#0A2A52] outline-none focus:border-green">
                     {SORTS.map((s) => (<option key={s.key} value={s.key}>{s.label}</option>))}
                   </select>
                 </label>
@@ -239,11 +239,11 @@ export default function RechercheContent() {
                 </div>
               ) : (
                 <div className="py-16 flex flex-col items-center text-center">
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#020B27] leading-snug">
+                  <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52] leading-snug">
                     Aucun produit trouvé
                     <br />
                     Utilisez moins de filtres ou{" "}
-                    <button type="button" onClick={resetFilters} className="underline underline-offset-4 hover:text-[#B8925A] transition-colors">
+                    <button type="button" onClick={resetFilters} className="underline underline-offset-4 hover:text-[#2F9E44] transition-colors">
                       effacez tout
                     </button>
                   </h2>
@@ -253,17 +253,17 @@ export default function RechercheContent() {
           </div>
         ) : showEmpty ? (
           <div className="mt-20 flex flex-col items-center text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#020B27] leading-snug">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#0A2A52] leading-snug">
               Aucun produit trouvé
               <br />
               Utilisez moins de filtres ou{" "}
               <button type="button" onClick={() => { setInput(""); resetFilters(); }}
-                className="underline underline-offset-4 hover:text-[#B8925A] transition-colors">
+                className="underline underline-offset-4 hover:text-[#2F9E44] transition-colors">
                 effacez tout
               </button>
             </h2>
             <Link href="/boutique"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-green px-8 py-4 text-base font-bold text-white btn-sweep hover:bg-[#9E7A45] transition-colors">
+              className="mt-8 inline-flex items-center justify-center rounded-full bg-green px-8 py-4 text-base font-bold text-white btn-sweep hover:bg-[#237A34] transition-colors">
               Continuer vos achats
             </Link>
           </div>
@@ -277,7 +277,7 @@ export default function RechercheContent() {
         <aside role="dialog" aria-modal="true" aria-label="Filtres"
           className={cn("absolute left-0 top-0 h-full w-[82%] max-w-xs bg-white shadow-2xl flex flex-col transition-transform duration-300", filtersOpen ? "translate-x-0" : "-translate-x-full")}>
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
-            <h2 className="font-bold text-[#020B27]">Filtres</h2>
+            <h2 className="font-bold text-[#0A2A52]">Filtres</h2>
             <button onClick={() => setFiltersOpen(false)} aria-label="Fermer" className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
               <X size={20} />
             </button>
@@ -285,7 +285,7 @@ export default function RechercheContent() {
           <div className="flex-1 overflow-y-auto p-5">{filterPanel}</div>
           <div className="shrink-0 p-4 border-t border-gray-100">
             <button onClick={() => setFiltersOpen(false)}
-              className="w-full bg-green text-white font-semibold py-3 rounded-xl btn-sweep hover:bg-[#9E7A45] transition-colors">
+              className="w-full bg-green text-white font-semibold py-3 rounded-xl btn-sweep hover:bg-[#237A34] transition-colors">
               Voir {filtered.length} résultat{filtered.length !== 1 ? "s" : ""}
             </button>
           </div>

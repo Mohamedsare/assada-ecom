@@ -45,7 +45,7 @@ export default function FindUsSection() {
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#8A6D3F] bg-green/15 px-3 py-1 rounded-full">
             <MapPin size={13} /> Boutique physique au Boulevard Abdelmoumen
           </span>
-          <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-[#020B27]">Trouvez notre boutique</h2>
+          <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-[#0A2A52]">Trouvez notre boutique</h2>
           <p className="mt-2 text-sm sm:text-base text-text-secondary max-w-xl mx-auto">
             Passez nous voir à Casablanca ou écrivez-nous un mot — nous vous répondons rapidement.
           </p>
@@ -59,7 +59,7 @@ export default function FindUsSection() {
                 <div className="w-14 h-14 rounded-full bg-green/15 flex items-center justify-center mb-4">
                   <CheckCircle size={28} className="text-green" />
                 </div>
-                <h3 className="font-bold text-[#020B27] text-lg">Message envoyé !</h3>
+                <h3 className="font-bold text-[#0A2A52] text-lg">Message envoyé !</h3>
                 <p className="text-sm text-text-secondary mt-1.5 max-w-xs">
                   Merci {form.name.split(" ")[0]}, nous vous recontactons très vite.
                 </p>
@@ -72,40 +72,40 @@ export default function FindUsSection() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <h3 className="font-bold text-[#020B27]">Écrivez-nous</h3>
+                <h3 className="font-bold text-[#0A2A52]">Écrivez-nous</h3>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#020B27] mb-1.5">Nom complet</label>
+                  <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Nom complet</label>
                   <div className="relative">
                     <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                     <input
                       type="text" value={form.name} onChange={set("name")} required
                       placeholder="Votre nom et prénom"
-                      className="w-full border border-gray-200 rounded-xl bg-white pl-9 pr-4 py-2.5 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15 transition-colors"
+                      className="w-full border border-gray-200 rounded-xl bg-white pl-9 pr-4 py-2.5 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/15 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#020B27] mb-1.5">Téléphone</label>
+                  <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Téléphone</label>
                   <div className="relative">
                     <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                     <input
                       type="tel" value={form.phone} onChange={set("phone")}
                       placeholder="Ex : 06 12 34 56 78"
-                      className="w-full border border-gray-200 rounded-xl bg-white pl-9 pr-4 py-2.5 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15 transition-colors"
+                      className="w-full border border-gray-200 rounded-xl bg-white pl-9 pr-4 py-2.5 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/15 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#020B27] mb-1.5">Message</label>
+                  <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Message</label>
                   <div className="relative">
                     <MessageSquare size={16} className="absolute left-3 top-3 text-gray-400 pointer-events-none" />
                     <textarea
                       value={form.message} onChange={set("message")} required rows={4}
                       placeholder="Votre message…"
-                      className="w-full border border-gray-200 rounded-xl bg-white pl-9 pr-4 py-2.5 text-sm outline-none focus:border-[#B8925A] focus:ring-2 focus:ring-[#B8925A]/15 transition-colors resize-none"
+                      className="w-full border border-gray-200 rounded-xl bg-white pl-9 pr-4 py-2.5 text-sm outline-none focus:border-[#2F9E44] focus:ring-2 focus:ring-[#2F9E44]/15 transition-colors resize-none"
                     />
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export default function FindUsSection() {
 
                 <button
                   type="submit" disabled={sending}
-                  className="w-full flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white py-3 rounded-xl font-bold text-sm transition-colors active:scale-95 disabled:opacity-60"
+                  className="w-full flex items-center justify-center gap-2 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white py-3 rounded-xl font-bold text-sm transition-colors active:scale-95 disabled:opacity-60"
                 >
                   {sending
                     ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Envoi…</>
@@ -158,7 +158,7 @@ export default function FindUsSection() {
                 </a>
                 <a
                   href={`tel:${SITE_PHONE}`}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold bg-green text-[#020B27] hover:bg-green-light px-3 py-2 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold bg-green text-[#0A2A52] hover:bg-green-light px-3 py-2 rounded-lg transition-colors"
                 >
                   <Phone size={13} /> {SITE_PHONE}
                 </a>

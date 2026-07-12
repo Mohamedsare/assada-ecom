@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
@@ -13,6 +13,8 @@ interface ProductCarouselProps {
   products: Product[];
   viewAllHref: string;
   viewAllColor?: string;
+  /** Défilement automatique horizontal (marquee), pausé au survol/toucher. */
+  autoScroll?: boolean;
 }
 
 export default function ProductCarousel({
@@ -22,8 +24,40 @@ export default function ProductCarousel({
   products,
   viewAllHref,
   viewAllColor = "text-green",
+  autoScroll = false,
 }: ProductCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+
+  // Pour un marquee fluide et infini, on affiche la liste deux fois et on
+  // « rembobine » dès qu'on a défilé la longueur d'un jeu complet.
+  const loop = autoScroll && products.length > 1;
+  const rendered = loop ? [...products, ...products] : products;
+
+  useEffect(() => {
+    if (!loop) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const SPEED = 0.5; // px par frame (~30 px/s)
+    let raf = 0;
+
+    const step = () => {
+      if (!pausedRef.current) {
+        // Point de rembobinage = position du 1er élément du 2e jeu (identique visuellement à 0).
+        const wrap = el.querySelector<HTMLElement>("[data-loop-start]")?.offsetLeft ?? el.scrollWidth / 2;
+        el.scrollLeft += SPEED;
+        if (el.scrollLeft >= wrap) el.scrollLeft -= wrap;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [loop, products.length]);
+
+  const pause = () => { pausedRef.current = true; };
+  const resume = () => { pausedRef.current = false; };
 
   const scroll = (dir: "left" | "right") => {
     const el = scrollRef.current;
@@ -41,7 +75,7 @@ export default function ProductCarousel({
           <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${viewAllColor}`}>
             {label}
           </p>
-          <h2 className="text-xl md:text-2xl font-bold text-[#020B27]">{title}</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">{title}</h2>
           {subtitle && <p className="text-text-secondary text-sm mt-0.5">{subtitle}</p>}
         </div>
         <Link
@@ -73,13 +107,18 @@ export default function ProductCarousel({
       {/* Piste de défilement */}
       <div
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto scroll-smooth scrollbar-hide pb-1 snap-x snap-mandatory"
+        onMouseEnter={loop ? pause : undefined}
+        onMouseLeave={loop ? resume : undefined}
+        onTouchStart={loop ? pause : undefined}
+        onTouchEnd={loop ? resume : undefined}
+        className={`flex gap-4 overflow-x-auto scrollbar-hide pb-1 ${loop ? "" : "scroll-smooth snap-x snap-mandatory"}`}
       >
-        {products.map((product) => (
+        {rendered.map((product, i) => (
           <div
-            key={product.id}
+            key={`${product.id}-${i}`}
             data-card
-            className="snap-start shrink-0 w-[46%] sm:w-[30%] md:w-[31%] lg:w-[19%]"
+            {...(loop && i === products.length ? { "data-loop-start": "" } : {})}
+            className={`shrink-0 w-[46%] sm:w-[30%] md:w-[31%] lg:w-[19%] ${loop ? "" : "snap-start"}`}
           >
             <ProductCard product={product} />
           </div>

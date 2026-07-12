@@ -51,11 +51,11 @@ export default function AProposPage() {
           const Icon = v.icon;
           return (
             <div key={v.title} className="flex items-start gap-3 rounded-xl border border-gray-100 bg-[#F8FAFC] p-4">
-              <div className="w-10 h-10 rounded-xl bg-[#B8925A]/15 text-[#B8925A] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-[#2F9E44]/15 text-[#2F9E44] flex items-center justify-center shrink-0">
                 <Icon size={18} />
               </div>
               <div>
-                <p className="font-semibold text-[#020B27] text-sm">{v.title}</p>
+                <p className="font-semibold text-[#0A2A52] text-sm">{v.title}</p>
                 <p className="text-[#64748B] text-sm mt-0.5 leading-relaxed">{v.desc}</p>
               </div>
             </div>
@@ -79,10 +79,10 @@ export default function AProposPage() {
       </p>
 
       <div className="flex flex-wrap gap-3 not-prose mt-6">
-        <Link href="/boutique" className="inline-flex items-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+        <Link href="/boutique" className="inline-flex items-center gap-2 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
           <Store size={16} /> Découvrir la boutique
         </Link>
-        <Link href="/contact" className="inline-flex items-center gap-2 border border-gray-200 text-[#020B27] text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-[#B8925A] hover:text-[#B8925A] transition-colors">
+        <Link href="/contact" className="inline-flex items-center gap-2 border border-gray-200 text-[#0A2A52] text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-[#2F9E44] hover:text-[#2F9E44] transition-colors">
           <HeartHandshake size={16} /> Nous contacter
         </Link>
       </div>

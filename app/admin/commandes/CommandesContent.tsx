@@ -23,7 +23,7 @@ const STATUS_COLOR: Record<string, string> = {
   preparing:        "bg-purple-100 text-purple-700",
   shipped:          "bg-indigo-100 text-indigo-700",
   out_for_delivery: "bg-orange-100 text-orange-700",
-  delivered:        "bg-green-100 text-[#020B27]",
+  delivered:        "bg-green-100 text-[#0A2A52]",
   cancelled:        "bg-red-100 text-red-700",
   returned:         "bg-gray-100 text-gray-700",
 };
@@ -148,7 +148,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#020B27]">Gestion des commandes</h1>
+          <h1 className="text-2xl font-bold text-[#0A2A52]">Gestion des commandes</h1>
           <p className="text-sm text-[#64748B] mt-0.5">{orders.length} commandes</p>
         </div>
       </div>
@@ -170,19 +170,19 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
             value={search}
             onChange={(e) => { setSearch(e.target.value); resetPage(); }}
             placeholder="N° commande, client ou téléphone…"
-            className="w-full text-sm border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 outline-none focus:border-[#B8925A] transition-colors"
+            className="w-full text-sm border border-gray-200 rounded-lg pl-9 pr-4 py-2.5 outline-none focus:border-[#2F9E44] transition-colors"
           />
         </div>
         <div className="grid sm:grid-cols-3 gap-3">
-          <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#B8925A] bg-white">
+          <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#2F9E44] bg-white">
             <option value="">Tous les statuts</option>
             {Object.entries(ORDER_STATUS_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
           </select>
-          <select value={filterPayment} onChange={(e) => { setFilterPayment(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#B8925A] bg-white">
+          <select value={filterPayment} onChange={(e) => { setFilterPayment(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#2F9E44] bg-white">
             <option value="">Tous les paiements</option>
             <option value="cash_on_delivery">Paiement à la livraison</option>
           </select>
-          <select value={filterDate} onChange={(e) => { setFilterDate(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#B8925A] bg-white">
+          <select value={filterDate} onChange={(e) => { setFilterDate(e.target.value); resetPage(); }} className="text-sm border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:border-[#2F9E44] bg-white">
             {DATE_FILTERS.map((d) => <option key={d.value} value={d.value}>{d.label}</option>)}
           </select>
         </div>
@@ -208,12 +208,12 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                 paged.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 transition-colors">
                     <td className="py-3 px-4 whitespace-nowrap">
-                      <Link href={`/admin/commandes/${order.id}`} className="text-sm font-bold text-[#020B27] hover:text-[#020B27] transition-colors">
+                      <Link href={`/admin/commandes/${order.id}`} className="text-sm font-bold text-[#0A2A52] hover:text-[#0A2A52] transition-colors">
                         {order.order_number}
                       </Link>
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
-                      <p className="text-sm text-[#020B27]">{order.customer_name}</p>
+                      <p className="text-sm text-[#0A2A52]">{order.customer_name}</p>
                       <p className="text-xs text-[#64748B]">{order.customer_phone}</p>
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
@@ -222,7 +222,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                       </span>
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
-                      <span className="text-sm font-bold text-[#020B27] whitespace-nowrap">{formatPrice(order.total_amount)}</span>
+                      <span className="text-sm font-bold text-[#0A2A52] whitespace-nowrap">{formatPrice(order.total_amount)}</span>
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
                       <span className="text-xs text-[#64748B] whitespace-nowrap">{PAYMENT_LABELS[order.payment_method]}</span>
@@ -242,7 +242,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                     </td>
                     <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
-                        <Link href={`/admin/commandes/${order.id}`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors" title="Voir le détail">
+                        <Link href={`/admin/commandes/${order.id}`} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors" title="Voir le détail">
                           <Eye size={15} />
                         </Link>
                         <button
@@ -282,7 +282,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
               <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 disabled:opacity-40 disabled:hover:bg-transparent transition-colors">
                 <ChevronLeft size={16} />
               </button>
-              <span className="px-2 text-[#020B27] font-medium">{currentPage} / {totalPages}</span>
+              <span className="px-2 text-[#0A2A52] font-medium">{currentPage} / {totalPages}</span>
               <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 disabled:opacity-40 disabled:hover:bg-transparent transition-colors">
                 <ChevronRight size={16} />
               </button>
@@ -302,7 +302,7 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
             <button
               onClick={() => !deleting && setToDelete(null)}
               disabled={deleting}
-              className="absolute top-4 right-4 text-gray-400 hover:text-[#020B27] transition-colors disabled:opacity-40"
+              className="absolute top-4 right-4 text-gray-400 hover:text-[#0A2A52] transition-colors disabled:opacity-40"
               aria-label="Fermer"
             >
               <X size={18} />
@@ -312,9 +312,9 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
                 <Trash2 size={18} className="text-red-600" />
               </div>
               <div className="min-w-0">
-                <h2 className="text-lg font-bold text-[#020B27]">Supprimer la commande</h2>
+                <h2 className="text-lg font-bold text-[#0A2A52]">Supprimer la commande</h2>
                 <p className="text-sm text-[#64748B] mt-1">
-                  La commande <span className="font-semibold text-[#020B27]">{toDelete.order_number}</span> et
+                  La commande <span className="font-semibold text-[#0A2A52]">{toDelete.order_number}</span> et
                   toutes ses données associées (articles, paiement) seront définitivement supprimées.
                   Cette action est irréversible.
                 </p>
@@ -351,8 +351,8 @@ export default function CommandesContent({ initialOrders }: { initialOrders: Ord
 
 function StatCard({ label, value, tone }: { label: string; value: string; tone: "default" | "green" | "orange" | "red" }) {
   const tones: Record<string, string> = {
-    default: "text-[#020B27]",
-    green: "text-[#020B27]",
+    default: "text-[#0A2A52]",
+    green: "text-[#0A2A52]",
     orange: "text-orange-600",
     red: "text-red-600",
   };

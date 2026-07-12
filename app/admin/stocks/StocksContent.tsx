@@ -34,7 +34,7 @@ export default function StocksContent({ products }: { products: Product[] }) {
   return (
     <div>
       <div className="mb-5">
-        <h1 className="text-xl font-bold text-[#020B27]">Gestion des stocks</h1>
+        <h1 className="text-xl font-bold text-[#0A2A52]">Gestion des stocks</h1>
         <p className="text-text-secondary text-sm mt-0.5">Suivez et ajustez les niveaux de stock en temps réel</p>
       </div>
 
@@ -65,7 +65,7 @@ export default function StocksContent({ products }: { products: Product[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Rechercher un produit / SKU..."
-            className="bg-transparent text-sm outline-none flex-1 text-[#020B27]"
+            className="bg-transparent text-sm outline-none flex-1 text-[#0A2A52]"
           />
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function StocksContent({ products }: { products: Product[] }) {
       {filtered.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-100 p-16 text-center">
           <Boxes size={48} className="mx-auto text-gray-200 mb-4" />
-          <p className="font-semibold text-[#020B27]">Aucun produit</p>
+          <p className="font-semibold text-[#0A2A52]">Aucun produit</p>
         </div>
       ) : (
         <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
@@ -119,12 +119,12 @@ function StockRow({ product }: { product: Product }) {
   return (
     <tr className="hover:bg-gray-50 transition-colors">
       <td className="py-3 px-4 whitespace-nowrap">
-        <Link href={`/admin/produits/${product.id}/modifier`} className="text-sm font-medium text-[#020B27] hover:text-green transition-colors">{product.name}</Link>
+        <Link href={`/admin/produits/${product.id}/modifier`} className="text-sm font-medium text-[#0A2A52] hover:text-green transition-colors">{product.name}</Link>
         <p className="text-xs text-text-secondary">{product.category?.name ?? "—"}</p>
       </td>
       <td className="py-3 px-4 whitespace-nowrap"><span className="text-xs text-text-secondary">{product.sku ?? "—"}</span></td>
-      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-semibold text-[#020B27]">{formatPrice(product.current_price)}</span></td>
-      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-bold text-[#020B27]">{stock}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-semibold text-[#0A2A52]">{formatPrice(product.current_price)}</span></td>
+      <td className="py-3 px-4 whitespace-nowrap"><span className="text-sm font-bold text-[#0A2A52]">{stock}</span></td>
       <td className="py-3 px-4 whitespace-nowrap">
         <div className="flex items-center gap-1.5">
           <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
@@ -138,7 +138,7 @@ function StockRow({ product }: { product: Product }) {
             <button onClick={() => setStock((s) => s + 1)} className="w-7 h-7 flex items-center justify-center hover:bg-gray-50" aria-label="Augmenter"><Plus size={12} /></button>
           </div>
           {dirty && (
-            <button onClick={save} disabled={pending} className="text-xs font-semibold bg-green text-[#020B27] px-2.5 py-1.5 rounded-lg btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 transition-colors">
+            <button onClick={save} disabled={pending} className="text-xs font-semibold bg-green text-[#0A2A52] px-2.5 py-1.5 rounded-lg btn-sweep hover:bg-[#237A34] disabled:opacity-60 transition-colors">
               {pending ? "…" : "OK"}
             </button>
           )}
@@ -155,7 +155,7 @@ function Kpi({ icon: Icon, label, value, color }: { icon: typeof Boxes; label: s
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex items-center gap-3">
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${color}`}><Icon size={18} /></div>
       <div className="min-w-0">
-        <p className="text-lg font-extrabold text-[#020B27] leading-none truncate">{value}</p>
+        <p className="text-lg font-extrabold text-[#0A2A52] leading-none truncate">{value}</p>
         <p className="text-xs text-text-secondary mt-1">{label}</p>
       </div>
     </div>

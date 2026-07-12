@@ -63,7 +63,7 @@ export default function AvatarUpload({
         {url ? (
           <Image src={url} alt="Photo de profil" fill sizes="96px" className="object-cover" />
         ) : (
-          <span className="w-full h-full flex items-center justify-center bg-linear-to-br from-green to-green-light text-[#020B27] font-bold text-2xl">
+          <span className="w-full h-full flex items-center justify-center bg-linear-to-br from-green to-green-light text-[#0A2A52] font-bold text-2xl">
             {initials}
           </span>
         )}
@@ -82,13 +82,13 @@ export default function AvatarUpload({
         )}
 
         {/* Badge caméra */}
-        <span className="absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full bg-green text-[#020B27] flex items-center justify-center ring-2 ring-white shadow">
+        <span className="absolute bottom-0.5 right-0.5 w-7 h-7 rounded-full bg-green text-[#0A2A52] flex items-center justify-center ring-2 ring-white shadow">
           <Camera size={14} />
         </span>
       </button>
 
       <div className="min-w-0">
-        <p className="text-sm font-medium text-[#020B27]">Photo de profil</p>
+        <p className="text-sm font-medium text-[#0A2A52]">Photo de profil</p>
         <p className="text-xs text-text-secondary mt-0.5">JPG, PNG ou WebP · 3 Mo max.</p>
         <div className="flex items-center gap-3 mt-2">
           <button

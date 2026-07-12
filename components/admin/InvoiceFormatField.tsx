@@ -26,7 +26,7 @@ export default function InvoiceFormatField({ defaultValue }: { defaultValue: str
   return (
     <div>
       <input type="hidden" name="invoice_format" value={format} />
-      <label className="block text-sm font-medium text-[#020B27] mb-1.5">Format de facture</label>
+      <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Format de facture</label>
 
       <div className="grid sm:grid-cols-3 gap-2">
         {OPTIONS.map((o) => {
@@ -38,14 +38,14 @@ export default function InvoiceFormatField({ defaultValue }: { defaultValue: str
               type="button"
               onClick={() => setFormat(o.value)}
               className={`flex items-center gap-2.5 text-left rounded-xl border p-3 transition-colors ${
-                selected ? "border-[#B8925A] bg-[#B8925A]/5 ring-1 ring-[#B8925A]/30" : "border-gray-200 hover:border-gray-300"
+                selected ? "border-[#2F9E44] bg-[#2F9E44]/5 ring-1 ring-[#2F9E44]/30" : "border-gray-200 hover:border-gray-300"
               }`}
             >
-              <span className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${selected ? "bg-[#B8925A] text-white" : "bg-gray-100 text-gray-500"}`}>
+              <span className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${selected ? "bg-[#2F9E44] text-white" : "bg-gray-100 text-gray-500"}`}>
                 <Icon size={16} />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-semibold text-[#020B27]">{o.label}</span>
+                <span className="block text-sm font-semibold text-[#0A2A52]">{o.label}</span>
                 <span className="block text-[11px] text-text-secondary">{o.desc}</span>
               </span>
             </button>
@@ -68,8 +68,8 @@ export default function InvoiceFormatField({ defaultValue }: { defaultValue: str
 
 function A4Preview() {
   return (
-    <div className="bg-white shadow-md text-[#0F172A] w-[210px] min-h-[297px] p-4 text-[7px] leading-tight">
-      <div className="flex justify-between items-start border-b-2 border-[#0F172A] pb-2">
+    <div className="bg-white shadow-md text-[#0E2440] w-[210px] min-h-[297px] p-4 text-[7px] leading-tight">
+      <div className="flex justify-between items-start border-b-2 border-[#0E2440] pb-2">
         <div>
           <p className="text-[11px] font-extrabold">RYTA</p>
           <p className="text-text-secondary">Derb Ghalef, Casablanca</p>
@@ -99,7 +99,7 @@ function A4Preview() {
         <div className="w-24">
           <div className="flex justify-between"><span className="text-text-secondary">Sous-total</span><span>690 DH</span></div>
           <div className="flex justify-between"><span className="text-text-secondary">Livraison</span><span>30 DH</span></div>
-          <div className="flex justify-between border-t-2 border-[#0F172A] mt-1 pt-1 font-extrabold text-[9px]"><span>Total</span><span>720 DH</span></div>
+          <div className="flex justify-between border-t-2 border-[#0E2440] mt-1 pt-1 font-extrabold text-[9px]"><span>Total</span><span>720 DH</span></div>
         </div>
       </div>
       <p className="text-center text-text-secondary mt-4 pt-2 border-t border-gray-100">Merci pour votre confiance ✨</p>
@@ -110,7 +110,7 @@ function A4Preview() {
 function ThermalPreview({ mm }: { mm: number }) {
   const width = mm === 58 ? 120 : 165;
   return (
-    <div style={{ width }} className="bg-white shadow-md text-[#0F172A] p-2.5 font-mono text-[7px] leading-snug">
+    <div style={{ width }} className="bg-white shadow-md text-[#0E2440] p-2.5 font-mono text-[7px] leading-snug">
       <div className="text-center">
         <p className="text-[10px] font-extrabold">RYTA</p>
         <p>Derb Ghalef, Casablanca</p>

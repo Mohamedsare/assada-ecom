@@ -31,8 +31,8 @@ export default function MiniProductCard({ product }: { product: Product }) {
         )}
       </div>
       <div className="mt-2.5 text-center px-1">
-        <p className="text-sm text-[#020B27] line-clamp-2 min-h-[2.5rem]">{product.name}</p>
-        <p className="text-sm font-bold text-[#020B27] mt-1">
+        <p className="text-sm text-[#0A2A52] line-clamp-2 min-h-[2.5rem]">{product.name}</p>
+        <p className="text-sm font-bold text-[#0A2A52] mt-1">
           {hasRange ? `À partir de ${formatPrice(minPrice)}` : formatPrice(product.current_price)}
         </p>
       </div>

@@ -89,12 +89,12 @@ export default function CartDrawer() {
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-[#020B27] text-white shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-[#0A2A52] text-white shrink-0">
           <div className="flex items-center gap-2.5">
             <ShoppingCart size={18} />
             <h2 className="font-bold text-base">Mon panier</h2>
             {totalItems() > 0 && (
-              <span className="bg-[#B8925A] text-[#020B27] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="bg-[#2F9E44] text-[#0A2A52] text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                 {totalItems() > 9 ? "9+" : totalItems()}
               </span>
             )}
@@ -115,12 +115,12 @@ export default function CartDrawer() {
               <ShoppingCart size={32} className="text-gray-300" />
             </div>
             <div>
-              <p className="font-bold text-[#020B27] text-lg">Votre panier est vide</p>
+              <p className="font-bold text-[#0A2A52] text-lg">Votre panier est vide</p>
               <p className="text-[#64748B] text-sm mt-1">Découvrez nos produits et commencez vos achats</p>
             </div>
             <button
               onClick={closeCartDrawer}
-              className="mt-2 bg-[#B8925A] text-white px-6 py-2.5 rounded-xl font-semibold text-sm btn-sweep hover:bg-[#9E7A45] transition-colors"
+              className="mt-2 bg-[#2F9E44] text-white px-6 py-2.5 rounded-xl font-semibold text-sm btn-sweep hover:bg-[#237A34] transition-colors"
             >
               Voir la boutique
             </button>
@@ -172,7 +172,7 @@ export default function CartDrawer() {
                       <Link
                         href={`/produit/${item.product.slug}`}
                         onClick={closeCartDrawer}
-                        className="text-sm font-semibold text-[#020B27] line-clamp-2 hover:text-[#020B27] transition-colors leading-snug"
+                        className="text-sm font-semibold text-[#0A2A52] line-clamp-2 hover:text-[#0A2A52] transition-colors leading-snug"
                       >
                         {item.product.name}
                       </Link>
@@ -197,17 +197,17 @@ export default function CartDrawer() {
                         <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity - 1, item.product.name)}
-                            className="w-7 h-7 flex items-center justify-center hover:bg-gray-50 transition-colors text-[#020B27]"
+                            className="w-7 h-7 flex items-center justify-center hover:bg-gray-50 transition-colors text-[#0A2A52]"
                             aria-label="Diminuer"
                           >
                             <Minus size={11} />
                           </button>
-                          <span className="w-7 text-center text-xs font-bold text-[#020B27]">
+                          <span className="w-7 text-center text-xs font-bold text-[#0A2A52]">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.id, item.quantity + 1, item.product.name)}
-                            className="w-7 h-7 flex items-center justify-center hover:bg-gray-50 transition-colors text-[#020B27]"
+                            className="w-7 h-7 flex items-center justify-center hover:bg-gray-50 transition-colors text-[#0A2A52]"
                             aria-label="Augmenter"
                           >
                             <Plus size={11} />
@@ -216,7 +216,7 @@ export default function CartDrawer() {
 
                         {/* Price */}
                         <div className="text-right">
-                          <p className="text-sm font-bold text-[#020B27]">
+                          <p className="text-sm font-bold text-[#0A2A52]">
                             {formatPrice(unitPrice * item.quantity)}
                           </p>
                           {item.quantity > 1 && (
@@ -245,29 +245,29 @@ export default function CartDrawer() {
               <div className="space-y-1.5 text-sm">
                 <div className="flex justify-between text-[#64748B]">
                   <span>Sous-total</span>
-                  <span className="font-medium text-[#020B27]">{formatPrice(subtotal)}</span>
+                  <span className="font-medium text-[#0A2A52]">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-[#64748B]">
                   <span className="flex items-center gap-1">
                     <Truck size={12} />
                     Livraison
                   </span>
-                  <span className={cn("font-medium", deliveryFee === 0 ? "text-[#020B27]" : "text-[#020B27]")}>
+                  <span className={cn("font-medium", deliveryFee === 0 ? "text-[#0A2A52]" : "text-[#0A2A52]")}>
                     {deliveryFee === 0 ? "Gratuite 🎉" : formatPrice(deliveryFee)}
                   </span>
                 </div>
               </div>
 
               <div className="flex justify-between items-center border-t border-gray-100 pt-3">
-                <span className="font-bold text-[#020B27]">Total</span>
-                <span className="text-xl font-extrabold text-[#020B27]">{formatPrice(total)}</span>
+                <span className="font-bold text-[#0A2A52]">Total</span>
+                <span className="text-xl font-extrabold text-[#0A2A52]">{formatPrice(total)}</span>
               </div>
 
               {/* CTAs */}
               <Link
                 href="/checkout"
                 onClick={closeCartDrawer}
-                className="w-full flex items-center justify-center gap-2 bg-[#B8925A] btn-sweep hover:bg-[#9E7A45] text-white py-3.5 rounded-xl font-bold text-sm transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white py-3.5 rounded-xl font-bold text-sm transition-colors"
               >
                 Passer la commande
                 <ArrowRight size={16} />
@@ -276,7 +276,7 @@ export default function CartDrawer() {
               <Link
                 href="/panier"
                 onClick={closeCartDrawer}
-                className="w-full flex items-center justify-center gap-1 text-[#64748B] hover:text-[#020B27] py-2 text-sm font-medium transition-colors"
+                className="w-full flex items-center justify-center gap-1 text-[#64748B] hover:text-[#0A2A52] py-2 text-sm font-medium transition-colors"
               >
                 Voir le panier complet
                 <ArrowRight size={13} />

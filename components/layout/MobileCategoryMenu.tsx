@@ -26,10 +26,10 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
               type="button"
               onClick={() => setOpenSlug(expanded ? null : axis.slug)}
               aria-expanded={expanded}
-              className="w-full flex items-center justify-between px-5 py-3.5 text-base font-semibold text-[#020B27] hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-5 py-3.5 text-base font-semibold text-[#0A2A52] hover:bg-gray-50 transition-colors"
             >
               <span className="flex items-center gap-2.5 whitespace-nowrap">
-                <CategoryIcon slug={axis.slug} size={18} className="text-[#B8925A] shrink-0" />
+                <CategoryIcon slug={axis.slug} size={18} className="text-[#2F9E44] shrink-0" />
                 {axis.name}
               </span>
               <ChevronDown
@@ -58,7 +58,7 @@ export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => v
                   onClick={onNavigate}
                   className="flex items-center gap-2.5 pl-12 pr-5 py-2.5 text-[15px] text-text-secondary hover:text-green hover:bg-white transition-colors"
                 >
-                  <CategoryIcon slug={cat.slug} size={15} className="text-[#B8925A]/70 shrink-0" />
+                  <CategoryIcon slug={cat.slug} size={15} className="text-[#2F9E44]/70 shrink-0" />
                   {cat.name}
                 </Link>
               ))}

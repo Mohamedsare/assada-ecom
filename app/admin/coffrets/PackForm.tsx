@@ -100,11 +100,11 @@ export default function PackForm({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <button onClick={() => router.back()} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#020B27] transition-colors">
+        <button onClick={() => router.back()} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-[#0A2A52] transition-colors">
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-[#020B27]">{isEdit ? "Modifier le coffret" : "Nouveau coffret cadeau"}</h1>
+          <h1 className="text-2xl font-bold text-[#0A2A52]">{isEdit ? "Modifier le coffret" : "Nouveau coffret cadeau"}</h1>
           <p className="text-sm text-text-secondary mt-0.5">{isEdit ? pack!.name : "Un coffret regroupe plusieurs produits vendus ensemble"}</p>
         </div>
       </div>
@@ -114,15 +114,15 @@ export default function PackForm({
         <div className="lg:col-span-2 space-y-6">
           <Card title="Informations générales">
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Nom du coffret<span className="text-red-500 ml-0.5">*</span></label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Nom du coffret<span className="text-red-500 ml-0.5">*</span></label>
               <input name="name" defaultValue={pack?.name ?? ""} required placeholder="Coffret Beauté Éclat" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Description courte</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description courte</label>
               <input name="short_description" defaultValue={pack?.short_description ?? ""} placeholder="Une ligne d'accroche" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Description complète</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description complète</label>
               <textarea name="description" defaultValue={pack?.description ?? ""} rows={4} placeholder="Ce que contient le coffret, à qui l'offrir…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
             </div>
           </Card>
@@ -152,7 +152,7 @@ export default function PackForm({
                           : <Package size={15} className="text-gray-400" />}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm text-[#020B27] truncate">{p.name}</p>
+                        <p className="text-sm text-[#0A2A52] truncate">{p.name}</p>
                         <p className="text-xs text-text-secondary">{formatPrice(p.current_price)}</p>
                       </div>
                       <Plus size={15} className="text-green shrink-0" />
@@ -178,14 +178,14 @@ export default function PackForm({
                           : <Package size={16} className="text-gray-400" />}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm text-[#020B27] truncate">{p?.name ?? "Produit introuvable"}</p>
+                        <p className="text-sm text-[#0A2A52] truncate">{p?.name ?? "Produit introuvable"}</p>
                         {p && <p className="text-xs text-text-secondary">{formatPrice(p.current_price)}</p>}
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
                         <button type="button" onClick={() => setQty(s.product_id, s.quantity - 1)} className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors" aria-label="Diminuer">
                           <Minus size={13} />
                         </button>
-                        <span className="w-8 text-center text-sm font-medium text-[#020B27]">{s.quantity}</span>
+                        <span className="w-8 text-center text-sm font-medium text-[#0A2A52]">{s.quantity}</span>
                         <button type="button" onClick={() => setQty(s.product_id, s.quantity + 1)} className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors" aria-label="Augmenter">
                           <Plus size={13} />
                         </button>
@@ -198,7 +198,7 @@ export default function PackForm({
                 })}
                 <div className="flex items-center justify-between pt-1 text-sm">
                   <span className="text-text-secondary">Valeur cumulée des produits</span>
-                  <span className="font-semibold text-[#020B27]">{formatPrice(componentsTotal)}</span>
+                  <span className="font-semibold text-[#0A2A52]">{formatPrice(componentsTotal)}</span>
                 </div>
               </div>
             )}
@@ -215,11 +215,11 @@ export default function PackForm({
 
           <Card title="Référencement (SEO)">
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Titre SEO</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Titre SEO</label>
               <input name="seo_title" defaultValue={pack?.seo_title ?? ""} placeholder="Coffret Beauté Éclat à Casablanca | RYTA" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Description SEO</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description SEO</label>
               <textarea name="seo_description" defaultValue={pack?.seo_description ?? ""} rows={2} placeholder="Description pour les moteurs de recherche…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
             </div>
           </Card>
@@ -241,14 +241,14 @@ export default function PackForm({
 
           <Card title="Organisation">
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Catégorie (optionnel)</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Catégorie (optionnel)</label>
               <select name="category_id" defaultValue={pack?.category_id ?? ""} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
                 <option value="">— Aucune —</option>
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-[#020B27] mb-1.5">Statut</label>
+              <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Statut</label>
               <select name="status" defaultValue={pack?.status ?? "active"} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
                 {STATUS_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
               </select>
@@ -264,7 +264,7 @@ export default function PackForm({
           {error && <p className="text-sm text-red-600">{error}</p>}
 
           <div className="flex flex-col gap-2">
-            <button type="submit" disabled={pending} className="flex items-center justify-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] disabled:opacity-60 text-[#020B27] text-sm font-semibold px-5 py-3 rounded-lg transition-colors">
+            <button type="submit" disabled={pending} className="flex items-center justify-center gap-2 bg-green btn-sweep hover:bg-[#237A34] disabled:opacity-60 text-[#0A2A52] text-sm font-semibold px-5 py-3 rounded-lg transition-colors">
               <Gift size={16} /> {pending ? "Enregistrement…" : isEdit ? "Enregistrer les modifications" : "Créer le coffret"}
             </button>
             <button type="button" onClick={() => router.push("/admin/coffrets")} className="text-text-secondary text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-gray-50 transition-colors">
@@ -280,7 +280,7 @@ export default function PackForm({
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5">
-      <h2 className="font-semibold text-[#020B27] mb-4">{title}</h2>
+      <h2 className="font-semibold text-[#0A2A52] mb-4">{title}</h2>
       <div className="space-y-4">{children}</div>
     </div>
   );
@@ -289,7 +289,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 function Field({ label, name, type = "text", placeholder, required, defaultValue }: { label: string; name: string; type?: string; placeholder?: string; required?: boolean; defaultValue?: string }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-[#020B27] mb-1.5">{label}{required && <span className="text-red-500 ml-0.5">*</span>}</label>
+      <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">{label}{required && <span className="text-red-500 ml-0.5">*</span>}</label>
       <input name={name} type={type} placeholder={placeholder} required={required} defaultValue={defaultValue} min={type === "number" ? 0 : undefined} className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
     </div>
   );
@@ -299,7 +299,7 @@ function Checkbox({ name, label, defaultChecked }: { name: string; label: string
   return (
     <label className="flex items-center gap-2.5 cursor-pointer">
       <input type="checkbox" name={name} value="true" defaultChecked={defaultChecked} className="w-4 h-4 rounded border-gray-300 text-green focus:ring-green accent-green" />
-      <span className="text-sm text-[#020B27]">{label}</span>
+      <span className="text-sm text-[#0A2A52]">{label}</span>
     </label>
   );
 }

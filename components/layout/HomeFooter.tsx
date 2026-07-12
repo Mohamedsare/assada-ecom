@@ -51,14 +51,14 @@ export default function HomeFooter() {
         <div className="max-w-7xl mx-auto px-4 py-8 grid lg:grid-cols-[1fr_2.2fr] gap-8 items-center">
           {/* Texte */}
           <div>
-            <p className="text-xs font-bold text-[#B8925A] uppercase tracking-widest mb-2">Suivez-nous</p>
-            <p className="text-[#020B27] text-2xl font-extrabold mb-1">@ryta</p>
+            <p className="text-xs font-bold text-[#2F9E44] uppercase tracking-widest mb-2">Suivez-nous</p>
+            <p className="text-[#0A2A52] text-2xl font-extrabold mb-1">@ryta</p>
             <p className="text-gray-400 text-sm mb-5">Découvrez nos produits en images</p>
             <Link
               href="https://www.instagram.com/ryta"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-green btn-sweep hover:bg-[#9E7A45] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
+              className="inline-flex items-center gap-2 bg-green btn-sweep hover:bg-[#237A34] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 01-1.38-.9 3.7 3.7 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 2.76a7.08 7.08 0 100 14.16 7.08 7.08 0 000-14.16zm0 11.68a4.6 4.6 0 110-9.2 4.6 4.6 0 010 9.2zm7.2-11.85a1.27 1.27 0 11-2.55 0 1.27 1.27 0 012.55 0z" />
