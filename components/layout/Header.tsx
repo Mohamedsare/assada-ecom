@@ -12,7 +12,7 @@ import {
   Gift,
 } from "lucide-react";
 import { cn, getWhatsAppUrl, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/utils";
-import { AXES, WHATSAPP_NUMBER } from "@/lib/constants";
+import { AXES, WHATSAPP_NUMBER, type Axis } from "@/lib/constants";
 import { useCartStore } from "@/stores/cart";
 import { useUIStore } from "@/stores/ui";
 import SearchAutocomplete from "@/components/search/SearchAutocomplete";
@@ -30,7 +30,7 @@ const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/ryta" },
 ] as const;
 
-export default function Header() {
+export default function Header({ axes = AXES }: { axes?: Axis[] }) {
   const logoUrl = useShopLogo();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -100,7 +100,7 @@ export default function Header() {
 
           {/* Desktop Navigation — 3 axes + L'univers RYTA, alignés sur une seule ligne */}
           <nav className="hidden lg:flex items-center gap-x-1">
-            {AXES.map((axis) => (
+            {axes.map((axis) => (
               <AxisMegaMenu key={axis.slug} axis={axis} active={false} />
             ))}
             <UniversMenu />
@@ -145,7 +145,7 @@ export default function Header() {
       </div>
 
       {/* Tiroir de recherche latéral droit */}
-      <SearchDrawer open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <SearchDrawer open={searchOpen} onClose={() => setSearchOpen(false)} axes={axes} />
 
       {/* ── Menu Mobile — tiroir latéral gauche ── */}
       <div
@@ -190,7 +190,7 @@ export default function Header() {
 
           {/* Liens — les 3 grands axes + L'univers RYTA en accordéon */}
           <nav className="flex-1 overflow-y-auto">
-            <MobileCategoryMenu onNavigate={() => setMobileOpen(false)} />
+            <MobileCategoryMenu axes={axes} onNavigate={() => setMobileOpen(false)} />
             <MobileUniversMenu onNavigate={() => setMobileOpen(false)} />
             <Link
               href="/coffrets-cadeaux"

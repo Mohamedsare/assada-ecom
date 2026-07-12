@@ -1,5 +1,5 @@
 import { createClient } from "./server";
-import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, DEFAULT_HERO_SLIDES, PAGE_IMAGE_DEFAULTS, type HeroSlide } from "@/lib/constants";
+import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, DEFAULT_HERO_SLIDES, PAGE_IMAGE_DEFAULTS, AXES, CATEGORIES, type HeroSlide, type Axis } from "@/lib/constants";
 import type {
   Product, Category, Brand, Order, Profile, Address,
   Review, Payment, ContactMessage, DeliveryAgent,
@@ -220,6 +220,27 @@ export async function getAllCategories(): Promise<Category[]> {
 
   if (error) return [];
   return (data ?? []) as Category[];
+}
+
+/**
+ * Arborescence de navigation construite DEPUIS la base (catégories actives, 2 niveaux :
+ * axe → sous-catégories). Alimente les méga-menus du header pour qu'ils reflètent
+ * toujours la vraie taxonomie. Repli sur la constante AXES si la base est vide/inaccessible.
+ */
+export async function getNavAxes(): Promise<Axis[]> {
+  const cats = await getCategories(); // actives, triées par sort_order
+  const roots = cats.filter((c) => !c.parent_id);
+  if (roots.length === 0) return AXES;
+
+  const emojiBySlug: Record<string, string> = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.emoji]));
+  return roots.map((root) => ({
+    name: root.name,
+    slug: root.slug,
+    emoji: emojiBySlug[root.slug] ?? "🛍️",
+    children: cats
+      .filter((c) => c.parent_id === root.id)
+      .map((c) => ({ name: c.name, slug: c.slug })),
+  }));
 }
 
 /** Nombre de produits par catégorie (toutes statuts confondus) pour l'admin. */

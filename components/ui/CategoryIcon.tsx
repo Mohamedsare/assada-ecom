@@ -23,6 +23,9 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "soins-visage":          Sparkles,
   "soins-corps":           Droplets,
   "soins-cheveux":         Scissors,
+  pommades:                Palette,   // « Make up » en base
+  deodorants:              SprayCan,
+  "accessoires-beaute":    Brush,
   hygiene:                 Bath,
   "traditionnels-hammam":  Flower2,
   accessoires:             Brush,

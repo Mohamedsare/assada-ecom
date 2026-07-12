@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { AXES, AXIS_FEATURED } from "@/lib/constants";
+import { AXES, AXIS_FEATURED, type Axis } from "@/lib/constants";
 import CategoryIcon from "@/components/ui/CategoryIcon";
 import MenuFeaturedCard from "@/components/layout/MenuFeaturedCard";
 
@@ -12,12 +12,12 @@ import MenuFeaturedCard from "@/components/layout/MenuFeaturedCard";
  * Accordéon catégories pour le tiroir mobile (2 niveaux : axe → catégories).
  * `onNavigate` ferme le tiroir après un clic sur un lien.
  */
-export default function MobileCategoryMenu({ onNavigate }: { onNavigate: () => void }) {
+export default function MobileCategoryMenu({ axes = AXES, onNavigate }: { axes?: Axis[]; onNavigate: () => void }) {
   const [openSlug, setOpenSlug] = useState<string | null>(null);
 
   return (
     <div className="border-b border-gray-100">
-      {AXES.map((axis) => {
+      {axes.map((axis) => {
         const expanded = openSlug === axis.slug;
         const featured = AXIS_FEATURED[axis.slug];
         return (

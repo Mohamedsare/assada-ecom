@@ -6,21 +6,23 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, Loader2, TrendingUp, ArrowRight } from "lucide-react";
 import { cn, formatPrice } from "@/lib/utils";
-import { AXES } from "@/lib/constants";
+import { AXES, type Axis } from "@/lib/constants";
 import { useProductSearch } from "@/hooks/useProductSearch";
 import CategoryIcon from "@/components/ui/CategoryIcon";
 
 /** Recherches populaires mises en avant (façon apia). */
 const QUICK_SEARCHES = ["Parfum", "Argan", "Miel", "Amlou", "Crème visage", "Vitamines"];
 
-/** Toutes les « collections » recherchables : axes + catégories + sous-catégories (statique). */
-const COLLECTIONS: { name: string; slug: string }[] = AXES.flatMap((axis) => [
-  { name: axis.name, slug: axis.slug },
-  ...axis.children.flatMap((cat) => [
-    { name: cat.name, slug: cat.slug },
-    ...(cat.children ?? []).map((leaf) => ({ name: leaf.name, slug: leaf.slug })),
-  ]),
-]);
+/** Toutes les « collections » recherchables : axes + catégories + sous-catégories. */
+function buildCollections(axes: Axis[]): { name: string; slug: string }[] {
+  return axes.flatMap((axis) => [
+    { name: axis.name, slug: axis.slug },
+    ...axis.children.flatMap((cat) => [
+      { name: cat.name, slug: cat.slug },
+      ...(cat.children ?? []).map((leaf) => ({ name: leaf.name, slug: leaf.slug })),
+    ]),
+  ]);
+}
 
 const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -29,7 +31,7 @@ const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,
  * Recherche asynchrone en direct — les produits s'affichent au fur et à mesure de la frappe,
  * avec onglets Produits / Collections. Se ferme via la croix, le fond ou Échap.
  */
-export default function SearchDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function SearchDrawer({ open, onClose, axes = AXES }: { open: boolean; onClose: () => void; axes?: Axis[] }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
@@ -38,11 +40,12 @@ export default function SearchDrawer({ open, onClose }: { open: boolean; onClose
   const { results: products, loading } = useProductSearch(query, { limit: 8 });
   const hasQuery = query.trim().length >= 2;
 
+  const allCollections = useMemo(() => buildCollections(axes), [axes]);
   const collections = useMemo(() => {
     if (!hasQuery) return [];
     const n = norm(query.trim());
-    return COLLECTIONS.filter((c) => norm(c.name).includes(n)).slice(0, 8);
-  }, [query, hasQuery]);
+    return allCollections.filter((c) => norm(c.name).includes(n)).slice(0, 8);
+  }, [query, hasQuery, allCollections]);
 
   // Verrouille le scroll du body + focus / reset à l'ouverture-fermeture
   useEffect(() => {
