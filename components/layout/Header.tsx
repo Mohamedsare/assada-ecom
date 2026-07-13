@@ -94,7 +94,7 @@ export default function Header({ axes = AXES }: { axes?: Axis[] }) {
               width={220}
               height={150}
               priority
-              className="h-12 w-auto object-contain"
+              className="h-14 lg:h-16 w-auto object-contain"
             />
           </Link>
 
