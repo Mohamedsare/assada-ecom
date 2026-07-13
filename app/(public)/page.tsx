@@ -68,7 +68,7 @@ export default async function HomePage() {
       )}
 
       {/* Offres (bannières commerciales) */}
-      <PromoBanners products={withImage} />
+      <PromoBanners />
 
       {/* Promotions */}
       {promoProducts.length > 0 && (

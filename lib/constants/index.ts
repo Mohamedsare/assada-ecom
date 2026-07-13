@@ -227,6 +227,9 @@ export const ORDER_CHANNEL_LABELS: Record<string, string> = {
 export const PAGE_IMAGE_DEFAULTS: Record<string, string> = {
   home_banner_promo: "/banners/banner4-accueil.png",
   home_banner_nouveaute: "/banners/banner3-accuiel.png",
+  // Cartes « Offres » de la page d'accueil (fond des deux bannières)
+  offer_coffrets: "/categories/cadeaux.jpeg",
+  offer_promotions: "/banners/banner4-accueil.png",
   banner_boutique: "/banners/banner2-accueil.png",
   banner_nouveautes: "/banners/banner3-accuiel.png",
   banner_promotions: "/banners/banner4-accueil.png",
@@ -277,6 +280,13 @@ export const PAGE_IMAGE_GROUPS: { group: string; items: { key: string; label: st
     items: [
       { key: "home_banner_promo", label: "Bannière « Offre spéciale »" },
       { key: "home_banner_nouveaute", label: "Bannière « Nouveautés »" },
+    ],
+  },
+  {
+    group: "Accueil — cartes « Offres »",
+    items: [
+      { key: "offer_coffrets", label: "Carte « Coffrets cadeaux » (fond)" },
+      { key: "offer_promotions", label: "Carte « Promotions » (fond)" },
     ],
   },
   {
