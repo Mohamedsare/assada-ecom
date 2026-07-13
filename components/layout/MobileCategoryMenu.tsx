@@ -44,21 +44,14 @@ export default function MobileCategoryMenu({ axes = AXES, onNavigate }: { axes?:
                 expanded ? "max-h-[60vh]" : "max-h-0"
               )}
             >
-              <Link
-                href={`/boutique?categorie=${axis.slug}`}
-                onClick={onNavigate}
-                className="block pl-12 pr-5 py-2.5 text-[15px] font-medium text-green hover:underline"
-              >
-                Tout {axis.name}
-              </Link>
               {axis.children.map((cat) => (
                 <Link
                   key={cat.slug}
                   href={`/boutique?categorie=${cat.slug}`}
                   onClick={onNavigate}
-                  className="flex items-center gap-2.5 pl-12 pr-5 py-2.5 text-[15px] text-text-secondary hover:text-green hover:bg-white transition-colors"
+                  className="flex items-center gap-2.5 pl-12 pr-5 py-2.5 text-base text-text-secondary hover:text-green hover:bg-white transition-colors"
                 >
-                  <CategoryIcon slug={cat.slug} size={15} className="text-[#2F9E44]/70 shrink-0" />
+                  <CategoryIcon slug={cat.slug} size={17} className="text-[#2F9E44]/70 shrink-0" />
                   {cat.name}
                 </Link>
               ))}

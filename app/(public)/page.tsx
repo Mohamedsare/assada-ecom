@@ -6,6 +6,7 @@ import HomeShowcase from "@/components/sections/home/HomeShowcase";
 import NosUnivers from "@/components/sections/home/NosUnivers";
 import FeatureProduct from "@/components/sections/home/FeatureProduct";
 import CommunityStories from "@/components/sections/home/CommunityStories";
+import PromoBanners from "@/components/sections/home/PromoBanners";
 import { buildUnivers } from "@/components/sections/home/buildUnivers";
 import ProductCarousel from "@/components/product/ProductCarousel";
 
@@ -31,6 +32,16 @@ export default async function HomePage() {
   const withImage = allProducts.filter((p) => p.main_image_url);
   const featureProduct = withImage.find((p) => p.is_featured) ?? withImage[0] ?? null;
 
+  // Meilleures ventes : produits vedettes ; à défaut, les mieux notés.
+  const featured = withImage.filter((p) => p.is_featured);
+  const bestSellers = (featured.length >= 3
+    ? featured
+    : [...withImage].sort((a, b) => (b.review_count ?? 0) - (a.review_count ?? 0))
+  ).slice(0, 12);
+
+  // Promotions : produits marqués en promo.
+  const promoProducts = withImage.filter((p) => p.is_promo).slice(0, 12);
+
   // Même page d'accueil sur desktop et mobile (les sections sont responsives).
   return (
     <>
@@ -39,6 +50,41 @@ export default async function HomePage() {
 
       {/* 2 — Nos Univers (axes → sous-catégories → produits) — juste après la bannière */}
       {univers.length > 0 && <NosUnivers univers={univers} />}
+
+      {/* Meilleures ventes */}
+      {bestSellers.length > 0 && (
+        <section className="py-10 px-4 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <ProductCarousel
+              label="Meilleures ventes"
+              title="Nos meilleures ventes"
+              subtitle="Les produits préférés de nos clients"
+              products={bestSellers}
+              viewAllHref="/boutique"
+              viewAllColor="text-green"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Offres (bannières commerciales) */}
+      <PromoBanners products={withImage} />
+
+      {/* Promotions */}
+      {promoProducts.length > 0 && (
+        <section className="py-10 px-4 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <ProductCarousel
+              label="Promotions"
+              title="Nos promotions"
+              subtitle="Profitez-en avant la fin du stock"
+              products={promoProducts}
+              viewAllHref="/promotions"
+              viewAllColor="text-green"
+            />
+          </div>
+        </section>
+      )}
 
       {/* Produit signature */}
       {featureProduct && <FeatureProduct product={featureProduct} />}

@@ -43,7 +43,7 @@ export default function MobileUniversMenu({ onNavigate }: { onNavigate: () => vo
             key={link.href}
             href={link.href}
             onClick={onNavigate}
-            className="block pl-12 pr-5 py-2.5 text-[15px] text-text-secondary hover:text-green hover:bg-white transition-colors"
+            className="block pl-12 pr-5 py-2.5 text-base text-text-secondary hover:text-green hover:bg-white transition-colors"
           >
             {link.label}
           </Link>

@@ -195,7 +195,7 @@ export default function Header({ axes = AXES }: { axes?: Axis[] }) {
             <Link
               href="/coffrets-cadeaux"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-between px-5 py-4 border-b border-gray-100 text-base font-bold uppercase tracking-wide text-[#0A2A52] hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 text-base font-semibold text-[#0A2A52] hover:bg-gray-50 transition-colors"
             >
               <span className="flex items-center gap-2.5"><Gift size={18} /> Coffrets cadeaux</span>
               <ChevronRight size={16} className="text-gray-300" />
@@ -203,7 +203,7 @@ export default function Header({ axes = AXES }: { axes?: Axis[] }) {
             <Link
               href="/compte"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-between px-5 py-4 border-b border-gray-100 text-base font-bold uppercase tracking-wide text-[#0A2A52] hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 text-base font-semibold text-[#0A2A52] hover:bg-gray-50 transition-colors"
             >
               <span className="flex items-center gap-2.5"><User size={18} /> Mon compte</span>
               <ChevronRight size={16} className="text-gray-300" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
@@ -58,6 +58,34 @@ export default function ProductCarousel({
 
   const pause = () => { pausedRef.current = true; };
   const resume = () => { pausedRef.current = false; };
+
+  // Points de pagination (mode non-auto) : une pastille par « page » visible.
+  const [pageCount, setPageCount] = useState(0);
+  const [activePage, setActivePage] = useState(0);
+
+  useEffect(() => {
+    if (loop) return; // le mode marquee n'a pas de points
+    const el = scrollRef.current;
+    if (!el) return;
+    const measure = () => {
+      const pages = el.clientWidth > 0 ? Math.ceil(el.scrollWidth / el.clientWidth) : 0;
+      setPageCount(pages > 1 ? pages : 0);
+    };
+    const onScroll = () => setActivePage(Math.round(el.scrollLeft / el.clientWidth));
+    measure();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", measure);
+    };
+  }, [loop, products.length]);
+
+  const goToPage = (i: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
 
   const scroll = (dir: "left" | "right") => {
     const el = scrollRef.current;
@@ -124,6 +152,23 @@ export default function ProductCarousel({
           </div>
         ))}
       </div>
+
+      {/* Points de pagination */}
+      {pageCount > 1 && (
+        <div className="flex justify-center gap-2 mt-5">
+          {Array.from({ length: pageCount }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goToPage(i)}
+              aria-label={`Aller à la page ${i + 1}`}
+              aria-current={i === activePage}
+              className={`h-2.5 rounded-full transition-all ${
+                i === activePage ? "w-6 bg-green" : "w-2.5 bg-gray-300 hover:bg-gray-400"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

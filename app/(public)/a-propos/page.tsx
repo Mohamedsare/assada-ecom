@@ -29,20 +29,46 @@ export default function AProposPage() {
     >
       <h2>Qui sommes-nous ?</h2>
       <p>
-        Chez <strong>RYTA</strong>, la beauté et le bien-être sont une affaire de passion. Depuis notre
-        boutique au cœur de <strong>Derb Ghalef, à Casablanca</strong>, nous réunissons trois univers
-        complémentaires : la <strong>Beauté</strong> (parfums, maquillage, soins du visage, du corps et des
-        cheveux, hygiène, accessoires et coffrets cadeaux), les <strong>Compléments alimentaires</strong>
-        (vitalité, immunité, beauté de la peau…) et les <strong>Produits du terroir marocain</strong>
-        (miel, huiles, amlou, épices, dattes…). Une sélection <strong>premium</strong>, choisie avec soin
-        et proposée au meilleur prix, en boutique physique comme en ligne.
+        <strong>RYTA, votre partenaire beauté, bien-être et produits du terroir.</strong>
       </p>
       <p>
-        Notre mission est simple : <strong>rendre la beauté et le bien-être accessibles à toutes et à
-        tous</strong>. Nous ne proposons que des produits <strong>100 % authentiques</strong>, nous vous
-        conseillons avec la proximité d’une véritable boutique de quartier, et nous vous offrons une
-        expérience d’achat fluide, rapide et rassurante — du choix du produit à la livraison chez vous,
-        partout au Maroc.
+        Située au <strong>Boulevard Abdelmoumen à Casablanca</strong>, RYTA sélectionne avec exigence des
+        produits de qualité pour répondre à tous vos besoins. Notre univers s’articule autour de trois
+        grandes catégories :
+      </p>
+      <ul>
+        <li>
+          <strong>Beauté</strong> : parfums, maquillage, soins du visage, du corps et des cheveux, produits
+          d’hygiène, accessoires et coffrets cadeaux.
+        </li>
+        <li>
+          <strong>Compléments alimentaires</strong> : vitalité, immunité (acérola, ginseng, spiruline),
+          minceur, détox et digestif (thés, infusions et cafés), antistress (chocolat noir, magnésium et
+          infusions), antidouleur musculaire (patchs chauffants…).
+        </li>
+        <li>
+          <strong>Produits du terroir</strong> : huile d’argan, safran, beurre de karité, moringa, cacao,
+          vanille, eaux florales, miel, propolis, pollen, matcha… et autres trésors authentiques.
+        </li>
+      </ul>
+      <p>
+        Notre engagement est de vous offrir une sélection de produits <strong>100 % authentiques</strong>,
+        soigneusement choisis parmi les meilleures marques, au meilleur rapport qualité-prix.
+      </p>
+      <p>
+        Chez RYTA, nous mettons la <strong>satisfaction de nos clients</strong> au cœur de nos priorités
+        grâce à :
+      </p>
+      <ul>
+        <li>Des produits fiables.</li>
+        <li>Des prix compétitifs toute l’année.</li>
+        <li>Un accompagnement personnalisé et des conseils de confiance.</li>
+        <li>Une expérience d’achat simple, rapide et sécurisée, en boutique comme en ligne.</li>
+        <li>Une livraison rapide partout au Maroc.</li>
+      </ul>
+      <p>
+        RYTA, c’est bien plus qu’une boutique : c’est une <strong>référence</strong> pour celles et ceux qui
+        recherchent qualité, authenticité et excellence, sans compromis sur le prix.
       </p>
 
       <h2>Nos valeurs</h2>
