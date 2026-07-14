@@ -15,6 +15,12 @@ interface ProductCarouselProps {
   autoScroll?: boolean;
   /** Une seule carte visible par vue sur mobile (au lieu de deux). */
   singleOnMobile?: boolean;
+  /**
+   * Auto-défilement du slider paginé (avec points) : avance d'une page toutes
+   * les `autoAdvanceMs` millisecondes, en boucle, pausé au survol/toucher.
+   * 0 = désactivé. Ignoré si `autoScroll` (marquee) est actif.
+   */
+  autoAdvanceMs?: number;
 }
 
 export default function ProductCarousel({
@@ -23,6 +29,7 @@ export default function ProductCarousel({
   products,
   autoScroll = false,
   singleOnMobile = false,
+  autoAdvanceMs = 0,
 }: ProductCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
@@ -79,6 +86,24 @@ export default function ProductCarousel({
     };
   }, [loop, products.length]);
 
+  // Auto-défilement du slider paginé : avance d'une page en boucle, pausé au
+  // survol / toucher (via pausedRef, partagé avec le marquee).
+  useEffect(() => {
+    if (loop) return; // le mode marquee gère son propre défilement
+    if (autoAdvanceMs <= 0 || pageCount <= 1) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const id = setInterval(() => {
+      if (pausedRef.current) return;
+      const current = el.clientWidth > 0 ? Math.round(el.scrollLeft / el.clientWidth) : 0;
+      const next = (current + 1) % pageCount;
+      el.scrollTo({ left: next * el.clientWidth, behavior: "smooth" });
+    }, autoAdvanceMs);
+    return () => clearInterval(id);
+  }, [loop, autoAdvanceMs, pageCount]);
+
   const goToPage = (i: number) => {
     const el = scrollRef.current;
     if (!el) return;
@@ -97,8 +122,11 @@ export default function ProductCarousel({
     <section className="relative">
       {/* En-tête */}
       <div className="text-center mb-6">
-        <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">{title}</h2>
-        {subtitle && <p className="text-text-secondary text-sm mt-0.5">{subtitle}</p>}
+        <h2 className="text-xl md:text-2xl font-extrabold uppercase tracking-wide text-[#0A2A52]">
+          {title}
+        </h2>
+        <span className="mt-2 inline-block h-1 w-12 rounded-full bg-[#2F9E44]" />
+        {subtitle && <p className="text-text-secondary text-sm mt-2">{subtitle}</p>}
       </div>
 
       {/* Flèche gauche */}
@@ -122,10 +150,10 @@ export default function ProductCarousel({
       {/* Piste de défilement */}
       <div
         ref={scrollRef}
-        onMouseEnter={loop ? pause : undefined}
-        onMouseLeave={loop ? resume : undefined}
-        onTouchStart={loop ? pause : undefined}
-        onTouchEnd={loop ? resume : undefined}
+        onMouseEnter={loop || autoAdvanceMs > 0 ? pause : undefined}
+        onMouseLeave={loop || autoAdvanceMs > 0 ? resume : undefined}
+        onTouchStart={loop || autoAdvanceMs > 0 ? pause : undefined}
+        onTouchEnd={loop || autoAdvanceMs > 0 ? resume : undefined}
         className={`flex gap-4 overflow-x-auto scrollbar-hide pb-1 ${loop ? "" : "scroll-smooth snap-x snap-mandatory"}`}
       >
         {rendered.map((product, i) => (

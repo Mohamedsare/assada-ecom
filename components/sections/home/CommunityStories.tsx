@@ -303,7 +303,6 @@ export default function CommunityStories({ products }: { products: Product[] }) 
       <div className="max-w-6xl mx-auto">
         {/* En-tête */}
         <div className="text-center mb-10">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#2F9E44] mb-2">Comme on le voit dans</p>
           <h2 className="text-2xl md:text-3xl font-bold text-[#0A2A52]">Histoires de la communauté</h2>
         </div>
 

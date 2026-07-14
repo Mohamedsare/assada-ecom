@@ -51,7 +51,7 @@ export default async function HomePage() {
       {/* 2 — Nos Univers (axes → sous-catégories → produits) — juste après la bannière */}
       {univers.length > 0 && <NosUnivers univers={univers} />}
 
-      {/* Meilleures ventes */}
+      {/* 1 — Nos meilleures ventes */}
       {bestSellers.length > 0 && (
         <section className="py-10 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
@@ -59,6 +59,35 @@ export default async function HomePage() {
               title="Nos meilleures ventes"
               products={bestSellers}
               singleOnMobile
+              autoAdvanceMs={3000}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* 2 — Nos offres et promotions */}
+      {promoProducts.length > 0 && (
+        <section className="py-10 px-4 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <ProductCarousel
+              title="Nos promotions"
+              products={promoProducts}
+              singleOnMobile
+              autoAdvanceMs={3000}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* 3 — Nos nouveautés */}
+      {latestProducts.length > 0 && (
+        <section className="py-10 px-4 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <ProductCarousel
+              title="Nos nouveautés"
+              products={latestProducts}
+              singleOnMobile
+              autoAdvanceMs={3000}
             />
           </div>
         </section>
@@ -67,34 +96,8 @@ export default async function HomePage() {
       {/* Offres (bannières commerciales) */}
       <PromoBanners />
 
-      {/* Promotions */}
-      {promoProducts.length > 0 && (
-        <section className="py-10 px-4 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <ProductCarousel
-              title="Nos promotions"
-              products={promoProducts}
-              singleOnMobile
-            />
-          </div>
-        </section>
-      )}
-
       {/* Produit signature */}
       {featureProduct && <FeatureProduct product={featureProduct} />}
-
-      {/* 5 — Derniers produits ajoutés */}
-      {latestProducts.length > 0 && (
-        <section className="py-10 px-4 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <ProductCarousel
-              title="Les derniers produits ajoutés"
-              products={latestProducts}
-              autoScroll
-            />
-          </div>
-        </section>
-      )}
 
       {/* Sections éditoriales façon apia */}
       <HomeShowcase products={allProducts} categories={allCategories} />

@@ -1514,6 +1514,109 @@ export async function studioProductImage(
   }
 }
 
+// ─── ADMIN — IA (couche commune OpenAI + fallback DeepSeek) ───────────────────
+
+interface AiChatOptions {
+  messages: unknown[];
+  max_tokens?: number;
+  temperature?: number;
+  response_format?: unknown;
+  /**
+   * `true` si la requête contient une image (Vision). DeepSeek ne gère pas les
+   * images : le fallback est alors désactivé et seul OpenAI est utilisé.
+   */
+  vision?: boolean;
+}
+
+interface AiChatResult {
+  content?: string;
+  provider?: "openai" | "deepseek";
+  error?: string;
+}
+
+/**
+ * Appelle un LLM compatible « chat completions » avec OpenAI en primaire et
+ * DeepSeek en secours automatique. On bascule sur DeepSeek si OpenAI échoue
+ * (clé absente, erreur HTTP, réseau, réponse vide) — sauf pour les requêtes
+ * Vision, que DeepSeek ne sait pas traiter.
+ */
+async function callAiChat(opts: AiChatOptions): Promise<AiChatResult> {
+  const providers: {
+    id: "openai" | "deepseek";
+    url: string;
+    apiKey: string;
+    model: string;
+  }[] = [];
+
+  if (process.env.OPENAI_API_KEY) {
+    providers.push({
+      id: "openai",
+      url: "https://api.openai.com/v1/chat/completions",
+      apiKey: process.env.OPENAI_API_KEY,
+      model: "gpt-4o-mini",
+    });
+  }
+  // DeepSeek uniquement en secours pour le texte (pas de support image).
+  if (!opts.vision && process.env.DEEPSEEK_API_KEY) {
+    providers.push({
+      id: "deepseek",
+      url: "https://api.deepseek.com/chat/completions",
+      apiKey: process.env.DEEPSEEK_API_KEY,
+      model: "deepseek-chat",
+    });
+  }
+
+  if (providers.length === 0) {
+    return {
+      error: opts.vision
+        ? "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local."
+        : "Aucune clé IA configurée : ajoutez OPENAI_API_KEY ou DEEPSEEK_API_KEY dans .env.local.",
+    };
+  }
+
+  let lastError = "Service IA indisponible pour le moment.";
+
+  for (const p of providers) {
+    try {
+      const res = await fetch(p.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${p.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: p.model,
+          ...(opts.max_tokens !== undefined ? { max_tokens: opts.max_tokens } : {}),
+          ...(opts.temperature !== undefined ? { temperature: opts.temperature } : {}),
+          ...(opts.response_format ? { response_format: opts.response_format } : {}),
+          messages: opts.messages,
+        }),
+      });
+
+      if (!res.ok) {
+        const body = await res.text();
+        console.error(`callAiChat ${p.id}:`, res.status, body.slice(0, 300));
+        lastError = `${p.id === "openai" ? "OpenAI" : "DeepSeek"} a renvoyé une erreur (${res.status}).`;
+        continue; // tente le fournisseur suivant (fallback)
+      }
+
+      const json = await res.json();
+      const content: string | undefined = json?.choices?.[0]?.message?.content;
+      if (!content) {
+        lastError = `Réponse vide de ${p.id === "openai" ? "OpenAI" : "DeepSeek"}.`;
+        continue;
+      }
+      return { content, provider: p.id };
+    } catch (e) {
+      console.error(`callAiChat ${p.id}:`, e);
+      lastError = `Erreur réseau avec ${p.id === "openai" ? "OpenAI" : "DeepSeek"}.`;
+      continue;
+    }
+  }
+
+  return { error: lastError };
+}
+
 // ─── ADMIN — IA (génération fiche produit via OpenAI) ─────────────────────────
 
 export interface GeneratedProductInfo {
@@ -1531,8 +1634,6 @@ export interface GeneratedProductInfo {
 export async function generateProductInfo(
   imageUrl: string,
 ): Promise<{ data?: GeneratedProductInfo; error?: string }> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return { error: "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local." };
   if (!imageUrl) return { error: "Aucune image à analyser." };
 
   const prompt = `Analyse cette photo de produit destinée à la boutique en ligne RYTA (Casablanca, prix en DH).
@@ -1547,45 +1648,33 @@ Réponds STRICTEMENT en JSON (sans markdown) avec ces clés :
 
 N'invente jamais une marque dont tu n'es pas sûr.`;
 
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+  // Requête Vision : OpenAI uniquement (DeepSeek ne traite pas les images).
+  const result = await callAiChat({
+    vision: true,
+    max_tokens: 800,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "Tu es un expert e-commerce qui rédige des fiches produits en français, commerciales, claires et optimisées SEO pour RYTA, une boutique en ligne à Casablanca.",
       },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 800,
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content:
-              "Tu es un expert e-commerce qui rédige des fiches produits en français, commerciales, claires et optimisées SEO pour RYTA, une boutique en ligne à Casablanca.",
-          },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: prompt },
-              { type: "image_url", image_url: { url: imageUrl } },
-            ],
-          },
+      {
+        role: "user",
+        content: [
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
         ],
-      }),
-    });
+      },
+    ],
+  });
 
-    if (!res.ok) {
-      const body = await res.text();
-      console.error("generateProductInfo OpenAI:", res.status, body);
-      return { error: `OpenAI a renvoyé une erreur (${res.status}). Vérifiez votre clé et votre crédit.` };
-    }
+  if (result.error || !result.content) {
+    return { error: result.error ?? "Impossible d'analyser l'image pour le moment." };
+  }
 
-    const json = await res.json();
-    const content: string | undefined = json?.choices?.[0]?.message?.content;
-    if (!content) return { error: "Réponse vide de l'IA." };
-
-    const parsed = JSON.parse(content) as Partial<GeneratedProductInfo>;
+  try {
+    const parsed = JSON.parse(result.content) as Partial<GeneratedProductInfo>;
     return {
       data: {
         name: parsed.name ?? "",
@@ -1596,8 +1685,8 @@ N'invente jamais une marque dont tu n'es pas sûr.`;
       },
     };
   } catch (e) {
-    console.error("generateProductInfo:", e);
-    return { error: "Impossible d'analyser l'image pour le moment." };
+    console.error("generateProductInfo parse:", e);
+    return { error: "Réponse IA illisible. Réessayez." };
   }
 }
 
@@ -1608,8 +1697,6 @@ N'invente jamais une marque dont tu n'es pas sûr.`;
 export async function generateBannerTitle(
   imageUrl: string,
 ): Promise<{ title?: string; error?: string }> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return { error: "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local." };
   if (!imageUrl) return { error: "Aucun visuel à analyser." };
 
   const prompt = `Regarde ce visuel de bannière pour la boutique en ligne RYTA (Casablanca) : beauté & bien-être, compléments alimentaires et produits du terroir marocain.
@@ -1622,51 +1709,39 @@ Contraintes :
 
 Réponds STRICTEMENT en JSON (sans markdown) : { "title": "..." }`;
 
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+  // Requête Vision : OpenAI uniquement (DeepSeek ne traite pas les images).
+  const result = await callAiChat({
+    vision: true,
+    max_tokens: 60,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "Tu es un directeur artistique e-commerce qui écrit des titres de bannières courts, percutants et premium en français pour RYTA (Casablanca).",
       },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 60,
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content:
-              "Tu es un directeur artistique e-commerce qui écrit des titres de bannières courts, percutants et premium en français pour RYTA (Casablanca).",
-          },
-          {
-            role: "user",
-            content: [
-              { type: "text", text: prompt },
-              { type: "image_url", image_url: { url: imageUrl } },
-            ],
-          },
+      {
+        role: "user",
+        content: [
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
         ],
-      }),
-    });
+      },
+    ],
+  });
 
-    if (!res.ok) {
-      const body = await res.text();
-      console.error("generateBannerTitle OpenAI:", res.status, body);
-      return { error: `OpenAI a renvoyé une erreur (${res.status}). Vérifiez votre clé et votre crédit.` };
-    }
+  if (result.error || !result.content) {
+    return { error: result.error ?? "Impossible d'analyser le visuel pour le moment." };
+  }
 
-    const json = await res.json();
-    const content: string | undefined = json?.choices?.[0]?.message?.content;
-    if (!content) return { error: "Réponse vide de l'IA." };
-
-    const parsed = JSON.parse(content) as { title?: string };
+  try {
+    const parsed = JSON.parse(result.content) as { title?: string };
     const title = (parsed.title ?? "").trim();
     if (!title) return { error: "L'IA n'a pas pu proposer de titre." };
     return { title };
   } catch (e) {
-    console.error("generateBannerTitle:", e);
-    return { error: "Impossible d'analyser le visuel pour le moment." };
+    console.error("generateBannerTitle parse:", e);
+    return { error: "Réponse IA illisible. Réessayez." };
   }
 }
 
@@ -1733,8 +1808,6 @@ export async function generateOrderConfirmationMessage(
   }
 
   const backup = buildBackupConfirmationMessage(order as Order);
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return { message: backup, ai: false };
 
   const itemsText = ((order as Order).items ?? [])
     .map((it) => `- ${it.quantity}x ${it.product_name} (${formatPrice(it.total_price)})`)
@@ -1763,44 +1836,30 @@ Rédige le message en français, prêt à être envoyé tel quel. Exigences :
 
 Réponds STRICTEMENT en JSON (sans markdown) : { "message": "..." }`;
 
-  try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+  // Requête texte : OpenAI en primaire, DeepSeek en secours automatique.
+  const result = await callAiChat({
+    max_tokens: 400,
+    temperature: 0.7,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "Tu es le/la responsable relation client de RYTA (Casablanca). Tu écris des messages WhatsApp de confirmation de commande impeccables, chaleureux et professionnels en français.",
       },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 400,
-        temperature: 0.7,
-        response_format: { type: "json_object" },
-        messages: [
-          {
-            role: "system",
-            content:
-              "Tu es le/la responsable relation client de RYTA (Casablanca). Tu écris des messages WhatsApp de confirmation de commande impeccables, chaleureux et professionnels en français.",
-          },
-          { role: "user", content: prompt },
-        ],
-      }),
-    });
+      { role: "user", content: prompt },
+    ],
+  });
 
-    if (!res.ok) {
-      console.error("generateOrderConfirmationMessage OpenAI:", res.status, await res.text());
-      return { message: backup, ai: false };
-    }
+  if (result.error || !result.content) return { message: backup, ai: false };
 
-    const json = await res.json();
-    const content: string | undefined = json?.choices?.[0]?.message?.content;
-    if (!content) return { message: backup, ai: false };
-
-    const parsed = JSON.parse(content) as { message?: string };
+  try {
+    const parsed = JSON.parse(result.content) as { message?: string };
     const message = (parsed.message ?? "").trim();
     if (!message) return { message: backup, ai: false };
     return { message, ai: true };
   } catch (e) {
-    console.error("generateOrderConfirmationMessage:", e);
+    console.error("generateOrderConfirmationMessage parse:", e);
     return { message: backup, ai: false };
   }
 }

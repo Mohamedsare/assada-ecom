@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { ArrowRight } from "lucide-react";
 import { usePageImage } from "@/stores/config";
 import { PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
 
@@ -35,7 +34,7 @@ const BANNERS = [
 ] as const;
 
 function Banner({ banner }: { banner: (typeof BANNERS)[number] }) {
-  const { href, imageKey, title, subtitle, cta, gradient, overlay } = banner;
+  const { href, imageKey, gradient } = banner;
   const dyn = usePageImage(imageKey);
   const [err, setErr] = useState(false);
   const src = err ? PAGE_IMAGE_DEFAULTS[imageKey] : dyn;
@@ -43,9 +42,9 @@ function Banner({ banner }: { banner: (typeof BANNERS)[number] }) {
   return (
     <Link
       href={href}
-      className={`group relative overflow-hidden rounded-2xl bg-linear-to-br ${gradient} text-white p-6 sm:p-8 flex flex-col justify-between min-h-44 shadow-sm transition-transform duration-300 hover:-translate-y-0.5`}
+      className={`group relative block overflow-hidden rounded-2xl bg-linear-to-br ${gradient} min-h-28 sm:min-h-44 shadow-sm transition-transform duration-300 hover:-translate-y-0.5`}
     >
-      {/* Image de fond gérée en admin */}
+      {/* Image de fond gérée en admin — laissée entièrement visible */}
       {src && (
         <Image
           src={src}
@@ -56,17 +55,6 @@ function Banner({ banner }: { banner: (typeof BANNERS)[number] }) {
           onError={() => setErr(true)}
         />
       )}
-      {/* Voile dégradé de la couleur pour garder le texte lisible */}
-      <div className={`absolute inset-0 bg-linear-to-r ${overlay}`} />
-
-      <div className="relative z-10 max-w-[62%] sm:max-w-sm">
-        <h3 className="text-lg sm:text-xl font-extrabold leading-snug">{title}</h3>
-        <p className="text-white/80 text-sm mt-2">{subtitle}</p>
-      </div>
-      <span className="relative z-10 mt-5 inline-flex items-center gap-1.5 text-sm font-bold uppercase tracking-wide">
-        {cta}
-        <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-      </span>
     </Link>
   );
 }
@@ -76,8 +64,10 @@ export default function PromoBanners() {
     <section className="py-10 px-4 bg-gray-light">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-6">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#2F9E44] mb-1">Offres</p>
-          <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">Nos offres à ne pas manquer</h2>
+          <h2 className="text-xl md:text-2xl font-extrabold uppercase tracking-wide text-[#0A2A52]">
+            Nos exceptions
+          </h2>
+          <span className="mt-2 inline-block h-1 w-12 rounded-full bg-[#2F9E44]" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
