@@ -4,7 +4,6 @@ import HeroSection from "@/components/sections/HeroSection";
 import FindUsSection from "@/components/sections/FindUsSection";
 import HomeShowcase from "@/components/sections/home/HomeShowcase";
 import NosUnivers from "@/components/sections/home/NosUnivers";
-import FeatureProduct from "@/components/sections/home/FeatureProduct";
 import CommunityStories from "@/components/sections/home/CommunityStories";
 import PromoBanners from "@/components/sections/home/PromoBanners";
 import { buildUnivers } from "@/components/sections/home/buildUnivers";
@@ -28,9 +27,7 @@ export default async function HomePage() {
 
   const univers = buildUnivers(allProducts, allCategories);
 
-  // Produit signature : un produit vedette (sinon 1er avec image).
   const withImage = allProducts.filter((p) => p.main_image_url);
-  const featureProduct = withImage.find((p) => p.is_featured) ?? withImage[0] ?? null;
 
   // Meilleures ventes : produits vedettes ; à défaut, les mieux notés.
   const featured = withImage.filter((p) => p.is_featured);
@@ -95,9 +92,6 @@ export default async function HomePage() {
 
       {/* Offres (bannières commerciales) */}
       <PromoBanners />
-
-      {/* Produit signature */}
-      {featureProduct && <FeatureProduct product={featureProduct} />}
 
       {/* Sections éditoriales façon apia */}
       <HomeShowcase products={allProducts} categories={allCategories} />
