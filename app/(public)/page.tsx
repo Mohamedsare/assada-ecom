@@ -56,12 +56,9 @@ export default async function HomePage() {
         <section className="py-10 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
             <ProductCarousel
-              label="Meilleures ventes"
               title="Nos meilleures ventes"
-              subtitle="Les produits préférés de nos clients"
               products={bestSellers}
-              viewAllHref="/boutique"
-              viewAllColor="text-green"
+              singleOnMobile
             />
           </div>
         </section>
@@ -75,12 +72,9 @@ export default async function HomePage() {
         <section className="py-10 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
             <ProductCarousel
-              label="Promotions"
               title="Nos promotions"
-              subtitle="Profitez-en avant la fin du stock"
               products={promoProducts}
-              viewAllHref="/promotions"
-              viewAllColor="text-green"
+              singleOnMobile
             />
           </div>
         </section>
@@ -94,12 +88,8 @@ export default async function HomePage() {
         <section className="py-10 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
             <ProductCarousel
-              label="Nouveautés"
               title="Les derniers produits ajoutés"
-              subtitle="Mis à jour cette semaine"
               products={latestProducts}
-              viewAllHref="/boutique"
-              viewAllColor="text-green"
               autoScroll
             />
           </div>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { usePageImage } from "@/stores/config";
 import { PAGE_IMAGE_DEFAULTS } from "@/lib/constants";
 
@@ -84,15 +84,6 @@ export default function PromoBanners() {
           {BANNERS.map((banner) => (
             <Banner key={banner.href} banner={banner} />
           ))}
-        </div>
-
-        <div className="mt-4 text-right">
-          <Link
-            href="/promotions"
-            className="inline-flex items-center gap-1 text-sm font-semibold text-[#2F9E44] hover:underline"
-          >
-            Voir plus de promotions <ChevronRight size={15} />
-          </Link>
         </div>
       </div>
     </section>

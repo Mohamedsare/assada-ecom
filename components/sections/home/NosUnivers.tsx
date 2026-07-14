@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import type { Product } from "@/types";
 import ProductCard from "@/components/product/ProductCard";
 import SubcatShowcase, { type SubcatItem } from "./SubcatShowcase";
@@ -51,21 +49,11 @@ export default function NosUnivers({ univers }: { univers: Univers[] }) {
         {current.subcats.length > 0 ? (
           <SubcatShowcase key={current.slug} cats={current.subcats} />
         ) : current.products.length > 0 ? (
-          <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {current.products.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-            <div className="text-center mt-8">
-              <Link
-                href={`/boutique?categorie=${current.slug}`}
-                className="inline-flex items-center gap-1.5 text-[#2F9E44] font-semibold text-sm hover:underline"
-              >
-                Voir tout {current.name} <ChevronRight size={16} />
-              </Link>
-            </div>
-          </>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {current.products.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
         ) : (
           <div className="text-center py-14 bg-gray-light rounded-2xl">
             <p className="text-3xl mb-2">✨</p>

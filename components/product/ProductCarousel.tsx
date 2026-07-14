@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard";
 import type { Product } from "@/types";
@@ -12,19 +11,18 @@ interface ProductCarouselProps {
   title: string;
   subtitle?: string;
   products: Product[];
-  viewAllHref: string;
-  viewAllColor?: string;
   /** Défilement automatique horizontal (marquee), pausé au survol/toucher. */
   autoScroll?: boolean;
+  /** Une seule carte visible par vue sur mobile (au lieu de deux). */
+  singleOnMobile?: boolean;
 }
 
 export default function ProductCarousel({
   title,
   subtitle,
   products,
-  viewAllHref,
-  viewAllColor = "text-green",
   autoScroll = false,
+  singleOnMobile = false,
 }: ProductCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const pausedRef = useRef(false);
@@ -101,12 +99,6 @@ export default function ProductCarousel({
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">{title}</h2>
         {subtitle && <p className="text-text-secondary text-sm mt-0.5">{subtitle}</p>}
-        <Link
-          href={viewAllHref}
-          className={`inline-flex items-center gap-1 font-semibold text-sm hover:underline mt-2 ${viewAllColor}`}
-        >
-          Voir tout <ChevronRight size={15} />
-        </Link>
       </div>
 
       {/* Flèche gauche */}
@@ -141,7 +133,7 @@ export default function ProductCarousel({
             key={`${product.id}-${i}`}
             data-card
             {...(loop && i === products.length ? { "data-loop-start": "" } : {})}
-            className={`shrink-0 w-[46%] sm:w-[30%] md:w-[31%] lg:w-[19%] ${loop ? "" : "snap-start"}`}
+            className={`shrink-0 ${singleOnMobile ? "w-full" : "w-[46%]"} sm:w-[30%] md:w-[31%] lg:w-[19%] ${loop ? "" : "snap-start"}`}
           >
             <ProductCard product={product} />
           </div>
