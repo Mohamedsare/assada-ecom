@@ -7,7 +7,8 @@ import ProductCard from "./ProductCard";
 import type { Product } from "@/types";
 
 interface ProductCarouselProps {
-  label: string;
+  /** @deprecated Ancien sur-titre — n'est plus affiché (un seul titre par section). */
+  label?: string;
   title: string;
   subtitle?: string;
   products: Product[];
@@ -18,7 +19,6 @@ interface ProductCarouselProps {
 }
 
 export default function ProductCarousel({
-  label,
   title,
   subtitle,
   products,
@@ -98,17 +98,12 @@ export default function ProductCarousel({
   return (
     <section className="relative">
       {/* En-tête */}
-      <div className="flex items-end justify-between mb-6">
-        <div>
-          <p className={`text-xs font-bold uppercase tracking-widest mb-1 ${viewAllColor}`}>
-            {label}
-          </p>
-          <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">{title}</h2>
-          {subtitle && <p className="text-text-secondary text-sm mt-0.5">{subtitle}</p>}
-        </div>
+      <div className="text-center mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-[#0A2A52]">{title}</h2>
+        {subtitle && <p className="text-text-secondary text-sm mt-0.5">{subtitle}</p>}
         <Link
           href={viewAllHref}
-          className={`flex items-center gap-1 font-semibold text-sm hover:underline shrink-0 ${viewAllColor}`}
+          className={`inline-flex items-center gap-1 font-semibold text-sm hover:underline mt-2 ${viewAllColor}`}
         >
           Voir tout <ChevronRight size={15} />
         </Link>

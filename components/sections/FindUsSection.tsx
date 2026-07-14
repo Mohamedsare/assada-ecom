@@ -5,8 +5,8 @@ import { MapPin, Phone, User, MessageSquare, Send, CheckCircle, AlertCircle, Ext
 import { createContactMessage } from "@/lib/supabase/actions";
 import { SITE_PHONE } from "@/lib/constants";
 
-const SHOP_ADDRESS = "N 10 Galerie Zemouri, Boulevard Abdelmoumen, Casablanca, Maroc";
-const MAP_QUERY = encodeURIComponent("N 10 Galerie Zemouri, Boulevard Abdelmoumen, Casablanca, Maroc");
+const SHOP_ADDRESS = "N 10 Boulevard Abdelmoumen";
+const MAP_QUERY = encodeURIComponent("N 10 Boulevard Abdelmoumen, Casablanca, Maroc");
 const MAP_EMBED = `https://maps.google.com/maps?q=${MAP_QUERY}&z=16&output=embed`;
 const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`;
 
@@ -141,13 +141,13 @@ export default function FindUsSection() {
               <div className="flex items-start gap-3">
                 <MapPin size={17} className="text-green-light shrink-0 mt-0.5" />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold">RYTA — Cosmétiques &amp; Produits du Terroir et Compléments alimentaires</p>
+                  <p className="text-sm font-semibold">RYTA — Produits de beauté, produits du terroir et compléments alimentaires</p>
                   <p className="text-xs text-gray-400 mt-0.5">{SHOP_ADDRESS}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Clock size={17} className="text-green-light shrink-0" />
-                <p className="text-xs text-gray-400">Ouvert du lundi au samedi · 9h – 20h</p>
+                <p className="text-xs text-gray-400">Ouvert du lundi au dimanche · 10h – 20h</p>
               </div>
               <div className="flex flex-wrap gap-2 pt-1">
                 <a
