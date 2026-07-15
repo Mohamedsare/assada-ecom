@@ -167,7 +167,7 @@ export default function ProductForm({
                 <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Ancien prix (DH)</label>
                 <input name="old_price" type="number" min={0} value={oldPrice} onChange={(e) => setOldPrice(e.target.value)} placeholder="80000" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
               </div>
-              <Field label="Stock" name="stock_quantity" type="number" defaultValue={product ? String(product.stock_quantity) : "0"} placeholder="10" />
+              <Field label="Stock" name="stock_quantity" type="number" defaultValue={product ? String(product.stock_quantity) : "100"} placeholder="10" />
             </div>
             <Field label="SKU (référence)" name="sku" defaultValue={product?.sku ?? ""} placeholder="NK-AM270-42" />
           </Card>
