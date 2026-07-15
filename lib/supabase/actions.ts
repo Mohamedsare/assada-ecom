@@ -1661,19 +1661,52 @@ export interface GeneratedProductInfo {
   description: string;
   seo_title: string;
   seo_description: string;
+  /** ID de la catégorie choisie par l'IA parmi celles existantes, sinon null. */
+  category_id: string | null;
+  /** Prix actuel lu sur la photo (DH), sinon null. */
+  current_price: number | null;
+  /** Ancien prix barré, généré de façon cohérente (> prix actuel), sinon null. */
+  old_price: number | null;
+}
+
+/** Catégorie transmise à l'IA (liste plate id + nom + parent). */
+export interface AiCategoryOption {
+  id: string;
+  name: string;
+  parent_id?: string | null;
+}
+
+/** Arrondit un montant « joliment » (au 5 le plus proche jusqu'à 100, sinon au 10). */
+function roundNicePrice(value: number): number {
+  if (value <= 0) return 0;
+  const step = value < 100 ? 5 : 10;
+  return Math.round(value / step) * step;
 }
 
 /**
  * Analyse une photo de produit avec l'API Vision d'OpenAI et génère
- * automatiquement le nom, les descriptions et les champs SEO en français.
+ * automatiquement le nom, les descriptions, le SEO, la catégorie (choisie parmi
+ * celles fournies), le prix actuel (lu sur la photo) et un ancien prix cohérent.
  */
 export async function generateProductInfo(
   imageUrl: string,
+  categories: AiCategoryOption[] = [],
 ): Promise<{ data?: GeneratedProductInfo; error?: string }> {
   if (!imageUrl) return { error: "Aucune image à analyser." };
 
+  // Libellés hiérarchiques « Parent > Enfant » indexés, pour un choix sans UUID.
+  const byId = new Map(categories.map((c) => [c.id, c]));
+  const catLabels = categories.map((c, i) => {
+    const parent = c.parent_id ? byId.get(c.parent_id) : null;
+    const label = parent ? `${parent.name} > ${c.name}` : c.name;
+    return `${i}: ${label}`;
+  });
+  const catBlock = catLabels.length
+    ? `\n\nCatégories disponibles (choisis la plus adaptée par son numéro) :\n${catLabels.join("\n")}`
+    : "";
+
   const prompt = `Analyse cette photo de produit destinée à la boutique en ligne RYTA (Casablanca, prix en DH).
-À partir de ce que tu vois (type de produit, marque visible, couleur, matière, style), génère une fiche produit commerciale en français pour le marché marocain (Casablanca).
+À partir de ce que tu vois (type de produit, marque visible, couleur, matière, style, prix affiché), génère une fiche produit commerciale en français pour le marché marocain (Casablanca).${catBlock}
 
 Réponds STRICTEMENT en JSON (sans markdown) avec ces clés :
 - "name": nom court et précis du produit (max 60 caractères), inclut la marque uniquement si elle est clairement visible.
@@ -1681,8 +1714,11 @@ Réponds STRICTEMENT en JSON (sans markdown) avec ces clés :
 - "description": description détaillée et vendeuse (3 à 5 phrases) mettant en avant caractéristiques et bénéfices.
 - "seo_title": titre SEO au format « {Produit} à Casablanca | RYTA » (max 60 caractères).
 - "seo_description": meta description SEO (max 155 caractères) incitant à l'achat, mentionnant livraison partout au Maroc et paiement à la livraison.
+- "category_index": le NUMÉRO (entier) de la catégorie la plus adaptée dans la liste ci-dessus, ou null si aucune ne convient ou si la liste est vide.
+- "current_price": le prix affiché sur la photo en dirhams, en NOMBRE pur (sans symbole, sans espace, ex: 89). null si aucun prix n'est visible.
+- "old_price": un ancien prix barré, réaliste et supérieur d'environ 15 à 40% au prix actuel, en NOMBRE pur arrondi. null si current_price est null.
 
-N'invente jamais une marque dont tu n'es pas sûr.`;
+N'invente jamais une marque dont tu n'es pas sûr. N'invente pas current_price : mets null si le prix n'est pas lisible sur la photo.`;
 
   // Requête Vision : OpenAI uniquement (DeepSeek ne traite pas les images).
   const result = await callAiChat({
@@ -1710,14 +1746,41 @@ N'invente jamais une marque dont tu n'es pas sûr.`;
   }
 
   try {
-    const parsed = JSON.parse(result.content) as Partial<GeneratedProductInfo>;
+    const parsed = JSON.parse(result.content) as Record<string, unknown>;
+
+    // Catégorie : index validé → id réel (jamais un UUID inventé).
+    let category_id: string | null = null;
+    const idx = parsed.category_index;
+    if (typeof idx === "number" && Number.isInteger(idx) && categories[idx]) {
+      category_id = categories[idx].id;
+    }
+
+    // Prix actuel : nombre positif lu sur la photo, sinon null.
+    const toNum = (v: unknown): number | null => {
+      const n = typeof v === "number" ? v : typeof v === "string" ? parseFloat(v.replace(/[^\d.]/g, "")) : NaN;
+      return Number.isFinite(n) && n > 0 ? n : null;
+    };
+    const current_price = toNum(parsed.current_price);
+
+    // Ancien prix : cohérent (> prix actuel). On garde celui de l'IA s'il est
+    // valide et supérieur, sinon on en dérive un (+25%) proprement arrondi.
+    let old_price: number | null = null;
+    if (current_price) {
+      const aiOld = toNum(parsed.old_price);
+      old_price = aiOld && aiOld > current_price ? roundNicePrice(aiOld) : roundNicePrice(current_price * 1.25);
+      if (old_price <= current_price) old_price = null; // sécurité anti-incohérence
+    }
+
     return {
       data: {
-        name: parsed.name ?? "",
-        short_description: parsed.short_description ?? "",
-        description: parsed.description ?? "",
-        seo_title: parsed.seo_title ?? "",
-        seo_description: parsed.seo_description ?? "",
+        name: typeof parsed.name === "string" ? parsed.name : "",
+        short_description: typeof parsed.short_description === "string" ? parsed.short_description : "",
+        description: typeof parsed.description === "string" ? parsed.description : "",
+        seo_title: typeof parsed.seo_title === "string" ? parsed.seo_title : "",
+        seo_description: typeof parsed.seo_description === "string" ? parsed.seo_description : "",
+        category_id,
+        current_price,
+        old_price,
       },
     };
   } catch (e) {

@@ -36,6 +36,9 @@ export default function ProductForm({
   const [desc, setDesc] = useState(product?.description ?? "");
   const [seoTitle, setSeoTitle] = useState(product?.seo_title ?? "");
   const [seoDesc, setSeoDesc] = useState(product?.seo_description ?? "");
+  const [categoryId, setCategoryId] = useState(product?.category_id ?? "");
+  const [currentPrice, setCurrentPrice] = useState(product ? String(product.current_price) : "");
+  const [oldPrice, setOldPrice] = useState(product?.old_price ? String(product.old_price) : "");
 
   // Photos existantes (édition) triées par ordre
   const initialImages = (product?.images ?? [])
@@ -61,7 +64,10 @@ export default function ProductForm({
     setAiError(null);
     setAiDone(false);
     startAi(async () => {
-      const res = await generateProductInfo(url);
+      const res = await generateProductInfo(
+        url,
+        categories.map((c) => ({ id: c.id, name: c.name, parent_id: c.parent_id })),
+      );
       if (res.error || !res.data) {
         setAiError(res.error ?? "Analyse impossible.");
       } else {
@@ -70,6 +76,13 @@ export default function ProductForm({
         setDesc(res.data.description);
         setSeoTitle(res.data.seo_title);
         setSeoDesc(res.data.seo_description);
+        // Catégorie choisie par l'IA (si elle existe toujours dans la liste).
+        if (res.data.category_id && categories.some((c) => c.id === res.data!.category_id)) {
+          setCategoryId(res.data.category_id);
+        }
+        // Prix lu sur la photo + ancien prix cohérent.
+        if (res.data.current_price != null) setCurrentPrice(String(res.data.current_price));
+        if (res.data.old_price != null) setOldPrice(String(res.data.old_price));
         setAiDone(true);
       }
     });
@@ -114,8 +127,8 @@ export default function ProductForm({
               <p className="text-xs text-text-secondary">
                 {aiPending ? "Analyse de la photo en cours…"
                   : aiError ? <span className="text-red-600">{aiError}</span>
-                  : aiDone ? "Champs générés — vérifiez et ajustez si besoin."
-                  : "Ajoutez une photo : nom, descriptions et SEO seront générés automatiquement."}
+                  : aiDone ? "Champs générés (fiche, catégorie, prix) — vérifiez et ajustez si besoin."
+                  : "Ajoutez une photo : nom, descriptions, SEO, catégorie et prix seront générés automatiquement."}
               </p>
             </div>
             <button
@@ -146,8 +159,14 @@ export default function ProductForm({
 
           <Card title="Prix & stock">
             <div className="grid sm:grid-cols-3 gap-4">
-              <Field label="Prix actuel (DH)" name="current_price" type="number" defaultValue={product ? String(product.current_price) : ""} placeholder="65000" required />
-              <Field label="Ancien prix (DH)" name="old_price" type="number" defaultValue={product?.old_price ? String(product.old_price) : ""} placeholder="80000" />
+              <div>
+                <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Prix actuel (DH)<span className="text-red-500 ml-0.5">*</span></label>
+                <input name="current_price" type="number" min={0} value={currentPrice} onChange={(e) => setCurrentPrice(e.target.value)} required placeholder="65000" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Ancien prix (DH)</label>
+                <input name="old_price" type="number" min={0} value={oldPrice} onChange={(e) => setOldPrice(e.target.value)} placeholder="80000" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              </div>
               <Field label="Stock" name="stock_quantity" type="number" defaultValue={product ? String(product.stock_quantity) : "0"} placeholder="10" />
             </div>
             <Field label="SKU (référence)" name="sku" defaultValue={product?.sku ?? ""} placeholder="NK-AM270-42" />
@@ -199,7 +218,7 @@ export default function ProductForm({
           <Card title="Organisation">
             <div>
               <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Catégorie</label>
-              <select name="category_id" defaultValue={product?.category_id ?? ""} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
+              <select name="category_id" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
                 <option value="">— Aucune —</option>
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
