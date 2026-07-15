@@ -43,7 +43,7 @@ export default function Footer() {
               </a>
             </div>
 
-            <div className="flex items-center gap-3 mt-6">
+            <div className="flex items-center gap-4 mt-6">
               {SOCIALS.map((s) => (
                 <a
                   key={s.label}
@@ -51,9 +51,9 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="w-11 h-11 rounded-full border border-white/30 flex items-center justify-center text-white hover:bg-[#2F9E44] hover:border-[#2F9E44] hover:text-[#0A2A52] transition-colors"
+                  className="w-14 h-14 rounded-full border border-white/25 flex items-center justify-center text-white hover:bg-[#2F9E44] hover:border-[#2F9E44] hover:text-[#0A2A52] transition-colors"
                 >
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d={s.path} /></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d={s.path} /></svg>
                 </a>
               ))}
             </div>

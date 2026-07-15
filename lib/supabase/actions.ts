@@ -1522,10 +1522,18 @@ interface AiChatOptions {
   temperature?: number;
   response_format?: unknown;
   /**
-   * `true` si la requête contient une image (Vision). DeepSeek ne gère pas les
-   * images : le fallback est alors désactivé et seul OpenAI est utilisé.
+   * `true` si `messages` contient une image (Vision). L'API DeepSeek n'accepte
+   * pas d'images : dans ce cas DeepSeek n'est utilisé en secours QUE si
+   * `textFallbackMessages` (version sans image) est fourni.
    */
   vision?: boolean;
+  /**
+   * Messages 100 % texte utilisés uniquement quand DeepSeek prend le relais
+   * d'une requête Vision (puisqu'il ne peut pas voir l'image). À ne fournir
+   * que si un résultat sans analyse d'image reste pertinent (ex. copie
+   * créative), jamais pour de l'extraction factuelle depuis la photo.
+   */
+  textFallbackMessages?: unknown[];
 }
 
 interface AiChatResult {
@@ -1534,18 +1542,30 @@ interface AiChatResult {
   error?: string;
 }
 
+const AI_LABELS: Record<"openai" | "deepseek", string> = {
+  openai: "OpenAI",
+  deepseek: "DeepSeek",
+};
+// Codes HTTP temporaires : on retente le même fournisseur avant de basculer.
+const AI_RETRYABLE = new Set([429, 500, 502, 503, 529]);
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 /**
  * Appelle un LLM compatible « chat completions » avec OpenAI en primaire et
- * DeepSeek en secours automatique. On bascule sur DeepSeek si OpenAI échoue
- * (clé absente, erreur HTTP, réseau, réponse vide) — sauf pour les requêtes
- * Vision, que DeepSeek ne sait pas traiter.
+ * DeepSeek en secours automatique. Bascule sur DeepSeek si OpenAI échoue (clé
+ * absente, 429/5xx après retry, réseau, réponse vide). Pour les requêtes
+ * Vision, DeepSeek n'est tenté que si un jeu de messages texte de repli est
+ * fourni (il ne peut pas analyser l'image elle-même).
  */
 async function callAiChat(opts: AiChatOptions): Promise<AiChatResult> {
+  const deepseekModel = process.env.DEEPSEEK_MODEL || "deepseek-chat";
   const providers: {
     id: "openai" | "deepseek";
     url: string;
     apiKey: string;
     model: string;
+    messages: unknown[];
   }[] = [];
 
   if (process.env.OPENAI_API_KEY) {
@@ -1554,63 +1574,79 @@ async function callAiChat(opts: AiChatOptions): Promise<AiChatResult> {
       url: "https://api.openai.com/v1/chat/completions",
       apiKey: process.env.OPENAI_API_KEY,
       model: "gpt-4o-mini",
+      messages: opts.messages,
     });
   }
-  // DeepSeek uniquement en secours pour le texte (pas de support image).
-  if (!opts.vision && process.env.DEEPSEEK_API_KEY) {
+  // DeepSeek en secours : messages texte pour une requête Vision (il ne voit
+  // pas l'image), sinon les messages d'origine.
+  const deepseekMessages = opts.vision ? opts.textFallbackMessages : opts.messages;
+  if (process.env.DEEPSEEK_API_KEY && deepseekMessages) {
     providers.push({
       id: "deepseek",
       url: "https://api.deepseek.com/chat/completions",
       apiKey: process.env.DEEPSEEK_API_KEY,
-      model: "deepseek-chat",
+      model: deepseekModel,
+      messages: deepseekMessages,
     });
   }
 
   if (providers.length === 0) {
     return {
-      error: opts.vision
-        ? "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local."
-        : "Aucune clé IA configurée : ajoutez OPENAI_API_KEY ou DEEPSEEK_API_KEY dans .env.local.",
+      error:
+        opts.vision && !opts.textFallbackMessages
+          ? "Clé OpenAI manquante : ajoutez OPENAI_API_KEY dans .env.local. (L'analyse d'image nécessite OpenAI.)"
+          : "Aucune clé IA configurée : ajoutez OPENAI_API_KEY ou DEEPSEEK_API_KEY dans .env.local.",
     };
   }
 
   let lastError = "Service IA indisponible pour le moment.";
 
   for (const p of providers) {
-    try {
-      const res = await fetch(p.url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${p.apiKey}`,
-        },
-        body: JSON.stringify({
-          model: p.model,
-          ...(opts.max_tokens !== undefined ? { max_tokens: opts.max_tokens } : {}),
-          ...(opts.temperature !== undefined ? { temperature: opts.temperature } : {}),
-          ...(opts.response_format ? { response_format: opts.response_format } : {}),
-          messages: opts.messages,
-        }),
-      });
+    // Jusqu'à 2 tentatives par fournisseur sur erreur temporaire (429/5xx).
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const res = await fetch(p.url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${p.apiKey}`,
+          },
+          body: JSON.stringify({
+            model: p.model,
+            ...(opts.max_tokens !== undefined ? { max_tokens: opts.max_tokens } : {}),
+            ...(opts.temperature !== undefined ? { temperature: opts.temperature } : {}),
+            ...(opts.response_format ? { response_format: opts.response_format } : {}),
+            messages: p.messages,
+          }),
+        });
 
-      if (!res.ok) {
-        const body = await res.text();
-        console.error(`callAiChat ${p.id}:`, res.status, body.slice(0, 300));
-        lastError = `${p.id === "openai" ? "OpenAI" : "DeepSeek"} a renvoyé une erreur (${res.status}).`;
-        continue; // tente le fournisseur suivant (fallback)
-      }
+        if (!res.ok) {
+          const body = await res.text();
+          console.error(`callAiChat ${p.id}:`, res.status, body.slice(0, 300));
+          lastError = `${AI_LABELS[p.id]} a renvoyé une erreur (${res.status}).`;
+          if (AI_RETRYABLE.has(res.status) && attempt === 0) {
+            await sleep(800); // courte pause puis nouvelle tentative
+            continue;
+          }
+          break; // erreur définitive → fournisseur suivant (fallback)
+        }
 
-      const json = await res.json();
-      const content: string | undefined = json?.choices?.[0]?.message?.content;
-      if (!content) {
-        lastError = `Réponse vide de ${p.id === "openai" ? "OpenAI" : "DeepSeek"}.`;
-        continue;
+        const json = await res.json();
+        const content: string | undefined = json?.choices?.[0]?.message?.content;
+        if (!content) {
+          lastError = `Réponse vide de ${AI_LABELS[p.id]}.`;
+          break;
+        }
+        return { content, provider: p.id };
+      } catch (e) {
+        console.error(`callAiChat ${p.id}:`, e);
+        lastError = `Erreur réseau avec ${AI_LABELS[p.id]}.`;
+        if (attempt === 0) {
+          await sleep(800);
+          continue;
+        }
+        break;
       }
-      return { content, provider: p.id };
-    } catch (e) {
-      console.error(`callAiChat ${p.id}:`, e);
-      lastError = `Erreur réseau avec ${p.id === "openai" ? "OpenAI" : "DeepSeek"}.`;
-      continue;
     }
   }
 
@@ -1709,17 +1745,30 @@ Contraintes :
 
 Réponds STRICTEMENT en JSON (sans markdown) : { "title": "..." }`;
 
-  // Requête Vision : OpenAI uniquement (DeepSeek ne traite pas les images).
+  // Repli DeepSeek (sans image) : le titre est de la copie créative, pas une
+  // extraction factuelle — un titre premium générique reste pertinent.
+  const fallbackPrompt = `Propose UN grand titre marketing court et accrocheur en français pour une bannière d'accueil de la boutique en ligne RYTA (Casablanca) : beauté & bien-être, compléments alimentaires et produits du terroir marocain.
+
+Contraintes :
+- 2 à 6 mots, percutant (max ~40 caractères).
+- Pas de point final, pas de guillemets, pas d'emoji.
+- Ton premium et commercial, adapté au marché marocain.
+
+Réponds STRICTEMENT en JSON (sans markdown) : { "title": "..." }`;
+
+  const systemMsg = {
+    role: "system",
+    content:
+      "Tu es un directeur artistique e-commerce qui écrit des titres de bannières courts, percutants et premium en français pour RYTA (Casablanca).",
+  };
+
+  // Vision (OpenAI) en primaire, repli texte (DeepSeek) sans image.
   const result = await callAiChat({
     vision: true,
     max_tokens: 60,
     response_format: { type: "json_object" },
     messages: [
-      {
-        role: "system",
-        content:
-          "Tu es un directeur artistique e-commerce qui écrit des titres de bannières courts, percutants et premium en français pour RYTA (Casablanca).",
-      },
+      systemMsg,
       {
         role: "user",
         content: [
@@ -1728,6 +1777,7 @@ Réponds STRICTEMENT en JSON (sans markdown) : { "title": "..." }`;
         ],
       },
     ],
+    textFallbackMessages: [systemMsg, { role: "user", content: fallbackPrompt }],
   });
 
   if (result.error || !result.content) {

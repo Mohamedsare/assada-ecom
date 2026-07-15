@@ -3,7 +3,8 @@
 import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { ImagePlus, Video, Loader2, X, ArrowLeft, ArrowRight, Save, Sparkles } from "lucide-react";
-import { uploadImage, adminUpdateHeroSlides, generateBannerTitle } from "@/lib/supabase/actions";
+import { adminUpdateHeroSlides, generateBannerTitle } from "@/lib/supabase/actions";
+import { uploadToBucket } from "@/lib/supabase/client";
 import type { HeroSlide } from "@/lib/constants";
 
 /**
@@ -55,21 +56,20 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
-  // Limite alignée sur next.config.ts (serverActions + proxyClientMaxBodySize = 20 Mo).
-  const MAX_BYTES = 20 * 1024 * 1024;
+  // Upload direct navigateur → Supabase Storage : la limite est celle du bucket
+  // `products` (50 Mo), pas les 4,5 Mo des fonctions Vercel.
+  const MAX_BYTES = 50 * 1024 * 1024;
 
   const addFile = (file: File, type: "image" | "video") => {
     setError(null);
     if (file.size > MAX_BYTES) {
       setError(
-        `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} Mo). Maximum 20 Mo — compressez la ${type === "video" ? "vidéo" : "image"}.`,
+        `Fichier trop volumineux (${(file.size / 1024 / 1024).toFixed(1)} Mo). Maximum 50 Mo — compressez la ${type === "video" ? "vidéo" : "image"}.`,
       );
       return;
     }
     setUploading(type);
-    const formData = new FormData();
-    formData.append("file", file);
-    uploadImage("products", formData)
+    uploadToBucket("products", file)
       .then((res) => {
         if (res.error || !res.url) setError(res.error ?? "Échec de l'upload.");
         else setSlides((s) => [...s, { type, url: res.url! }]);
@@ -135,7 +135,7 @@ export default function HeroSlidesEditor({ initialSlides }: { initialSlides: Her
         Ajoutez autant de bannières que vous voulez (images ou vidéos), réordonnez-les et supprimez-les.
         Pour chaque bannière : un <strong>grand titre</strong> (laissez vide pour une bannière épurée) et le
         <strong> lien du bouton « Découvrir »</strong>. Les vidéos défilent en fond, sans son.
-        Formats conseillés : image ~1600×600 px, vidéo MP4 légère (&lt; 20 Mo).
+        Formats conseillés : image ~1600×600 px, vidéo MP4 légère (&lt; 50 Mo).
       </p>
 
       {slides.length === 0 ? (
