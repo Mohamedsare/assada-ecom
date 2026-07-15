@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
 import type { Product } from "@/types";
-import MiniProductCard from "./MiniProductCard";
+import ProductCard from "@/components/product/ProductCard";
 
 export interface SubcatItem {
   name: string;
@@ -143,7 +143,7 @@ export default function SubcatShowcase({ cats }: { cats: SubcatItem[] }) {
         <div className="flex gap-3 sm:gap-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1">
           {current.products.map((p) => (
             <div key={p.id} className="shrink-0 w-[46%] sm:w-[45%] lg:w-[23%] snap-start">
-              <MiniProductCard product={p} />
+              <ProductCard product={p} />
             </div>
           ))}
         </div>
