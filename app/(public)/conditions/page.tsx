@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LegalPage from "@/components/legal/LegalPage";
-import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
+import { SITE_EMAIL, SITE_PHONE, SHOP_ADDRESS } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Conditions Générales de Vente et d’Utilisation — RYTA",
@@ -33,7 +33,7 @@ export default function ConditionsPage() {
       <h2>2. Identification du vendeur</h2>
       <ul>
         <li><strong>Dénomination :</strong> RYTA — Cosmétiques & Parfums</li>
-        <li><strong>Adresse :</strong> Galerie Derb Ghalef, Boulevard Abdelmoumen, Kissariat Zemmouri, 20102 Derb Ghalef, Casablanca, Maroc</li>
+        <li><strong>Adresse :</strong> {SHOP_ADDRESS}, Maroc</li>
         <li><strong>Email :</strong> <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a></li>
         <li><strong>Téléphone / WhatsApp :</strong> <a href={`tel:${SITE_PHONE}`}>{SITE_PHONE}</a></li>
       </ul>

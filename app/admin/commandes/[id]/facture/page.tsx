@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getAdminOrderById, getSettings } from "@/lib/supabase/queries";
 import { requirePermission } from "@/lib/supabase/guards";
-import { SITE_NAME, SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
+import { SITE_NAME, SITE_EMAIL, SITE_PHONE, SHOP_ADDRESS } from "@/lib/constants";
 import Invoice, { type InvoiceShop, type InvoiceFormat } from "@/components/admin/Invoice";
 
 export const metadata = { title: "Facture" };
@@ -29,7 +29,7 @@ export default async function FacturePage({ params }: { params: Promise<{ id: st
 
   const shop: InvoiceShop = {
     name: read(settings.shop_name, SITE_NAME),
-    address: read(settings.shop_address, "Galerie Derb Ghalef, Bd Abdelmoumen"),
+    address: read(settings.shop_address, SHOP_ADDRESS),
     city: read(settings.shop_city, "Casablanca, Maroc"),
     phone: read(settings.shop_phone, SITE_PHONE),
     email: read(settings.shop_email, SITE_EMAIL),

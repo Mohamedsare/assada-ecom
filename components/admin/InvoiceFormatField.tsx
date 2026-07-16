@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FileText, Receipt } from "lucide-react";
 import type { InvoiceFormat } from "@/components/admin/Invoice";
+import { SHOP_ADDRESS } from "@/lib/constants";
 
 const OPTIONS: { value: InvoiceFormat; label: string; desc: string; icon: typeof FileText }[] = [
   { value: "a4", label: "A4", desc: "Feuille standard", icon: FileText },
@@ -72,7 +73,7 @@ function A4Preview() {
       <div className="flex justify-between items-start border-b-2 border-[#0E2440] pb-2">
         <div>
           <p className="text-[11px] font-extrabold">RYTA</p>
-          <p className="text-text-secondary">Derb Ghalef, Casablanca</p>
+          <p className="text-text-secondary">{SHOP_ADDRESS}</p>
         </div>
         <div className="text-right">
           <p className="text-[9px] font-bold uppercase">Facture</p>
@@ -113,7 +114,7 @@ function ThermalPreview({ mm }: { mm: number }) {
     <div style={{ width }} className="bg-white shadow-md text-[#0E2440] p-2.5 font-mono text-[7px] leading-snug">
       <div className="text-center">
         <p className="text-[10px] font-extrabold">RYTA</p>
-        <p>Derb Ghalef, Casablanca</p>
+        <p>{SHOP_ADDRESS}</p>
         <p>+212 6 12 34 56 78</p>
       </div>
       <Dashed />

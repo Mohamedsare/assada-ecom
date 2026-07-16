@@ -1,6 +1,6 @@
 import {
   SITE_URL, SITE_NAME, SITE_EMAIL, SITE_DESCRIPTION,
-  WHATSAPP_NUMBER, CASABLANCA_DISTRICTS, SHOP_GEO, SOCIAL_LINKS,
+  WHATSAPP_NUMBER, CASABLANCA_DISTRICTS, SHOP_GEO, SOCIAL_LINKS, SHOP_ADDRESS,
 } from "@/lib/constants";
 
 const base = SITE_URL.replace(/\/$/, "");
@@ -26,8 +26,7 @@ export const storeJsonLd = {
   paymentAccepted: "Paiement à la livraison",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Boulevard Abdelmoumen, N10, Galerie Derb Ghalef, Kissariat Zemmouri",
-    postalCode: "20102",
+    streetAddress: SHOP_ADDRESS,
     addressLocality: SHOP_GEO.placename,
     addressRegion: "Casablanca-Settat",
     addressCountry: "MA",

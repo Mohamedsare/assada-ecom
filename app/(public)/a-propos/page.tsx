@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldCheck, Truck, MessageCircle, Store, Sparkles, HeartHandshake } from "lucide-react";
 import LegalPage from "@/components/legal/LegalPage";
-import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
+import { SITE_EMAIL, SITE_PHONE, SHOP_ADDRESS } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "À propos — RYTA, boutique cosmétique à Casablanca",
   description:
-    "Découvrez RYTA : produits de beauté, compléments alimentaires et produits du terroir marocain. Boutique physique à Derb Ghalef, Casablanca. Produits authentiques, meilleurs prix, livraison partout au Maroc et paiement à la livraison.",
-  keywords: ["à propos RYTA", "boutique cosmétique Casablanca", "parfums Derb Ghalef"],
+    "Découvrez RYTA : produits de beauté, compléments alimentaires et produits du terroir marocain. Boutique physique à Maârif, Casablanca. Produits authentiques, meilleurs prix, livraison partout au Maroc et paiement à la livraison.",
+  keywords: ["à propos RYTA", "boutique cosmétique Casablanca", "parfums Maârif"],
   alternates: { canonical: "/a-propos" },
   openGraph: { title: "À propos — RYTA", type: "website", locale: "fr_MA" },
 };
@@ -91,8 +91,7 @@ export default function AProposPage() {
 
       <h2>Notre boutique</h2>
       <p>
-        Retrouvez-nous en boutique : <strong>Galerie Derb Ghalef, Boulevard Abdelmoumen, Kissariat Zemmouri,
-        Derb Ghalef, Casablanca</strong>. Notre équipe vous accueille pour vous conseiller et vous faire
+        Retrouvez-nous en boutique : <strong>{SHOP_ADDRESS}</strong>. Notre équipe vous accueille pour vous conseiller et vous faire
         découvrir nos nouveautés et nos meilleures offres.
       </p>
 

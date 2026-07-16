@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { MapPin, Phone, User, MessageSquare, Send, CheckCircle, AlertCircle, ExternalLink, Clock } from "lucide-react";
 import { createContactMessage } from "@/lib/supabase/actions";
-import { SITE_PHONE } from "@/lib/constants";
+import { SITE_PHONE, SHOP_ADDRESS } from "@/lib/constants";
 
-const SHOP_ADDRESS = "N 10 Boulevard Abdelmoumen";
-const MAP_QUERY = encodeURIComponent("N 10 Boulevard Abdelmoumen, Casablanca, Maroc");
+const MAP_QUERY = encodeURIComponent(`${SHOP_ADDRESS}, Maroc`);
 const MAP_EMBED = `https://maps.google.com/maps?q=${MAP_QUERY}&z=16&output=embed`;
 const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`;
 

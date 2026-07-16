@@ -9,8 +9,11 @@ export const SITE_PHONE = "+212 654 885 746";
 export const WHATSAPP_NUMBER = "212654885746";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ryta.ma";
 
+/** Adresse complète de la boutique — source unique affichée partout dans l'app. */
+export const SHOP_ADDRESS = "Boulevard Abdelmoumen N 10 Galerie zemouri, Maarif Casablanca";
+
 export const SITE_DESCRIPTION =
-  "RYTA, votre boutique en ligne à Casablanca : produits de beauté (parfums, maquillage, soins du visage, du corps et des cheveux), compléments alimentaires et produits du terroir marocain (miel, huiles, amlou, épices, dattes). Livraison partout au Maroc en 24 à 72h, gratuite à partir de 300 DH. Paiement à la livraison. Boutique physique à Derb Ghalef, Casablanca. Support WhatsApp.";
+  "RYTA, votre boutique en ligne à Casablanca : produits de beauté (parfums, maquillage, soins du visage, du corps et des cheveux), compléments alimentaires et produits du terroir marocain (miel, huiles, amlou, épices, dattes). Livraison partout au Maroc en 24 à 72h, gratuite à partir de 300 DH. Paiement à la livraison. Boutique physique à Maârif, Casablanca. Support WhatsApp.";
 
 /** Quartiers de Casablanca desservis — utilisés pour le SEO local (areaServed) et le checkout. */
 export const CASABLANCA_DISTRICTS = [
@@ -21,7 +24,7 @@ export const CASABLANCA_DISTRICTS = [
   "Sidi Moumen", "Ben M'sik", "Sidi Othmane", "Moulay Rachid",
 ] as const;
 
-/** Coordonnées de la boutique (Derb Ghalef, Casablanca) pour le balisage géo / LocalBusiness. */
+/** Coordonnées de la boutique (Maârif, Casablanca) pour le balisage géo / LocalBusiness. */
 export const SHOP_GEO = {
   latitude: 33.5606,
   longitude: -7.6261,
@@ -39,7 +42,7 @@ export const SOCIAL_LINKS = {
 /** Mots-clés SEO Casablanca — les 3 axes RYTA + intentions d'achat locales. */
 export const SEO_KEYWORDS = [
   "boutique en ligne Casablanca", "produits de beauté Casablanca", "parfums Casablanca",
-  "cosmétique Derb Ghalef", "maquillage Casablanca", "soins visage Casablanca",
+  "cosmétique Maârif", "maquillage Casablanca", "soins visage Casablanca",
   "compléments alimentaires Casablanca", "compléments alimentaires Maroc",
   "produits du terroir marocain", "produits locaux marocains",
   "miel Maroc", "amlou", "huile d'argan Casablanca",

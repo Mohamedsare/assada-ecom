@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LegalPage from "@/components/legal/LegalPage";
-import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
+import { SITE_EMAIL, SITE_PHONE, SHOP_ADDRESS } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité — RYTA",
@@ -30,7 +30,7 @@ export default function ConfidentialitePage() {
       <h2>2. Responsable du traitement</h2>
       <p>
         Le responsable du traitement des données est <strong>RYTA</strong>, dont la boutique est située
-        Galerie Derb Ghalef, Boulevard Abdelmoumen, Kissariat Zemmouri, 20102 Derb Ghalef, Casablanca, Maroc.
+        {" "}{SHOP_ADDRESS}, Maroc.
         Contact : <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a> — <a href={`tel:${SITE_PHONE}`}>{SITE_PHONE}</a>.
       </p>
 
