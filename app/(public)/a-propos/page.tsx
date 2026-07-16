@@ -104,10 +104,10 @@ export default function AProposPage() {
       </p>
 
       <div className="flex flex-wrap gap-3 not-prose mt-6">
-        <Link href="/boutique" className="inline-flex items-center gap-2 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
+        <Link href="/boutique" className="inline-flex items-center gap-2 bg-[#2F9E44] btn-sweep hover:bg-[#237A34] text-white! no-underline! text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors">
           <Store size={16} /> Découvrir la boutique
         </Link>
-        <Link href="/contact" className="inline-flex items-center gap-2 border border-gray-200 text-[#0A2A52] text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-[#2F9E44] hover:text-[#2F9E44] transition-colors">
+        <Link href="/contact" className="inline-flex items-center gap-2 border border-gray-200 text-[#0A2A52]! hover:text-[#2F9E44]! no-underline! text-sm font-semibold px-5 py-2.5 rounded-xl hover:border-[#2F9E44] transition-colors">
           <HeartHandshake size={16} /> Nous contacter
         </Link>
       </div>
