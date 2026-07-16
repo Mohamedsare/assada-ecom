@@ -1789,6 +1789,79 @@ N'invente jamais une marque dont tu n'es pas sûr. N'invente pas current_price :
   }
 }
 
+// ─── ADMIN — IA (détails d'un coffret cadeau depuis sa composition) ────────────
+
+export interface GeneratedPackInfo {
+  name: string;
+  short_description: string;
+  description: string;
+  seo_title: string;
+  seo_description: string;
+}
+
+/**
+ * Génère les détails d'un coffret cadeau (nom, descriptions, SEO) à partir de la
+ * LISTE des produits qui le composent. Requête 100 % texte → OpenAI en primaire
+ * et DeepSeek en secours automatique.
+ */
+export async function generatePackInfo(
+  items: { name: string; quantity: number }[],
+): Promise<{ data?: GeneratedPackInfo; error?: string }> {
+  const cleanItems = (items ?? []).filter((it) => it.name?.trim());
+  if (cleanItems.length === 0) {
+    return { error: "Ajoutez au moins un produit au coffret avant de générer." };
+  }
+
+  const list = cleanItems.map((it) => `- ${it.quantity}× ${it.name}`).join("\n");
+
+  const prompt = `Tu crées la fiche d'un COFFRET CADEAU pour la boutique en ligne RYTA (Casablanca, beauté & bien-être). Le coffret regroupe les produits suivants :
+${list}
+
+Génère une fiche commerciale en français (marché marocain, Casablanca), attrayante pour un cadeau.
+
+Réponds STRICTEMENT en JSON (sans markdown) avec ces clés :
+- "name": nom court et vendeur du coffret (max 60 caractères), commence idéalement par « Coffret ».
+- "short_description": accroche d'une seule phrase (max 120 caractères).
+- "description": description détaillée et vendeuse (3 à 5 phrases) : ce que contient le coffret, à qui l'offrir, les bénéfices.
+- "seo_title": titre SEO au format « {Nom du coffret} à Casablanca | RYTA » (max 60 caractères).
+- "seo_description": meta description SEO (max 155 caractères) incitant à l'achat, mentionnant livraison partout au Maroc et paiement à la livraison.
+
+Base-toi uniquement sur les produits listés, n'invente pas d'articles absents.`;
+
+  const result = await callAiChat({
+    max_tokens: 700,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "Tu es un expert e-commerce qui rédige des fiches de coffrets cadeaux en français, commerciales, claires et optimisées SEO pour RYTA (Casablanca).",
+      },
+      { role: "user", content: prompt },
+    ],
+  });
+
+  if (result.error || !result.content) {
+    return { error: result.error ?? "Génération impossible pour le moment." };
+  }
+
+  try {
+    const parsed = JSON.parse(result.content) as Partial<GeneratedPackInfo>;
+    return {
+      data: {
+        name: parsed.name ?? "",
+        short_description: parsed.short_description ?? "",
+        description: parsed.description ?? "",
+        seo_title: parsed.seo_title ?? "",
+        seo_description: parsed.seo_description ?? "",
+      },
+    };
+  } catch (e) {
+    console.error("generatePackInfo parse:", e);
+    return { error: "Réponse IA illisible. Réessayez." };
+  }
+}
+
 /**
  * Analyse le visuel d'une bannière (image, ou frame extraite d'une vidéo passée en data URL)
  * et propose un grand titre court et accrocheur pour le slider d'accueil, en français.

@@ -3,8 +3,8 @@
 import { useState, useMemo, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ArrowLeft, Search, Plus, Minus, Trash2, Package, Gift } from "lucide-react";
-import { adminCreatePack, adminUpdatePack } from "@/lib/supabase/actions";
+import { ArrowLeft, Search, Plus, Minus, Trash2, Package, Gift, Sparkles, Loader2 } from "lucide-react";
+import { adminCreatePack, adminUpdatePack, generatePackInfo } from "@/lib/supabase/actions";
 import MultiImageUpload from "@/components/admin/MultiImageUpload";
 import { formatPrice } from "@/lib/utils";
 import type { Product, Category } from "@/types";
@@ -31,6 +31,15 @@ export default function PackForm({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+
+  // Champs remplis automatiquement par l'IA — donc contrôlés.
+  const [name, setName] = useState(pack?.name ?? "");
+  const [shortDesc, setShortDesc] = useState(pack?.short_description ?? "");
+  const [desc, setDesc] = useState(pack?.description ?? "");
+  const [seoTitle, setSeoTitle] = useState(pack?.seo_title ?? "");
+  const [seoDesc, setSeoDesc] = useState(pack?.seo_description ?? "");
+  const [currentPrice, setCurrentPrice] = useState(pack ? String(pack.current_price) : "");
+  const [oldPrice, setOldPrice] = useState(pack?.old_price ? String(pack.old_price) : "");
 
   const initialImages = (pack?.images ?? [])
     .slice()
@@ -78,6 +87,50 @@ export default function PackForm({
     [selected, productById],
   );
 
+  // Génération IA des détails à partir de la composition du coffret.
+  const [aiPending, startAi] = useTransition();
+  const [aiError, setAiError] = useState<string | null>(null);
+  const [aiDone, setAiDone] = useState(false);
+
+  // Arrondi « joli » (au 5 sous 100, sinon au 10).
+  const roundNice = (v: number) => {
+    if (v <= 0) return 0;
+    const step = v < 100 ? 5 : 10;
+    return Math.round(v / step) * step;
+  };
+
+  const runAi = () => {
+    if (selected.length === 0) {
+      setAiError("Ajoutez au moins un produit au coffret avant de générer.");
+      return;
+    }
+    setAiError(null);
+    setAiDone(false);
+    const items = selected.map((s) => ({
+      name: productById.get(s.product_id)?.name ?? "",
+      quantity: s.quantity,
+    }));
+    startAi(async () => {
+      const res = await generatePackInfo(items);
+      if (res.error || !res.data) {
+        setAiError(res.error ?? "Génération impossible.");
+        return;
+      }
+      setName(res.data.name);
+      setShortDesc(res.data.short_description);
+      setDesc(res.data.description);
+      setSeoTitle(res.data.seo_title);
+      setSeoDesc(res.data.seo_description);
+      // Suggestion de prix depuis la valeur cumulée : ancien prix = somme,
+      // prix du coffret = −15 % (remise cadeau), arrondis proprement.
+      if (componentsTotal > 0) {
+        setOldPrice(String(roundNice(componentsTotal)));
+        setCurrentPrice(String(roundNice(componentsTotal * 0.85)));
+      }
+      setAiDone(true);
+    });
+  };
+
   const action = (formData: FormData) => {
     setError(null);
     if (selected.length === 0) {
@@ -115,15 +168,15 @@ export default function PackForm({
           <Card title="Informations générales">
             <div>
               <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Nom du coffret<span className="text-red-500 ml-0.5">*</span></label>
-              <input name="name" defaultValue={pack?.name ?? ""} required placeholder="Coffret Beauté Éclat" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              <input name="name" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Coffret Beauté Éclat" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description courte</label>
-              <input name="short_description" defaultValue={pack?.short_description ?? ""} placeholder="Une ligne d'accroche" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              <input name="short_description" value={shortDesc} onChange={(e) => setShortDesc(e.target.value)} placeholder="Une ligne d'accroche" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description complète</label>
-              <textarea name="description" defaultValue={pack?.description ?? ""} rows={4} placeholder="Ce que contient le coffret, à qui l'offrir…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
+              <textarea name="description" value={desc} onChange={(e) => setDesc(e.target.value)} rows={4} placeholder="Ce que contient le coffret, à qui l'offrir…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
             </div>
           </Card>
 
@@ -204,11 +257,42 @@ export default function PackForm({
             )}
           </Card>
 
+          {/* Bandeau IA — génère les détails à partir des produits du coffret */}
+          <div className="rounded-lg border border-green/30 bg-green-50/50 p-4 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-green/10 flex items-center justify-center shrink-0">
+              {aiPending ? <Loader2 size={18} className="text-green animate-spin" /> : <Sparkles size={18} className="text-green" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[#0A2A52]">{"Remplissage automatique par l'IA"}</p>
+              <p className="text-xs text-text-secondary">
+                {aiPending ? "Génération des détails en cours…"
+                  : aiError ? <span className="text-red-600">{aiError}</span>
+                  : aiDone ? "Détails générés (fiche, SEO, prix suggéré) — vérifiez et ajustez."
+                  : "Ajoutez les produits du coffret, puis générez nom, descriptions, SEO et prix."}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={runAi}
+              disabled={aiPending || selected.length === 0}
+              className="shrink-0 flex items-center gap-1.5 text-xs font-semibold bg-green text-[#0A2A52] px-3 py-2 rounded-lg btn-sweep hover:bg-[#237A34] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title={selected.length === 0 ? "Ajoutez d'abord des produits" : "Générer les détails"}
+            >
+              <Sparkles size={14} /> {aiPending ? "…" : aiDone ? "Régénérer" : "Générer"}
+            </button>
+          </div>
+
           <Card title="Prix & stock">
             <div className="grid sm:grid-cols-3 gap-4">
-              <Field label="Prix du coffret (DH)" name="current_price" type="number" defaultValue={pack ? String(pack.current_price) : ""} placeholder="450" required />
-              <Field label="Ancien prix (DH)" name="old_price" type="number" defaultValue={pack?.old_price ? String(pack.old_price) : ""} placeholder="600" />
-              <Field label="Stock" name="stock_quantity" type="number" defaultValue={pack ? String(pack.stock_quantity) : "0"} placeholder="10" />
+              <div>
+                <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Prix du coffret (DH)<span className="text-red-500 ml-0.5">*</span></label>
+                <input name="current_price" type="number" min={0} value={currentPrice} onChange={(e) => setCurrentPrice(e.target.value)} required placeholder="450" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Ancien prix (DH)</label>
+                <input name="old_price" type="number" min={0} value={oldPrice} onChange={(e) => setOldPrice(e.target.value)} placeholder="600" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              </div>
+              <Field label="Stock" name="stock_quantity" type="number" defaultValue={pack ? String(pack.stock_quantity) : "100"} placeholder="10" />
             </div>
             <Field label="SKU (référence)" name="sku" defaultValue={pack?.sku ?? ""} placeholder="PACK-ECLAT" />
           </Card>
@@ -216,11 +300,11 @@ export default function PackForm({
           <Card title="Référencement (SEO)">
             <div>
               <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Titre SEO</label>
-              <input name="seo_title" defaultValue={pack?.seo_title ?? ""} placeholder="Coffret Beauté Éclat à Casablanca | RYTA" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
+              <input name="seo_title" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} placeholder="Coffret Beauté Éclat à Casablanca | RYTA" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Description SEO</label>
-              <textarea name="seo_description" defaultValue={pack?.seo_description ?? ""} rows={2} placeholder="Description pour les moteurs de recherche…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
+              <textarea name="seo_description" value={seoDesc} onChange={(e) => setSeoDesc(e.target.value)} rows={2} placeholder="Description pour les moteurs de recherche…" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-green transition-colors resize-none" />
             </div>
           </Card>
         </div>
