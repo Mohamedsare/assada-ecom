@@ -4,7 +4,7 @@ import { useState, useMemo, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowLeft, Search, Plus, Minus, Trash2, Package, Gift, Sparkles, Loader2 } from "lucide-react";
-import { adminCreatePack, adminUpdatePack, generatePackInfo } from "@/lib/supabase/actions";
+import { adminCreatePack, adminUpdatePack, generatePackInfo, generateProductInfo } from "@/lib/supabase/actions";
 import MultiImageUpload from "@/components/admin/MultiImageUpload";
 import { formatPrice } from "@/lib/utils";
 import type { Product, Category } from "@/types";
@@ -40,12 +40,16 @@ export default function PackForm({
   const [seoDesc, setSeoDesc] = useState(pack?.seo_description ?? "");
   const [currentPrice, setCurrentPrice] = useState(pack ? String(pack.current_price) : "");
   const [oldPrice, setOldPrice] = useState(pack?.old_price ? String(pack.old_price) : "");
+  const [categoryId, setCategoryId] = useState(pack?.category_id ?? "");
 
   const initialImages = (pack?.images ?? [])
     .slice()
     .sort((a, b) => a.sort_order - b.sort_order)
     .map((img) => img.image_url);
   if (!initialImages.length && pack?.main_image_url) initialImages.push(pack.main_image_url);
+
+  // Photo principale (méthode 1 : pack créé depuis une photo → analyse IA).
+  const [imageUrl, setImageUrl] = useState(initialImages[0] ?? "");
 
   // Composition initiale du pack
   const [selected, setSelected] = useState<Selected[]>(
@@ -99,6 +103,15 @@ export default function PackForm({
     return Math.round(v / step) * step;
   };
 
+  const applyText = (d: { name: string; short_description: string; description: string; seo_title: string; seo_description: string }) => {
+    setName(d.name);
+    setShortDesc(d.short_description);
+    setDesc(d.description);
+    setSeoTitle(d.seo_title);
+    setSeoDesc(d.seo_description);
+  };
+
+  // Méthode 2 : générer depuis la composition (produits existants).
   const runAi = () => {
     if (selected.length === 0) {
       setAiError("Ajoutez au moins un produit au coffret avant de générer.");
@@ -116,11 +129,7 @@ export default function PackForm({
         setAiError(res.error ?? "Génération impossible.");
         return;
       }
-      setName(res.data.name);
-      setShortDesc(res.data.short_description);
-      setDesc(res.data.description);
-      setSeoTitle(res.data.seo_title);
-      setSeoDesc(res.data.seo_description);
+      applyText(res.data);
       // Suggestion de prix depuis la valeur cumulée : ancien prix = somme,
       // prix du coffret = −15 % (remise cadeau), arrondis proprement.
       if (componentsTotal > 0) {
@@ -131,12 +140,41 @@ export default function PackForm({
     });
   };
 
+  // Méthode 1 : générer depuis la PHOTO du coffret (analyse Vision, comme un produit).
+  const runPhotoAi = (url: string) => {
+    if (!url) return;
+    setAiError(null);
+    setAiDone(false);
+    startAi(async () => {
+      const res = await generateProductInfo(
+        url,
+        categories.map((c) => ({ id: c.id, name: c.name, parent_id: c.parent_id })),
+      );
+      if (res.error || !res.data) {
+        setAiError(res.error ?? "Analyse impossible.");
+        return;
+      }
+      applyText(res.data);
+      if (res.data.category_id && categories.some((c) => c.id === res.data!.category_id)) {
+        setCategoryId(res.data.category_id);
+      }
+      if (res.data.current_price != null) setCurrentPrice(String(res.data.current_price));
+      if (res.data.old_price != null) setOldPrice(String(res.data.old_price));
+      setAiDone(true);
+    });
+  };
+
+  // Ajout/suppression de photo → lance l'analyse Vision sur la 1re image.
+  const handleImagesChange = (urls: string[]) => {
+    const first = urls[0] ?? "";
+    if (first && first !== imageUrl) runPhotoAi(first);
+    setImageUrl(first);
+  };
+
   const action = (formData: FormData) => {
     setError(null);
-    if (selected.length === 0) {
-      setError("Ajoutez au moins un produit au coffret.");
-      return;
-    }
+    // La composition est optionnelle : un pack peut être un produit à part
+    // entière (créé depuis une photo) OU un ensemble de produits existants.
     formData.set("pack_items", JSON.stringify(selected));
     startTransition(async () => {
       const res = isEdit
@@ -180,8 +218,12 @@ export default function PackForm({
             </div>
           </Card>
 
-          {/* Composition du pack */}
-          <Card title="Produits du coffret">
+          {/* Composition du pack (optionnelle) */}
+          <Card title="Produits du coffret (optionnel)">
+            <p className="text-xs text-text-secondary -mt-1">
+              Laissez vide si le coffret est un produit à part entière (créé depuis une photo). Sinon,
+              sélectionnez des produits existants pour vendre l'ensemble avec une remise.
+            </p>
             <div className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
@@ -257,29 +299,42 @@ export default function PackForm({
             )}
           </Card>
 
-          {/* Bandeau IA — génère les détails à partir des produits du coffret */}
-          <div className="rounded-lg border border-green/30 bg-green-50/50 p-4 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-green/10 flex items-center justify-center shrink-0">
-              {aiPending ? <Loader2 size={18} className="text-green animate-spin" /> : <Sparkles size={18} className="text-green" />}
+          {/* Bandeau IA — deux façons de générer les détails */}
+          <div className="rounded-lg border border-green/30 bg-green-50/50 p-4">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-green/10 flex items-center justify-center shrink-0">
+                {aiPending ? <Loader2 size={18} className="text-green animate-spin" /> : <Sparkles size={18} className="text-green" />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-[#0A2A52]">{"Remplissage automatique par l'IA"}</p>
+                <p className="text-xs text-text-secondary">
+                  {aiPending ? "Génération en cours…"
+                    : aiError ? <span className="text-red-600">{aiError}</span>
+                    : aiDone ? "Détails générés — vérifiez et ajustez."
+                    : "Deux options : ajoutez une photo du coffret (analyse auto), ou composez avec des produits existants puis générez."}
+                </p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[#0A2A52]">{"Remplissage automatique par l'IA"}</p>
-              <p className="text-xs text-text-secondary">
-                {aiPending ? "Génération des détails en cours…"
-                  : aiError ? <span className="text-red-600">{aiError}</span>
-                  : aiDone ? "Détails générés (fiche, SEO, prix suggéré) — vérifiez et ajustez."
-                  : "Ajoutez les produits du coffret, puis générez nom, descriptions, SEO et prix."}
-              </p>
+            <div className="flex flex-wrap gap-2 mt-3 pl-12">
+              <button
+                type="button"
+                onClick={() => runPhotoAi(imageUrl)}
+                disabled={aiPending || !imageUrl}
+                className="flex items-center gap-1.5 text-xs font-semibold bg-green text-[#0A2A52] px-3 py-2 rounded-lg btn-sweep hover:bg-[#237A34] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title={!imageUrl ? "Ajoutez d'abord une photo du coffret" : "Analyser la photo"}
+              >
+                <Sparkles size={14} /> Analyser la photo
+              </button>
+              <button
+                type="button"
+                onClick={runAi}
+                disabled={aiPending || selected.length === 0}
+                className="flex items-center gap-1.5 text-xs font-semibold border border-green text-[#0A2A52] px-3 py-2 rounded-lg hover:bg-green/10 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                title={selected.length === 0 ? "Ajoutez d'abord des produits" : "Générer depuis les produits"}
+              >
+                <Package size={14} /> Depuis les produits
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={runAi}
-              disabled={aiPending || selected.length === 0}
-              className="shrink-0 flex items-center gap-1.5 text-xs font-semibold bg-green text-[#0A2A52] px-3 py-2 rounded-lg btn-sweep hover:bg-[#237A34] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              title={selected.length === 0 ? "Ajoutez d'abord des produits" : "Générer les détails"}
-            >
-              <Sparkles size={14} /> {aiPending ? "…" : aiDone ? "Régénérer" : "Générer"}
-            </button>
           </div>
 
           <Card title="Prix & stock">
@@ -318,15 +373,16 @@ export default function PackForm({
               label="Photos (5 max)"
               defaultValues={initialImages}
               max={5}
+              onChange={handleImagesChange}
               studio
             />
-            <p className="text-[11px] text-text-secondary">{"La 1re photo est l'image principale du coffret."}</p>
+            <p className="text-[11px] text-text-secondary">{"La 1re photo est l'image principale. L'IA analyse la photo dès son ajout."}</p>
           </Card>
 
           <Card title="Organisation">
             <div>
               <label className="block text-sm font-medium text-[#0A2A52] mb-1.5">Catégorie (optionnel)</label>
-              <select name="category_id" defaultValue={pack?.category_id ?? ""} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
+              <select name="category_id" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green bg-white">
                 <option value="">— Aucune —</option>
                 {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
