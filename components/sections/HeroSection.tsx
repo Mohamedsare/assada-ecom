@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ChevronRight, Truck, RotateCcw, ShieldCheck, MessageCircle } from "lucide-react";
+import { Truck, RotateCcw, ShieldCheck, MessageCircle } from "lucide-react";
 import { useConfigStore } from "@/stores/config";
 import { DEFAULT_HERO_SLIDES } from "@/lib/constants";
 
@@ -163,13 +163,12 @@ export default function HeroSection() {
         </div>
       )}
 
-      {/* Un seul bouton court, centré en bas */}
+      {/* Un seul bouton court, centré en bas — fond transparent, bordure blanche */}
       <Link
         href={media?.link || slide.cta1.href}
-        className="absolute bottom-11 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-1.5 bg-green btn-sweep hover:bg-[#237A34] text-white font-bold px-6 py-2.5 rounded-full transition-colors text-sm shadow-lg"
+        className="absolute bottom-11 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 inline-flex items-center justify-center bg-transparent border-2 border-white hover:bg-white/10 text-white font-bold uppercase tracking-wide px-8 py-3 rounded-md transition-colors text-sm"
       >
-        Découvrir
-        <ChevronRight size={16} />
+        {"J'en profite"}
       </Link>
 
       {/* Points de position (slider) */}

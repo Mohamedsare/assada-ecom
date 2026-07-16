@@ -65,8 +65,21 @@ export default function BoutiqueContent({
     return () => { document.body.style.overflow = ""; document.removeEventListener("keydown", onKey); };
   }, [filtersOpen]);
 
-  // Catégories de tête pour la sidebar (le méga-menu gère les sous-catégories).
+  // Catégories de tête (axes) pour la sidebar.
   const topCategories = useMemo(() => categories.filter((c) => !c.parent_id), [categories]);
+
+  // Sous-catégories groupées par axe parent, pour les afficher sous chaque axe.
+  const subcategoriesByParent = useMemo(() => {
+    const map = new Map<string, Category[]>();
+    for (const c of categories) {
+      if (c.parent_id) {
+        const arr = map.get(c.parent_id) ?? [];
+        arr.push(c);
+        map.set(c.parent_id, arr);
+      }
+    }
+    return map;
+  }, [categories]);
 
   // slug d'une catégorie -> ensemble { elle-même + tous ses descendants },
   // pour qu'un filtre parent (ex. « parfums ») inclue « parfums-homme », etc.
@@ -173,20 +186,43 @@ export default function BoutiqueContent({
     <div className="space-y-6">
       <div>
         <h3 className="font-semibold text-[#0A2A52] mb-3 text-sm">Catégories</h3>
-        <div className="space-y-2">
-          {topCategories.map((cat) => (
-            <label key={cat.slug} className="flex items-center gap-2 cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={selectedCategories.includes(cat.slug)}
-                onChange={() => toggleCategory(cat.slug)}
-                className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]"
-              />
-              <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">
-                {cat.name}
-              </span>
-            </label>
-          ))}
+        <div className="space-y-3">
+          {topCategories.map((cat) => {
+            const subs = subcategoriesByParent.get(cat.id) ?? [];
+            return (
+              <div key={cat.slug}>
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories.includes(cat.slug)}
+                    onChange={() => toggleCategory(cat.slug)}
+                    className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]"
+                  />
+                  <span className="text-sm font-medium text-[#0A2A52] group-hover:text-[#2F9E44] transition-colors">
+                    {cat.name}
+                  </span>
+                </label>
+
+                {subs.length > 0 && (
+                  <div className="mt-2 ml-6 space-y-2 border-l border-gray-200 pl-3">
+                    {subs.map((sub) => (
+                      <label key={sub.slug} className="flex items-center gap-2 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(sub.slug)}
+                          onChange={() => toggleCategory(sub.slug)}
+                          className="rounded border-gray-300 text-[#0A2A52] focus:ring-[#2F9E44]"
+                        />
+                        <span className="text-sm text-gray-600 group-hover:text-[#0A2A52] transition-colors">
+                          {sub.name}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
