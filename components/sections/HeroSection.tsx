@@ -166,7 +166,7 @@ export default function HeroSection() {
       {/* Un seul bouton court, centré en bas — fond transparent, bordure blanche */}
       <Link
         href={media?.link || slide.cta1.href}
-        className="absolute bottom-11 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 inline-flex items-center justify-center bg-transparent border-2 border-white hover:bg-white/10 text-white font-bold uppercase tracking-wide px-8 py-3 rounded-md transition-colors text-sm"
+        className="absolute bottom-11 sm:bottom-14 left-1/2 -translate-x-1/2 z-20 inline-flex items-center justify-center bg-transparent border border-white sm:border-2 hover:bg-white/10 text-white font-bold uppercase tracking-wide px-4 py-1.5 text-[11px] sm:px-8 sm:py-3 sm:text-sm rounded-md transition-colors"
       >
         {"J'en profite"}
       </Link>
