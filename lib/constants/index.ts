@@ -33,6 +33,9 @@ export const SHOP_GEO = {
   country: "Maroc",
 } as const;
 
+/** Liens réseaux sociaux (surchargés par les Paramètres boutique en base). */
+export type SocialLinks = { facebook: string; tiktok: string; instagram: string };
+
 export const SOCIAL_LINKS = {
   tiktok: "https://www.tiktok.com/@ryta",
   facebook: "https://www.facebook.com/ryta",

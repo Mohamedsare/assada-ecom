@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { getWhatsAppUrl } from "@/lib/utils";
+import { useSocialLinks } from "@/stores/config";
 
 const CATEGORIES = [
   { emoji: "🌸", image: "/categories/parfums.jpeg",       label: "Parfums",          slug: "parfums"      },
@@ -48,7 +49,7 @@ function CategoryCard({ cat }: { cat: (typeof CATEGORIES)[number] }) {
 const SOCIALS = [
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@ryta",
+    key: "tiktok",
     bg: "bg-[#010101] hover:bg-black",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -58,7 +59,7 @@ const SOCIALS = [
   },
   {
     label: "Facebook",
-    href: "https://www.facebook.com/ryta",
+    key: "facebook",
     bg: "bg-[#1877F2] hover:bg-[#1565c0]",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -68,7 +69,7 @@ const SOCIALS = [
   },
   {
     label: "WhatsApp",
-    href: getWhatsAppUrl("Bonjour RYTA, je suis intéressé par vos produits."),
+    key: "whatsapp",
     bg: "bg-whatsapp hover:bg-whatsapp-dark",
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
@@ -79,6 +80,14 @@ const SOCIALS = [
 ];
 
 export default function SocialSection() {
+  // Liens réseaux sociaux pilotés par les Paramètres admin (WhatsApp garde son lien direct).
+  const social = useSocialLinks();
+  const socials = SOCIALS.map((s) => ({
+    ...s,
+    href: s.key === "whatsapp"
+      ? getWhatsAppUrl("Bonjour RYTA, je suis intéressé par vos produits.")
+      : social[s.key as "facebook" | "tiktok"],
+  }));
   return (
     <section className="py-10 px-4 bg-gray-light">
       <div className="max-w-7xl mx-auto">
@@ -101,7 +110,7 @@ export default function SocialSection() {
 
         {/* Boutons sociaux */}
         <div className="flex flex-wrap justify-center gap-3">
-          {SOCIALS.map((s) => (
+          {socials.map((s) => (
             <Link
               key={s.label}
               href={s.href}

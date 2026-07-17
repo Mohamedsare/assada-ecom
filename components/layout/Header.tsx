@@ -23,15 +23,16 @@ import MobileUniversMenu from "@/components/layout/MobileUniversMenu";
 import MobileCategoryMenu from "@/components/layout/MobileCategoryMenu";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 import { useShopLogo } from "@/components/layout/LogoProvider";
-
-const SOCIAL_LINKS = [
-  { label: "TikTok", href: "https://www.tiktok.com/@ryta" },
-  { label: "Facebook", href: "https://www.facebook.com/ryta" },
-  { label: "Instagram", href: "https://www.instagram.com/ryta" },
-] as const;
+import { useSocialLinks } from "@/stores/config";
 
 export default function Header({ axes = AXES }: { axes?: Axis[] }) {
   const logoUrl = useShopLogo();
+  const social = useSocialLinks();
+  const socialLinks = [
+    { label: "TikTok", href: social.tiktok },
+    { label: "Facebook", href: social.facebook },
+    { label: "Instagram", href: social.instagram },
+  ] as const;
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -213,7 +214,7 @@ export default function Header({ axes = AXES }: { axes?: Axis[] }) {
             <div className="px-5 py-5">
               <p className="text-[11px] font-bold uppercase tracking-widest text-gray-400 mb-3">Suivez-nous</p>
               <div className="flex items-center gap-3">
-                {SOCIAL_LINKS.map((s) => (
+                {socialLinks.map((s) => (
                   <a
                     key={s.label}
                     href={s.href}

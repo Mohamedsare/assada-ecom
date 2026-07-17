@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useConfigStore } from "@/stores/config";
-import type { HeroSlide } from "@/lib/constants";
+import type { HeroSlide, SocialLinks } from "@/lib/constants";
 
 /**
  * Injecte la configuration boutique (lue côté serveur depuis les Paramètres admin)
@@ -14,15 +14,18 @@ export default function ConfigHydrator({
   freeDeliveryThreshold,
   images,
   heroSlides,
+  socialLinks,
 }: {
   deliveryFee: number;
   freeDeliveryThreshold: number;
   images?: Record<string, string>;
   heroSlides?: HeroSlide[];
+  socialLinks?: SocialLinks;
 }) {
   const setConfig = useConfigStore((s) => s.setConfig);
   const setImages = useConfigStore((s) => s.setImages);
   const setHeroSlides = useConfigStore((s) => s.setHeroSlides);
+  const setSocialLinks = useConfigStore((s) => s.setSocialLinks);
 
   useEffect(() => {
     setConfig({ deliveryFee, freeDeliveryThreshold });
@@ -35,6 +38,10 @@ export default function ConfigHydrator({
   useEffect(() => {
     if (heroSlides && heroSlides.length > 0) setHeroSlides(heroSlides);
   }, [heroSlides, setHeroSlides]);
+
+  useEffect(() => {
+    if (socialLinks) setSocialLinks(socialLinks);
+  }, [socialLinks, setSocialLinks]);
 
   return null;
 }

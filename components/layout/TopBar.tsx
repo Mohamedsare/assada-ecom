@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { Phone, Truck } from "lucide-react";
 import { SITE_PHONE, WHATSAPP_NUMBER } from "@/lib/constants";
+import { useSocialLinks } from "@/stores/config";
 
 export default function TopBar() {
+  const social = useSocialLinks();
   return (
     <div className="bg-[#0A2A52] text-white/80 text-xs py-2 px-4 hidden md:block border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -22,7 +24,7 @@ export default function TopBar() {
 
         <div className="flex items-center gap-3">
           <Link
-            href={`https://www.tiktok.com/@ryta`}
+            href={social.tiktok}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="TikTok"
@@ -33,7 +35,7 @@ export default function TopBar() {
             </svg>
           </Link>
           <Link
-            href={`https://www.facebook.com/ryta`}
+            href={social.facebook}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"

@@ -1,5 +1,5 @@
 import { createClient } from "./server";
-import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, DEFAULT_HERO_SLIDES, PAGE_IMAGE_DEFAULTS, AXES, CATEGORIES, type HeroSlide, type Axis } from "@/lib/constants";
+import { DEFAULT_DELIVERY_FEE, DEFAULT_FREE_DELIVERY_THRESHOLD, DEFAULT_HERO_SLIDES, PAGE_IMAGE_DEFAULTS, SOCIAL_LINKS, AXES, CATEGORIES, type HeroSlide, type Axis, type SocialLinks } from "@/lib/constants";
 import type {
   Product, Category, Brand, Order, Profile, Address,
   Review, Payment, ContactMessage, DeliveryAgent,
@@ -594,6 +594,19 @@ export async function getStoreConfig(): Promise<{ deliveryFee: number; freeDeliv
 export async function getShopLogo(): Promise<string> {
   const s = await getSettings();
   return readSettingString(s.shop_logo) || "/ryta.png";
+}
+
+/**
+ * Liens réseaux sociaux (Facebook, TikTok, Instagram) définis dans les Paramètres admin,
+ * avec repli sur les constantes si un champ est vide. Consommés partout via ConfigHydrator.
+ */
+export async function getSocialLinks(): Promise<SocialLinks> {
+  const s = await getSettings();
+  return {
+    facebook:  readSettingString(s.facebook_url).trim()  || SOCIAL_LINKS.facebook,
+    tiktok:    readSettingString(s.tiktok_url).trim()    || SOCIAL_LINKS.tiktok,
+    instagram: readSettingString(s.instagram_url).trim() || SOCIAL_LINKS.instagram,
+  };
 }
 
 /** Décode une valeur de réglage texte (potentiellement encodée en JSON). */

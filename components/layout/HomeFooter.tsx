@@ -3,16 +3,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { usePageImage } from "@/stores/config";
-import { SOCIAL_LINKS } from "@/lib/constants";
+import { usePageImage, useSocialLinks } from "@/stores/config";
 import { getWhatsAppUrl } from "@/lib/utils";
 import Footer from "@/components/layout/Footer";
 
-/* ── Réseaux sociaux (icônes réelles, vraies couleurs de marque) ── */
+/* ── Réseaux sociaux (icônes réelles, vraies couleurs de marque) ──
+   `key` = réseau piloté par les Paramètres admin ; le href est résolu à l'affichage. */
 const SOCIALS = [
   {
     label: "Facebook",
-    href: SOCIAL_LINKS.facebook,
+    key: "facebook",
     className: "bg-[#1877F2] hover:brightness-110",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -22,7 +22,7 @@ const SOCIALS = [
   },
   {
     label: "TikTok",
-    href: SOCIAL_LINKS.tiktok,
+    key: "tiktok",
     className: "bg-black hover:brightness-125",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -32,7 +32,7 @@ const SOCIALS = [
   },
   {
     label: "Instagram",
-    href: SOCIAL_LINKS.instagram,
+    key: "instagram",
     className:
       "bg-[linear-gradient(45deg,#f09433,#e6683c_25%,#dc2743_50%,#cc2366_75%,#bc1888)] hover:brightness-110",
     icon: (
@@ -43,7 +43,7 @@ const SOCIALS = [
   },
   {
     label: "WhatsApp",
-    href: getWhatsAppUrl("Bonjour RYTA, je suis intéressé par vos produits."),
+    key: "whatsapp",
     className: "bg-[#25D366] hover:brightness-110",
     icon: (
       <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -91,6 +91,15 @@ export default function HomeFooter() {
   ];
   const gallery: GalleryItem[] = GALLERY_META.map((m, i) => ({ ...m, image: galleryImgs[i] }));
 
+  // Liens réseaux sociaux pilotés par les Paramètres admin (WhatsApp garde son lien direct).
+  const social = useSocialLinks();
+  const socials = SOCIALS.map((s) => ({
+    ...s,
+    href: s.key === "whatsapp"
+      ? getWhatsAppUrl("Bonjour RYTA, je suis intéressé par vos produits.")
+      : social[s.key as "facebook" | "tiktok" | "instagram"],
+  }));
+
   return (
     <>
       {/* ── Galerie Instagram ── */}
@@ -102,7 +111,7 @@ export default function HomeFooter() {
             <p className="text-[#0A2A52] text-2xl font-extrabold mb-1">@ryta</p>
             <p className="text-gray-400 text-sm mb-5">Découvrez nos produits en images</p>
             <div className="flex items-center gap-3">
-              {SOCIALS.map((s) => (
+              {socials.map((s) => (
                 <Link
                   key={s.label}
                   href={s.href}
